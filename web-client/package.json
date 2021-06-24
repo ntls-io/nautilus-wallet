@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:prod": "cross-env NODE_ENV=production ng build --configuration production"
   },
   "private": true,
   "dependencies": {
@@ -42,11 +43,17 @@
     "@capacitor/cli": "3.0.2",
     "@ionic/angular-toolkit": "^4.0.0",
     "@ionic/lab": "3.2.10",
+    "@tailwindcss/aspect-ratio": "latest",
+    "@tailwindcss/forms": "latest",
+    "@tailwindcss/line-clamp": "latest",
+    "@tailwindcss/typography": "latest",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
+    "autoprefixer": "^10.2.5",
+    "cross-env": "^7.0.3",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
@@ -59,7 +66,9 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "postcss": "^8.3.5",
     "protractor": "~7.0.0",
+    "tailwindcss": "^2.1.2",
     "ts-node": "~8.3.0",
     "typescript": "~4.2.4"
   },
