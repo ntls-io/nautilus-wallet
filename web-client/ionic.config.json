@@ -1,0 +1,7 @@
+{
+  "name": "Nautilus wallet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
