@@ -1,0 +1,58 @@
+on: push
+
+defaults:
+  run:
+    working-directory: web-client
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Docs: https://github.com/actions/setup-node#v2
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      # Docs:
+      # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows
+      # https://github.com/actions/cache/blob/main/examples.md#node---npm
+      - name: Cache (NPM)
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install dependencies (NPM)
+        run: npm ci
+
+      # TODO: The steps below could be done in parallel.
+
+      - name: Build (dev)
+        run: npm run build
+
+      # Docs: https://angular.io/guide/testing#configure-project-for-github-actions
+      # See also the CI config in karma.conf.js
+      - name: Test (Karma)
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
+
+      - name: Upload coverage (Codecov)
+        uses: codecov/codecov-action@v1
+
+      # TODO: E2E coverage
+      # See https://github.com/angular/angular-cli/issues/6286
+      # See also the CI config in protractor.conf.js
+      - name: Test (E2E / Protractor)
+        run: npm run e2e
+
+      - name: Check (eslint)
+        run: npm run lint
+
+      # The production build takes longer, so do this last.
+      - name: Build (prod)
+        run: npm run build:prod

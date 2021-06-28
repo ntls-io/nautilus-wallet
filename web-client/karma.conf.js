@@ -41,4 +41,35 @@ module.exports = function (config) {
     singleRun: false,
     restartOnFileChange: true
   });
+
+  if (process.env['CI']) {
+    // XXX: config.set merges recursively using _.mergeWith, replacing array values.
+
+    // Use Headless Chrome
+    // Docs: https://angular.io/guide/testing#configure-cli-for-ci-testing-in-chrome
+    config.set({
+        browsers: ['ChromeHeadlessCI'],
+        customLaunchers: {
+          ChromeHeadlessCI: {
+            base: 'ChromeHeadless',
+            flags: ['--no-sandbox']
+          }
+        },
+      }
+    );
+
+    // Emit coverage compatible with the Codecov uploader.
+    // Docs: https://github.com/codecov/example-node#istanbul
+    config.set({
+      coverageReporter: {
+        reporters: [
+          {type: 'text'},
+          {type: 'lcovonly'},
+          {type: 'json'},
+        ]
+      },
+
+    });
+
+  }
 };

@@ -35,3 +35,17 @@ exports.config = {
     }));
   }
 };
+
+// Docs: https://www.protractortest.org/#/browser-setup#using-headless-chrome
+if (process.env['CI']) {
+  /** @type { import("protractor").Config } */
+  exports.config = {
+    ...exports.config,
+    capabilities: {
+      browserName: 'chrome',
+      chromeOptions: {
+        args: ["--headless", "--disable-gpu", "--window-size=800,600"]
+      }
+    }
+  }
+}
