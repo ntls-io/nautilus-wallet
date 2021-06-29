@@ -4,6 +4,7 @@
   "overrides": [
     {
       "files": ["*.ts"],
+      "excludedFiles": ["**/*.stories.ts"],
       "parserOptions": {
         "project": ["tsconfig.json", "e2e/tsconfig.json"],
         "createDefaultProgram": true
@@ -37,6 +38,19 @@
           }
         ]
       }
+    },
+    {
+      "files": ["**/*.stories.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["tsconfig.json"]
+      },
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ]
     },
     {
       "files": ["*.html"],
