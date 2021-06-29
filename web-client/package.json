@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:prod": "cross-env NODE_ENV=production ng build --configuration production"
+    "build:prod": "cross-env NODE_ENV=production ng build --configuration production",
+    "format": "prettier --write .",
+    "format-check": "prettier --check ."
   },
   "private": true,
   "dependencies": {
