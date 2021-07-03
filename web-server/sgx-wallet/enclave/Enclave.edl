@@ -1,0 +1,11 @@
+enclave {
+    from "sgx_tstd.edl" import *;
+    from "sgx_backtrace.edl" import *;
+    trusted
+    {
+        public sgx_status_t ecall_test([in, size=len] const uint8_t* some_string, size_t len);
+    };
+    untrusted
+    {
+    };
+};
