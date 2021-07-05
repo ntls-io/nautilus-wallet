@@ -7,6 +7,13 @@ const routes: Routes = [
     path: '',
     component: WalletPage,
   },
+  {
+    path: 'send-funds',
+    loadChildren: () =>
+      import('../send-funds/send-funds.module').then(
+        (m) => m.SendFundsPageModule
+      ),
+  },
 ];
 
 @NgModule({
