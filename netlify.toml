@@ -1,0 +1,20 @@
+# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+base = "web-client"
+publish = "www"
+command = "npm run build:prod"
+
+# Set fallback
+#
+# Docs:
+# https://angular.io/guide/deployment#routed-apps-must-fallback-to-indexhtml
+# https://docs.netlify.com/configure-builds/common-configurations/angular/#redirects
+#
+# TODO: Investigate pre-rendering with Angular Universal or Scully to avoid needing this?
+# https://www.netlify.com/blog/2021/02/08/pre-rendering-with-angular-universal/
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
