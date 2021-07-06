@@ -5,7 +5,9 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
-      import('./views/home/home.module').then((m) => m.HomePageModule),
+      // XXX: Work around https://github.com/compodoc/compodoc/issues/954#issuecomment-708987583
+      // prettier-ignore
+      import('./views/home/home.module').then(m => m.HomePageModule),
   },
   {
     path: '',

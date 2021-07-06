@@ -1,4 +1,6 @@
 # https://prettier.io/docs/en/ignore.html
 
 /coverage
+/documentation
+/storybook-static
 /www
