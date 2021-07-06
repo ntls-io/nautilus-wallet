@@ -53,6 +53,9 @@ jobs:
       - name: Check (eslint)
         run: npm run lint
 
+      - name: Check (prettier)
+        run: npm run format-check
+
       # The production build takes longer, so do this last.
       - name: Build (prod)
         run: npm run build:prod

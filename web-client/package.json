@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:prod": "cross-env NODE_ENV=production ng build --configuration production"
+    "build:prod": "cross-env NODE_ENV=production ng build --configuration production",
+    "format": "prettier --write .",
+    "format-check": "prettier --check ."
   },
   "private": true,
   "dependencies": {
@@ -67,6 +69,8 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "postcss": "^8.3.5",
+    "prettier": "^2.3.2",
+    "prettier-plugin-organize-imports": "^2.2.0",
     "protractor": "~7.0.0",
     "tailwindcss": "^2.1.2",
     "ts-node": "~8.3.0",
