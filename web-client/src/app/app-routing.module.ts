@@ -29,6 +29,20 @@ const routes: Routes = [
         m => m.RegisterPageModule // prettier-ignore
       ),
   },
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('./views/home/home.module').then(
+        m => m.HomePageModule // prettier-ignore
+      ),
+  },
+  {
+    path: 'landing',
+    loadChildren: () =>
+      import('./views/landing/landing.module').then(
+        m => m.LandingPageModule // prettier-ignore
+      ),
+  },
 ];
 
 @NgModule({
