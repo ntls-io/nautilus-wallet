@@ -10,10 +10,14 @@ edition = "2018"
 members = [
     "algorand_core",
     "algorand_transaction",
+    "algorand_crypto",
+    "algorand_encoding",
 ]
 
 [dependencies]
 algorand_core = {path = "algorand_core", version = "0.1.0"}
 algorand_transaction = {path = "algorand_transaction", version = "0.1.0"}
+algorand_crypto = {path = "algorand_crypto", version = "0.1.0"}
+algorand_encoding = {path = "algorand_encoding",  version = "0.1.0"}
 
 [dev-dependencies]

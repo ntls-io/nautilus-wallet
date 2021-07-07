@@ -10,3 +10,13 @@ edition = "2018"
 algorand_core = {path = "../algorand_core", version = "0.1.0"}
 ring = {version = "0.16.19", default_features = false}
 rand = {version = "0.7.3", default_features = false}
+algorand_crypto = {path = "../algorand_crypto", version = "0.1.0"}
+algorand_encoding = {path = "../algorand_encoding", version = "0.1.0"}
+data-encoding = "2.3.1"
+derive_more = "0.99.13"
+rmp-serde = "0.14.0"
+serde = {version = "1.0", features = ["derive"]}
+serde_bytes = "0.11"
+sha2 = "0.8.0"
+thiserror = "1.0.23"
+
