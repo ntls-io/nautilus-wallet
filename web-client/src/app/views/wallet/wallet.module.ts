@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -15,5 +15,6 @@ import { WalletPage } from './wallet.page';
     QRCodeModule,
   ],
   declarations: [WalletPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WalletPageModule {}
