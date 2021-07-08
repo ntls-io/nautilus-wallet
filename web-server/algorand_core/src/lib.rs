@@ -1,3 +1,4 @@
+#![no_std]
 const HASH_LEN: usize = 32;
 
 

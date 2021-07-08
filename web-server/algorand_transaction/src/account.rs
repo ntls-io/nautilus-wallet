@@ -1,5 +1,5 @@
 use algorand_core::Address;
-use rand::{Rng, rngs::OsRng};
+use rand::{Rng, CryptoRng};
 use ring::signature::Ed25519KeyPair as KeyPairType;
 use ring::signature::KeyPair;
 
@@ -10,8 +10,8 @@ pub struct Account {
 }
 
 impl Account {
-    pub fn generate() ->  Account{
-        let seed: [u8; 32] = OsRng.gen();
+    pub fn generate<T: Rng + CryptoRng>(rng: &mut T) ->  Account{
+        let seed: [u8; 32] = rng.gen();
         Self::from_seed(seed)
     }
 

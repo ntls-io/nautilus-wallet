@@ -8,5 +8,5 @@ edition = "2018"
 
 [dependencies]
 algorand_core = {path = "../algorand_core", version = "0.1.0"}
-ring = "0.16.19"
-rand = "0.8.3"
+ring = {version = "0.16.19", default_features = false}
+rand = {version = "0.7.3", default_features = false}
