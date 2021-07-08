@@ -1,4 +1,6 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { WalletPage } from './wallet.page';
 
@@ -10,7 +12,8 @@ describe('WalletPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [WalletPage],
-        imports: [IonicModule.forRoot()],
+        imports: [IonicModule.forRoot(), RouterTestingModule],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
 
       fixture = TestBed.createComponent(WalletPage);
