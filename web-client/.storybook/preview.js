@@ -1,3 +1,4 @@
+import { RouterTestingModule } from "@angular/router/testing";
 import { IonicModule } from "@ionic/angular";
 import { setCompodocJson } from "@storybook/addon-docs/angular";
 import { componentWrapperDecorator, moduleMetadata } from "@storybook/angular";
@@ -21,8 +22,14 @@ export const parameters = {
 export const decorators = [
   // See AppModule:
   moduleMetadata({
-    imports: [IonicModule.forRoot()],
+    imports: [IonicModule.forRoot(), RouterTestingModule],
   }),
   // See AppComponent's template:
-  componentWrapperDecorator((story) => `<ion-app>${story}</ion-app>`),
+  componentWrapperDecorator(
+    (story) => `
+      <ion-app>
+        <ion-router-outlet>${story}</ion-router-outlet>
+      </ion-app>
+    `
+  ),
 ];
