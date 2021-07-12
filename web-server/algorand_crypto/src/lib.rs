@@ -1,6 +1,7 @@
+#![no_std]
 use data_encoding::{BASE32_NOPAD, BASE64};
 use fmt::Debug;
-use std::fmt::{self, Formatter};
+use core::fmt::{self, Formatter};
 
 use algorand_encoding::{deserialize_bytes32, U8_32Visitor};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};

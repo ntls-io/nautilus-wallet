@@ -44,7 +44,9 @@ pub struct Transaction {
 
     /// The human-readable string that identifies the network for the transaction. The genesis ID is
     /// found in the genesis block. See the genesis ID for MainNet, TestNet, and BetaNet.
-    pub genesis_id: String,
+    // pub genesis_id: String,
+    //TODO Check length of genesis ids
+    pub genesis_id: [u8; 64],
 
     /// The group specifies that the transaction is part of a group and, if so, specifies the hash of
     /// the transaction group. Assign a group ID to a transaction through the workflow described in
@@ -64,7 +66,8 @@ pub struct Transaction {
     pub lease: Option<HashDigest>,
 
     /// Any data up to 1000 bytes.
-    pub note: Option<Vec<u8>>,
+    // pub note: Option<Vec<u8>>,
+    pub note: Option<[u8; 64]>,
 
     /// Specifies the authorized address. This address will be used to authorize all future transactions.
     /// Learn more about Rekeying accounts.
@@ -150,6 +153,6 @@ pub struct SignedTransaction {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TransactionSignature {
     Single(Signature),
-    Multi(MultisigSignature),
-    Logic(SignedLogic),
+    // Multi(MultisigSignature),
+    // Logic(SignedLogic),
 }
