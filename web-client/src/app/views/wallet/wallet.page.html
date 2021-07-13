@@ -6,4 +6,11 @@
 
 <ion-content>
   <ion-button routerLink="/wallet/send-funds"> Send Funds </ion-button>
+  <qrcode
+    qrdata="Nautilus"
+    elementType="svg"
+    [width]="250"
+    [margin]="1"
+    errorCorrectionLevel="H"
+  ></qrcode>
 </ion-content>
