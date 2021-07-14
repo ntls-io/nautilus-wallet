@@ -6,49 +6,49 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'landing',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'wallet',
     loadChildren: () =>
       import('./views/wallet/wallet.module').then(
         m => m.WalletPageModule // prettier-ignore
-      )
+      ),
   },
   {
     path: 'login',
     loadChildren: () =>
       import('./views/login/login.module').then(
         m => m.LoginPageModule // prettier-ignore
-      )
+      ),
   },
   {
     path: 'register',
     loadChildren: () =>
       import('./views/register/register.module').then(
         m => m.RegisterPageModule // prettier-ignore
-      )
+      ),
   },
   {
     path: 'home',
     loadChildren: () =>
       import('./views/home/home.module').then(
         m => m.HomePageModule // prettier-ignore
-      )
+      ),
   },
   {
     path: 'landing',
     loadChildren: () =>
       import('./views/landing/landing.module').then(
         m => m.LandingPageModule // prettier-ignore
-      )
-  }
+      ),
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
