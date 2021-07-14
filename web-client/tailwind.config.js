@@ -5,17 +5,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'prussian-blue': '#003450',
-        'usafa-blue': '#025581',
-        'viridian-green': '#209C95',
-        'portland-orange': '#FF642E',
-        'blue-jeans': '#02A7FF',
-        gainsboro: '#DADFDF',
-        'caribbean-green': '#11CA92',
-        mustard: '#FFD952',
-        'jungle-green': '#1A4C48',
-        'indigo-dye': '#00507A',
-        'morning-blue': '#92A2A1'
+        'prussian-blue': 'var(--ion-color-prussian-blue)',
+        'usafa-blue': 'var(--ion-color-usafa-blue)',
+        'viridian-green': 'var(--ion-color-viridian-green)',
+        'portland-orange': 'var(--ion-color-portland-orange)',
+        'blue-jeans': 'var(--ion-color-blue-jeans)',
+        gainsboro: 'var(--ion-color-gainsboro)',
+        'caribbean-green': 'var(--ion-color-caribbean-green)',
+        mustard: 'var(--ion-color-mustard)',
+        'jungle-green': 'var(--ion-color-jungle-green)',
+        'indigo-dye': 'var(--ion-color-indigo-dye)',
+        'morning-blue': 'var(--ion-color-morning-blue)'
       }
     }
   },
