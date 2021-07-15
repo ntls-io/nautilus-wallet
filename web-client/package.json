@@ -32,6 +32,7 @@
     "@capacitor/keyboard": "1.0.2",
     "@capacitor/status-bar": "1.0.2",
     "@ionic/angular": "^5.5.2",
+    "@ngneat/transloco": "^2.22.0",
     "angularx-qrcode": "^11.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
