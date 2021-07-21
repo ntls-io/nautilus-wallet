@@ -1,3 +1,6 @@
 ion-app {
   background-color: var(--ion-color-prussian-blue);
+  ion-router-outlet {
+    @apply max-w-screen-sm m-auto;
+  }
 }
