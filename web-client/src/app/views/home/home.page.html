@@ -1,7 +1,51 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <h1 class="ion-text-center">Welcome to Nautilus</h1>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none" class="border border-solid rounded-lg p-3">
+          <ion-avatar slot="start" class="h-2/5 w-2/5">
+            <img src="https://ntls.io/img/team_co.jpg" />
+          </ion-avatar>
+          <ion-label>
+            <p>Title</p>
+            <h2>Full Name</h2>
+            <h3>012 3456 789</h3>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item
+          lines="none"
+          detail
+          detailIcon="chevron-forward-circle"
+          class="border border-solid rounded-lg py-2"
+        >
+          <ion-icon name="wallet" slot="start"></ion-icon>
+          <ion-label>My Wallet </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item
+          lines="none"
+          detail
+          detailIcon="chevron-forward-circle"
+          class="border border-solid rounded-lg py-2"
+        >
+          <ion-icon name="person-circle" slot="start"></ion-icon>
+          <ion-label>My Profile </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
