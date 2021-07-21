@@ -17,6 +17,9 @@ module.exports = {
         "indigo-dye": "var(--ion-color-indigo-dye)",
         "morning-blue": "var(--ion-color-morning-blue)",
       },
+      fontFamily: {
+        nasalization: "nasalization",
+      },
     },
   },
   variants: {
