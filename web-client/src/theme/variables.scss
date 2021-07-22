@@ -11,19 +11,11 @@
   src: url("../assets/fonts/nasalization.otf") format("opentype");
 }
 
-@font-face {
-  font-family: "Open Sans", sans-serif;
-  src: url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
-}
-
-@font-face {
-  font-family: "Audiowide";
-  src: url("@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');");
-}
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Open+Sans&display=swap");
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-font-family: "Open Sans";
+  --ion-font-family: "Open Sans", sans-serif;
 
   /** colors **/
   --ion-color-primary: #3880ff;
