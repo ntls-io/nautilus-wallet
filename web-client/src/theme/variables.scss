@@ -16,9 +16,14 @@
   src: url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 }
 
+@font-face {
+  font-family: "Audiowide";
+  src: url("@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');");
+}
+
 /** Ionic CSS Variables **/
 :root {
-  --ion-font-family: "Open Sans", "nasalization";
+  --ion-font-family: "Open Sans";
 
   /** colors **/
   --ion-color-primary: #3880ff;
