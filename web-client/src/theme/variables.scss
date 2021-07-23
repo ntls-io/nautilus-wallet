@@ -6,11 +6,21 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+@font-face {
+  font-family: "nasalization";
+  src: url("../assets/fonts/nasalization.otf") format("opentype");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Open+Sans&display=swap");
+
 /** Ionic CSS Variables **/
 :root {
+  --ion-font-family: "Open Sans", sans-serif;
+  
   // See Nautilus UI Kit:
   // https://www.figma.com/file/zYVHu1EwCIDCbQp8rFscyA/Nautilus-Branding?node-id=23%3A128
 
+  /** colors **/
   // UI Kit: Primary 1 - Prussian Blue
   --ion-color-primary: #003450;
   --ion-color-primary-rgb: 0, 52, 80;

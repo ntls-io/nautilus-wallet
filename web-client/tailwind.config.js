@@ -17,6 +17,10 @@ module.exports = {
         "jungle-green": "var(--ion-color-jungle-green)",
         orange: "var(--ion-color-orange)",
       },
+      fontFamily: {
+        nasalization: "nasalization",
+        audiowide: "Audiowide, cursive",
+      },
     },
   },
   variants: {
