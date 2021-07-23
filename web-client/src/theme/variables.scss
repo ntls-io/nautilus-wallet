@@ -6,9 +6,18 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+@font-face {
+  font-family: "nasalization";
+  src: url("../assets/fonts/nasalization.otf") format("opentype");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Open+Sans&display=swap");
+
 /** Ionic CSS Variables **/
 :root {
-  /** primary **/
+  --ion-font-family: "Open Sans", sans-serif;
+
+  /** colors **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
