@@ -25,9 +25,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-ion-toolbar,
-ion-content,
-ion-footer {
-  --background: var(--ion-color-prussian-blue);
-  --color: var(--ion-color-white);
+:root {
+  // Docs: https://ionicframework.com/docs/theming/themes#application-colors
+  --ion-background-color: var(--ion-color-prussian-blue);
+  --ion-background-color-rgb: var(--ion-color-prussian-blue-rgb);
+  --ion-text-color: var(--ion-color-white);
+  --ion-text-color-rgb: var(--ion-color-white-rgb);
 }
