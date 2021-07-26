@@ -5,17 +5,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "prussian-blue": "var(--ion-color-prussian-blue)",
-        "usafa-blue": "var(--ion-color-usafa-blue)",
-        "viridian-green": "var(--ion-color-viridian-green)",
-        "portland-orange": "var(--ion-color-portland-orange)",
-        "blue-jeans": "var(--ion-color-blue-jeans)",
-        gainsboro: "var(--ion-color-gainsboro)",
-        "caribbean-green": "var(--ion-color-caribbean-green)",
-        mustard: "var(--ion-color-mustard)",
+        primary: "var(--ion-color-primary)",
+        "primary-background": "var(--ion-color-primary-background)",
+        secondary: "var(--ion-color-secondary)",
+        tertiary: "var(--ion-color-tertiary)",
+        success: "var(--ion-color-success)",
+        warning: "var(--ion-color-warning)",
+        danger: "var(--ion-color-danger)",
+        dark: "var(--ion-color-dark)",
+        medium: "var(--ion-color-medium)",
+        light: "var(--ion-color-light)",
         "jungle-green": "var(--ion-color-jungle-green)",
-        "indigo-dye": "var(--ion-color-indigo-dye)",
-        "morning-blue": "var(--ion-color-morning-blue)",
       },
       fontFamily: {
         nasalization: "nasalization",
