@@ -9,13 +9,6 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'wallet',
-    loadChildren: () =>
-      import('./views/wallet/wallet.module').then(
-        m => m.WalletPageModule // prettier-ignore
-      ),
-  },
-  {
     path: 'login',
     loadChildren: () =>
       import('./views/login/login.module').then(
