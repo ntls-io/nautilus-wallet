@@ -13,5 +13,5 @@ const Template: Story<ActionItemComponent> = (args: ActionItemComponent) => ({
 export const Default = Template.bind({});
 Default.args = {
   icon: 'wallet',
-  title: 'My wallet',
+  title: 'My Wallet',
 };
