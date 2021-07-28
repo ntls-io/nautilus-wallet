@@ -7,13 +7,6 @@ const routes: Routes = [
     path: '',
     component: HomePage,
   },
-  {
-    path: 'wallet',
-    loadChildren: () =>
-      import('../wallet/wallet.module').then(
-        m => m.WalletPageModule // prettier-ignore
-      ),
-  },
 ];
 
 @NgModule({

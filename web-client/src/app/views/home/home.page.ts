@@ -11,7 +11,7 @@ export class HomePage implements OnInit {
     {
       title: 'My Wallet',
       icon: faWallet,
-      path: 'wallet',
+      path: '../wallet',
     },
     {
       title: 'My Profile',
