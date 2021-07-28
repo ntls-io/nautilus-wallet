@@ -1,3 +1,4 @@
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
@@ -9,6 +10,7 @@ export default {
   component: HomePage,
   decorators: [
     moduleMetadata({
+      imports: [FontAwesomeModule],
       declarations: [
         HeaderComponent,
         ActionItemComponent,
