@@ -4,6 +4,7 @@
     "types": ["node"]
   },
   "exclude": [
+    "../src/tests",
     "../src/test.ts",
     "../src/**/*.spec.ts",
     "../projects/**/*.spec.ts"

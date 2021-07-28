@@ -1,6 +1,7 @@
 on:
   push:
     paths:
+      - '.github/workflows/web-client.yaml'
       - 'web-client/**'
 
 defaults:
@@ -51,7 +52,19 @@ jobs:
       # See https://github.com/angular/angular-cli/issues/6286
       # See also the CI config in protractor.conf.js
       - name: Test (E2E / Protractor)
-        run: npm run e2e
+        # XXX: Disable the default "webdriverUpdate" behaviour for GitHub Actions.
+        #
+        # The GitHub Actions virtual environment already has matching versions of Chrome and ChromeDriver installed:
+        # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#browsers-and-drivers
+        #
+        # Without this flag, "ng e2e" will download the latest ChromeDriver, which will fail with a version mismatch
+        # error during the windows of time that a new Chrome major version has been released, but the GitHub image
+        # hasn't been updated yet.
+        #
+        # Note: This flag is not actually documented as part of "ng e2e", but see:
+        # https://stackoverflow.com/a/54757277
+        # https://ngrefs.com/cli/builder-protractor#webdriverUpdate
+        run: npm run e2e -- --webdriverUpdate=false
 
       - name: Check (eslint)
         run: npm run lint
