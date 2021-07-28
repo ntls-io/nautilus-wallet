@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-action-item',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ActionItemComponent implements OnInit {
   @Input() title: string | undefined;
-  @Input() icon: string | undefined;
+  @Input() icon: IconProp | undefined;
   @Input() path: string | undefined;
 
   constructor() {}
