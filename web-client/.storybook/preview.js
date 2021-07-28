@@ -34,8 +34,8 @@ export const decorators = [
   // See AppComponent's template:
   componentWrapperDecorator(
     (story) => `
-      <ion-app>
-        <ion-router-outlet>${story}</ion-router-outlet>
+      <ion-app color="primary">
+        <ion-router-outlet class="max-w-screen-sm m-auto">${story}</ion-router-outlet>
       </ion-app>
     `
   ),
