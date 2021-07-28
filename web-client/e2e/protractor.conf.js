@@ -49,3 +49,19 @@ if (process.env["CI"]) {
     },
   };
 }
+
+// If CHROMEWEBDRIVER is set, use that as a base directory for chromedriver, rather than invoking webdriver-manager.
+//
+// This is intended to work with GitHub Actions:
+// https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#browsers-and-drivers
+// https://github.com/actions/virtual-environments/blob/ubuntu20/20210726.1/images/linux/scripts/installers/google-chrome.sh#L56-L67
+//
+// Docs:
+// https://github.com/angular/protractor/blob/6.0.0/lib/config.ts#L68-L76
+if (process.env["CHROMEWEBDRIVER"]) {
+  /** @type { import("protractor").Config } */
+  exports.config = {
+    ...exports.config,
+    chromeDriver: process.env["CHROMEWEBDRIVER"] + "/chromedriver",
+  };
+}
