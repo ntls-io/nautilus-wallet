@@ -1,5 +1,7 @@
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { QRCodeModule } from 'angularx-qrcode';
+import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
 import { WalletPage } from './wallet.page';
 
 export default {
@@ -7,7 +9,8 @@ export default {
   component: WalletPage,
   decorators: [
     moduleMetadata({
-      imports: [QRCodeModule],
+      imports: [FontAwesomeModule],
+      declarations: [HeaderComponent, ActionItemComponent],
     }),
   ],
 } as Meta;

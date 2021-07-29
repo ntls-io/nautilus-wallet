@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  faCreditCard,
+  faMoneyBill,
+  faMoneyCheck,
+  faQrcode,
+  faReceipt,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-wallet',
@@ -6,26 +14,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wallet.page.scss'],
 })
 export class WalletPage implements OnInit {
+  faWallet = faWallet;
+
   actionItems = [
     {
       title: 'Send Money',
-      icon: 'cash',
+      icon: faCreditCard,
     },
     {
       title: 'Top Up Wallet',
-      icon: 'cash',
+      icon: faMoneyBill,
     },
     {
       title: 'Withdraw',
-      icon: 'archive',
+      icon: faMoneyCheck,
     },
     {
       title: 'Receive',
-      icon: 'qr-code',
+      icon: faQrcode,
     },
     {
       title: 'My Transactions',
-      icon: 'receipt',
+      icon: faReceipt,
     },
   ];
 

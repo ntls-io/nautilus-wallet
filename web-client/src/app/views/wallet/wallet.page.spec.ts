@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
 import { verifyButtonNavigation } from '../../../tests/test.helpers';
 import { routes } from '../../app-routing.module';
 import { WalletPage } from './wallet.page';
@@ -15,7 +17,7 @@ describe('WalletPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [],
+        declarations: [HeaderComponent, ActionItemComponent],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
