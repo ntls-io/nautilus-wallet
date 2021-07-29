@@ -54,3 +54,16 @@
   --ion-color-step-900: #e6ebee;
   --ion-color-step-950: #f2f5f6;
 }
+
+.app-item {
+  @apply border border-solid rounded-lg m-3;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --detail-icon-opacity: 1;
+}
+
+// iOS specific (not supported atm)
+.ios {
+  --ion-toolbar-background: var(--ion-color-primary-background);
+  --ion-toolbar-color: var(--ion-color-white);
+}
