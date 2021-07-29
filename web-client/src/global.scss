@@ -32,11 +32,6 @@
   --ion-text-color: var(--ion-color-white);
   --ion-text-color-rgb: var(--ion-color-white-rgb);
 
-  .ios {
-    --ion-toolbar-background: var(--ion-color-primary-background);
-    --ion-toolbar-color: var(--ion-color-white);
-  }
-
   // Generated with: https://ionicframework.com/docs/theming/themes#stepped-color-generator
   // NOTE: Re-generate these whenever --ion-background-color / --ion-text-color change
   --ion-color-step-50: #0d3e59;
@@ -65,4 +60,10 @@
   --padding-top: 12px;
   --padding-bottom: 12px;
   --detail-icon-opacity: 1;
+}
+
+// iOS specific (not supported atm)
+.ios {
+  --ion-toolbar-background: var(--ion-color-primary-background);
+  --ion-toolbar-color: var(--ion-color-white);
 }
