@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
   faCreditCard,
-  faMoneyBill,
-  faMoneyCheck,
+  faDonate,
+  faHandHoldingUsd,
   faQrcode,
   faReceipt,
   faWallet,
@@ -20,14 +20,15 @@ export class WalletPage implements OnInit {
     {
       title: 'Send Money',
       icon: faCreditCard,
+      path: '../send-funds',
     },
     {
       title: 'Top Up Wallet',
-      icon: faMoneyBill,
+      icon: faDonate,
     },
     {
       title: 'Withdraw',
-      icon: faMoneyCheck,
+      icon: faHandHoldingUsd,
     },
     {
       title: 'Receive',
@@ -37,7 +38,7 @@ export class WalletPage implements OnInit {
       title: 'My Transactions',
       icon: faReceipt,
     },
-  ];
+  ]; // Placeholder icons until we get definite ones.
 
   constructor() {}
 
