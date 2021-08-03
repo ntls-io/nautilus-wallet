@@ -5,7 +5,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'wallet',
+    redirectTo: 'landing',
     pathMatch: 'full',
   },
   {
