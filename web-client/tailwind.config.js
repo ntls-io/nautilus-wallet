@@ -32,4 +32,7 @@ module.exports = {
     require("@tailwindcss/line-clamp"),
     require("@tailwindcss/typography"),
   ],
+  corePlugins: {
+    preflight: false, //https://tailwindcss.com/docs/preflight
+  },
 };
