@@ -3,10 +3,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { routes } from 'src/app/app-routing.module';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
-import { verifyButtonNavigation } from '../../../tests/test.helpers';
-import { routes } from '../../app-routing.module';
+import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -37,6 +37,6 @@ describe('WalletPage', () => {
   });
 
   it('navigates to send funds', async (): Promise<void> => {
-    await verifyButtonNavigation(router, fixture, '/wallet/send-funds');
+    await verifyNavigationTrigger(router, fixture, '/wallet/send-funds');
   });
 });
