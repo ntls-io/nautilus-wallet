@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
-import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
-import { HeaderComponent } from 'src/app/components/header/header.component';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletPageRoutingModule } from './wallet-routing.module';
 import { WalletPage } from './wallet.page';
 
@@ -14,8 +12,8 @@ import { WalletPage } from './wallet.page';
     FormsModule,
     IonicModule,
     WalletPageRoutingModule,
-    FontAwesomeModule,
+    SharedModule,
   ],
-  declarations: [WalletPage, HeaderComponent, ActionItemComponent],
+  declarations: [WalletPage],
 })
 export class WalletPageModule {}

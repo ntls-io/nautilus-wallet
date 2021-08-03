@@ -1,7 +1,5 @@
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
-import { HeaderComponent } from 'src/app/components/header/header.component';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletPage } from './wallet.page';
 
 export default {
@@ -9,8 +7,7 @@ export default {
   component: WalletPage,
   decorators: [
     moduleMetadata({
-      imports: [FontAwesomeModule],
-      declarations: [HeaderComponent, ActionItemComponent],
+      imports: [SharedModule],
     }),
   ],
 } as Meta;

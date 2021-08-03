@@ -1,11 +1,9 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
-import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
-import { HeaderComponent } from 'src/app/components/header/header.component';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { WalletPage } from './wallet.page';
 
@@ -17,12 +15,12 @@ describe('WalletPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [HeaderComponent, ActionItemComponent],
+        declarations: [WalletPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          SharedModule,
         ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
 
       router = TestBed.inject(Router);
