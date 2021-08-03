@@ -5,7 +5,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'landing',
+    redirectTo: 'wallet',
     pathMatch: 'full',
   },
   {
@@ -41,6 +41,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/landing/landing.module').then(
         m => m.LandingPageModule // prettier-ignore
+      ),
+  },
+  {
+    path: 'send-funds',
+    loadChildren: () =>
+      import('./views/send-funds/send-funds.module').then(
+        (m) => m.SendFundsPageModule
       ),
   },
 ];
