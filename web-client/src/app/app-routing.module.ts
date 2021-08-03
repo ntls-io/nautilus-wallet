@@ -43,13 +43,6 @@ export const routes: Routes = [
         m => m.LandingPageModule // prettier-ignore
       ),
   },
-  {
-    path: 'send-funds',
-    loadChildren: () =>
-      import('./views/send-funds/send-funds.module').then(
-        (m) => m.SendFundsPageModule
-      ),
-  },
 ];
 
 @NgModule({

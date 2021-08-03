@@ -20,7 +20,7 @@ export class WalletPage implements OnInit {
     {
       title: 'Send Money',
       icon: faCreditCard,
-      path: '../send-funds',
+      path: '/wallet/send-funds',
     },
     {
       title: 'Top Up Wallet',
