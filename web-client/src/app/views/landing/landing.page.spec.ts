@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { verifyNavigationTrigger } from '../../../tests/test.helpers';
+import { getTranslocoTestingModule } from '../../../tests/transloco.helpers';
 import { routes } from '../../app-routing.module';
 import { LandingPage } from './landing.page';
 
@@ -17,6 +18,7 @@ describe('LandingPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          getTranslocoTestingModule(),
         ],
       }).compileComponents();
 
