@@ -14,7 +14,6 @@ describe('LandingPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [LandingPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),

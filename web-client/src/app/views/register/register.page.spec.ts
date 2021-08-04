@@ -14,7 +14,6 @@ describe('RegisterPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [RegisterPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),

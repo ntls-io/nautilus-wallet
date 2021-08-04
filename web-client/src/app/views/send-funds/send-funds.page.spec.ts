@@ -13,7 +13,6 @@ describe('SendFundsPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [SendFundsPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),

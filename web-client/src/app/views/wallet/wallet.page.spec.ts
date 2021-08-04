@@ -15,7 +15,6 @@ describe('WalletPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [WalletPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
