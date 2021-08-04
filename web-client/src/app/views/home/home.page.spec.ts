@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
-import { HeaderComponent } from 'src/app/components/header/header.component';
-import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { HomePage } from './home.page';
 
 describe('HomePage', () => {
@@ -13,13 +11,8 @@ describe('HomePage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          HomePage,
-          HeaderComponent,
-          ActionItemComponent,
-          ProfileCardHorizontalComponent,
-        ],
-        imports: [IonicModule.forRoot(), RouterTestingModule],
+        declarations: [HomePage],
+        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(HomePage);

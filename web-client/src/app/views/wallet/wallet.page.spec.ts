@@ -1,10 +1,10 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { verifyButtonNavigation } from '../../../tests/test.helpers';
-import { routes } from '../../app-routing.module';
+import { routes } from 'src/app/app-routing.module';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -15,12 +15,12 @@ describe('WalletPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [],
+        declarations: [WalletPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          SharedModule,
         ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
 
       router = TestBed.inject(Router);
@@ -35,6 +35,6 @@ describe('WalletPage', () => {
   });
 
   it('navigates to send funds', async (): Promise<void> => {
-    await verifyButtonNavigation(router, fixture, '/wallet/send-funds');
+    await verifyNavigationTrigger(router, fixture, '/wallet/send-funds');
   });
 });

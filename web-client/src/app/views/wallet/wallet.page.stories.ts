@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { QRCodeModule } from 'angularx-qrcode';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletPage } from './wallet.page';
 
 export default {
@@ -7,7 +7,7 @@ export default {
   component: WalletPage,
   decorators: [
     moduleMetadata({
-      imports: [QRCodeModule],
+      imports: [SharedModule],
     }),
   ],
 } as Meta;

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { verifyButtonNavigation } from '../../../tests/test.helpers';
+import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { routes } from '../../app-routing.module';
 import { LoginPage } from './login.page';
 
@@ -33,10 +33,10 @@ describe('LoginPage', () => {
   });
 
   it('navigates to wallet', async (): Promise<void> => {
-    await verifyButtonNavigation(router, fixture, '/wallet');
+    await verifyNavigationTrigger(router, fixture, '/wallet');
   });
 
   it('navigates to register', async (): Promise<void> => {
-    await verifyButtonNavigation(router, fixture, '/register');
+    await verifyNavigationTrigger(router, fixture, '/register');
   });
 });

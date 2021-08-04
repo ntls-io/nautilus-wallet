@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { QRCodeModule } from 'angularx-qrcode';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletPageRoutingModule } from './wallet-routing.module';
 import { WalletPage } from './wallet.page';
 
@@ -12,9 +12,8 @@ import { WalletPage } from './wallet.page';
     FormsModule,
     IonicModule,
     WalletPageRoutingModule,
-    QRCodeModule,
+    SharedModule,
   ],
   declarations: [WalletPage],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WalletPageModule {}
