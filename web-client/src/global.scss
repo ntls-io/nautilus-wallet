@@ -62,6 +62,14 @@
   --detail-icon-opacity: 1;
 }
 
+ion-searchbar {
+  .searchbar-input {
+    border: solid 1px white !important;
+    --border-radius: 9999px;
+    --background: transparent;
+  }
+}
+
 // iOS specific (not supported atm)
 .ios {
   --ion-toolbar-background: var(--ion-color-primary-background);
