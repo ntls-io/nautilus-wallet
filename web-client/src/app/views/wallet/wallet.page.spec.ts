@@ -24,6 +24,7 @@ describe('WalletPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
+      router.navigate(['wallet']);
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -35,6 +36,11 @@ describe('WalletPage', () => {
   });
 
   it('navigates to send funds', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/wallet/send-funds');
+    await verifyNavigationTrigger(
+      router,
+      fixture,
+      '/wallet',
+      '/wallet/send-funds'
+    );
   });
 });

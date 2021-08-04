@@ -22,6 +22,7 @@ describe('LandingPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
+      router.navigate(['landing']);
       fixture = TestBed.createComponent(LandingPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -33,10 +34,10 @@ describe('LandingPage', () => {
   });
 
   it('navigates to wallet', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/wallet');
+    await verifyNavigationTrigger(router, fixture, '/landing', '/wallet');
   });
 
   it('navigates to register', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/register');
+    await verifyNavigationTrigger(router, fixture, '/landing', '/register');
   });
 });

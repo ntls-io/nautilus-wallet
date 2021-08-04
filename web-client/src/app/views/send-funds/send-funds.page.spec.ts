@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { routes } from '../../app-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
 describe('SendFundsPage', () => {
+  let router: Router;
   let component: SendFundsPage;
   let fixture: ComponentFixture<SendFundsPage>;
 
@@ -11,9 +14,14 @@ describe('SendFundsPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [SendFundsPage],
-        imports: [IonicModule.forRoot(), RouterTestingModule],
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule.withRoutes(routes),
+        ],
       }).compileComponents();
 
+      router = TestBed.inject(Router);
+      router.navigate(['home']);
       fixture = TestBed.createComponent(SendFundsPage);
       component = fixture.componentInstance;
       fixture.detectChanges();

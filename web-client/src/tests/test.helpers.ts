@@ -13,9 +13,10 @@ import { Router } from '@angular/router';
 export const verifyNavigationTrigger = async (
   router: Router,
   fixture: ComponentFixture<any>,
+  urlBeforeClick: string,
   routerLink: string
 ): Promise<void> => {
-  expect(router.url).toBe('/');
+  expect(router.url).toBe(urlBeforeClick);
   const trigger = getElementWithLink(fixture.debugElement, routerLink);
   trigger.nativeElement.click();
   await fixture.whenStable();
