@@ -37,4 +37,8 @@ describe('WalletPage', () => {
   it('navigates to send funds', async (): Promise<void> => {
     await verifyNavigationTrigger(router, fixture, '/wallet/send-funds');
   });
+
+  it('navigates to send funds', async (): Promise<void> => {
+    await verifyNavigationTrigger(router, fixture, '/wallet/receive');
+  });
 });
