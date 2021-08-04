@@ -1,16 +1,19 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Opened Wallet</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <app-header></app-header>
 </ion-header>
 
 <ion-content>
-  <ion-button routerLink="/wallet/send-funds"> Send Funds </ion-button>
-  <qrcode
-    qrdata="Nautilus"
-    elementType="svg"
-    [width]="250"
-    [margin]="1"
-    errorCorrectionLevel="H"
-  ></qrcode>
+  <div class="ion-text-center p-2">
+    <fa-icon [icon]="faWallet" size="5x"></fa-icon>
+    <h1 class="font-semibold font-nasalization">My Wallet</h1>
+    <p>Send or recieve money quickly and easily, select an option below</p>
+  </div>
+  <ion-list>
+    <app-action-item
+      *ngFor="let item of actionItems"
+      [title]="item.title"
+      [icon]="item.icon"
+      [path]="item.path"
+    ></app-action-item>
+  </ion-list>
 </ion-content>

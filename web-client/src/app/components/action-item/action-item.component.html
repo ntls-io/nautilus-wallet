@@ -1,0 +1,11 @@
+<ion-item
+  lines="none"
+  button
+  detail
+  detailIcon="chevron-forward-circle"
+  class="app-item"
+  [routerLink]="path"
+>
+  <fa-icon *ngIf="icon" [icon]="icon" size="lg" slot="start"></fa-icon>
+  <ion-label>{{ title }}</ion-label>
+</ion-item>

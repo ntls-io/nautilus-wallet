@@ -1,7 +1,16 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <app-header></app-header>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <h2 class="ion-text-center font-nasalization">Welcome to Nautilus</h2>
+  <ion-list>
+    <app-profile-card-horizontal></app-profile-card-horizontal>
+    <app-action-item
+      *ngFor="let item of actionItems"
+      [title]="item.title"
+      [icon]="item.icon"
+      [path]="item.path"
+    ></app-action-item>
+  </ion-list>
+</ion-content>

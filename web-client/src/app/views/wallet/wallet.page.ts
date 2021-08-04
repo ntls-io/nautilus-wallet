@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  faCreditCard,
+  faDonate,
+  faHandHoldingUsd,
+  faQrcode,
+  faReceipt,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-wallet',
@@ -6,6 +14,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wallet.page.scss'],
 })
 export class WalletPage implements OnInit {
+  faWallet = faWallet;
+
+  actionItems = [
+    {
+      title: 'Send Money',
+      icon: faCreditCard,
+      path: '/wallet/send-funds',
+    },
+    {
+      title: 'Top Up Wallet',
+      icon: faDonate,
+    },
+    {
+      title: 'Withdraw',
+      icon: faHandHoldingUsd,
+    },
+    {
+      title: 'Receive',
+      icon: faQrcode,
+    },
+    {
+      title: 'My Transactions',
+      icon: faReceipt,
+    },
+  ]; // Placeholder icons until we get definite ones.
+
   constructor() {}
 
   ngOnInit() {}

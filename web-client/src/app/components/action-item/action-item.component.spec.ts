@@ -1,21 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { HomePage } from './home.page';
+import { ActionItemComponent } from './action-item.component';
 
-describe('HomePage', () => {
-  let component: HomePage;
-  let fixture: ComponentFixture<HomePage>;
+describe('ActionItemComponent', () => {
+  let component: ActionItemComponent;
+  let fixture: ComponentFixture<ActionItemComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [HomePage],
-        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
+        declarations: [ActionItemComponent],
+        imports: [IonicModule.forRoot(), RouterTestingModule],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(HomePage);
+      fixture = TestBed.createComponent(ActionItemComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
     })
