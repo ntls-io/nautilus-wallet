@@ -14,7 +14,6 @@ describe('LoginPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [LoginPage],
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
@@ -22,6 +21,7 @@ describe('LoginPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
+      router.navigate(['login']);
       fixture = TestBed.createComponent(LoginPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -33,10 +33,10 @@ describe('LoginPage', () => {
   });
 
   it('navigates to wallet', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/wallet');
+    await verifyNavigationTrigger(router, fixture, '/login', '/wallet');
   });
 
   it('navigates to register', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/register');
+    await verifyNavigationTrigger(router, fixture, '/login', '/register');
   });
 });
