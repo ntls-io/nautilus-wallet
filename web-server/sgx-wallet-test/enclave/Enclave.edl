@@ -1,0 +1,8 @@
+enclave {
+    from "sgx_tstd.edl" import *;
+    from "sgx_backtrace.edl" import *;
+    trusted
+    {
+        public sgx_status_t run_tests_ecall();
+    };
+};

@@ -1,0 +1,13 @@
+[package]
+# name matches APP_U in Makefile
+name = "sgx-wallet-test-app"
+version = "0.1.0"
+edition = "2018"
+authors = ["Registree"]
+build = "build.rs"
+
+[dependencies]
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
+sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
+
+[patch.'https://github.com/apache/teaclave-sgx-sdk.git']
