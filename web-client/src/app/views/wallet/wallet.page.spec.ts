@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { verifyNavigationTrigger } from '../../../tests/test.helpers';
+import { verifyNavigationTrigger } from 'src/tests/test.helpers';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -43,7 +43,12 @@ describe('WalletPage', () => {
     );
   });
 
-  it('navigates to send funds', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/wallet/receive');
+  it('navigates to receive', async (): Promise<void> => {
+    await verifyNavigationTrigger(
+      router,
+      fixture,
+      '/wallet',
+      '/wallet/receive'
+    );
   });
 });
