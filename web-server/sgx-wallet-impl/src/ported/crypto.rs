@@ -56,8 +56,6 @@ impl Default for SodaBoxCrypto {
 impl SodaBoxCrypto {
     pub fn new() -> Self {
         let enclave_key = get_enclave_key();
-        let mut pub_key = [0_u8; 32];
-        let mut priv_key = [0_u8; 32];
         let mut seed = [0_u8; 32];
         let (left, right) = seed.split_at_mut(16);
 
@@ -65,6 +63,13 @@ impl SodaBoxCrypto {
         // TODO: Guard against the panics
         left.copy_from_slice(enclave_key.expose_secret());
         right.copy_from_slice(enclave_key.expose_secret());
+
+        SodaBoxCrypto::from_seed(seed)
+    }
+
+    pub fn from_seed(mut seed: [u8; 32]) -> Self {
+        let mut pub_key = [0_u8; 32];
+        let mut priv_key = [0_u8; 32];
 
         // TODO: Create a PR to make the requirement for seed broader if possible
         sodalite::box_keypair_seed(&mut pub_key, &mut priv_key, &seed);

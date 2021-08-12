@@ -10,7 +10,9 @@ use sgx_wallet_impl::ported::crypto::{
     CRYPTO_BOX_ZEROBYTES,
 };
 
-fn get_test_keypair(seed: &[u8; 32]) -> (sodalite::BoxPublicKey, sodalite::BoxSecretKey) {
+pub(crate) fn get_test_keypair(
+    seed: &[u8; 32],
+) -> (sodalite::BoxPublicKey, sodalite::BoxSecretKey) {
     let mut pub_key = sodalite::BoxPublicKey::default();
     let mut secret_key = sodalite::BoxSecretKey::default();
     sodalite::box_keypair_seed(&mut pub_key, &mut secret_key, seed);
