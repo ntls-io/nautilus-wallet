@@ -1,16 +1,11 @@
 [package]
-# name matches ENCLAVE_CARGO_LIB in Makefile
-name = "sgx-wallet-test-enclave"
+name = "sgx-wallet-impl"
 version = "0.1.0"
-edition = "2018"
 authors = ["Registree"]
+edition = "2018"
 
 [lib]
-crate-type = ["staticlib"]
 test = false
-
-[features]
-default = []
 
 [dependencies]
 # no_std
@@ -19,11 +14,16 @@ sodalite = { version = "0.4.0", default-features = false }
 
 # SGX SDK
 sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"] }
-sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
+sgx_tse = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
 
-sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
+# Community SGX forks
+rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
+thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
+
+# Our SGX forks
+algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
 sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk" }
