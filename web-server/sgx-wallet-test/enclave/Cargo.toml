@@ -24,6 +24,9 @@ sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", featu
 sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 
+# Community SGX forks
+serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
+
 sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 
 # Test-only

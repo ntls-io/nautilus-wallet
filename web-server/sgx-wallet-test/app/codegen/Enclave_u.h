@@ -12,6 +12,7 @@
 #include "sys/uio.h"
 #include "inc/stat.h"
 #include "inc/dirent.h"
+#include "pwd.h"
 
 #include <stdlib.h> /* for size_t */
 
@@ -240,6 +241,98 @@ int SGX_UBRIDGE(SGX_NOCONVENTION, u_dirfd_ocall, (int* error, void* dirp));
 #ifndef U_FSTATAT64_OCALL_DEFINED__
 #define U_FSTATAT64_OCALL_DEFINED__
 int SGX_UBRIDGE(SGX_NOCONVENTION, u_fstatat64_ocall, (int* error, int dirfd, const char* pathname, struct stat64_t* buf, int flags));
+#endif
+#ifndef U_ENVIRON_OCALL_DEFINED__
+#define U_ENVIRON_OCALL_DEFINED__
+char** SGX_UBRIDGE(SGX_NOCONVENTION, u_environ_ocall, (void));
+#endif
+#ifndef U_GETENV_OCALL_DEFINED__
+#define U_GETENV_OCALL_DEFINED__
+char* SGX_UBRIDGE(SGX_NOCONVENTION, u_getenv_ocall, (const char* name));
+#endif
+#ifndef U_SETENV_OCALL_DEFINED__
+#define U_SETENV_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_NOCONVENTION, u_setenv_ocall, (int* error, const char* name, const char* value, int overwrite));
+#endif
+#ifndef U_UNSETENV_OCALL_DEFINED__
+#define U_UNSETENV_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_NOCONVENTION, u_unsetenv_ocall, (int* error, const char* name));
+#endif
+#ifndef U_CHDIR_OCALL_DEFINED__
+#define U_CHDIR_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_NOCONVENTION, u_chdir_ocall, (int* error, const char* dir));
+#endif
+#ifndef U_GETCWD_OCALL_DEFINED__
+#define U_GETCWD_OCALL_DEFINED__
+char* SGX_UBRIDGE(SGX_NOCONVENTION, u_getcwd_ocall, (int* error, char* buf, size_t buflen));
+#endif
+#ifndef U_GETPWUID_R_OCALL_DEFINED__
+#define U_GETPWUID_R_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_NOCONVENTION, u_getpwuid_r_ocall, (unsigned int uid, struct passwd* pwd, char* buf, size_t buflen, struct passwd** passwd_result));
+#endif
+#ifndef U_GETUID_OCALL_DEFINED__
+#define U_GETUID_OCALL_DEFINED__
+unsigned int SGX_UBRIDGE(SGX_NOCONVENTION, u_getuid_ocall, (void));
+#endif
+#ifndef U_SGXPROTECTEDFS_EXCLUSIVE_FILE_OPEN_DEFINED__
+#define U_SGXPROTECTEDFS_EXCLUSIVE_FILE_OPEN_DEFINED__
+void* SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_exclusive_file_open, (const char* filename, uint8_t read_only, int64_t* file_size, int32_t* error_code));
+#endif
+#ifndef U_SGXPROTECTEDFS_CHECK_IF_FILE_EXISTS_DEFINED__
+#define U_SGXPROTECTEDFS_CHECK_IF_FILE_EXISTS_DEFINED__
+uint8_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_check_if_file_exists, (const char* filename));
+#endif
+#ifndef U_SGXPROTECTEDFS_FREAD_NODE_DEFINED__
+#define U_SGXPROTECTEDFS_FREAD_NODE_DEFINED__
+int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fread_node, (void* f, uint64_t node_number, uint8_t* buffer, uint32_t node_size));
+#endif
+#ifndef U_SGXPROTECTEDFS_FWRITE_NODE_DEFINED__
+#define U_SGXPROTECTEDFS_FWRITE_NODE_DEFINED__
+int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fwrite_node, (void* f, uint64_t node_number, uint8_t* buffer, uint32_t node_size));
+#endif
+#ifndef U_SGXPROTECTEDFS_FCLOSE_DEFINED__
+#define U_SGXPROTECTEDFS_FCLOSE_DEFINED__
+int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fclose, (void* f));
+#endif
+#ifndef U_SGXPROTECTEDFS_FFLUSH_DEFINED__
+#define U_SGXPROTECTEDFS_FFLUSH_DEFINED__
+uint8_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fflush, (void* f));
+#endif
+#ifndef U_SGXPROTECTEDFS_REMOVE_DEFINED__
+#define U_SGXPROTECTEDFS_REMOVE_DEFINED__
+int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_remove, (const char* filename));
+#endif
+#ifndef U_SGXPROTECTEDFS_RECOVERY_FILE_OPEN_DEFINED__
+#define U_SGXPROTECTEDFS_RECOVERY_FILE_OPEN_DEFINED__
+void* SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_recovery_file_open, (const char* filename));
+#endif
+#ifndef U_SGXPROTECTEDFS_FWRITE_RECOVERY_NODE_DEFINED__
+#define U_SGXPROTECTEDFS_FWRITE_RECOVERY_NODE_DEFINED__
+uint8_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fwrite_recovery_node, (void* f, uint8_t* data, uint32_t data_length));
+#endif
+#ifndef U_SGXPROTECTEDFS_DO_FILE_RECOVERY_DEFINED__
+#define U_SGXPROTECTEDFS_DO_FILE_RECOVERY_DEFINED__
+int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_do_file_recovery, (const char* filename, const char* recovery_filename, uint32_t node_size));
+#endif
+#ifndef SGX_OC_CPUIDEX_DEFINED__
+#define SGX_OC_CPUIDEX_DEFINED__
+void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
+#endif
+#ifndef SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
+#define SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_wait_untrusted_event_ocall, (const void* self));
+#endif
+#ifndef SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
+#define SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_untrusted_event_ocall, (const void* waiter));
+#endif
+#ifndef SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
+#define SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const void* waiter, const void* self));
+#endif
+#ifndef SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
+#define SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
 #endif
 
 sgx_status_t run_tests_ecall(sgx_enclave_id_t eid, sgx_status_t* retval);

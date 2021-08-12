@@ -19,6 +19,11 @@ pub extern "C" fn run_tests_ecall() -> sgx_status_t {
         ported::test_attestation::create_report_impl_works,
         ported::test_crypto::soda_box_decrypt_works,
         ported::test_crypto::soda_box_encrypt_works,
+        ported::test_kv_store::test_alter,
+        ported::test_kv_store::test_load_save_delete,
+        ported::test_kv_store::test_mutate,
+        ported::test_kv_store::test_try_insert,
+        ported::test_kv_store_fs::prop_fs_safe_roundtrip,
     );
 
     sgx_status_t::SGX_SUCCESS

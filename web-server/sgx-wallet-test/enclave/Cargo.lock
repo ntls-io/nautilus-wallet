@@ -242,6 +242,12 @@ version = "0.9.0"
 source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=d107bd0718f723221750a4f2973451b386cbf9d2#d107bd0718f723221750a4f2973451b386cbf9d2"
 
 [[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
 name = "idna"
 version = "0.2.0"
 source = "git+https://github.com/mesalock-linux/rust-url-sgx#23832f3191456c2d4a0faab10952e1747be58ca8"
@@ -613,8 +619,11 @@ name = "sgx-wallet-impl"
 version = "0.1.0"
 dependencies = [
  "algonaut",
+ "hex",
  "rand 0.7.3",
  "secrecy",
+ "serde",
+ "serde_json",
  "sgx_tcrypto",
  "sgx_tse",
  "sgx_tstd",
@@ -629,6 +638,7 @@ version = "0.1.0"
 dependencies = [
  "proptest",
  "secrecy",
+ "serde",
  "sgx-wallet-impl",
  "sgx_rand",
  "sgx_tcrypto",
