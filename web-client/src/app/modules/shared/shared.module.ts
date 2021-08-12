@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
@@ -19,6 +20,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     HeaderComponent,
     ProfileCardHorizontalComponent,
     ActionItemComponent,
+    ZXingScannerModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
