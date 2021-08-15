@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate sgx_tstd as std;
 
+mod helpers;
 mod ported;
 
 use std::string::String;
