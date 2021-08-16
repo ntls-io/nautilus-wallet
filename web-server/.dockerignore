@@ -3,6 +3,9 @@
 !Makefile.toml
 !rust-toolchain.toml
 !rustfmt.toml
+!sgx-helpers/Cargo.lock
+!sgx-helpers/Cargo.toml
+!sgx-helpers/src/
 !sgx-wallet-impl/Cargo.lock
 !sgx-wallet-impl/Cargo.toml
 !sgx-wallet-impl/src/
