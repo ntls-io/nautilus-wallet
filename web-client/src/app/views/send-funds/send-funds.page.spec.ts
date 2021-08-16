@@ -2,7 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { routes } from '../../app-routing.module';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { verifyNavigationTrigger } from 'src/tests/test.helpers';
+import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
 describe('SendFundsPage', () => {
@@ -16,11 +18,12 @@ describe('SendFundsPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          SharedModule,
         ],
       }).compileComponents();
 
       router = TestBed.inject(Router);
-      router.navigate(['home']);
+      router.navigate(['send-funds']);
       fixture = TestBed.createComponent(SendFundsPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -29,5 +32,9 @@ describe('SendFundsPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('navigates to scanner', async (): Promise<void> => {
+    await verifyNavigationTrigger(router, fixture, '/send-funds', 'scanner');
   });
 });
