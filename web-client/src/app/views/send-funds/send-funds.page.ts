@@ -12,6 +12,7 @@ export class SendFundsPage implements OnInit {
       label: 'Quick pay',
       title: 'Scan a QR code',
       icon: faQrcode,
+      path: 'scanner',
     },
     {
       label: 'Add New Friend',
