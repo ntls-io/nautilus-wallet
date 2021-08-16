@@ -39,7 +39,7 @@ FILES_T_F_RUST=$(addprefix $(SRC_T), $(FILES_T_RUST))
 OUTPUT_W_FT=$(addprefix $(OBJ_T), $(OUTPUT_T))
 
 # All Rust and other source files that the Cargo build depends on.
-FILES_RUST_F = Cargo.toml Cargo.lock $(shell find src -name '*.rs')
+FILES_RUST_F = Cargo.toml Cargo.lock $(shell find src ../../sgx-wallet-impl/src -name '*.rs')
 
 # Contains compilation rules for the enclave part
 

@@ -12,18 +12,18 @@ impl Actor for WalletEnclaveActor {
     type Context = Context<Self>;
 }
 
-pub(crate) struct CreateReport {
+pub(crate) struct CreateReportMessage {
     pub(crate) target_info: sgx_target_info_t,
 }
 
-impl Message for CreateReport {
+impl Message for CreateReportMessage {
     type Result = SgxResult<SgxResult<(sgx_report_t, [u8; 32])>>;
 }
 
-impl Handler<CreateReport> for WalletEnclaveActor {
-    type Result = <CreateReport as Message>::Result;
+impl Handler<CreateReportMessage> for WalletEnclaveActor {
+    type Result = <CreateReportMessage as Message>::Result;
 
-    fn handle(&mut self, msg: CreateReport, _ctx: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: CreateReportMessage, _ctx: &mut Self::Context) -> Self::Result {
         self.wallet_enclave.create_report(msg.target_info)
     }
 }

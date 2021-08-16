@@ -27,11 +27,12 @@
 )
 
 
-typedef struct ms_ecall_test_t {
+typedef struct ms_enclave_create_report_t {
 	sgx_status_t ms_retval;
-	const uint8_t* ms_some_string;
-	size_t ms_len;
-} ms_ecall_test_t;
+	const sgx_target_info_t* ms_p_qe3_target;
+	sgx_report_t* ms_p_report;
+	uint8_t* ms_enclave_data;
+} ms_enclave_create_report_t;
 
 typedef struct ms_t_global_init_ecall_t {
 	uint64_t ms_id;
@@ -437,50 +438,87 @@ typedef struct ms_u_fstatat64_ocall_t {
 	int ms_flags;
 } ms_u_fstatat64_ocall_t;
 
-static sgx_status_t SGX_CDECL sgx_ecall_test(void* pms)
+static sgx_status_t SGX_CDECL sgx_enclave_create_report(void* pms)
 {
-	CHECK_REF_POINTER(pms, sizeof(ms_ecall_test_t));
+	CHECK_REF_POINTER(pms, sizeof(ms_enclave_create_report_t));
 	//
 	// fence after pointer checks
 	//
 	sgx_lfence();
-	ms_ecall_test_t* ms = SGX_CAST(ms_ecall_test_t*, pms);
+	ms_enclave_create_report_t* ms = SGX_CAST(ms_enclave_create_report_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	const uint8_t* _tmp_some_string = ms->ms_some_string;
-	size_t _tmp_len = ms->ms_len;
-	size_t _len_some_string = _tmp_len;
-	uint8_t* _in_some_string = NULL;
+	const sgx_target_info_t* _tmp_p_qe3_target = ms->ms_p_qe3_target;
+	size_t _len_p_qe3_target = sizeof(sgx_target_info_t);
+	sgx_target_info_t* _in_p_qe3_target = NULL;
+	sgx_report_t* _tmp_p_report = ms->ms_p_report;
+	size_t _len_p_report = sizeof(sgx_report_t);
+	sgx_report_t* _in_p_report = NULL;
+	uint8_t* _tmp_enclave_data = ms->ms_enclave_data;
+	size_t _len_enclave_data = 32 * sizeof(uint8_t);
+	uint8_t* _in_enclave_data = NULL;
 
-	CHECK_UNIQUE_POINTER(_tmp_some_string, _len_some_string);
+	CHECK_UNIQUE_POINTER(_tmp_p_qe3_target, _len_p_qe3_target);
+	CHECK_UNIQUE_POINTER(_tmp_p_report, _len_p_report);
+	CHECK_UNIQUE_POINTER(_tmp_enclave_data, _len_enclave_data);
 
 	//
 	// fence after pointer checks
 	//
 	sgx_lfence();
 
-	if (_tmp_some_string != NULL && _len_some_string != 0) {
-		if ( _len_some_string % sizeof(*_tmp_some_string) != 0)
-		{
-			status = SGX_ERROR_INVALID_PARAMETER;
-			goto err;
-		}
-		_in_some_string = (uint8_t*)malloc(_len_some_string);
-		if (_in_some_string == NULL) {
+	if (_tmp_p_qe3_target != NULL && _len_p_qe3_target != 0) {
+		_in_p_qe3_target = (sgx_target_info_t*)malloc(_len_p_qe3_target);
+		if (_in_p_qe3_target == NULL) {
 			status = SGX_ERROR_OUT_OF_MEMORY;
 			goto err;
 		}
 
-		if (memcpy_s(_in_some_string, _len_some_string, _tmp_some_string, _len_some_string)) {
+		if (memcpy_s(_in_p_qe3_target, _len_p_qe3_target, _tmp_p_qe3_target, _len_p_qe3_target)) {
 			status = SGX_ERROR_UNEXPECTED;
 			goto err;
 		}
 
 	}
+	if (_tmp_p_report != NULL && _len_p_report != 0) {
+		if ((_in_p_report = (sgx_report_t*)malloc(_len_p_report)) == NULL) {
+			status = SGX_ERROR_OUT_OF_MEMORY;
+			goto err;
+		}
 
-	ms->ms_retval = ecall_test((const uint8_t*)_in_some_string, _tmp_len);
+		memset((void*)_in_p_report, 0, _len_p_report);
+	}
+	if (_tmp_enclave_data != NULL && _len_enclave_data != 0) {
+		if ( _len_enclave_data % sizeof(*_tmp_enclave_data) != 0)
+		{
+			status = SGX_ERROR_INVALID_PARAMETER;
+			goto err;
+		}
+		if ((_in_enclave_data = (uint8_t*)malloc(_len_enclave_data)) == NULL) {
+			status = SGX_ERROR_OUT_OF_MEMORY;
+			goto err;
+		}
+
+		memset((void*)_in_enclave_data, 0, _len_enclave_data);
+	}
+
+	ms->ms_retval = enclave_create_report((const sgx_target_info_t*)_in_p_qe3_target, _in_p_report, _in_enclave_data);
+	if (_in_p_report) {
+		if (memcpy_s(_tmp_p_report, _len_p_report, _in_p_report, _len_p_report)) {
+			status = SGX_ERROR_UNEXPECTED;
+			goto err;
+		}
+	}
+	if (_in_enclave_data) {
+		if (memcpy_s(_tmp_enclave_data, _len_enclave_data, _in_enclave_data, _len_enclave_data)) {
+			status = SGX_ERROR_UNEXPECTED;
+			goto err;
+		}
+	}
 
 err:
-	if (_in_some_string) free(_in_some_string);
+	if (_in_p_qe3_target) free(_in_p_qe3_target);
+	if (_in_p_report) free(_in_p_report);
+	if (_in_enclave_data) free(_in_enclave_data);
 	return status;
 }
 
@@ -545,7 +583,7 @@ SGX_EXTERNC const struct {
 } g_ecall_table = {
 	3,
 	{
-		{(void*)(uintptr_t)sgx_ecall_test, 0, 0},
+		{(void*)(uintptr_t)sgx_enclave_create_report, 0, 0},
 		{(void*)(uintptr_t)sgx_t_global_init_ecall, 0, 0},
 		{(void*)(uintptr_t)sgx_t_global_exit_ecall, 0, 0},
 	}

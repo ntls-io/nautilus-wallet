@@ -13,7 +13,13 @@ test = false
 default = []
 
 [dependencies]
+# SGX SDK
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 
+sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
+
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
+sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }

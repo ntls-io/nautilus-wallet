@@ -1,11 +1,12 @@
 #include "Enclave_u.h"
 #include <errno.h>
 
-typedef struct ms_ecall_test_t {
+typedef struct ms_enclave_create_report_t {
 	sgx_status_t ms_retval;
-	const uint8_t* ms_some_string;
-	size_t ms_len;
-} ms_ecall_test_t;
+	const sgx_target_info_t* ms_p_qe3_target;
+	sgx_report_t* ms_p_report;
+	uint8_t* ms_enclave_data;
+} ms_enclave_create_report_t;
 
 typedef struct ms_t_global_init_ecall_t {
 	uint64_t ms_id;
@@ -914,12 +915,13 @@ static const struct {
 		(void*)Enclave_u_fstatat64_ocall,
 	}
 };
-sgx_status_t ecall_test(sgx_enclave_id_t eid, sgx_status_t* retval, const uint8_t* some_string, size_t len)
+sgx_status_t enclave_create_report(sgx_enclave_id_t eid, sgx_status_t* retval, const sgx_target_info_t* p_qe3_target, sgx_report_t* p_report, uint8_t enclave_data[32])
 {
 	sgx_status_t status;
-	ms_ecall_test_t ms;
-	ms.ms_some_string = some_string;
-	ms.ms_len = len;
+	ms_enclave_create_report_t ms;
+	ms.ms_p_qe3_target = p_qe3_target;
+	ms.ms_p_report = p_report;
+	ms.ms_enclave_data = (uint8_t*)enclave_data;
 	status = sgx_ecall(eid, 0, &ocall_table_Enclave, &ms);
 	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
 	return status;

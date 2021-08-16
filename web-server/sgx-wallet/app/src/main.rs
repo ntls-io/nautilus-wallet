@@ -1,18 +1,18 @@
 extern crate sgx_types;
 extern crate sgx_urts;
 
+use std::io;
+
+use http_service_impl::server::run_server;
+use sgx_types::{sgx_attributes_t, sgx_launch_token_t, sgx_misc_attribute_t, SgxResult};
+use sgx_urts::SgxEnclave;
+
+use crate::trait_impls::WalletEnclaveImpl;
+
 #[path = "../codegen/Enclave_u.rs"]
 mod enclave_u;
-
-use enclave_u::ecall_test;
-use sgx_types::{
-    sgx_attributes_t,
-    sgx_launch_token_t,
-    sgx_misc_attribute_t,
-    sgx_status_t,
-    SgxResult,
-};
-use sgx_urts::SgxEnclave;
+mod safe_ecalls;
+mod trait_impls;
 
 static ENCLAVE_FILE: &str = "enclave.signed.so";
 
@@ -35,40 +35,18 @@ fn init_enclave() -> SgxResult<SgxEnclave> {
     )
 }
 
-fn main() {
-    let enclave = match init_enclave() {
-        Ok(r) => {
-            println!("[+] Init Enclave Successful {}!", r.geteid());
-            r
-        }
-        Err(x) => {
-            println!("[-] Init Enclave Failed {}!", x.as_str());
-            return;
-        }
-    };
+#[actix_web::main]
+async fn main() -> io::Result<()> {
+    let enclave = init_enclave()
+        .map_err(|sgx_error| {
+            io::Error::new(
+                io::ErrorKind::Other,
+                format!("init_enclave failed: {:?}", sgx_error),
+            )
+        })
+        .unwrap();
+    let wallet_enclave = Box::new(WalletEnclaveImpl { enclave });
 
-    let input_string = String::from("Sending this string to the enclave then printing it\n");
-
-    let mut retval = sgx_status_t::SGX_SUCCESS;
-
-    let result = unsafe {
-        ecall_test(
-            enclave.geteid(),
-            &mut retval,
-            input_string.as_ptr() as *const u8,
-            input_string.len(),
-        )
-    };
-
-    match result {
-        sgx_status_t::SGX_SUCCESS => {}
-        _ => {
-            println!("[-] ECALL Enclave Failed {}!", result.as_str());
-            return;
-        }
-    }
-
-    println!("[+] ecall_test success...");
-
-    enclave.destroy();
+    let bind_addr = "127.0.0.1:8080";
+    run_server(wallet_enclave, bind_addr).await
 }

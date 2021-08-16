@@ -1,6 +1,5 @@
 use actix::{Actor, Addr, Arbiter};
-use actix_web::web::Data;
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 
 use crate::actors::WalletEnclaveActor;
 use crate::resources;
@@ -26,8 +25,8 @@ pub async fn run_server(
             wallet_enclave_addr: wallet_enclave_addr.clone(),
         };
         App::new()
-            .app_data(Data::new(app_state))
-            .service(resources::enclave_report)
+            .app_data(web::Data::new(app_state))
+            .service(resources::enclave_report::get_enclave_report)
     });
     println!("run_server: binding to http://{}/", bind_addr);
     let server1 = server.bind(bind_addr)?;
