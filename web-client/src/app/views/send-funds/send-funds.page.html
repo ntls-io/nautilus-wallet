@@ -1,12 +1,23 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Send Funds</ion-title>
-  </ion-toolbar>
+  <app-header></app-header>
 </ion-header>
 
 <ion-content>
-  <ion-button>Scan QR-Code</ion-button>
+  <div class="ion-text-center p-2">
+    <h1 class="font-semibold font-nasalization">Send Money</h1>
+  </div>
+  <ion-searchbar class="px-3"></ion-searchbar>
+  <ion-list>
+    <ion-item-group *ngFor="let item of actionItems">
+      <ion-list-header>
+        <ion-label>
+          <h3>{{item.label}}</h3>
+        </ion-label>
+      </ion-list-header>
+      <app-action-item
+        [title]="item.title"
+        [icon]="item.icon"
+      ></app-action-item>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
