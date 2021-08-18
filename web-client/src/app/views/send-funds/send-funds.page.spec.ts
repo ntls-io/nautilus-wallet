@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { verifyNavigationTrigger } from 'src/tests/test.helpers';
 import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
@@ -32,9 +31,5 @@ describe('SendFundsPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('navigates to scanner', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/send-funds', 'scanner');
   });
 });
