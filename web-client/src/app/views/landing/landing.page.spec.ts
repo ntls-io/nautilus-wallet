@@ -35,7 +35,12 @@ describe('LandingPage', () => {
   });
 
   it('navigates to wallet', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/landing', '/wallet');
+    await verifyNavigationTrigger(
+      router,
+      fixture,
+      '/landing',
+      '/wallet-access'
+    );
   });
 
   it('navigates to register', async (): Promise<void> => {
