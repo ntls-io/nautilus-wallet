@@ -52,7 +52,10 @@ export const routes: Routes = [
   },
   {
     path: 'wallet-access',
-    loadChildren: () => import('./views/wallet-access/wallet-access.module').then( m => m.WalletAccessPageModule)
+    loadChildren: () =>
+      import('./views/wallet-access/wallet-access.module').then(
+        (m) => m.WalletAccessPageModule
+      ),
   },
 ];
 
