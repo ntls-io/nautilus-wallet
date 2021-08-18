@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-scanner',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./scanner.page.scss'],
 })
 export class ScannerPage implements OnInit {
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
@@ -16,5 +17,9 @@ export class ScannerPage implements OnInit {
 
   scanErrorHandler(event: any) {
     console.log(event);
+  }
+
+  dismissModal() {
+    this.modalCtrl.dismiss();
   }
 }
