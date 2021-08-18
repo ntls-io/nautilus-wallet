@@ -13,7 +13,7 @@ export class SendFundsPage implements OnInit {
       label: 'Quick pay',
       title: 'Scan a QR code',
       icon: faQrcode,
-      action: () => this.presentScanner(),
+      action: 'presentScanner',
     },
     {
       label: 'Add New Friend',
@@ -29,5 +29,16 @@ export class SendFundsPage implements OnInit {
 
   async presentScanner() {
     await this.scannerService.presentScanner();
+  }
+
+  perform(action: string | undefined) {
+    switch (action) {
+      case 'presentScanner':
+        this.presentScanner();
+        break;
+
+      default:
+        break;
+    }
   }
 }
