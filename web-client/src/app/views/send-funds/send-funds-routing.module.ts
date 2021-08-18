@@ -7,13 +7,6 @@ export const routes: Routes = [
     path: '',
     component: SendFundsPage,
   },
-  {
-    path: 'scanner',
-    loadChildren: () =>
-      import('../scanner/scanner.module').then(
-        m => m.ScannerPageModule // prettier-ignore
-      ),
-  },
 ];
 
 @NgModule({
