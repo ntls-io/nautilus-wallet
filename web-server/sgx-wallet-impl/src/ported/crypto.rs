@@ -118,7 +118,7 @@ impl SodaBoxCrypto {
 
     pub fn encrypt_message(
         &mut self,
-        message: SecretBytes,
+        message: &SecretBytes,
         their_pk: &PublicKey,
     ) -> Result<EncryptedMessage, CryptoError> {
         let nonce = self.get_nonce()?;

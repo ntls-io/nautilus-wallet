@@ -53,7 +53,7 @@ pub fn soda_box_encrypt_works() {
     let mut sut = SodaBoxCrypto::new();
 
     let result = sut
-        .encrypt_message(Secret::new(message.clone().into_boxed_slice()), &pub_key)
+        .encrypt_message(&Secret::new(message.clone().into_boxed_slice()), &pub_key)
         .unwrap();
     let ciphertext = [
         vec![0_u8; CRYPTO_BOX_BOXZEROBYTES],

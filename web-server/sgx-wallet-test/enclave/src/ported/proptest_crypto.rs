@@ -23,7 +23,7 @@ fn prop_soda_box_roundtrips_impl(
     assert_ne!(sender.get_pubkey(), receiver.get_pubkey());
 
     let encrypted = sender
-        .encrypt_message(Secret::new(plaintext.clone()), &receiver.get_pubkey())
+        .encrypt_message(&Secret::new(plaintext.clone()), &receiver.get_pubkey())
         .unwrap();
     let decrypted = receiver
         .decrypt_message(
