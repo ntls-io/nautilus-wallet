@@ -27,6 +27,7 @@ pub async fn run_server(
         App::new()
             .app_data(web::Data::new(app_state))
             .service(resources::enclave_report::get_enclave_report)
+            .service(resources::wallet_operation::post_wallet_operation)
     });
     println!("run_server: binding to http://{}/", bind_addr);
     let server1 = server.bind(bind_addr)?;

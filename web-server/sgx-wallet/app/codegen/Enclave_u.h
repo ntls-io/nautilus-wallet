@@ -23,6 +23,26 @@
 extern "C" {
 #endif
 
+#ifndef SGX_OC_CPUIDEX_DEFINED__
+#define SGX_OC_CPUIDEX_DEFINED__
+void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
+#endif
+#ifndef SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
+#define SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_wait_untrusted_event_ocall, (const void* self));
+#endif
+#ifndef SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
+#define SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_untrusted_event_ocall, (const void* waiter));
+#endif
+#ifndef SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
+#define SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const void* waiter, const void* self));
+#endif
+#ifndef SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
+#define SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
+#endif
 #ifndef U_THREAD_SET_EVENT_OCALL_DEFINED__
 #define U_THREAD_SET_EVENT_OCALL_DEFINED__
 int SGX_UBRIDGE(SGX_NOCONVENTION, u_thread_set_event_ocall, (int* error, const void* tcs));
@@ -315,28 +335,9 @@ uint8_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_fwrite_recovery_node, (vo
 #define U_SGXPROTECTEDFS_DO_FILE_RECOVERY_DEFINED__
 int32_t SGX_UBRIDGE(SGX_NOCONVENTION, u_sgxprotectedfs_do_file_recovery, (const char* filename, const char* recovery_filename, uint32_t node_size));
 #endif
-#ifndef SGX_OC_CPUIDEX_DEFINED__
-#define SGX_OC_CPUIDEX_DEFINED__
-void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
-#endif
-#ifndef SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
-#define SGX_THREAD_WAIT_UNTRUSTED_EVENT_OCALL_DEFINED__
-int SGX_UBRIDGE(SGX_CDECL, sgx_thread_wait_untrusted_event_ocall, (const void* self));
-#endif
-#ifndef SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
-#define SGX_THREAD_SET_UNTRUSTED_EVENT_OCALL_DEFINED__
-int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_untrusted_event_ocall, (const void* waiter));
-#endif
-#ifndef SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
-#define SGX_THREAD_SETWAIT_UNTRUSTED_EVENTS_OCALL_DEFINED__
-int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const void* waiter, const void* self));
-#endif
-#ifndef SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
-#define SGX_THREAD_SET_MULTIPLE_UNTRUSTED_EVENTS_OCALL_DEFINED__
-int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
-#endif
 
 sgx_status_t enclave_create_report(sgx_enclave_id_t eid, sgx_status_t* retval, const sgx_target_info_t* p_qe3_target, sgx_report_t* p_report, uint8_t enclave_data[32]);
+sgx_status_t wallet_operation(sgx_enclave_id_t eid, sgx_status_t* retval, const uint8_t* sealed_request_buffer, size_t sealed_request_size, uint8_t* sealed_response_buffer, size_t sealed_response_capacity, size_t* sealed_response_used);
 sgx_status_t t_global_init_ecall(sgx_enclave_id_t eid, uint64_t id, const uint8_t* path, size_t len);
 sgx_status_t t_global_exit_ecall(sgx_enclave_id_t eid);
 

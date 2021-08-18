@@ -17,4 +17,16 @@ impl WalletEnclave for WalletEnclaveImpl {
     ) -> SgxResult<SgxResult<(sgx_report_t, [u8; 32])>> {
         safe_ecalls::safe_enclave_create_report(self.enclave.geteid(), target_info)
     }
+
+    fn wallet_operation(
+        &self,
+        sealed_request: &[u8],
+        sealed_response_capacity: usize,
+    ) -> SgxResult<SgxResult<Box<[u8]>>> {
+        safe_ecalls::safe_wallet_operation(
+            self.enclave.geteid(),
+            sealed_request,
+            sealed_response_capacity,
+        )
+    }
 }

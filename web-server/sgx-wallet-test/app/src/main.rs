@@ -4,6 +4,8 @@ extern crate sgx_urts;
 #[path = "../codegen/Enclave_u.rs"]
 mod enclave_u;
 
+use std::fs::create_dir_all;
+
 use sgx_types::{
     sgx_attributes_t,
     sgx_launch_token_t,
@@ -45,6 +47,9 @@ fn main() {
             return;
         }
     };
+
+    // FIXME: See WALLET_STORE_DIR
+    create_dir_all("wallet_store").unwrap();
 
     let mut retval = sgx_status_t::SGX_ERROR_UNEXPECTED;
 

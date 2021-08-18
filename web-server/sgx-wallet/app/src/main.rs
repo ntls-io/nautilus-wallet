@@ -1,6 +1,7 @@
 extern crate sgx_types;
 extern crate sgx_urts;
 
+use std::fs::create_dir_all;
 use std::io;
 
 use http_service_impl::server::run_server;
@@ -46,6 +47,9 @@ async fn main() -> io::Result<()> {
         })
         .unwrap();
     let wallet_enclave = Box::new(WalletEnclaveImpl { enclave });
+
+    // FIXME: See WALLET_STORE_DIR
+    create_dir_all("wallet_store")?;
 
     let bind_addr = "127.0.0.1:8080";
     run_server(wallet_enclave, bind_addr).await

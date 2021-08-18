@@ -28,7 +28,7 @@ pub enum CryptoError {
 
 pub(crate) type PublicKey = [u8; 32];
 type PrivateKey = Secret<[u8; 32]>;
-type Nonce = [u8; 24];
+pub(crate) type Nonce = [u8; 24];
 
 // FIXME: sodalite should expose these padding constants.
 // Values referenced from https://tweetnacl.cr.yp.to/20140427/tweetnacl.h

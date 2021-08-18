@@ -72,7 +72,7 @@ $(CODEGEN_U)Enclave_u.rs: $(CODEGEN_U)Enclave_u.h
 	@bindgen \
 		--no-recursive-allowlist \
 		--raw-line 'use sgx_types::*;' \
-		--allowlist-function enclave_create_report \
+		--allowlist-function 'enclave_create_report|wallet_operation' \
 		--use-array-pointers-in-arguments \
 		--output $@ \
 		$? \

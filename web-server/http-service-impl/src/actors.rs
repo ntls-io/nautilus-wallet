@@ -12,6 +12,8 @@ impl Actor for WalletEnclaveActor {
     type Context = Context<Self>;
 }
 
+// CreateReport message:
+
 pub(crate) struct CreateReportMessage {
     pub(crate) target_info: sgx_target_info_t,
 }
@@ -28,4 +30,21 @@ impl Handler<CreateReportMessage> for WalletEnclaveActor {
     }
 }
 
-// TODO: WalletOperation
+// WalletOperation message:
+
+pub(crate) struct WalletOperationMessage {
+    pub(crate) sealed_request_bytes: Box<[u8]>,
+}
+
+impl Message for WalletOperationMessage {
+    type Result = SgxResult<SgxResult<Box<[u8]>>>;
+}
+
+impl Handler<WalletOperationMessage> for WalletEnclaveActor {
+    type Result = <WalletOperationMessage as Message>::Result;
+
+    fn handle(&mut self, msg: WalletOperationMessage, _ctx: &mut Self::Context) -> Self::Result {
+        self.wallet_enclave
+            .wallet_operation_with_retry(&msg.sealed_request_bytes)
+    }
+}

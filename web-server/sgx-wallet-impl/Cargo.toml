@@ -11,6 +11,7 @@ test = false
 # no_std
 hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 secrecy = "0.8.0"
+zeroize = { version = "1.4.1", features = ["alloc", "zeroize_derive"] }
 sodalite = { version = "0.4.0", default-features = false }
 
 # SGX SDK
@@ -21,6 +22,7 @@ sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev 
 
 # Community SGX forks
 rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
+rmp-serde = { git = "https://github.com/mesalock-linux/msgpack-rust-sgx" }
 serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
 serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx" }
 thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
