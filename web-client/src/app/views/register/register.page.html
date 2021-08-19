@@ -1,49 +1,63 @@
 <ion-header>
+  <app-header></app-header>
 </ion-header>
-<app-header></app-header>
 <ion-content>
-  <ion-grid>
+  <h1 class="font-bold font-nasalization text-center">Sign Up</h1>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <ion-list class="inputList">
+      <ion-item lines="none">
+        <ion-label position="stacked" for="firstName">First Name</ion-label>
+        <ion-input type="text" formControlName="firstName" name="firstName"></ion-input>
+        <p *ngIf="f.firstName.touched && f.firstName.errors?.required">First Name Is Required</p>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked" for="lastName">Last Name</ion-label>
+        <ion-input type="text" formControlName="lastName"></ion-input>
+        <p *ngIf="f.lastName.touched && f.lastName.errors?.required">Last Name Is Required</p>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked" for="mobile">Mobile</ion-label>
+        <ion-input type="text" formControlName="mobile"></ion-input>
+        <p *ngIf="f.mobile.touched && f.mobile.errors?.required">Mobile Number Is Required</p>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked" for="password">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+        <p *ngIf="f.password.touched && f.password.errors?.required">Password Is Required</p>
+        <p *ngIf="f.confirmPassword.touched && f.password.errors?.minlength">A Minimum Of 4 Digits Is Required</p>
+        <p *ngIf="f.confirmPassword.touched && f.password.errors?.maxlength">Your Password Can Only Be Up To 10 Characters</p>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked" for="confirmPassword"
+          >Confirm Password</ion-label
+        >
+        <ion-input
+          type="password"
+          formControlName="confirmPassword"
+        ></ion-input>
+        <p *ngIf="f.confirmPassword.touched && f.confirmPassword.errors?.required">Password Confirmation Is Required</p>
+        <p *ngIf="f.confirmPassword.touched && f.confirmPassword.errors?.minlength">A Minimum Of 4 Digits Is Required</p>
+        <p *ngIf="f.confirmPassword.touched && f.confirmPassword.errors?.maxlength">Your Password Can Only Be Up To 10 Characters</p>
+        <p *ngIf="f.confirmPassword.touched && registrationForm.errors?.misMatch">Passwords Do Not Match</p>
 
-    <ion-title class="text-center">Sign Up</ion-title>
-    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-      <ion-grid class="h-full">
-        <ion-row class="h-full content-around">
-          <ion-item lines="none">
-            <div>
-              <ion-label position="stacked" for="firstName">First Name</ion-label>
-              <input class="formInput" type="text" formControlName="firstName">
-            </div>
-          </ion-item>
-          <ion-item lines="none">
-            <div>
-              <ion-label position="stacked" for="lastName">Last Name</ion-label>
-              <input class="formInput" type="text" formControlName="lastName">
-            </div>
-          </ion-item>
-          <ion-item lines="none">
-            <div>
-              <ion-label position="stacked" for="mobile">Mobile</ion-label>
-              <input class="formInput" type="text" formControlName="mobile">
-            </div>
-          </ion-item>
-          <ion-item lines="none">
-            <div>
-              <ion-label position="stacked" for="password">Password</ion-label>
-              <input class="formInput" type="password" formControlName="password">
-            </div>
-          </ion-item>
-          <ion-item lines="none">
-            <div>
-              <ion-label position="stacked" for="confirmPassword">Confirm Password</ion-label>
-              <input class="formInput" type="password" formControlName="confirmPassword">
-            </div>
-          </ion-item>
-        <ion-col size="12">
-      <ion-button expand="block" shape="round" type="submit">Submit</ion-button>
-    </ion-col>
-    </ion-row>
-  </ion-grid>
-    </form>
-  </ion-grid>
 
+      </ion-item>
+      <ion-grid>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12" class="ion-text-center">
+            <ion-button 
+            [disabled]="registrationForm.errors ||
+            f.firstName.errors ||
+            f.lastName.errors ||
+            f.mobile.errors ||
+            f.password.errors ||
+            f.confirmPassword.errors
+            " expand="block" shape="round" type="submit"
+              >Submit</ion-button
+            >
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </form>
 </ion-content>

@@ -1,10 +1,17 @@
-.formInput {
-    width: 100%;
-    border-color: white;
-    border-radius: 50px;
-    border-width: 2px;
-    background: transparent;
-    margin-bottom: 10px;
-    margin-top: 6px;
+.inputList {
+  ion-input {
+    @apply bg-transparent border-white rounded-full border-2 my-1.5 border-solid;
+
+    --border-radius: 9999px;
+    --padding-start: 10px;
+  }
+  p {
+    color: red;
+    font-size: 10px;
+    margin-top: 0;
+  }
 }
 
+ion-button {
+  margin-top: 10px;
+}
