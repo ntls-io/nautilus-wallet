@@ -30,7 +30,6 @@ export class ScannerService {
       });
       return active;
     } catch (e) {
-      console.log(e);
       return false;
     }
   }
