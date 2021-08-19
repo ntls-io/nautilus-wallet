@@ -43,10 +43,13 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@ionic/angular": "^5.5.2",
+    "@msgpack/msgpack": "^2.7.0",
     "@ngneat/transloco": "^2.22.0",
+    "algosdk": "^1.11.0",
     "angularx-qrcode": "^11.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "tweetnacl": "^1.0.3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
