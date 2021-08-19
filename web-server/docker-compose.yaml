@@ -1,0 +1,68 @@
+# Bring up the server:
+#
+#   docker-compose up server-sw
+#
+# Run the tests:
+#
+#   docker-compose run test-sw
+#
+# For HW mode, replace `sw` with `hw`.
+
+services:
+
+  server-sw:
+    profiles: ["sw"]
+    build:
+      context: .
+      args:
+        SGX_MODE: "SW"
+      target: run-sgx-wallet-server-sw
+    read_only: true
+    init: true
+    environment:
+      BIND_ADDR: "0.0.0.0:8080"
+    volumes:
+       - wallet-data-sw:/app/wallet_store
+    ports:
+      - "8080:8080"
+
+  server-hw:
+    profiles: ["hw"]
+    build:
+      context: .
+      args:
+        SGX_MODE: "HW"
+      target: run-sgx-wallet-server-hw
+    read_only: true
+    init: true
+    environment:
+      BIND_ADDR: "0.0.0.0:8080"
+    devices:
+      - /dev/sgx/enclave
+      - /dev/sgx/provision
+    volumes:
+       - wallet-data-hw:/app/wallet_store
+    ports:
+      - "8080:8080"
+
+  test-sw:
+    profiles: ["test-sw"]
+    build:
+      context: .
+      args:
+        SGX_MODE: "SW"
+      target: run-sgx-wallet-test-sw
+    read_only: true
+
+  test-hw:
+    profiles: ["test-hw"]
+    build:
+      context: .
+      args:
+        SGX_MODE: "HW"
+      target: run-sgx-wallet-test-hw
+    read_only: true
+
+volumes:
+  wallet-data-sw:
+  wallet-data-hw:
