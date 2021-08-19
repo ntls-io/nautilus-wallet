@@ -54,7 +54,7 @@ export const routes: Routes = [
     path: 'wallet-access',
     loadChildren: () =>
       import('./views/wallet-access/wallet-access.module').then(
-        (m) => m.WalletAccessPageModule
+        (m) => m.WalletAccessPageModule //prettier-ignore
       ),
   },
 ];
