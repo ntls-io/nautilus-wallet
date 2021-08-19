@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -7,13 +7,22 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./lockscreen.page.scss'],
 })
 export class LockscreenPage implements OnInit {
-  @Input() passcode: string | undefined;
+  @Input() passcode: string | undefined = '1234';
 
   inputCombination = '';
   dots: any[] = [];
   isIncorrect = false;
 
   constructor(private modalCtrl: ModalController) {}
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key.match(/[0-9]/i)) {
+      this.add(parseInt(event.key, 10));
+    } else if (event.key === 'Backspace') {
+      this.delete();
+    }
+  }
 
   ngOnInit() {}
 
