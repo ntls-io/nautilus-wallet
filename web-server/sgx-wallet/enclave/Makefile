@@ -16,7 +16,7 @@ GCC_STEP1_T = -fstack-protector -I$(CUSTOM_COMMON_PATH)/inc -I$(CUSTOM_EDL_PATH)
 	-L$(LIB) $(ENCLAVE_CFLAGS) $(SGX_COMMON_CFLAGS)
 GCC_STEP2_T = -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \
 	-Wl,--whole-archive -l$(TRTS_LIB) -Wl,--no-whole-archive \
-	-Wl,--start-group -lsgx_tstdc -l$(SERVICE_LIB) -lsgx_tcrypto -L$(LIB) -lenclave -Wl,--end-group \
+	-Wl,--start-group -lsgx_tstdc -l$(SERVICE_LIB) -lsgx_tcrypto -lsgx_tcxx -lsgx_tprotected_fs -L$(LIB) -lenclave -Wl,--end-group \
 	-Wl,--version-script=$(SRC_T)Enclave.lds $(ENCLAVE_LDFLAGS)
 FILES_T = Enclave_t.c
 FILES_T_H = Enclave_t.h

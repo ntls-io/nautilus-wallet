@@ -2,6 +2,9 @@ enclave {
     from "sgx_tstd.edl" import *;
     from "sgx_backtrace.edl" import *;
 
+    from "sgx_env.edl" import *;
+    from "sgx_tprotected_fs.edl" import *;
+
     include "sgx_report.h"
 
     trusted {
