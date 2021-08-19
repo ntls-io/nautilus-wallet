@@ -9,7 +9,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./lockscreen.page.scss'],
 })
 export class LockscreenPage implements OnInit {
-  @Input() passcode: string | undefined = '1234';
+  @Input() passcode: string | undefined;
 
   inputCombination = '';
   dots: any[] = [];
