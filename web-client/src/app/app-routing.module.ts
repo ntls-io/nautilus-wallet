@@ -43,6 +43,13 @@ export const routes: Routes = [
         m => m.LandingPageModule // prettier-ignore
       ),
   },
+  {
+    path: 'lockscreen',
+    loadChildren: () =>
+      import('./views/lockscreen/lockscreen.module').then(
+        m => m.LockscreenPageModule // prettier-ignore
+      ),
+  },
 ];
 
 @NgModule({

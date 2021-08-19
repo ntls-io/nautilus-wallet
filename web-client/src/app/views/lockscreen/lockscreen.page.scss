@@ -1,0 +1,44 @@
+.lockscreen-page {
+  .keypad {
+    .keypad-item {
+      @apply w-20 h-20 mx-1 my-2 text-3xl;
+
+      &.keypad-icon {
+        --padding-start: 0;
+        --padding-end: 0;
+      }
+    }
+  }
+}
+
+.animated-shake {
+  animation-duration: 750ms;
+  animation-fill-mode: both;
+  animation-name: shake;
+
+  .dot {
+    @apply text-danger;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
+  }
+}
