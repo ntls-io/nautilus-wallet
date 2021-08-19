@@ -1,3 +1,5 @@
+use std::net::ToSocketAddrs;
+
 use actix::{Actor, Addr, Arbiter};
 use actix_web::{web, App, HttpServer};
 
@@ -11,10 +13,13 @@ pub(crate) struct AppState {
 }
 
 /// Run the server on the given address.
-pub async fn run_server(
+pub async fn run_server<Addr>(
     wallet_enclave: Box<dyn WalletEnclave>,
-    bind_addr: &str,
-) -> std::io::Result<()> {
+    bind_addr: Addr,
+) -> std::io::Result<()>
+where
+    Addr: ToSocketAddrs,
+{
     let enclave_arbiter = Arbiter::new();
     let wallet_enclave_addr = Actor::start_in_arbiter(&enclave_arbiter.handle(), |_ctx| {
         WalletEnclaveActor { wallet_enclave }
@@ -29,7 +34,5 @@ pub async fn run_server(
             .service(resources::enclave_report::get_enclave_report)
             .service(resources::wallet_operation::post_wallet_operation)
     });
-    println!("run_server: binding to http://{}/", bind_addr);
-    let server1 = server.bind(bind_addr)?;
-    server1.run().await
+    server.bind(bind_addr)?.run().await
 }
