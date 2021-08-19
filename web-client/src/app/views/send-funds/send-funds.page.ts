@@ -31,7 +31,7 @@ export class SendFundsPage implements OnInit {
     await this.scannerService.presentScanner();
   }
 
-  perform(action: string | undefined) {
+  execItemAction(action: string | undefined) {
     switch (action) {
       case 'presentScanner':
         this.presentScanner();

@@ -18,7 +18,7 @@
         [title]="item.title"
         [icon]="item.icon"
         [disabled]="item.disabled"
-        (click)="perform(item.action)"
+        (click)="execItemAction(item.action)"
       ></app-action-item>
     </ion-item-group>
   </ion-list>
