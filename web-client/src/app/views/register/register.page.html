@@ -1,11 +1,49 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Create Wallet</ion-title>
-  </ion-toolbar>
 </ion-header>
-
+<app-header></app-header>
 <ion-content>
-  <ion-button routerLink="/login" routerDirection="back">
-    Open Wallet
-  </ion-button>
+  <ion-grid>
+
+    <ion-title class="text-center">Sign Up</ion-title>
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <ion-grid class="h-full">
+        <ion-row class="h-full content-around">
+          <ion-item lines="none">
+            <div>
+              <ion-label position="stacked" for="firstName">First Name</ion-label>
+              <input class="formInput" type="text" formControlName="firstName">
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div>
+              <ion-label position="stacked" for="lastName">Last Name</ion-label>
+              <input class="formInput" type="text" formControlName="lastName">
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div>
+              <ion-label position="stacked" for="mobile">Mobile</ion-label>
+              <input class="formInput" type="text" formControlName="mobile">
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div>
+              <ion-label position="stacked" for="password">Password</ion-label>
+              <input class="formInput" type="password" formControlName="password">
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div>
+              <ion-label position="stacked" for="confirmPassword">Confirm Password</ion-label>
+              <input class="formInput" type="password" formControlName="confirmPassword">
+            </div>
+          </ion-item>
+        <ion-col size="12">
+      <ion-button expand="block" shape="round" type="submit">Submit</ion-button>
+    </ion-col>
+    </ion-row>
+  </ion-grid>
+    </form>
+  </ion-grid>
+
 </ion-content>
