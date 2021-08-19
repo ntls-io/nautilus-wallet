@@ -15,7 +15,11 @@
         <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Enter Pin</h1>
 
-        <div class="p-5" [ngClass]="{'animated-shake': isIncorrect}">
+        <div
+          class="p-5"
+          [ngClass]="{'animated-shake': isIncorrect}"
+          (click)="showKeyboard()"
+        >
           <ion-icon
             class="p-2 dot !text-5xl"
             [name]="dot.active ? 'radio-button-on' : 'radio-button-off'"

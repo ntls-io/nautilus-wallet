@@ -1,4 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -33,6 +35,14 @@ export class LockscreenPage implements OnInit {
           active: false,
         });
       });
+
+      this.showKeyboard();
+    }
+  }
+
+  async showKeyboard() {
+    if (Capacitor.isNativePlatform()) {
+      await Keyboard.show();
     }
   }
 
