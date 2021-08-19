@@ -11,10 +11,12 @@ export class ScannerPage implements OnInit {
 
   ngOnInit() {}
 
+  //TODO: handle successful scan
   scanSuccessHandler(event: any) {
     console.log(event);
   }
 
+  //TODO: handle scan error
   scanErrorHandler(event: any) {
     console.log(event);
   }
