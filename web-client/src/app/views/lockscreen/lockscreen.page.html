@@ -11,81 +11,17 @@
 <ion-content class="lockscreen-page ion-text-center">
   <ion-grid class="h-full">
     <ion-row class="h-full ion-justify-content-center">
-      <ion-col class="ion-align-self-center" size="12">
+      <ion-col class="ion-align-self-center" size="auto">
+        <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Enter Pin</h1>
 
         <div class="p-5" [ngClass]="{'animated-shake': isIncorrect}">
           <ion-icon
-            class="p-2 dot"
-            size="large"
+            class="p-2 dot !text-5xl"
             [name]="dot.active ? 'radio-button-on' : 'radio-button-off'"
             *ngFor="let dot of dots"
           >
           </ion-icon>
-        </div>
-
-        <div class="keypad">
-          <ion-button
-            *ngFor="let digit of [1,2,3]"
-            class="keypad-item"
-            shape="round"
-            fill="outline"
-            color="light"
-            (click)="add(digit)"
-            >{{digit}}</ion-button
-          >
-          <br />
-          <ion-button
-            *ngFor="let digit of [4,5,6]"
-            class="keypad-item"
-            shape="round"
-            fill="outline"
-            color="light"
-            (click)="add(digit)"
-            >{{digit}}</ion-button
-          >
-          <br />
-          <ion-button
-            *ngFor="let digit of [7,8,9]"
-            class="keypad-item"
-            shape="round"
-            fill="outline"
-            color="light"
-            (click)="add(digit)"
-            >{{digit}}</ion-button
-          >
-          <br />
-          <ion-button
-            class="keypad-item text-sm"
-            shape="round"
-            fill="clear"
-            color="light"
-          >
-          </ion-button>
-
-          <ion-button
-            class="keypad-item"
-            shape="round"
-            fill="outline"
-            color="light"
-            (click)="add(0)"
-            >0</ion-button
-          >
-
-          <ion-button
-            class="keypad-item text-lg"
-            shape="round"
-            fill="clear"
-            color="light"
-            (click)="delete()"
-          >
-            <ion-icon
-              *ngIf="inputCombination.length"
-              slot="icon-only"
-              size="large"
-              name="backspace"
-            ></ion-icon>
-          </ion-button>
         </div>
       </ion-col>
     </ion-row>

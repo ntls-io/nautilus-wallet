@@ -1,16 +1,3 @@
-.lockscreen-page {
-  .keypad {
-    .keypad-item {
-      @apply w-20 h-20 mx-1 my-2 text-3xl;
-
-      &.keypad-icon {
-        --padding-start: 0;
-        --padding-end: 0;
-      }
-    }
-  }
-}
-
 .animated-shake {
   animation-duration: 750ms;
   animation-fill-mode: both;
