@@ -33,6 +33,7 @@ export class WalletPage implements OnInit {
     {
       title: 'Receive',
       icon: faQrcode,
+      path: '/wallet/receive',
     },
     {
       title: 'My Transactions',
