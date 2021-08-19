@@ -14,6 +14,11 @@ export const routes: Routes = [
         (m) => m.SendFundsPageModule
       ),
   },
+  {
+    path: 'receive',
+    loadChildren: () =>
+      import('../receive/receive.module').then((m) => m.ReceivePageModule),
+  },
 ];
 
 @NgModule({
