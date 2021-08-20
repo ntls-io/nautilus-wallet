@@ -36,8 +36,11 @@ pub extern "C" fn run_tests_ecall() -> sgx_status_t {
         wallet_operations::test_open_wallet::open_wallet_bad_pin,
         wallet_operations::test_open_wallet::open_wallet_malformed_wallet_id,
         wallet_operations::test_open_wallet::open_wallet_works,
+        wallet_operations::test_sign_transaction::sign_transaction_empty,
         wallet_operations::test_sign_transaction::sign_transaction_malformed_transaction,
+        wallet_operations::test_sign_transaction::sign_transaction_without_tag,
         wallet_operations::test_sign_transaction::sign_transaction_works,
+        wallet_operations::test_sign_transaction_msgpack::prop_transaction_msgpack_roundtrips,
     );
 
     sgx_status_t::SGX_SUCCESS
