@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row id="print-section">
+      <ion-col size="12">
+        <qrcode
+          [qrdata]="wallet"
+          errorCorrectionLevel="H"
+          elementType="img"
+          [width]="1000"
+          [margin]="2"
+        ></qrcode>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <h2 class="font-nasalization">Address</h2>
+        <div class="border-dashed border-2 rounded p-3 my-2">
+          <ion-text class="font-bold">{{wallet}}</ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="white"
+          shape="round"
+          (click)="copyAddress(wallet)"
+        >
+          <ion-icon name="copy-outline"></ion-icon> Copy address
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="white"
+          shape="round"
+          ngxPrintItemButton
+          divID="print-section"
+        >
+          <ion-icon name="print-outline"></ion-icon> Print page
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

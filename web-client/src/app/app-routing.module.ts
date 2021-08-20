@@ -64,6 +64,13 @@ export const routes: Routes = [
         (m) => m.WalletAccessPageModule //prettier-ignore
       ),
   },
+  {
+    path: 'print-wallet',
+    loadChildren: () =>
+      import('./views/print-wallet/print-wallet.module').then(
+        (m) => m.PrintWalletPageModule
+      ),
+  },
 ];
 
 @NgModule({
