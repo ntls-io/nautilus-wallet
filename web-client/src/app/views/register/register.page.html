@@ -19,6 +19,7 @@
         <ion-label position="stacked" for="mobile">Mobile</ion-label>
         <ion-input type="text" formControlName="mobile"></ion-input>
         <p *ngIf="f.mobile.touched && f.mobile.errors?.required">Mobile Number Is Required</p>
+        <p *ngIf="f.mobile.touched && (f.mobile.errors?.minlength || f.mobile.errors?.maxlength)" >Invalid Phone Number</p>
       </ion-item>
       <ion-item lines="none">
         <ion-label position="stacked" for="password">Password</ion-label>

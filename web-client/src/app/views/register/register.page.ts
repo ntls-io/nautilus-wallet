@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.minLength(1),
+          Validators.minLength(10),
           Validators.maxLength(10),
         ]),
       ],
