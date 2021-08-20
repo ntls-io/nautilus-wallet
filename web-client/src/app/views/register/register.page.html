@@ -15,11 +15,11 @@
         <ion-input type="text" formControlName="lastName"></ion-input>
         <p *ngIf="f.lastName.touched && f.lastName.errors?.required">Last Name Is Required</p>
       </ion-item>
-      <ion-item lines="none">
-        <ion-label position="stacked" for="mobile">Mobile</ion-label>
-        <ion-input type="text" formControlName="mobile"></ion-input>
-        <p *ngIf="f.mobile.touched && f.mobile.errors?.required">Mobile Number Is Required</p>
-      </ion-item>
+      <!-- <ion-item lines="none">
+           <ion-label position="stacked" for="mobile">Mobile</ion-label>
+           <ion-input type="text" formControlName="mobile"></ion-input>
+           <p *ngIf="f.mobile.touched && f.mobile.errors?.required">Mobile Number Is Required</p>
+           </ion-item> -->
       <ion-item lines="none">
         <ion-label position="stacked" for="password">PIN</ion-label>
         <ion-input type="password" inputmode="numeric" formControlName="password"></ion-input>
@@ -50,7 +50,6 @@
             [disabled]="registrationForm.errors ||
             f.firstName.errors ||
             f.lastName.errors ||
-            f.mobile.errors ||
             f.password.errors ||
             f.confirmPassword.errors
             " expand="block" shape="round" type="submit"

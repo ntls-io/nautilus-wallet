@@ -32,14 +32,14 @@ export class RegisterPage implements OnInit {
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
-        mobile: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(10),
-          ]),
-        ],
+        // mobile: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,
+        //     Validators.minLength(1),
+        //     Validators.maxLength(10),
+        //   ]),
+        // ],
         password: [
           '',
           Validators.compose([
