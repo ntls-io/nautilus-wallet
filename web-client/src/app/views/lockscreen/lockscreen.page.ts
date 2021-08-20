@@ -36,6 +36,7 @@ export class LockscreenPage implements OnInit {
   async displayError(message: string) {
     const toast = await this.toastCtrl.create({
       message,
+      color: 'danger',
       duration: 2000,
     });
     toast.present();
