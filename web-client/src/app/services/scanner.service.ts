@@ -10,13 +10,13 @@ import { ScannerPage } from '../views/scanner/scanner.page';
 export class ScannerService {
   constructor(private modalCtrl: ModalController) {}
 
-  async presentScanner() {
+  async presentScanner(withCode = false) {
     const modal = await this.modalCtrl.create({
       component: ScannerPage,
     });
 
     modal.onWillDismiss().then(({ data }) => {
-      if (data?.success) {
+      if (withCode && data?.success) {
         this.presentLock();
       }
     });

@@ -22,7 +22,7 @@ export class WalletAccessPage implements OnInit {
     const permission = await this.scannerService.checkPermissions();
     console.log(permission);
     if (permission === 'granted') {
-      this.scannerService.presentScanner();
+      this.scannerService.presentScanner(true);
     } else {
       const granted = await this.scannerService.requestPermissions();
       if (granted) {
