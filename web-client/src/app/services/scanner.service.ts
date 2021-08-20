@@ -18,17 +18,16 @@ export class ScannerService {
     modal.onWillDismiss().then(({ data }) => {
       const { success, code } = data;
       if (success) {
-        this.presentLock(code);
+        this.presentLock();
       }
     });
 
     return await modal.present();
   }
 
-  async presentLock(passcode: string) {
+  async presentLock() {
     const modal = await this.modalCtrl.create({
       component: LockscreenPage,
-      componentProps: { passcode },
     });
 
     return await modal.present();
