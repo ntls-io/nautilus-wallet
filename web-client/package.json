@@ -46,6 +46,7 @@
     "@ionic/angular": "^5.5.2",
     "@ngneat/transloco": "^2.22.0",
     "angularx-qrcode": "^11.0.0",
+    "ngx-printer": "^1.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
