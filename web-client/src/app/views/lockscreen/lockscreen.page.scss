@@ -1,31 +1,6 @@
-.animated-shake {
-  animation-duration: 750ms;
-  animation-fill-mode: both;
-  animation-name: shake;
+ion-input {
+  @apply bg-transparent border-white rounded-full border-2 my-1.5 border-solid;
 
-  .dot {
-    @apply text-danger;
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-10px);
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(10px);
-  }
+  --border-radius: 9999px;
+  --padding-start: 10px;
 }
