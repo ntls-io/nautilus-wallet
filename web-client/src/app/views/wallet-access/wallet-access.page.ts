@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
+  address: string;
 
   constructor(private scannerService: ScannerService) {}
 
@@ -37,6 +38,13 @@ export class WalletAccessPage implements OnInit {
           allowOutsideClick: false,
         });
       }
+    }
+  }
+
+  confirm() {
+    this.address = this.address.trim();
+    if (this.address) {
+      this.scannerService.presentLock();
     }
   }
 }

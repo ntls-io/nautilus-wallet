@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-lockscreen',
@@ -9,7 +9,10 @@ import { ModalController } from '@ionic/angular';
 export class LockscreenPage implements OnInit {
   code: number;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {}
 
@@ -26,6 +29,15 @@ export class LockscreenPage implements OnInit {
       this.dismiss(true);
     } else {
       //show error
+      this.displayError('error message');
     }
+  }
+
+  async displayError(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+    });
+    toast.present();
   }
 }
