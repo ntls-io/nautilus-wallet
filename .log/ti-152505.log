@@ -1,0 +1,22 @@
+[11:47:59.443] Global cache location '/home/longtomjr/.cache/typescript/4.2', safe file path '/home/longtomjr/.node_modules/lib/node_modules/typescript/lib/typingSafeList.json', types map path /home/longtomjr/.node_modules/lib/node_modules/typescript/lib/typesMap.json
+[11:47:59.443] Processing cache location '/home/longtomjr/.cache/typescript/4.2'
+[11:47:59.443] Trying to find '/home/longtomjr/.cache/typescript/4.2/package.json'...
+[11:47:59.522] Loaded content of '/home/longtomjr/.cache/typescript/4.2/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.542"},"devDependencies":{"@types/node":"^15.6.1","@types/node-fetch":"^2.5.10","@types/sprintf":"^0.1.0"}}
+[11:47:59.523] Loaded content of '/home/longtomjr/.cache/typescript/4.2/package-lock.json'
+[11:47:59.598] Adding entry into typings cache: 'node' => '/home/longtomjr/.cache/typescript/4.2/node_modules/@types/node/index.d.ts'
+[11:47:59.639] Adding entry into typings cache: 'node-fetch' => '/home/longtomjr/.cache/typescript/4.2/node_modules/@types/node-fetch/index.d.ts'
+[11:47:59.663] Adding entry into typings cache: 'sprintf' => '/home/longtomjr/.cache/typescript/4.2/node_modules/@types/sprintf/index.d.ts'
+[11:47:59.663] Finished processing cache location '/home/longtomjr/.cache/typescript/4.2'
+[11:47:59.664] Process id: 152545
+[11:47:59.664] NPM location: /usr/bin/npm (explicit '--npmLocation' not  provided)
+[11:47:59.665] validateDefaultNpmLocation: false
+[11:47:59.665] Npm config file: /home/longtomjr/.cache/typescript/4.2/package.json
+[11:47:59.665] Updating types-registry npm package...
+[11:47:59.666] Exec: /usr/bin/npm install --ignore-scripts types-registry@latest
+[11:48:14.026]     Succeeded. stdout:
+    
+    changed 1 package, and audited 11 packages in 10s
+
+found 0 vulnerabilities
+
+[11:48:14.026] Updated types-registry npm package

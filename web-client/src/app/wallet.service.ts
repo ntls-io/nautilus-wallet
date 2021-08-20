@@ -22,7 +22,16 @@ import { Bytes } from '../schema/types';
   providedIn: 'root',
 })
 export class WalletService {
+  someValue: any;
   constructor(private http: HttpClient) {}
+
+  setValue(newVal: any): void {
+    this.someValue = newVal;
+  }
+
+  getValue(): any {
+    return this.someValue;
+  }
 
   getEnclaveReport(): Observable<AttestationReport> {
     const base = 'http://ntls-demo.registree.io';
@@ -72,17 +81,19 @@ export class WalletService {
           clientCrypto
         );
         return this.postWalletOperationBytes(sealedRequestBytes).pipe(
-          map((sealedResponseBytes): Response => {
-            const response = unseal_msgpack_as<Response>(
-              sealedResponseBytes,
-              clientCrypto
-            );
-            if (response !== null) {
-              return response;
-            } else {
-              throw new Error('unsealing response failed!');
+          map(
+            (sealedResponseBytes): Response => {
+              const response = unseal_msgpack_as<Response>(
+                sealedResponseBytes,
+                clientCrypto
+              );
+              if (response !== null) {
+                return response;
+              } else {
+                throw new Error('unsealing response failed!');
+              }
             }
-          })
+          )
         );
       })
     );

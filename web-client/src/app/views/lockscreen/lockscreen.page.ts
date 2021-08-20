@@ -7,7 +7,7 @@ import { ModalController, ToastController } from '@ionic/angular';
   styleUrls: ['./lockscreen.page.scss'],
 })
 export class LockscreenPage implements OnInit {
-  code: number;
+  code: string;
 
   constructor(
     private modalCtrl: ModalController,
@@ -20,6 +20,7 @@ export class LockscreenPage implements OnInit {
     this.modalCtrl.dismiss({
       type: 'dismiss',
       success,
+      code: this.code,
     });
   }
   //TODO: implement function

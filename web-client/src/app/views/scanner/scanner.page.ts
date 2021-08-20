@@ -13,8 +13,7 @@ export class ScannerPage implements OnInit {
 
   //TODO: handle successful scan
   scanSuccessHandler(event: any) {
-    console.log(event);
-    this.dismissModal({ success: true, code: '1234' });
+    this.dismissModal({ success: true, code: event });
   }
 
   //TODO: handle scan error

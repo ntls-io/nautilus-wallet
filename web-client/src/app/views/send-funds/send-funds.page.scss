@@ -1,0 +1,7 @@
+
+ion-input {
+  @apply bg-transparent border-white rounded-full border-2 my-1.5 border-solid;
+
+  --border-radius: 9999px;
+  --padding-start: 10px;
+}

@@ -13,10 +13,10 @@ export class HomePage implements OnInit {
       icon: faWallet,
       path: '../wallet',
     },
-    {
-      title: 'My Profile',
-      icon: faUserCircle,
-    },
+    // {
+    //   title: 'My Profile',
+    //   icon: faUserCircle,
+    // },
   ];
   constructor() {}
 

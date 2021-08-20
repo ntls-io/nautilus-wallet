@@ -44,7 +44,7 @@ export class WalletAccessPage implements OnInit {
   confirm() {
     this.address = this.address.trim();
     if (this.address) {
-      this.scannerService.presentLock();
+      this.scannerService.presentLock(this.address);
     }
   }
 }
