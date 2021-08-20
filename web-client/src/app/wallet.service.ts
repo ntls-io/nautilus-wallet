@@ -7,6 +7,8 @@ import {
   CreateWalletResult,
   OpenWallet,
   OpenWalletResult,
+  SignTransaction,
+  SignTransactionResult,
 } from '../schema/actions';
 import { AttestationReport } from '../schema/attestation';
 import { PublicKey, TweetNaClCrypto } from '../schema/crypto';
@@ -106,6 +108,19 @@ export class WalletService {
     >(walletRequest).pipe(
       map((response) => {
         const { OpenWallet: result } = response;
+        return result;
+      })
+    );
+  }
+
+  signTransaction(request: SignTransaction): Observable<SignTransactionResult> {
+    const walletRequest = { SignTransaction: request };
+    return this.postSealedExchange<
+      { SignTransaction: SignTransaction },
+      { SignTransaction: SignTransactionResult }
+    >(walletRequest).pipe(
+      map((response) => {
+        const { SignTransaction: result } = response;
         return result;
       })
     );
