@@ -1,7 +1,7 @@
 use actix_web::{error, get, web};
 
 use crate::actors::CreateReportMessage;
-use crate::resources::enclave_report::attestation_report::AttestationReport;
+use crate::resources::enclave_report::attestation_report::{to_msgpack, AttestationReport};
 use crate::server::AppState;
 
 #[get("/enclave-report")]
@@ -29,18 +29,36 @@ pub(crate) async fn get_enclave_report(
         report: report.into(),
         enclave_public_key: enclave_data,
     };
-    let response_body = rmp_serde::to_vec_named(attestation_report).map_err(|err| {
-        error::ErrorInternalServerError(format!("failed to serialize AttestationReport: {}", err))
-    })?;
+    let response_body = to_msgpack(attestation_report)
+        .map(Vec::from)
+        .map_err(|err| {
+            error::ErrorInternalServerError(format!(
+                "failed to serialize AttestationReport: {}",
+                err
+            ))
+        })?;
     Ok(actix_web::HttpResponse::Ok()
         .content_type("application/x-msgpack")
         .body(response_body))
 }
 
 /// XXX: Stop-gap
+
 mod attestation_report {
+    use rmp_serde::{encode, Serializer};
     use serde::{Deserialize, Serialize};
     use sgx_types::*;
+
+    /// See [`sgx_wallet_impl::schema::msgpack::ToMessagePack::to_msgpack`]
+    pub(crate) fn to_msgpack(message: &impl Serialize) -> Result<Box<[u8]>, encode::Error> {
+        // XXX: Like rmp_serde::to_vec_named, but we need string variants too.
+        let mut wr = Vec::with_capacity(128);
+        let mut se = Serializer::new(&mut wr)
+            .with_struct_map()
+            .with_string_variants();
+        message.serialize(&mut se)?;
+        Ok(wr.into_boxed_slice())
+    }
 
     type PublicKey = [u8; 32];
 

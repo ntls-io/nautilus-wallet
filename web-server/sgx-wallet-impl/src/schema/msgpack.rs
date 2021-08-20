@@ -2,7 +2,7 @@
 
 use std::prelude::v1::{Box, Vec};
 
-use rmp_serde::{decode, encode};
+use rmp_serde::{decode, encode, Serializer};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
@@ -23,7 +23,13 @@ pub trait FromMessagePackOwned: DeserializeOwned {
 
 pub trait ToMessagePack: Serialize {
     fn to_msgpack(&self) -> Result<Box<[u8]>, encode::Error> {
-        rmp_serde::to_vec_named(self).map(Vec::into_boxed_slice)
+        // XXX: Like rmp_serde::to_vec_named, but we need string variants too.
+        let mut wr = Vec::with_capacity(128);
+        let mut se = Serializer::new(&mut wr)
+            .with_struct_map()
+            .with_string_variants();
+        self.serialize(&mut se)?;
+        Ok(wr.into_boxed_slice())
     }
 }
 
