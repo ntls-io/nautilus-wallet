@@ -30,7 +30,13 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" fill="outline" color="white" shape="round">
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="white"
+          shape="round"
+          (click)="copyAddress(wallet)"
+        >
           <ion-icon name="copy-outline"></ion-icon> Copy address
         </ion-button>
       </ion-col>
