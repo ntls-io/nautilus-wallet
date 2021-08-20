@@ -2,14 +2,14 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { routes } from '../wallet/wallet-routing.module';
-import { SendFundsPage } from './send-funds.page';
+import { ScannerPage } from './scanner.page';
 
-describe('SendFundsPage', () => {
+describe('ScannerPage', () => {
   let router: Router;
-  let component: SendFundsPage;
-  let fixture: ComponentFixture<SendFundsPage>;
+  let component: ScannerPage;
+  let fixture: ComponentFixture<ScannerPage>;
 
   beforeEach(
     waitForAsync(() => {
@@ -22,8 +22,8 @@ describe('SendFundsPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
-      router.navigate(['send-funds']);
-      fixture = TestBed.createComponent(SendFundsPage);
+      router.navigate(['scanner']);
+      fixture = TestBed.createComponent(ScannerPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
     })
