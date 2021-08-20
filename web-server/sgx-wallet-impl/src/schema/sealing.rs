@@ -1,7 +1,7 @@
 //! [`SealedMessage`] sealing and unsealing.
 
 use std::error::Error;
-use std::prelude::v1::{Box, Vec};
+use std::prelude::v1::Box;
 
 use secrecy::{ExposeSecret, Secret};
 use serde::{Deserialize, Serialize};
@@ -9,13 +9,18 @@ use zeroize::Zeroize;
 
 use crate::ported::crypto::{CryptoError, Nonce, PublicKey, SecretBytes, SodaBoxCrypto};
 use crate::schema::msgpack::{FromMessagePack, FromMessagePackOwned, ToMessagePack};
+use crate::schema::serde_bytes_array;
+use crate::schema::types::Bytes;
 
 /// A sealed message
 #[derive(Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 pub struct SealedMessage {
-    pub ciphertext: Vec<u8>,
+    #[serde(with = "serde_bytes")]
+    pub ciphertext: Bytes,
+    #[serde(with = "serde_bytes_array")]
     pub nonce: Nonce,
+    #[serde(with = "serde_bytes_array")]
     pub sender_public_key: PublicKey,
 }
 
@@ -27,7 +32,7 @@ pub fn seal(
 ) -> Result<SealedMessage, CryptoError> {
     let encrypted_message = sender_crypto.encrypt_message(message_bytes, &receiver_public_key)?;
     Ok(SealedMessage {
-        ciphertext: encrypted_message.ciphertext.into_vec(),
+        ciphertext: encrypted_message.ciphertext,
         nonce: encrypted_message.nonce,
         sender_public_key: sender_crypto.get_pubkey(),
     })

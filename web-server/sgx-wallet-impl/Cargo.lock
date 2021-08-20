@@ -507,6 +507,7 @@ dependencies = [
  "rmp-serde",
  "secrecy",
  "serde",
+ "serde_bytes",
  "serde_json",
  "sgx_tcrypto",
  "sgx_tse",
