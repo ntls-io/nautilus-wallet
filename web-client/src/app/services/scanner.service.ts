@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Camera } from '@capacitor/camera';
 import { ModalController } from '@ionic/angular';
+import { LockscreenPage } from '../views/lockscreen/lockscreen.page';
 import { ScannerPage } from '../views/scanner/scanner.page';
 
 @Injectable({
@@ -13,6 +14,23 @@ export class ScannerService {
     const modal = await this.modalCtrl.create({
       component: ScannerPage,
     });
+
+    modal.onWillDismiss().then(({ data }) => {
+      const { success, code } = data;
+      if (success) {
+        this.presentLock(code);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async presentLock(passcode: string) {
+    const modal = await this.modalCtrl.create({
+      component: LockscreenPage,
+      componentProps: { passcode },
+    });
+
     return await modal.present();
   }
 
