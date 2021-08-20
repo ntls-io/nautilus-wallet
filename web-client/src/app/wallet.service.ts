@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { CreateWallet, CreateWalletResult } from '../schema/actions';
+import {
+  CreateWallet,
+  CreateWalletResult,
+  OpenWallet,
+  OpenWalletResult,
+} from '../schema/actions';
 import { AttestationReport } from '../schema/attestation';
 import { PublicKey, TweetNaClCrypto } from '../schema/crypto';
 import { from_msgpack_as } from '../schema/msgpack';
@@ -90,6 +95,19 @@ export class WalletService {
       map((response) => {
         console.log('XXX createWallet response:', response);
         const { CreateWallet: result } = response;
+        return result;
+      })
+    );
+  }
+
+  openWallet(request: OpenWallet): Observable<OpenWalletResult> {
+    const walletRequest = { OpenWallet: request };
+    return this.postSealedExchange<
+      { OpenWallet: OpenWallet },
+      { OpenWallet: OpenWalletResult }
+    >(walletRequest).pipe(
+      map((response) => {
+        const { OpenWallet: result } = response;
         return result;
       })
     );
