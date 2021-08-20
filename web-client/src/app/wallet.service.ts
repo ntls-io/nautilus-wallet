@@ -18,7 +18,8 @@ export class WalletService {
   constructor(private http: HttpClient) {}
 
   getEnclaveReport(): Observable<AttestationReport> {
-    const base = '/api';
+    const base = 'http://ntls-demo.registree.io';
+    // const base = '/api';
     return this.http
       .get(base + '/enclave-report', { responseType: 'arraybuffer' })
       .pipe(
@@ -40,7 +41,8 @@ export class WalletService {
   }
 
   postWalletOperationBytes(sealedMessageBytes: Bytes): Observable<Bytes> {
-    const base = '/api';
+    // const base = '/api';
+    const base = 'http://ntls-demo.registree.io';
 
     // Note: HttpClient expects bytes as an ArrayBuffer, not Uint8Array,
     // so take care to convert between them correctly.

@@ -6,6 +6,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { WalletService } from 'src/app/wallet.service';
+import { WalletDisplay } from 'src/schema/entities';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +17,11 @@ import { Router } from '@angular/router';
 export class RegisterPage implements OnInit {
   public registrationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private walletService: WalletService
+  ) {
     this.initializeForm();
   }
 
@@ -55,20 +61,24 @@ export class RegisterPage implements OnInit {
     );
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     // createWallet
-    let res = {
-      Created: {
-        wallet_id: '12345',
-        owner_name: 'test',
-        algorand_address_base32: '12345',
-      },
-    };
+    let res = await this.walletService
+      .createWallet({
+        auth_pin: this.registrationForm.controls.password.value,
+        owner_name: this.registrationForm.controls.firstName.value,
+      })
+      .toPromise();
+    if ((res as { Failed: string }).Failed) {
+      throw new Error('failed');
+    }
 
     console.log(this.registrationForm);
     console.log(this.registrationForm.controls);
     this.router.navigate(['/print-wallet'], {
-      state: { wallet_id: res.Created.wallet_id },
+      state: {
+        wallet_id: (res as { Created: WalletDisplay }).Created.wallet_id,
+      },
     });
   }
 
