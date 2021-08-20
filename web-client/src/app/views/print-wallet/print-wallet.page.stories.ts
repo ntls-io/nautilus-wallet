@@ -3,7 +3,7 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { PrintWalletPage } from './print-wallet.page';
 
 export default {
-  title: 'Views/ReceivePage',
+  title: 'Views/PrintWalletPage',
   component: PrintWalletPage,
   decorators: [
     moduleMetadata({
