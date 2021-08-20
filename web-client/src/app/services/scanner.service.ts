@@ -16,8 +16,7 @@ export class ScannerService {
     });
 
     modal.onWillDismiss().then(({ data }) => {
-      const { success, code } = data;
-      if (success) {
+      if (data?.success) {
         this.presentLock();
       }
     });
