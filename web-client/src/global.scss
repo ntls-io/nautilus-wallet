@@ -78,6 +78,11 @@ ion-textarea {
   }
 }
 
+input {
+  --tw-ring-color: var(--ion-color-tertiary) !important;
+  --tw-ring-offset-color: var(--ion-color-tertiary) !important;
+  --tw-ring-offset-width: 2px !important;
+}
 // iOS specific (not supported atm)
 .ios {
   --ion-toolbar-background: var(--ion-color-primary-background);
