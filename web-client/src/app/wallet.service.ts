@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import algosdk from 'algosdk';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -10,6 +12,11 @@ import {
   SignTransaction,
   SignTransactionResult,
 } from '../schema/actions';
+import {
+  makePaymentTxnHelper,
+  OptionalParameters,
+  RequiredParameters,
+} from '../schema/algorand.helpers';
 import { AttestationReport } from '../schema/attestation';
 import { PublicKey, TweetNaClCrypto } from '../schema/crypto';
 import { from_msgpack_as } from '../schema/msgpack';
@@ -25,9 +32,9 @@ export class WalletService {
   constructor(private http: HttpClient) {}
 
   getEnclaveReport(): Observable<AttestationReport> {
-    const base = '/api';
+    const url = this.getNautilusBaseUrl() + '/enclave-report';
     return this.http
-      .get(base + '/enclave-report', { responseType: 'arraybuffer' })
+      .get(url, { responseType: 'arraybuffer' })
       .pipe(
         map((arrayBuffer) =>
           from_msgpack_as<AttestationReport>(new Uint8Array(arrayBuffer))
@@ -47,12 +54,12 @@ export class WalletService {
   }
 
   postWalletOperationBytes(sealedMessageBytes: Bytes): Observable<Bytes> {
-    const base = '/api';
+    const url = this.getNautilusBaseUrl() + '/wallet-operation';
 
     // Note: HttpClient expects bytes as an ArrayBuffer, not Uint8Array,
     // so take care to convert between them correctly.
     return this.http
-      .post(base + '/wallet-operation', bufferFromView(sealedMessageBytes), {
+      .post(url, bufferFromView(sealedMessageBytes), {
         responseType: 'arraybuffer',
       })
       .pipe(map((arrayBuffer) => viewFromBuffer(arrayBuffer)));
@@ -124,6 +131,49 @@ export class WalletService {
         return result;
       })
     );
+  }
+
+  // Algorand network interface functions:
+
+  async createUnsignedTransaction(
+    required: RequiredParameters,
+    optional?: OptionalParameters
+  ) {
+    const algodClient = this.getAlgodClient();
+    const suggestedParams = await algodClient.getTransactionParams().do();
+    console.log('createUnsignedTransaction', 'got:', { suggestedParams });
+    const transaction = makePaymentTxnHelper(
+      suggestedParams,
+      required,
+      optional
+    );
+    console.log('createUnsignedTransaction', 'created:', { transaction });
+    return transaction;
+  }
+
+  async submitSignedTransaction(
+    signedTxn: Uint8Array
+  ): Promise<{ txId: string }> {
+    return await this.getAlgodClient().sendRawTransaction(signedTxn).do();
+  }
+
+  // Configuration helpers:
+
+  protected getNautilusBaseUrl(): string {
+    const nautilusBaseUrl = environment.nautilusBaseUrl;
+    if (nautilusBaseUrl === undefined) {
+      throw new Error('environment.algod.token not configured');
+    }
+    return nautilusBaseUrl;
+  }
+
+  protected getAlgodClient() {
+    const algod = environment.algod;
+    console.log('getAlgodClient', { algod });
+    if (algod.token === undefined) {
+      throw new Error('environment.algod.token not configured');
+    }
+    return new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
   }
 }
 
