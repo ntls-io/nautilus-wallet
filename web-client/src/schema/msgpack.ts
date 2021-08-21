@@ -11,11 +11,29 @@ const decoder = new Decoder();
 // TODO: Better type handling.
 
 export const from_msgpack = (bytes: Bytes): unknown => {
-  console.log('XXX from_msgpack:', { bytes: base64(bytes) });
-  return decoder.decode(bytes);
+  const value = decoder.decode(bytes);
+  log_debug('from_msgpack', { value, bytes });
+  return value;
 };
 
-export const to_msgpack = (value: unknown): Bytes => encoder.encode(value);
+export const to_msgpack = (value: unknown): Bytes => {
+  const bytes = encoder.encode(value);
+  log_debug('to_msgpack', { value, bytes });
+  return bytes;
+};
+
+const log_debug = (
+  label: string,
+  { value, bytes }: { value: unknown; bytes: Bytes }
+) => {
+  if (false) {
+    // eslint-disable-next-line no-console
+    console.debug(label, {
+      value,
+      bytes: base64(bytes),
+    });
+  }
+};
 
 // FIXME: Placeholder casts
 
