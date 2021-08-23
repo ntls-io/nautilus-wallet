@@ -13,7 +13,11 @@
     "target": "es2015",
     "module": "es2020",
     "lib": ["es2018", "dom"],
-    "strict": true
+    "strict": true,
+    /* XXX: webpack shenanigans */
+    "paths": {
+      "crypto": ["node_modules/crypto-js"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
