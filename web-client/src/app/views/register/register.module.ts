@@ -13,7 +13,7 @@ import { RegisterPage } from './register.page';
     RegisterPageRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
   declarations: [RegisterPage],
 })
