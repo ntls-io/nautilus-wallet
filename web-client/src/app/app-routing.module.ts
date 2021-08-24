@@ -5,7 +5,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'landing',
+    redirectTo: 'akita',
     pathMatch: 'full',
   },
   {
@@ -42,6 +42,11 @@ export const routes: Routes = [
       import('./views/landing/landing.module').then(
         m => m.LandingPageModule // prettier-ignore
       ),
+  },
+  {
+    path: 'akita',
+    loadChildren: () =>
+      import('./views/akita/akita.module').then((m) => m.AkitaPageModule),
   },
 ];
 

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>akita</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="store">
+        <ion-label>Store</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="entity">
+        <ion-label>Entity</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [ngSwitch]="segment">
+    <ion-grid *ngSwitchCase="'store'">
+      <ion-row>
+        <ion-col>
+          <h1>Store</h1>
+          <ion-button color="success" expand="block">Add</ion-button>
+          <ion-button color="warning" expand="block">Remove</ion-button>
+          <ion-button color="tertiary" expand="block">Update</ion-button>
+          <ion-button color="danger" expand="block">Clear</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngSwitchCase="'entity'">
+      <ion-row>
+        <ion-col>
+          <h1>Entity</h1>
+          <ion-button expand="block" (click)="addRandomEntities()"
+            >Add Random</ion-button
+          >
+          <ion-button color="success" expand="block">Add</ion-button>
+          <ion-button color="warning" expand="block">Remove</ion-button>
+          <ion-button color="tertiary" expand="block">Update</ion-button>
+          <ion-button color="danger" expand="block" (click)="clearEntity()"
+            >Clear</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

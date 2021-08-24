@@ -6,12 +6,11 @@ export interface EntExampleState extends EntityState<EntExample> {}
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'entExample'
+  name: 'entExample',
+  idKey: 'code',
 })
 export class EntExampleStore extends EntityStore<EntExampleState> {
-
   constructor() {
     super();
   }
-
 }
