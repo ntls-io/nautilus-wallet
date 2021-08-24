@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import {
   EntExampleQuery,
   EntExampleService,
@@ -12,14 +13,15 @@ import { StExampleQuery, StExampleService } from 'src/app/stores/stExample';
   styleUrls: ['./akita.page.scss'],
 })
 export class AkitaPage implements OnInit {
-  segment = 'store';
+  segment = 'entity';
 
   constructor(
     public stExampleQuery: StExampleQuery,
     private stExampleService: StExampleService,
     public entExampleQuery: EntExampleQuery,
-    private entExampleService: EntExampleService,
-    private entExampleStore: EntExampleStore
+    public entExampleService: EntExampleService,
+    private entExampleStore: EntExampleStore,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {}
@@ -30,9 +32,45 @@ export class AkitaPage implements OnInit {
 
   addEntity() {}
 
-  removeEntity() {}
+  removeEntity(entity: string) {
+    this.entExampleStore.remove(entity);
+  }
 
-  updateEntity() {}
+  async updateEntity(entityId: string) {
+    const entity = this.entExampleQuery.getEntity(entityId);
+
+    console.log(entity);
+
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Prompt!',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: entity?.name,
+          placeholder: 'This will update the entity name',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Confirm Cancel');
+          },
+        },
+        {
+          text: 'Update',
+          handler: ({ name }) => {
+            this.entExampleStore.update(entity, { name });
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
 
   clearEntity() {
     this.entExampleStore.reset();

@@ -4,7 +4,7 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-segment [(ngModel)]="segment">
-      <ion-segment-button value="store">
+      <ion-segment-button value="store" disabled>
         <ion-label>Store</ion-label>
       </ion-segment-button>
       <ion-segment-button value="entity">
@@ -20,10 +20,6 @@
       <ion-row>
         <ion-col>
           <h1>Store</h1>
-          <ion-button color="success" expand="block">Add</ion-button>
-          <ion-button color="warning" expand="block">Remove</ion-button>
-          <ion-button color="tertiary" expand="block">Update</ion-button>
-          <ion-button color="danger" expand="block">Clear</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -33,14 +29,34 @@
         <ion-col>
           <h1>Entity</h1>
           <ion-button expand="block" (click)="addRandomEntities()"
-            >Add Random</ion-button
-          >
+            >Add Random
+          </ion-button>
           <ion-button color="success" expand="block">Add</ion-button>
-          <ion-button color="warning" expand="block">Remove</ion-button>
-          <ion-button color="tertiary" expand="block">Update</ion-button>
           <ion-button color="danger" expand="block" (click)="clearEntity()"
             >Clear</ion-button
           >
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-item
+              *ngFor="let entity of entExampleQuery.selectAll() | async"
+            >
+              <ion-label>
+                <h3>{{entity.name}}</h3>
+                <p>{{entity.code}}</p>
+              </ion-label>
+              <ion-buttons slot="end">
+                <ion-button color="light" (click)="removeEntity(entity.code)">
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+                <ion-button color="light" (click)="updateEntity(entity.code)">
+                  <ion-icon name="create"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </ion-list>
         </ion-col>
       </ion-row>
     </ion-grid>
