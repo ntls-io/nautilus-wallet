@@ -7,16 +7,14 @@ export interface StExampleState {
 
 export function createInitialState(): StExampleState {
   return {
-    key: ''
+    key: '',
   };
 }
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'stExample' })
 export class StExampleStore extends Store<StExampleState> {
-
   constructor() {
     super(createInitialState());
   }
-
 }
