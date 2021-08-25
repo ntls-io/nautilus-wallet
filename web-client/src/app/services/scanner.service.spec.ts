@@ -22,4 +22,9 @@ describe('ScannerService', () => {
       permission
     );
   });
+
+  it('should return camera requested result', async () => {
+    const access = await service.requestPermissions();
+    expect(access).toBe(true);
+  });
 });
