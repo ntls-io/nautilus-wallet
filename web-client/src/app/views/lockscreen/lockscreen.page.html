@@ -15,18 +15,19 @@
         <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Enter Pin</h1>
 
-        <div
-          class="p-5"
-          [ngClass]="{'animated-shake': isIncorrect}"
-          (click)="showKeyboard()"
+        <ion-input
+          [(ngModel)]="code"
+          type="password"
+          inputmode="tel"
+          autofocus="true"
+          clearInput="true"
+          minlength="4"
+          maxlength="10"
+        ></ion-input>
+
+        <ion-button expand="block" shape="round" (click)="confirm()"
+          >Confirm</ion-button
         >
-          <ion-icon
-            class="p-2 dot !text-5xl"
-            [name]="dot.active ? 'radio-button-on' : 'radio-button-off'"
-            *ngFor="let dot of dots"
-          >
-          </ion-icon>
-        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

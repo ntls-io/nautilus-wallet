@@ -1,7 +1,5 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { Keyboard } from '@capacitor/keyboard';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-lockscreen',
@@ -9,89 +7,38 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./lockscreen.page.scss'],
 })
 export class LockscreenPage implements OnInit {
-  @Input() passcode: string | undefined;
+  code = '';
 
-  inputCombination = '';
-  dots: any[] = [];
-  isIncorrect = false;
-
-  constructor(private modalCtrl: ModalController) {}
-
-  @HostListener('window:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key.match(/[0-9]/i)) {
-      this.add(parseInt(event.key, 10));
-    } else if (event.key === 'Backspace') {
-      this.delete();
-    }
-  }
+  constructor(
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {}
 
-  ionViewWillEnter() {
-    if (this.passcode) {
-      [...this.passcode].forEach(() => {
-        this.dots.push({
-          active: false,
-        });
-      });
-
-      this.showKeyboard();
-    }
-  }
-
-  async showKeyboard() {
-    if (Capacitor.isNativePlatform()) {
-      await Keyboard.show();
-    }
-  }
-
-  add(digit: number) {
-    if (this.passcode && this.inputCombination.length < this.passcode.length) {
-      this.inputCombination += '' + digit;
-      this.updateDots();
-
-      if (this.inputCombination.length === this.passcode.length) {
-        this.verify();
-      }
-    }
-  }
-
-  delete() {
-    if (this.inputCombination.length > 0) {
-      this.inputCombination = this.inputCombination.slice(0, -1);
-      this.updateDots();
-    }
-  }
-
-  clear() {
-    this.inputCombination = '';
-    this.updateDots();
-  }
-
-  verify() {
-    if (this.inputCombination === this.passcode) {
-      console.log('CORRECT PASSCODE!');
-      this.dismiss(true);
-    } else {
-      this.isIncorrect = true;
-      setTimeout(() => {
-        this.clear();
-        this.isIncorrect = false;
-      }, 1000);
-    }
-  }
-
-  updateDots() {
-    this.dots.forEach((dot, i) => {
-      dot.active = i < this.inputCombination.length ? true : false;
-    });
-  }
-
-  dismiss(data: boolean) {
+  dismiss(success: boolean) {
     this.modalCtrl.dismiss({
       type: 'dismiss',
-      data,
+      success,
     });
+  }
+  //TODO: implement function
+  confirm() {
+    //()=>{}
+    if ('success') {
+      this.dismiss(true);
+    } else {
+      //show error
+      this.displayError('error message');
+    }
+  }
+
+  async displayError(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      color: 'danger',
+      duration: 2000,
+    });
+    toast.present();
   }
 }
