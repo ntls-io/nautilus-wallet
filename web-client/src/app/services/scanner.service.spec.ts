@@ -15,4 +15,11 @@ describe('ScannerService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+  it('should return camera state', async () => {
+    const permission = await service.checkPermissions();
+    expect(permission).toBeDefined();
+    expect(['prompt', 'prompt-with-rationale', 'granted', 'denied']).toContain(
+      permission
+    );
+  });
 });
