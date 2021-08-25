@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import { ModalController } from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
 import Swal from 'sweetalert2';
+import { ScannerPage } from '../scanner/scanner.page';
 
 @Component({
   selector: 'app-wallet-access',
@@ -11,7 +13,10 @@ import Swal from 'sweetalert2';
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
 
-  constructor(private scannerService: ScannerService) {}
+  constructor(
+    private scannerService: ScannerService,
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
@@ -20,7 +25,16 @@ export class WalletAccessPage implements OnInit {
   async openScanner() {
     const permission = await this.scannerService.checkPermissions();
     if (permission === 'granted') {
-      this.scannerService.presentScanner();
+      const scanner = await this.modalCtrl.create({
+        component: ScannerPage,
+      });
+
+      scanner.onWillDismiss().then((result) => {
+        //TODO: perform action after scan result
+        console.log(result);
+      });
+
+      return await scanner.present();
     } else {
       const granted = await this.scannerService.requestPermissions();
       if (granted) {

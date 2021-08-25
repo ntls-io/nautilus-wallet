@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faLink, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { ModalController } from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
+import { ScannerPage } from '../scanner/scanner.page';
 
 @Component({
   selector: 'app-send-funds',
@@ -23,12 +25,23 @@ export class SendFundsPage implements OnInit {
     },
   ];
 
-  constructor(private scannerService: ScannerService) {}
+  constructor(
+    private scannerService: ScannerService,
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {}
 
   async presentScanner() {
-    await this.scannerService.presentScanner();
+    const scanner = await this.modalCtrl.create({
+      component: ScannerPage,
+    });
+
+    scanner.onWillDismiss().then((result) => {
+      console.log(result);
+    });
+
+    return await scanner.present();
   }
 
   execItemAction(action: string | undefined) {

@@ -11,9 +11,8 @@ export class ScannerPage implements OnInit {
 
   ngOnInit() {}
 
-  //TODO: handle successful scan
-  scanSuccessHandler(event: any) {
-    console.log(event);
+  scanSuccessHandler(data: any) {
+    this.modalCtrl.dismiss(data);
   }
 
   //TODO: handle scan error
