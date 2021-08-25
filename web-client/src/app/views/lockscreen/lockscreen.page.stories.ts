@@ -11,6 +11,3 @@ const Template: Story<LockscreenPage> = (args: LockscreenPage) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {
-  passcode: '1234',
-};
