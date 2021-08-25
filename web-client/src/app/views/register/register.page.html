@@ -4,8 +4,8 @@
 <ion-content>
   <h1 class="font-bold font-nasalization text-center">Sign Up</h1>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-    <ion-list class="inputList">
-      <ion-item lines="none">
+    <ion-list class="inputList" lines="none">
+      <ion-item>
         <ion-label position="stacked" for="firstName">First Name</ion-label>
         <ion-input
           type="text"
@@ -18,7 +18,7 @@
           First Name Is Required
         </p>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item>
         <ion-label position="stacked" for="lastName">Last Name</ion-label>
         <ion-input type="text" formControlName="lastName"></ion-input>
         <p
@@ -27,7 +27,7 @@
           Last Name Is Required
         </p>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item >
         <ion-label position="stacked" for="mobile">Mobile</ion-label>
         <ion-input type="text" formControlName="mobile"></ion-input>
         <p
@@ -41,7 +41,7 @@
           Invalid Phone Number
         </p>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item >
         <ion-label position="stacked" for="pin">Password</ion-label>
         <ion-input type="password" formControlName="pin"></ion-input>
         <p
@@ -60,7 +60,7 @@
           Your Pin Can Only Be Up To 10 Characters
         </p>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item >
         <ion-label position="stacked" for="confirmPin">Confirm Pin</ion-label>
         <ion-input type="password" formControlName="confirmPin"></ion-input>
         <p
