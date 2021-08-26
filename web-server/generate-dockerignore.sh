@@ -13,6 +13,7 @@ SCRIPT="
 /.dockerignore/ d
 /.gitignore/ d
 /Dockerfile/ d
+/README.md/ d
 /docker-compose.yaml/ d
 
 s#/src/.*#/src/#
