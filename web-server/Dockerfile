@@ -95,7 +95,7 @@ ARG RUST_SGX_SDK_REVISION
 RUN git -C /build/rust-sgx-sdk switch -d "${RUST_SGX_SDK_REVISION}"
 
 # STAGE: rust-builder (from base-builder, arg RUST_TOOLCHAIN)
-# Builder for Rust, with Rust toolchain and cargo build tools (bindgen) under /home/user/.cargo
+# Builder for Rust, with Rust toolchain and cargo build tools (bindgen, cargo make) under /home/user/.cargo
 FROM base-builder AS rust-builder
 
 ADD --chown=user:user "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init" /home/user/rustup-init
@@ -123,6 +123,16 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     . ~/.cargo/env && \
     cargo install bindgen
+
+# Cargo make
+USER root
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt \
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -o APT::Keep-Downloaded-Packages=true \
+    unzip
+USER user
+ADD --chown=user:user https://github.com/sagiegurari/cargo-make/releases/download/0.34.0/cargo-make-v0.34.0-x86_64-unknown-linux-musl.zip /build/cargo-make.zip
+RUN unzip -j -d /home/user/.cargo/bin /build/cargo-make.zip '*/cargo-make'
 
 # STAGE: rust-sgx-builder (from rust-builder)
 # Builder for Rust SGX, with the Intel and Rust SGX SDKs files
@@ -177,6 +187,29 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     CUSTOM_EDL_PATH="/build/rust-sgx-sdk/edl" \
     SGX_MODE="${SGX_MODE}" \
     make -C sgx-wallet-test
+
+# STAGE: build-cargo-make-ci (from web-server-builder, arg SGX_MODE)
+# Build project with cargo make
+FROM web-server-builder AS build-cargo-make-ci
+
+#
+COPY --from=build-sgx-wallet-server /build/web-server/sgx-wallet/build/lib/ /build/web-server/sgx-wallet/build/lib/
+COPY --from=build-sgx-wallet-test /build/web-server/sgx-wallet-test/build/lib/ /build/web-server/sgx-wallet-test/build/lib/
+
+ARG SGX_MODE
+RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/registry \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet-impl/target \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet-test/app/target \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet-test/enclave/target \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet/app/target \
+    --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet/enclave/target \
+    . ~/.cargo/env && \
+    . /build/intel/sgxsdk/environment && \
+#    CUSTOM_COMMON_PATH="/build/rust-sgx-sdk/common" \
+#    CUSTOM_EDL_PATH="/build/rust-sgx-sdk/edl" \
+    SGX_MODE="${SGX_MODE}" \
+    CI=1 cargo make
 
 # STAGE: base-sgx-runner-sw (FROM base)
 # Base runner, with SW-mode SGX libraries.
