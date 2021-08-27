@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
@@ -17,6 +18,8 @@ describe('RegisterPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          ReactiveFormsModule,
+          FormsModule,
         ],
       }).compileComponents();
 
@@ -30,9 +33,5 @@ describe('RegisterPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('navigates to login', async (): Promise<void> => {
-    await verifyNavigationTrigger(router, fixture, '/register', '/login');
   });
 });
