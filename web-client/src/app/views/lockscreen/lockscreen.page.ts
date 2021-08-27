@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -7,29 +8,45 @@ import { ModalController, ToastController } from '@ionic/angular';
   styleUrls: ['./lockscreen.page.scss'],
 })
 export class LockscreenPage implements OnInit {
-  code = '';
+  codeForm: FormGroup;
 
   constructor(
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController
-  ) {}
+    private toastCtrl: ToastController,
+    public formBuilder: FormBuilder
+  ) {
+    this.codeForm = this.formBuilder.group({
+      code: [
+        null,
+        Validators.compose([
+          Validators.minLength(4),
+          Validators.maxLength(10),
+          Validators.required,
+          Validators.pattern(/^[0-9]*$/),
+        ]),
+      ],
+    });
+  }
 
   ngOnInit() {}
 
   dismiss(success: boolean) {
     this.modalCtrl.dismiss({
-      type: 'dismiss',
       success,
     });
   }
   //TODO: implement function
-  confirm() {
-    //()=>{}
-    if ('success') {
-      this.dismiss(true);
-    } else {
-      //show error
-      this.displayError('error message');
+  onSubmit() {
+    this.codeForm.markAllAsTouched();
+
+    if (this.codeForm.valid) {
+      //()=>{validate pin}
+      if ('success') {
+        this.dismiss(true);
+      } else {
+        //show error
+        this.displayError('error message');
+      }
     }
   }
 

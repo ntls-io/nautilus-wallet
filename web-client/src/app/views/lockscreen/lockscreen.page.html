@@ -14,20 +14,23 @@
       <ion-col class="ion-align-self-center" size="auto">
         <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Enter Pin</h1>
+        <form [formGroup]="codeForm" (ngSubmit)="onSubmit()">
+          <ion-input
+            type="password"
+            formControlName="code"
+            inputmode="tel"
+            autofocus="true"
+            clearInput="true"
+            minlength="4"
+            maxlength="10"
+            [ngClass]="{'invalid': codeForm.dirty && codeForm.invalid}"
+            [brmasker]="{type:'num'}"
+          ></ion-input>
 
-        <ion-input
-          [(ngModel)]="code"
-          type="password"
-          inputmode="tel"
-          autofocus="true"
-          clearInput="true"
-          minlength="4"
-          maxlength="10"
-        ></ion-input>
-
-        <ion-button expand="block" shape="round" (click)="confirm()"
-          >Confirm</ion-button
-        >
+          <ion-button expand="block" shape="round" type="submit"
+            >Confirm</ion-button
+          >
+        </form>
       </ion-col>
     </ion-row>
   </ion-grid>

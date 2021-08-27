@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
+import { BrMaskerModule } from 'br-mask';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
@@ -14,13 +15,14 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ActionItemComponent,
     ProfileCardHorizontalComponent,
   ],
-  imports: [IonicModule, CommonModule, RouterModule],
+  imports: [IonicModule, CommonModule, RouterModule, BrMaskerModule],
   exports: [
     FontAwesomeModule,
     QRCodeModule,
     HeaderComponent,
     ProfileCardHorizontalComponent,
     ActionItemComponent,
+    BrMaskerModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
