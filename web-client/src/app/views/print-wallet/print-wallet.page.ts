@@ -18,13 +18,18 @@ export class PrintWalletPage implements OnInit {
     await Clipboard.write({
       // eslint-disable-next-line id-blacklist
       string: address,
-    });
-    this.notice();
+    })
+      .then(() => {
+        this.notice('Address copied!');
+      })
+      .catch(() => {
+        this.notice('Something weird happened, please try again!');
+      });
   }
 
-  async notice() {
+  async notice(message: string) {
     const toast = await this.toastCtrl.create({
-      message: 'Address copied!',
+      message,
       color: 'white',
       duration: 2000,
     });
