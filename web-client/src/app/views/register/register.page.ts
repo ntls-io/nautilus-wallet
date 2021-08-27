@@ -56,8 +56,13 @@ export class RegisterPage implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.registrationForm);
-    console.log(this.registrationForm.controls);
+    if (this.registrationForm.valid) {
+      // TODO: Submit registration to the backend
+      console.log(this.registrationForm);
+      console.log(this.registrationForm.controls);
+    } else {
+      this.showErrors();
+    }
   }
 
   get f() {
