@@ -48,6 +48,7 @@
     "angularx-qrcode": "^11.0.0",
     "ngx-printer": "^1.0.0",
     "rxjs": "~6.6.0",
+    "tailwindcss-children": "^2.1.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },
