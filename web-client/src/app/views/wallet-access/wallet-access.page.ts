@@ -23,8 +23,8 @@ export class WalletAccessPage implements OnInit {
   }
 
   async openScanner() {
-    const permission = await this.scannerService.checkPermissions();
-    if (permission === 'granted') {
+    const allowed = await this.scannerService.requestPermissions();
+    if (allowed) {
       const scanner = await this.modalCtrl.create({
         component: ScannerPage,
       });
@@ -36,20 +36,15 @@ export class WalletAccessPage implements OnInit {
 
       return await scanner.present();
     } else {
-      const granted = await this.scannerService.requestPermissions();
-      if (granted) {
-        this.openScanner();
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Permission required',
-          text: `In order to scan a QR Code, you need to grant camera's permission`,
-          confirmButtonColor: 'var(--ion-color-primary)',
-          backdrop: true,
-          heightAuto: false,
-          allowOutsideClick: false,
-        });
-      }
+      Swal.fire({
+        icon: 'error',
+        title: 'Permission required',
+        text: `In order to scan a QR Code, you need to grant camera's permission`,
+        confirmButtonColor: 'var(--ion-color-primary)',
+        backdrop: true,
+        heightAuto: false,
+        allowOutsideClick: false,
+      });
     }
   }
 }
