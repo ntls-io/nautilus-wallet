@@ -16,6 +16,7 @@ export class ScannerPage implements OnInit {
   }
 
   //TODO: handle scan error
+  /* istanbul ignore next TODO */
   scanErrorHandler(event: any) {
     console.log(event);
   }
