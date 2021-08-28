@@ -16,7 +16,7 @@ export class ScannerService {
     }
   }
 
-  async requestPermissions(): Promise<Boolean> {
+  async requestPermissions(): Promise<boolean> {
     if ((await this.checkPermissions()) !== 'denied') {
       //NOTE: https://github.com/ionic-team/capacitor/discussions/4944#discussioncomment-1205023
       try {
