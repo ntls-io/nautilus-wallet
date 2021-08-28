@@ -15,16 +15,45 @@ describe('ScannerService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-  it('should return camera state', async () => {
-    const permission = await service.checkPermissions();
-    expect(permission).toBeDefined();
-    expect(['prompt', 'prompt-with-rationale', 'granted', 'denied']).toContain(
-      permission
-    );
+
+  it('#requestPermissions should return false when camera permissions are denied', async () => {
+    spyOn(service, 'checkPermissions').and.resolveTo('denied');
+
+    const permission = await service.requestPermissions();
+    expect(permission).toBeFalse();
   });
 
-  it('should return camera requested result', async () => {
-    const access = await service.requestPermissions();
-    expect(access).toBe(true);
+  it('#requestPermissions should try to get the video media device', async () => {
+    spyOn(service, 'checkPermissions').and.resolveTo('prompt');
+
+    spyOn(navigator.mediaDevices, 'getUserMedia')
+      .withArgs({ video: true })
+      .and.resolveTo({ ...new MediaStream(), active: true });
+
+    const permission = await service.requestPermissions();
+    expect(permission).toBeTrue();
   });
+
+  it('#requestPersmissions should return false if getUserMedia fails', async () => {
+    spyOn(service, 'checkPermissions').and.resolveTo('prompt');
+
+    spyOn(navigator.mediaDevices, 'getUserMedia')
+      .withArgs({ video: true })
+      .and.rejectWith('error');
+
+    const permission = await service.requestPermissions();
+    expect(permission).toBeFalse();
+  });
+
+  // it('#checkPermissions should return camera permissions', async () => {
+  //   const cameraPermission: CameraPermissionState = 'granted';
+  //   const cameraSpy = spyOn(Camera, 'checkPermissions').and.resolveTo({
+  //     camera: cameraPermission,
+  //     photos: cameraPermission,
+  //   });
+
+  //   const permission = await service.checkPermissions();
+  //   expect(permission).toBe(cameraPermission);
+  //   expect(cameraSpy).toHaveBeenCalled();
+  // });
 });

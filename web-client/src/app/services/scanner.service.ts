@@ -7,6 +7,7 @@ import { Camera, CameraPermissionState } from '@capacitor/camera';
 export class ScannerService {
   constructor() {}
 
+  /* istanbul ignore next not sure if there is a way to easily spy on Camera.checkPermissions() */
   async checkPermissions(): Promise<CameraPermissionState> {
     try {
       const { camera } = await Camera.checkPermissions();
