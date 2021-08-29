@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { routes } from '../../app-routing.module';
 import { RegisterPage } from './register.page';
 
@@ -33,5 +32,24 @@ describe('RegisterPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('#onSubmit should show errors if the form is invalid', () => {
+    const getValidSpy = spyOnProperty(
+      component.registrationForm,
+      'valid',
+      'get'
+    ).and.returnValue(false);
+    const showErrorsSpy = spyOn(component, 'showErrors');
+
+    component.onSubmit();
+
+    expect(showErrorsSpy).toHaveBeenCalled();
+    expect(getValidSpy).toHaveBeenCalled();
+  });
+
+  it('#showErrors should set nonValidSubmit to false', () => {
+    component.showErrors();
+    expect(component.nonValidSubmit).toBeFalse();
   });
 });

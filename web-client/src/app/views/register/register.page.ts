@@ -56,6 +56,7 @@ export class RegisterPage implements OnInit {
   }
 
   onSubmit(): void {
+    /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       // TODO: Submit registration to the backend
       console.log(this.registrationForm);
