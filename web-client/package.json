@@ -18,6 +18,11 @@
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook"
   },
+  "akitaCli": {
+    "template": "angular",
+    "basePath": "./src/app/stores",
+    "customFolderName": "true"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "<12.0.4",
@@ -31,6 +36,9 @@
     "@capacitor/haptics": "1.0.2",
     "@capacitor/keyboard": "1.0.2",
     "@capacitor/status-bar": "1.0.2",
+    "@datorama/akita": "^6.2.3",
+    "@datorama/akita-ng-entity-service": "^6.0.0",
+    "@datorama/akita-ng-router-store": "^6.0.0",
     "@fortawesome/angular-fontawesome": "~0.9.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
@@ -55,6 +63,8 @@
     "@babel/core": "^7.14.6",
     "@capacitor/cli": "3.0.2",
     "@compodoc/compodoc": "^1.1.11",
+    "@datorama/akita-cli": "^6.1.1",
+    "@datorama/akita-ngdevtools": "^6.0.0",
     "@ionic/angular-toolkit": "^4.0.0",
     "@ionic/lab": "3.2.10",
     "@storybook/addon-actions": "^6.3.2",

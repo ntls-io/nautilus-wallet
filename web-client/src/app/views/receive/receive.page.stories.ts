@@ -1,10 +1,10 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SendFundsPage } from './send-funds.page';
+import { ReceivePage } from './receive.page';
 
 export default {
-  title: 'Views/SendFundsPage',
-  component: SendFundsPage,
+  title: 'Views/ReceivePage',
+  component: ReceivePage,
   decorators: [
     moduleMetadata({
       imports: [SharedModule],
@@ -12,7 +12,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<SendFundsPage> = (args: SendFundsPage) => ({
+const Template: Story<ReceivePage> = (args: ReceivePage) => ({
   props: args,
 });
 

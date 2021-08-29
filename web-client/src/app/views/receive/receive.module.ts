@@ -3,17 +3,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SendFundsPageRoutingModule } from './send-funds-routing.module';
-import { SendFundsPage } from './send-funds.page';
+import { ReceivePageRoutingModule } from './receive-routing.module';
+import { ReceivePage } from './receive.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SendFundsPageRoutingModule,
+    ReceivePageRoutingModule,
     SharedModule,
   ],
-  declarations: [SendFundsPage],
+  declarations: [ReceivePage],
 })
-export class SendFundsPageModule {}
+export class ReceivePageModule {}
