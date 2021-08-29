@@ -13,7 +13,7 @@ import {
 })
 export class RegisterPage implements OnInit {
   public registrationForm: FormGroup;
-  nonValidSubmit: boolean = true;
+  nonValidSubmit = true;
 
   constructor(private formBuilder: FormBuilder) {
     this.registrationForm = this.generateFormGroup();
