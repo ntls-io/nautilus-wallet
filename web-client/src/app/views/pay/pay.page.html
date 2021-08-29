@@ -1,0 +1,41 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-content>
+  <div class="ion-text-center p-2">
+    <h1 class="font-semibold font-nasalization">Pay</h1>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="mx-0">
+          <ion-item lines="none" color="white">
+            <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>{{wallet}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+          <ion-input
+            inputmode="tel"
+            placeholder="Amount"
+            formControlName="amount"
+          ></ion-input>
+          <div class="m-5">
+            <ion-button expand="block" shape="round">PAY</ion-button>
+            <p class="text-sm text-center">
+              Please check payment amount carefully. This transaction cannot be
+              reversed.
+            </p>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
