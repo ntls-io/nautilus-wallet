@@ -43,6 +43,20 @@ export const routes: Routes = [
         m => m.LandingPageModule // prettier-ignore
       ),
   },
+  {
+    path: 'scanner',
+    loadChildren: () =>
+      import('./views/scanner/scanner.module').then(
+        m => m.ScannerPageModule // prettier-ignore
+      ),
+  },
+  {
+    path: 'wallet-access',
+    loadChildren: () =>
+      import('./views/wallet-access/wallet-access.module').then(
+        (m) => m.WalletAccessPageModule //prettier-ignore
+      ),
+  },
 ];
 
 @NgModule({
