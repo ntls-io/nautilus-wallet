@@ -29,7 +29,11 @@
       </ng-container>
       <ng-container>
         <ion-label position="stacked" for="mobile">Mobile</ion-label>
-        <ion-input type="text" formControlName="mobile"></ion-input>
+        <ion-input
+          type="text"
+          formControlName="mobile"
+          [brmasker]="{type:'num'}"
+        ></ion-input>
         <p
           *ngIf="(f.mobile.touched && f.mobile.errors?.required) ||!nonValidSubmit && f.mobile.errors?.required"
         >
@@ -43,7 +47,11 @@
       </ng-container>
       <ng-container>
         <ion-label position="stacked" for="pin">Password</ion-label>
-        <ion-input type="password" formControlName="pin"></ion-input>
+        <ion-input
+          type="password"
+          formControlName="pin"
+          [brmasker]="{type:'num', len: 10}"
+        ></ion-input>
         <p
           *ngIf="(f.pin.touched && f.pin.errors?.required) || !nonValidSubmit && f.pin.errors?.required"
         >
@@ -62,7 +70,11 @@
       </ng-container>
       <ng-container>
         <ion-label position="stacked" for="confirmPin">Confirm Pin</ion-label>
-        <ion-input type="password" formControlName="confirmPin"></ion-input>
+        <ion-input
+          type="password"
+          formControlName="confirmPin"
+          [brmasker]="{type:'num', len: 10}"
+        ></ion-input>
         <p
           *ngIf="(f.confirmPin.touched && f.confirmPin.errors?.required) || !nonValidSubmit && f.confirmPin.errors?.required"
         >
