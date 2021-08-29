@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { ScannerPage } from '../scanner/scanner.page';
 import { ScannerService } from 'src/app/services/scanner.service';
 import Swal from 'sweetalert2';
+import { ScannerPage } from '../scanner/scanner.page';
 import { WalletAccessPage } from './wallet-access.page';
 
 describe('WalletAccessPage', () => {
