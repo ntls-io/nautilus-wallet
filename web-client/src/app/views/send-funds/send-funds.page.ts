@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faLink, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import { ModalController } from '@ionic/angular';
-import { ScannerService } from 'src/app/services/scanner.service';
+import { ModalController, NavController } from '@ionic/angular';
 import { ScannerPage } from '../scanner/scanner.page';
 
 @Component({
@@ -26,7 +25,7 @@ export class SendFundsPage implements OnInit {
   ];
 
   constructor(
-    private scannerService: ScannerService,
+    private navCtrl: NavController,
     private modalCtrl: ModalController
   ) {}
 
@@ -39,6 +38,9 @@ export class SendFundsPage implements OnInit {
 
     scanner.onWillDismiss().then((result) => {
       console.log(result);
+      if (false) {
+        // this.navCtrl.navigateForward('pay', { queryParams: { wallet } });
+      }
     });
 
     return await scanner.present();

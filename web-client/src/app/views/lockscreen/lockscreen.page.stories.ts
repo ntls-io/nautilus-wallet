@@ -1,10 +1,10 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { RegisterPage } from './register.page';
+import { LockscreenPage } from './lockscreen.page';
 
 export default {
-  title: 'Views/RegisterPage',
-  component: RegisterPage,
+  title: 'Views/LockscreenPage',
+  component: LockscreenPage,
   decorators: [
     moduleMetadata({
       imports: [SharedModule],
@@ -12,7 +12,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<RegisterPage> = (args: RegisterPage) => ({
+const Template: Story<LockscreenPage> = (args: LockscreenPage) => ({
   props: args,
 });
 

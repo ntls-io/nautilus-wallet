@@ -1,10 +1,10 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { RegisterPage } from './register.page';
+import { PayPage } from './pay.page';
 
 export default {
-  title: 'Views/RegisterPage',
-  component: RegisterPage,
+  title: 'Views/PayPage',
+  component: PayPage,
   decorators: [
     moduleMetadata({
       imports: [SharedModule],
@@ -12,8 +12,11 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<RegisterPage> = (args: RegisterPage) => ({
+const Template: Story<PayPage> = (args: PayPage) => ({
   props: args,
 });
 
 export const Default = Template.bind({});
+Default.args = {
+  wallet: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
+};

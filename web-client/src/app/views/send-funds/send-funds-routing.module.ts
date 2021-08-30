@@ -7,6 +7,11 @@ export const routes: Routes = [
     path: '',
     component: SendFundsPage,
   },
+  {
+    path: 'pay',
+    loadChildren: () =>
+      import('../pay/pay.module').then((m) => m.PayPageModule),
+  },
 ];
 
 @NgModule({
