@@ -47,7 +47,21 @@ export const routes: Routes = [
     path: 'print-wallet',
     loadChildren: () =>
       import('./views/print-wallet/print-wallet.module').then(
-        (m) => m.PrintWalletPageModule
+        (m) => m.PrintWalletPageModule// prettier-ignore
+        ),
+    },
+    {
+    path: 'scanner',
+    loadChildren: () =>
+      import('./views/scanner/scanner.module').then(
+        m => m.ScannerPageModule // prettier-ignore
+      ),
+  },
+  {
+    path: 'wallet-access',
+    loadChildren: () =>
+      import('./views/wallet-access/wallet-access.module').then(
+        (m) => m.WalletAccessPageModule //prettier-ignore
       ),
   },
 ];
