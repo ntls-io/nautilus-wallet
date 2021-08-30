@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { PayPage } from './pay.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PayPage
-  }
+    component: PayPage,
+  },
 ];
 
 @NgModule({

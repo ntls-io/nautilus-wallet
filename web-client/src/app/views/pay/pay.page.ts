@@ -22,6 +22,7 @@ export class PayPage implements OnInit {
   }
 
   ngOnInit() {}
+
   onSubmit() {
     this.paymentForm.markAllAsTouched();
 
