@@ -31,6 +31,12 @@ export class PayPage implements OnInit {
 
   onSubmit() {
     this.paymentForm.markAllAsTouched();
+    this.notifySuccess(
+      'R250',
+      'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
+      'LNJH2Q2BYMV7KMMFMEEUCKIW6C3HPBOL4ARZBPPE2OBVVDPNVN6A',
+      new Date()
+    );
 
     if (this.paymentForm.valid) {
       //TODO: ()=>{send payment}
@@ -67,6 +73,7 @@ export class PayPage implements OnInit {
       confirmButtonText: 'DONE',
       customClass: {
         confirmButton: 'w-1/2 !rounded-full',
+        title: 'font-nasalization',
       },
       backdrop: true,
       heightAuto: false,
@@ -88,6 +95,7 @@ export class PayPage implements OnInit {
       confirmButtonText: 'RETRY',
       customClass: {
         confirmButton: 'w-1/2 !rounded-full',
+        title: 'font-nasalization',
       },
       showCloseButton: true,
       backdrop: true,
