@@ -19,6 +19,7 @@ import { AttestationReport } from '../../schema/attestation';
 import { PublicKey, TweetNaClCrypto } from '../../schema/crypto';
 import { from_msgpack_as } from '../../schema/msgpack';
 import { seal_msgpack_as, unseal_msgpack_as } from '../../schema/sealing';
+import { TransactionConfirmation, waitForConfirmation } from './algosdk.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -91,6 +92,21 @@ export class WalletService {
     signedTxn: Uint8Array
   ): Promise<{ txId: string }> {
     return await this.getAlgodClient().sendRawTransaction(signedTxn).do();
+  }
+
+  async waitForTransactionConfirmation(
+    txId: string
+  ): Promise<TransactionConfirmation> {
+    // TODO: Report rejection and timeout in a way the UI can use.
+    return waitForConfirmation(this.getAlgodClient(), txId, 4);
+  }
+
+  /** Combine {@link submitSignedTransaction} and {@link waitForTransactionConfirmation}. */
+  async submitAndConfirmTransaction(
+    signedTxn: Uint8Array
+  ): Promise<TransactionConfirmation> {
+    const { txId } = await this.submitSignedTransaction(signedTxn);
+    return await this.waitForTransactionConfirmation(txId);
   }
 
   // HTTP helpers
