@@ -5,7 +5,7 @@
 <ion-content>
   <div class="ion-text-center p-2">
     <fa-icon [icon]="faWallet" size="5x"></fa-icon>
-    <h1 class="font-semibold font-nasalization">My Wallet</h1>
+    <h1 class="font-semibold font-nasalization">{{walletQuery.select('name') | async }}'s Wallet</h1>
     <p>Send or recieve money quickly and easily, select an option below</p>
   </div>
   <ion-list>

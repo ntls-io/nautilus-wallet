@@ -46,7 +46,7 @@
         </p>
       </ng-container>
       <ng-container>
-        <ion-label position="stacked" for="pin">Password</ion-label>
+        <ion-label position="stacked" for="pin">PIN</ion-label>
         <ion-input
           type="password"
           formControlName="pin"
@@ -55,7 +55,7 @@
         <p
           *ngIf="(f.pin.touched && f.pin.errors?.required) || !nonValidSubmit && f.pin.errors?.required"
         >
-          Pin Is Required
+          PIN Is Required
         </p>
         <p
           *ngIf="(f.pin.touched && f.pin.errors?.minlength) || !nonValidSubmit && (f.pin.touched && f.pin.errors?.minlength)"
@@ -65,11 +65,11 @@
         <p
           *ngIf="(f.pin.touched && f.pin.dirty && f.pin.errors?.maxlength) || !nonValidSubmit && (f.pin.touched && f.pin.errors?.minlength)"
         >
-          Your Pin Can Only Be Up To 10 Characters
+          Your PIN Can Only Be Up To 10 Characters
         </p>
       </ng-container>
       <ng-container>
-        <ion-label position="stacked" for="confirmPin">Confirm Pin</ion-label>
+        <ion-label position="stacked" for="confirmPin">Confirm PIN</ion-label>
         <ion-input
           type="password"
           formControlName="confirmPin"
@@ -78,7 +78,7 @@
         <p
           *ngIf="(f.confirmPin.touched && f.confirmPin.errors?.required) || !nonValidSubmit && f.confirmPin.errors?.required"
         >
-          Pin Confirmation Is Required
+          PIN Confirmation Is Required
         </p>
         <p
           *ngIf="(f.confirmPin.touched && f.confirmPin.errors?.minlength) || !nonValidSubmit && (f.confirmPin.touched && f.confirmPin.errors?.minlength)"
@@ -88,12 +88,12 @@
         <p
           *ngIf="(f.confirmPin.touched && f.confirmPin.errors?.maxlength) || !nonValidSubmit && (f.confirmPin.touched && f.confirmPin.errors?.maxlength)"
         >
-          Your Pin Can Only Be Up To 10 Characters
+          Your  Can Only Be Up To 10 Characters
         </p>
         <p
           *ngIf="(f.confirmPin.touched && registrationForm.errors?.misMatch) || !nonValidSubmit && (f.confirmPin.touched && registrationForm.errors?.misMatch)"
         >
-          Pins Do Not Match
+          PIN Do Not Match
         </p>
       </ng-container>
       <ion-button expand="block" shape="round" type="submit">
