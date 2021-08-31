@@ -1,8 +1,4 @@
-on:
-  push:
-    paths:
-      - '.github/workflows/web-client.yaml'
-      - 'web-client/**'
+on: push
 
 defaults:
   run:
