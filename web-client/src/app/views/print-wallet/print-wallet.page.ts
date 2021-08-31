@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
+import { WalletQuery } from 'src/app/wallet.query';
 
 @Component({
   selector: 'app-print-wallet',
@@ -10,7 +11,12 @@ import { ToastController } from '@ionic/angular';
 export class PrintWalletPage implements OnInit {
   @Input() wallet!: string;
 
-  constructor(private toastCtrl: ToastController) {}
+  constructor(
+    private toastCtrl: ToastController,
+    private walletQuery: WalletQuery
+  ) {
+    this.wallet = walletQuery.getValue().walletId;
+  }
 
   ngOnInit() {}
 
