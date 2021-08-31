@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
 import { SessionQuery } from 'src/app/stores/session/session.query';
 import Swal from 'sweetalert2';
@@ -20,7 +20,8 @@ export class PayPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private walletService: WalletService,
-    private sessionQuery: SessionQuery
+    private sessionQuery: SessionQuery,
+    private loadingCtrl: LoadingController
   ) {
     this.paymentForm = this.formBuilder.group({
       amount: [0, Validators.compose([Validators.required])],
@@ -37,11 +38,14 @@ export class PayPage implements OnInit {
   async onSubmit() {
     this.paymentForm.markAllAsTouched();
     if (this.paymentForm.valid) {
+      const loading = await this.loadingCtrl.create();
+      loading.present();
       console.log(this.paymentForm.controls.amount.value);
       await this.walletService.sendFunds(
         this.wallet,
         this.paymentForm.controls.amount.value
       );
+      loading.dismiss();
 
       this.notifySuccess(
         'R' + this.paymentForm.controls.amount.value,

@@ -38,7 +38,9 @@ export class WalletAccessPage implements OnInit {
       scanner.onWillDismiss().then((result) => {
         // this.address = result;
         //TODO: perform action after scan result
-        console.log(result);
+        this.address = result.data;
+        scanner.dismiss();
+        this.confirm();
       });
 
       return await scanner.present();
@@ -65,8 +67,6 @@ export class WalletAccessPage implements OnInit {
 
       await this.walletService.openWallet(this.address, pin);
       this.router.navigate(['/wallet']);
-
-      // this.scannerService.presentLock(this.address);
     }
   }
 

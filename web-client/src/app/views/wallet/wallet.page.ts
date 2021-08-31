@@ -43,7 +43,7 @@ export class WalletPage implements OnInit {
     },
   ]; // Placeholder icons until we get definite ones.
 
-  constructor(private sessionQuery: SessionQuery) {
+  constructor(public sessionQuery: SessionQuery) {
     this.ownerName = sessionQuery.getValue().name;
   }
 
