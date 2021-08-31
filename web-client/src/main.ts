@@ -14,10 +14,10 @@ if (environment.production) {
   enableAkitaProdMode();
 }
 
-persistState({
-  enableInNonBrowser: true,
-  key: 'nautilus',
-});
+// persistState({
+//   enableInNonBrowser: true,
+//   key: 'nautilus',
+// });
 
 akitaConfig({ resettable: true });
 
