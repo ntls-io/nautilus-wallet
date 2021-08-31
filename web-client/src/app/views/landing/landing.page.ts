@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { resetStores } from '@datorama/akita';
 
 @Component({
   selector: 'app-landing',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./landing.page.scss'],
 })
 export class LandingPage implements OnInit {
-  constructor() {}
+  constructor() {
+    resetStores();
+  }
 
   ngOnInit() {}
 }
