@@ -186,16 +186,16 @@ export class WalletService {
 // Also, note that TypeScript's type system does not actually distinguish these two,
 // so this code checks the types at run-time to avoid hard-to-diagnose errors.
 
-const arrayViewFromBuffer = (buffer: ArrayBuffer): Uint8Array => {
+export const arrayViewFromBuffer = (buffer: ArrayBuffer): Uint8Array => {
   if (!(buffer instanceof ArrayBuffer)) {
-    throw new TypeError(`expected ArrayBuffer`);
+    throw new TypeError('expected ArrayBuffer');
   }
   return new Uint8Array(buffer);
 };
 
-const bufferFromArrayView = (view: Uint8Array): ArrayBuffer => {
+export const bufferFromArrayView = (view: Uint8Array): ArrayBuffer => {
   if (!(view instanceof Uint8Array)) {
-    throw new TypeError(`expected Uint8Array`);
+    throw new TypeError('expected Uint8Array');
   }
   const begin = view.byteOffset;
   const end = view.byteOffset + view.byteLength;
