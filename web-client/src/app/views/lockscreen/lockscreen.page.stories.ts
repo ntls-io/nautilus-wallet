@@ -17,3 +17,8 @@ const Template: Story<LockscreenPage> = (args: LockscreenPage) => ({
 });
 
 export const Default = Template.bind({});
+
+Default.args = {
+  // Disable autofocus by default, for consistent Chromatic snapshots
+  autofocus: false,
+};
