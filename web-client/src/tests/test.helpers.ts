@@ -34,3 +34,31 @@ const getElementWithLink = (
   expect(trigger).not.toBeNull();
   return trigger;
 };
+
+/**
+ * Resolve a promise with dynamic context provided by a callable.
+ *
+ * This is intended to make it slightly less awkward to use Promise-based code with Angular's HTTP testing pattern,
+ * which requires request expectations to be made strictly _after_ the code under test makes its requests,
+ * but _before_ awaiting completion of the code under test.
+ *
+ * With this helper, `const result = await codeUnderTest()` becomes:
+ *
+ * ```
+ * const result = await withResolveContext(codeUnderTest(), () => {
+ *   // Use httpTestingController.expectOne(…)
+ * })
+ * ```
+ *
+ * @see https://angular.io/guide/http#testing-http-requests
+ *
+ * @param promise Promise to await
+ * @param context callable to invoke before awaiting `promise`
+ */
+export const withResolveContext = async <T>(
+  promise: Promise<T>,
+  context: () => void
+): Promise<T> => {
+  context();
+  return await promise;
+};
