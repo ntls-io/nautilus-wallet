@@ -36,6 +36,25 @@
             "prefix": "app",
             "style": "camelCase"
           }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase", "snake_case"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "snake_case", "UPPER_CASE"]
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "property",
+            "format": ["camelCase", "snake_case", "PascalCase"]
+          }
         ]
       }
     },
