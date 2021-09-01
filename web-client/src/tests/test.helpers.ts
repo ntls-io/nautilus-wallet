@@ -3,7 +3,11 @@
  */
 
 import { DebugElement } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  flushMicrotasks,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -62,3 +66,28 @@ export const withResolveContext = async <T>(
   context();
   return await promise;
 };
+
+/**
+ * Like {@link withResolveContext}, but support a series of nested dynamic contexts.
+ *
+ * This can be used when a promised depends on more thane
+ *
+ * The implementation of this function more tricky and subtle:
+ * it relies on careful use of Angular's {@link fakeAsync} and {@link flushMicrotasks}
+ * to manually advance the resolving task's execution before calling each context.
+ *
+ * @param promise Promise to return
+ * @param contexts A series of context callables to be called in order,
+ *                 interleaved with advancing the execution of `promise`
+ */
+export const withNestedResolveContexts = <R>(
+  promise: Promise<R>,
+  contexts: Array<() => void>
+): Promise<R> =>
+  fakeAsync(() => {
+    for (const context of contexts) {
+      flushMicrotasks();
+      context();
+    }
+    return promise;
+  })();
