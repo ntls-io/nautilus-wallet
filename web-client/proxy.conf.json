@@ -1,0 +1,20 @@
+{
+  "/api/nautilus": {
+    "target": "http://ntls-demo.registree.io/",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/nautilus": ""
+    },
+    "logLevel": "debug"
+  },
+  "/api/algorand": {
+    "target": "https://testnet-algorand.api.purestake.io/ps2",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/algorand": ""
+    },
+    "logLevel": "debug"
+  }
+}
