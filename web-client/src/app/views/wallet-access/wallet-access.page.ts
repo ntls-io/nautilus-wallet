@@ -77,6 +77,6 @@ export class WalletAccessPage implements OnInit {
 
     await lock.present();
     console.log(await result);
-    return (await result).data!.pin;
+    return (await result).data?.pin;
   }
 }
