@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
 import Swal from 'sweetalert2';
@@ -15,7 +17,11 @@ describe('WalletAccessPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [WalletAccessPage],
-        imports: [IonicModule.forRoot()],
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule,
+          HttpClientTestingModule,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(WalletAccessPage);
