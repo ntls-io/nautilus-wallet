@@ -24,7 +24,7 @@ export class NewWalletService {
       } else {
         this.walletStore.update({
           walletId: (res as { Created: WalletDisplay }).Created.wallet_id,
-          name: name,
+          name,
         });
       }
     } catch (err) {
@@ -34,7 +34,7 @@ export class NewWalletService {
 
   async openWallet(walletId: string, pin: string) {
     try {
-      let res = await this.ntlsService.openWallet({
+      const res = await this.ntlsService.openWallet({
         wallet_id: walletId,
         auth_pin: pin,
       });
@@ -43,11 +43,11 @@ export class NewWalletService {
       if ((res as { Failed: string }).Failed) {
         this.walletStore.setError((res as { Failed: string }).Failed);
       } else {
-        let opened = (res as { Opened: WalletDisplay }).Opened;
+        const opened = (res as { Opened: WalletDisplay }).Opened;
         this.walletStore.update({
-          walletId: walletId,
+          walletId,
           name: opened.owner_name,
-          pin: pin,
+          pin,
         });
       }
     } catch (err) {
@@ -57,18 +57,18 @@ export class NewWalletService {
 
   async sendFunds(recieverId: string, amount: number) {
     try {
-      let sessionData = this.walletStore.getValue();
-      let transaction = await this.ntlsService.createUnsignedTransaction({
+      const sessionData = this.walletStore.getValue();
+      const transaction = await this.ntlsService.createUnsignedTransaction({
         amount: amount * 100000,
         from: sessionData.walletId,
         to: recieverId,
       });
-      let res = await this.ntlsService.signTransaction({
+      const res = await this.ntlsService.signTransaction({
         auth_pin: this.walletStore.getValue().pin,
         wallet_id: this.walletStore.getValue().walletId,
         algorand_transaction_bytes: transaction.bytesToSign(),
       });
-      let submitRes = await this.ntlsService.submitSignedTransaction(
+      const submitRes = await this.ntlsService.submitSignedTransaction(
         (res as { Signed: AlgorandTransactionSigned }).Signed
           .signed_transaction_bytes
       );

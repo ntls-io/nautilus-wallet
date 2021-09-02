@@ -63,7 +63,7 @@ export class WalletAccessPage implements OnInit {
   async confirm() {
     if (this.address) {
       this.address = this.address.trim();
-      let pin = await this.presentLock();
+      const pin = await this.presentLock();
 
       await this.walletService.openWallet(this.address, pin);
       this.router.navigate(['/wallet']);
@@ -71,9 +71,9 @@ export class WalletAccessPage implements OnInit {
   }
 
   async presentLock(): Promise<string> {
-    let lock = await this.modalCtrl.create({ component: LockscreenPage });
+    const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
-    let result = lock.onWillDismiss();
+    const result = lock.onWillDismiss();
 
     await lock.present();
     console.log(await result);
