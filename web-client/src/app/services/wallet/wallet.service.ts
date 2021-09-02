@@ -56,13 +56,13 @@ export class WalletService {
     }
   }
 
-  async sendFunds(recieverId: string, amount: number) {
+  async sendFunds(receiverId: string, amount: number) {
     try {
       const sessionData = this.sessionStore.getValue();
       const transaction = await this.enclaveService.createUnsignedTransaction({
         amount: amount * 100000,
         from: sessionData.walletId,
-        to: recieverId,
+        to: receiverId,
       });
       const res = await this.enclaveService.signTransaction({
         auth_pin: this.sessionStore.getValue().pin,
