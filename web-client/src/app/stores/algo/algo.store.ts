@@ -5,18 +5,12 @@ export interface AlgoState {
   key: string;
 }
 
-export function createInitialState(): AlgoState {
-  return {
-    key: ''
-  };
-}
+export const createInitialState = (): AlgoState => ({ key: '' });
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'algo' })
 export class AlgoStore extends Store<AlgoState> {
-
   constructor() {
     super(createInitialState());
   }
-
 }

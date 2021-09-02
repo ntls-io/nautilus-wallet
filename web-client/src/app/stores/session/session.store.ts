@@ -5,18 +5,12 @@ export interface SessionState {
   key: string;
 }
 
-export function createInitialState(): SessionState {
-  return {
-    key: ''
-  };
-}
+export const createInitialState = (): SessionState => ({ key: '' });
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'session' })
 export class SessionStore extends Store<SessionState> {
-
   constructor() {
     super(createInitialState());
   }
-
 }
