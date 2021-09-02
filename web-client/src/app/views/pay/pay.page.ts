@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { NewWalletService } from 'src/app/new-wallet.service';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { WalletQuery } from 'src/app/wallet.query';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pay',
@@ -21,7 +21,8 @@ export class PayPage implements OnInit {
     private navCtrl: NavController,
     private walletService: NewWalletService,
     private walletQuery: WalletQuery,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private notification: SwalHelper
   ) {
     this.paymentForm = this.formBuilder.group({
       amount: [0, Validators.compose([Validators.required])],
@@ -74,53 +75,40 @@ export class PayPage implements OnInit {
     txid: string,
     timestamp: Date
   ) {
-    Swal.fire({
-      icon: 'success',
-      titleText: 'Money sent!',
-      text: `Your money was sent successfully.`,
-      html: `<div >
+    this.notification.swal
+      .fire({
+        icon: 'success',
+        titleText: 'Money sent!',
+        text: `Your money was sent successfully.`,
+        html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
               <p class="text-xs">${address}</p>
               <small>Completed on ${timestamp.toLocaleString()}</small>
             </div>`,
-      confirmButtonColor: 'var(--ion-color-primary)',
-      confirmButtonText: 'DONE',
-      customClass: {
-        confirmButton: 'w-1/2 !rounded-full',
-        title: 'font-nasalization',
-      },
-      backdrop: true,
-      heightAuto: false,
-      allowOutsideClick: false,
-      footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
-    }).then(({ isConfirmed }) => {
-      if (isConfirmed) {
-        this.navCtrl.navigateRoot('wallet');
-      }
-    });
+        confirmButtonText: 'DONE',
+        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
+      })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          this.navCtrl.navigateRoot('wallet');
+        }
+      });
   }
 
   notifyError(text: string) {
-    Swal.fire({
-      icon: 'error',
-      titleText: 'Oops!',
-      text,
-      confirmButtonColor: 'var(--ion-color-primary)',
-      confirmButtonText: 'RETRY',
-      customClass: {
-        confirmButton: 'w-1/2 !rounded-full',
-        title: 'font-nasalization',
-      },
-      showCloseButton: true,
-      backdrop: true,
-      heightAuto: false,
-      allowOutsideClick: false,
-    }).then(({ isConfirmed, isDismissed }) => {
-      if (isConfirmed) {
-        //TODO: retry payment
-      } else if (isDismissed) {
-        this.navCtrl.navigateRoot('wallet');
-      }
-    });
+    this.notification.swal
+      .fire({
+        icon: 'error',
+        titleText: 'Oops!',
+        text,
+        confirmButtonText: 'RETRY',
+      })
+      .then(({ isConfirmed, isDismissed }) => {
+        if (isConfirmed) {
+          //TODO: retry payment
+        } else if (isDismissed) {
+          this.navCtrl.navigateRoot('wallet');
+        }
+      });
   }
 }
