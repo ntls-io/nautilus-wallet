@@ -8,14 +8,12 @@ export interface WalletState {
   transactionId: string;
 }
 
-export function createInitialState(): WalletState {
-  return {
-    walletId: '',
-    name: '',
-    pin: '',
-    transactionId: '',
-  };
-}
+export const createInitialState = (): WalletState => ({
+  walletId: '',
+  name: '',
+  pin: '',
+  transactionId: '',
+});
 
 @Injectable({
   providedIn: 'root',
