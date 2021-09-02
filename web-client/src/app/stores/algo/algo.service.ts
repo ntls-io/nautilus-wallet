@@ -5,12 +5,11 @@ import { AlgoStore } from './algo.store';
 
 @Injectable({ providedIn: 'root' })
 export class AlgoService {
-
-  constructor(private algoStore: AlgoStore, private http: HttpClient) {
-  }
+  constructor(private algoStore: AlgoStore, private http: HttpClient) {}
 
   get() {
-    return this.http.get('').pipe(tap(entities => this.algoStore.update(entities)));
+    return this.http
+      .get('')
+      .pipe(tap((entities) => this.algoStore.update(entities)));
   }
-
 }
