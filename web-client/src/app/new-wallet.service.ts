@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlgorandTransactionSigned, WalletDisplay } from 'src/schema/entities';
+import { AlgorandTransactionSigned } from 'src/schema/entities';
 import { WalletService } from './services/wallet.service';
 import { WalletStore } from './wallet.store';
 
@@ -19,13 +19,13 @@ export class NewWalletService {
         auth_pin: pin,
       });
 
-      if ((res as { Failed: string }).Failed) {
-        this.walletStore.setError((res as { Failed: string }).Failed);
+      if ('Created' in res) {
+        const { wallet_id: walletId } = res.Created;
+        this.walletStore.update({ walletId, name });
+      } else if ('Failed' in res) {
+        this.walletStore.setError(res);
       } else {
-        this.walletStore.update({
-          walletId: (res as { Created: WalletDisplay }).Created.wallet_id,
-          name,
-        });
+        never(res);
       }
     } catch (err) {
       this.walletStore.setError(err);
@@ -40,15 +40,15 @@ export class NewWalletService {
       });
       console.log(res);
 
-      if ((res as { Failed: string }).Failed) {
-        this.walletStore.setError((res as { Failed: string }).Failed);
+      if ('Opened' in res) {
+        const { owner_name: name } = res.Opened;
+        this.walletStore.update({ walletId, name, pin });
+      } else if ('InvalidAuth' in res) {
+        this.walletStore.setError(res);
+      } else if ('Failed' in res) {
+        this.walletStore.setError(res);
       } else {
-        const opened = (res as { Opened: WalletDisplay }).Opened;
-        this.walletStore.update({
-          walletId,
-          name: opened.owner_name,
-          pin,
-        });
+        never(res);
       }
     } catch (err) {
       this.walletStore.setError(err);
