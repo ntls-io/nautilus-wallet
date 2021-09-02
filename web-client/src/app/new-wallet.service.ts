@@ -55,13 +55,13 @@ export class NewWalletService {
     }
   }
 
-  async sendFunds(recieverId: string, amount: number) {
+  async sendFunds(receiverId: string, amount: number) {
     try {
       const sessionData = this.walletStore.getValue();
       const transaction = await this.ntlsService.createUnsignedTransaction({
         amount: amount * 100000,
         from: sessionData.walletId,
-        to: recieverId,
+        to: receiverId,
       });
       const res = await this.ntlsService.signTransaction({
         auth_pin: this.walletStore.getValue().pin,
