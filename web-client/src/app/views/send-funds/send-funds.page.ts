@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ScannerPage } from '../scanner/scanner.page';
+
+type ActionItem = {
+  label: string;
+  title: string;
+  icon: IconDefinition;
+  action: string;
+  disabled?: boolean;
+};
 
 @Component({
   selector: 'app-send-funds',
@@ -9,7 +17,7 @@ import { ScannerPage } from '../scanner/scanner.page';
   styleUrls: ['./send-funds.page.scss'],
 })
 export class SendFundsPage implements OnInit {
-  actionItems = [
+  actionItems: Array<ActionItem> = [
     {
       label: 'Quick pay',
       title: 'Scan a QR code',
