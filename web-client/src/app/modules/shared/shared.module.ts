@@ -18,7 +18,15 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ActionItemComponent,
     ProfileCardHorizontalComponent,
   ],
-  imports: [IonicModule, CommonModule, RouterModule, BrMaskerModule],
+  imports: [
+    IonicModule,
+    CommonModule,
+    RouterModule,
+    BrMaskerModule,
+    // XXX: The build doesn't actually fail when this FontAwesomeModule import is missing,
+    //      but removing it silently breaks fa-icon rendering in production builds (but not development).
+    FontAwesomeModule,
+  ],
   exports: [
     FontAwesomeModule,
     QRCodeModule,
