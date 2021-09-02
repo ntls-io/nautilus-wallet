@@ -41,6 +41,9 @@ export class WalletAccessPage implements OnInit {
         title: 'Permission required',
         text: `In order to scan a QR Code, you need to grant camera's permission`,
         confirmButtonColor: 'var(--ion-color-primary)',
+        customClass: {
+          title: 'font-nasalization',
+        },
         backdrop: true,
         heightAuto: false,
         allowOutsideClick: false,
