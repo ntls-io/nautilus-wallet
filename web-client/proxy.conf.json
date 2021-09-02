@@ -1,6 +1,6 @@
 {
   "/api/nautilus": {
-    "target": "http://ntls-demo.registree.io/",
+    "target": "https://ntls-api.registree.io/",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
