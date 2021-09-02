@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
@@ -12,7 +13,12 @@ describe('PayPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PayPage],
-        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule,
+          SharedModule,
+          HttpClientTestingModule,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(PayPage);
