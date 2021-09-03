@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Browser } from '@capacitor/browser';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
@@ -18,10 +17,4 @@ export class ActionItemComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
-
-  async goTo(url: string | undefined) {
-    if (url) {
-      await Browser.open({ url });
-    }
-  }
 }
