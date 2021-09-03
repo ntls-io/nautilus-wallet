@@ -27,6 +27,7 @@ export class GlobalErrorHandler implements ErrorHandler {
             text: 'Unexpected Error Occurred',
           })
           .then(() => {
+            // XXX: See also modal closing code in LandingPage
             this.navCtrl.navigateRoot('');
           })
     );
