@@ -44,8 +44,9 @@ export class NewWalletService {
     });
 
     if ('Opened' in res) {
+      const balance = (await this.ntlsService.getBalance(walletId)) / 100000;
       const { owner_name: name } = res.Opened;
-      this.walletStore.update({ walletId, name, pin });
+      this.walletStore.update({ walletId, name, pin, balance });
       return undefined;
     } else if ('InvalidAuth' in res) {
       return 'Authentication failed, please ensure that the address and password provided is correct.';

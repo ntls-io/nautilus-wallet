@@ -6,6 +6,7 @@ export interface WalletState {
   name: string;
   pin: string;
   transactionId: string;
+  balance: number | null;
 }
 
 export const createInitialState = (): WalletState => ({
@@ -13,6 +14,7 @@ export const createInitialState = (): WalletState => ({
   name: '',
   pin: '',
   transactionId: '',
+  balance: null,
 });
 
 @Injectable({
