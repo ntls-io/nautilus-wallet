@@ -24,7 +24,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
         this.notification.swal.fire({
           icon: 'error',
-          text: error.message ?? JSON.stringify(error),
+          text: 'Unexpected Error Occurred',
         });
         return throwError(error);
       }),

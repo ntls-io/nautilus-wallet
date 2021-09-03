@@ -16,7 +16,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         await this.notification.swal
           .fire({
             icon: 'error',
-            text: error.message || 'Undefined client error',
+            text: 'Unexpected Error Occurred',
           })
           .then(() => {
             this.navCtrl.navigateRoot('');
