@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
-import { ScannerService } from 'src/app/services/scanner.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { ScannerPage } from '../scanner/scanner.page';
+import { never } from '../../new-wallet.service';
+import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 
 type ActionItem = {
   label: string;
@@ -37,36 +37,65 @@ export class SendFundsPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private modalCtrl: ModalController,
-    private notification: SwalHelper,
-    private scannerService: ScannerService
+    private notification: SwalHelper
   ) {}
 
   ngOnInit() {}
 
+  // FIXME: Duplication with WalletAccessPage.openScanner
   async presentScanner() {
-    const allowed = await this.scannerService.requestPermissions();
-    if (allowed) {
-      const scanner = await this.modalCtrl.create({
-        component: ScannerPage,
+    const scanSuccess = async (address: string) => {
+      await this.navCtrl.navigateForward('pay', {
+        queryParams: { recieverAddress: address },
       });
+    };
 
-      scanner.onWillDismiss().then((result) => {
-        console.log(result);
-        if (result.data) {
-          this.navCtrl.navigateForward('pay', {
-            queryParams: { recieverAddress: result.data },
+    // FIXME: fix import for OverlayEventDetail
+    const dismissed = async (eventDetail: { data?: ScanResult }) => {
+      const { data: result } = eventDetail;
+      switch (result?.type) {
+        case 'scanSuccess':
+          await scanSuccess(result.result);
+          break;
+        case 'scanError':
+          await this.notification.swal.fire({
+            icon: 'error',
+            title: 'Error scanning QR code',
+            text: 'Failed to scan a valid QR code. Please try again.',
           });
-        }
-      });
+          break;
+        case 'camerasNotFound':
+          await this.notification.swal.fire({
+            icon: 'warning',
+            title: 'No camera found',
+            text: 'In order to scan a QR Code, your device must have a camera',
+          });
+          break;
+        case 'permissionDenied':
+          await this.notification.swal.fire({
+            icon: 'error',
+            title: 'Permission required',
+            text: `In order to scan a QR Code, you need to grant camera's permission`,
+          });
+          break;
+        case 'dismissed':
+          // Explicit user dismiss: just return silently.
+          break;
+        case undefined:
+          throw Error(
+            'ScannerPage modal dismiss returned unexpected undefined!'
+          );
+        default:
+          never(result);
+      }
+    };
 
-      return await scanner.present();
-    } else {
-      this.notification.swal.fire({
-        icon: 'error',
-        title: 'Permission required',
-        text: `In order to scan a QR Code, you need to grant camera's permission`,
-      });
-    }
+    // Show modal
+    const scanner = await this.modalCtrl.create({ component: ScannerPage });
+    const didDismissPromise = scanner.onDidDismiss();
+
+    await scanner.present();
+    await dismissed(await didDismissPromise);
   }
 
   execItemAction(action: string | undefined) {
