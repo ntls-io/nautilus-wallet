@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
+import { ScannerService } from 'src/app/services/scanner.service';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ScannerPage } from '../scanner/scanner.page';
 
 type ActionItem = {
@@ -34,26 +36,37 @@ export class SendFundsPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private notification: SwalHelper,
+    private scannerService: ScannerService
   ) {}
 
   ngOnInit() {}
 
   async presentScanner() {
-    const scanner = await this.modalCtrl.create({
-      component: ScannerPage,
-    });
+    const allowed = await this.scannerService.requestPermissions();
+    if (allowed) {
+      const scanner = await this.modalCtrl.create({
+        component: ScannerPage,
+      });
 
-    scanner.onWillDismiss().then((result) => {
-      console.log(result);
-      if (result.data) {
-        this.navCtrl.navigateForward('pay', {
-          queryParams: { recieverAddress: result.data },
-        });
-      }
-    });
+      scanner.onWillDismiss().then((result) => {
+        console.log(result);
+        if (result.data) {
+          this.navCtrl.navigateForward('pay', {
+            queryParams: { recieverAddress: result.data },
+          });
+        }
+      });
 
-    return await scanner.present();
+      return await scanner.present();
+    } else {
+      this.notification.swal.fire({
+        icon: 'error',
+        title: 'Permission required',
+        text: `In order to scan a QR Code, you need to grant camera's permission`,
+      });
+    }
   }
 
   execItemAction(action: string | undefined) {
