@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
 import { NewWalletService } from 'src/app/new-wallet.service';
 import { ScannerService } from 'src/app/services/scanner.service';
@@ -26,7 +26,8 @@ export class WalletAccessPage implements OnInit {
     private walletService: NewWalletService,
     private notification: SwalHelper,
     private walletQuery: WalletQuery,
-    private router: Router
+    private router: Router,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
@@ -79,8 +80,10 @@ export class WalletAccessPage implements OnInit {
     if (this.address) {
       this.address = this.address.trim();
       const pin = await this.presentLock();
-
+      const loading = await this.loadingCtrl.create();
+      loading.present();
       const error = await this.walletService.openWallet(this.address, pin);
+      loading.dismiss();
       if (error) {
         await this.notification.swal.fire({
           icon: 'error',
