@@ -36,6 +36,14 @@ export class NewWalletService {
       this.walletStore.setError(err);
     }
   }
+  async updateBalance() {
+    const balance =
+      (await this.ntlsService.getBalance(
+        this.walletStore.getValue().walletId
+      )) / 100000;
+    console.log(balance);
+    this.walletStore.update({ balance });
+  }
 
   async openWallet(walletId: string, pin: string): Promise<MaybeError> {
     const res = await this.ntlsService.openWallet({
@@ -44,9 +52,9 @@ export class NewWalletService {
     });
 
     if ('Opened' in res) {
-      const balance = (await this.ntlsService.getBalance(walletId)) / 100000;
       const { owner_name: name } = res.Opened;
-      this.walletStore.update({ walletId, name, pin, balance });
+      this.walletStore.update({ walletId, name, pin });
+      await this.updateBalance();
       return undefined;
     } else if ('InvalidAuth' in res) {
       return 'Authentication failed, please ensure that the address and password provided is correct.';
@@ -69,11 +77,12 @@ export class NewWalletService {
       wallet_id: this.walletStore.getValue().walletId,
       algorand_transaction_bytes: transaction.bytesToSign(),
     });
-    const submitRes = await this.ntlsService.submitSignedTransaction(
+    const submitRes = await this.ntlsService.submitAndConfirmTransaction(
       (res as { Signed: AlgorandTransactionSigned }).Signed
         .signed_transaction_bytes
     );
     this.walletStore.update({ transactionId: submitRes.txId });
+    await this.updateBalance();
   }
 }
 
