@@ -18,6 +18,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       return;
     }
 
+    console.error('GlobalErrorHandler:', error);
     this.zone.run(
       async () =>
         await this.notification.swal
