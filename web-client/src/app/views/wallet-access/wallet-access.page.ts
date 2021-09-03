@@ -82,16 +82,19 @@ export class WalletAccessPage implements OnInit {
       const pin = await this.presentLock();
       const loading = await this.loadingCtrl.create();
       loading.present();
-      const error = await this.walletService.openWallet(this.address, pin);
-      loading.dismiss();
-      if (error) {
-        await this.notification.swal.fire({
-          icon: 'error',
-          title: 'Open Wallet Failed',
-          text: error,
-        });
-      } else {
-        this.router.navigate(['/wallet']);
+      try {
+        const error = await this.walletService.openWallet(this.address, pin);
+        if (error) {
+          await this.notification.swal.fire({
+            icon: 'error',
+            title: 'Open Wallet Failed',
+            text: error,
+          });
+        } else {
+          this.router.navigate(['/wallet']);
+        }
+      } finally {
+        loading.dismiss();
       }
     }
   }
