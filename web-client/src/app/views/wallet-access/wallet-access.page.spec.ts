@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
 import Swal from 'sweetalert2';
-import { ScannerPage } from '../scanner/scanner.page';
+import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 import { WalletAccessPage } from './wallet-access.page';
 
 describe('WalletAccessPage', () => {
@@ -46,9 +46,10 @@ describe('WalletAccessPage', () => {
   });
 
   it('#openScanner should create the a modal with the scanner page if camera permission request succeeds', async () => {
+    const scanResult: ScanResult = { type: 'dismissed' };
     const modalSpy = jasmine.createSpyObj('Modal', {
       present: Promise.resolve(),
-      onWillDismiss: Promise.resolve('result'),
+      onDidDismiss: Promise.resolve({ data: scanResult }),
       dismiss: Promise.resolve(),
     });
 

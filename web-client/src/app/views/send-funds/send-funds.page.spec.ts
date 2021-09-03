@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ScannerPage } from '../scanner/scanner.page';
+import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
@@ -37,9 +37,10 @@ describe('SendFundsPage', () => {
   });
 
   it('#presentScanner should create a modal with the scanner component', async () => {
+    const scanResult: ScanResult = { type: 'dismissed' };
     const modalSpy = jasmine.createSpyObj('Modal', {
       present: Promise.resolve(),
-      onWillDismiss: Promise.resolve('result'),
+      onDidDismiss: Promise.resolve({ data: scanResult }),
     });
 
     const modalCreateSpy = spyOn(modalCtrl, 'create')
