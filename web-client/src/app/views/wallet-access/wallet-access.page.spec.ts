@@ -2,7 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { ScannerService } from 'src/app/services/scanner.service';
 import Swal from 'sweetalert2';
 import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 import { WalletAccessPage } from './wallet-access.page';
@@ -10,7 +9,6 @@ import { WalletAccessPage } from './wallet-access.page';
 describe('WalletAccessPage', () => {
   let component: WalletAccessPage;
   let fixture: ComponentFixture<WalletAccessPage>;
-  let scannerService: ScannerService;
   let modalCtrl: ModalController;
 
   beforeEach(
@@ -26,7 +24,6 @@ describe('WalletAccessPage', () => {
 
       fixture = TestBed.createComponent(WalletAccessPage);
       component = fixture.componentInstance;
-      scannerService = TestBed.get(ScannerService);
       modalCtrl = TestBed.get(ModalController);
       fixture.detectChanges();
     })
@@ -39,7 +36,6 @@ describe('WalletAccessPage', () => {
   it('#openScanner should fire alert if camera permission request fails', async () => {
     // TODO: Implement this by wrapping swal in a service or using ngx-sweetalert2
 
-    spyOn(scannerService, 'requestPermissions').and.resolveTo(false);
     const swalSpy = spyOn(Swal, 'fire');
     await component.openScanner();
     expect(swalSpy).toHaveBeenCalled();
@@ -57,8 +53,6 @@ describe('WalletAccessPage', () => {
         component: ScannerPage,
       })
       .and.resolveTo(modalSpy);
-
-    spyOn(scannerService, 'requestPermissions').and.resolveTo(true);
 
     await component.openScanner();
 
