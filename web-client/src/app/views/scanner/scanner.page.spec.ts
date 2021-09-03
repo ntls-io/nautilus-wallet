@@ -13,8 +13,8 @@ describe('ScannerPage', () => {
   let modalCtrl: ModalController;
 
   beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
+    waitForAsync(async () => {
+      await TestBed.configureTestingModule({
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
@@ -23,7 +23,7 @@ describe('ScannerPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
-      router.navigate(['scanner']);
+      await router.navigate(['scanner']);
       fixture = TestBed.createComponent(ScannerPage);
       component = fixture.componentInstance;
       modalCtrl = TestBed.get(ModalController);
