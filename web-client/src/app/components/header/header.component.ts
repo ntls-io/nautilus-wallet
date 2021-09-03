@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { WalletQuery } from 'src/app/wallet.query';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() title = 'NAUTILUS';
-  constructor() {}
+  constructor(public walletQuery: WalletQuery) {}
 
   ngOnInit() {}
 }
