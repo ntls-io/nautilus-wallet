@@ -10,6 +10,10 @@ export class LandingPage implements OnInit {
   constructor() {
     resetStores();
   }
-
-  ngOnInit() {}
+  ngOnInit() {
+    resetStores();
+  }
+  ionViewDidEnter() {
+    resetStores();
+  }
 }

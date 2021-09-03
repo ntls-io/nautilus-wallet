@@ -60,6 +60,7 @@ export class WalletService {
     } else if ('InvalidAuth' in res) {
       return 'Authentication failed, please ensure that the address and password provided is correct.';
     } else if ('Failed' in res) {
+      console.error(res);
       throw new Error(res.Failed);
     } else {
       never(res);
