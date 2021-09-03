@@ -11,6 +11,7 @@ import { NgxPrinterModule } from 'ngx-printer';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ErrorHandlerModule } from './modules/error-handler.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule,
     NgxPrinterModule.forRoot({ printOpenWindow: false }),
+    ErrorHandlerModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
