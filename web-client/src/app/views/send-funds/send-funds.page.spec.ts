@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ScannerPage, ScanResult } from '../scanner/scanner.page';
+import {
+  expectModalScannerPresented,
+  stubModalScannerResult,
+} from '../scanner.helpers.spec';
 import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
@@ -37,22 +40,13 @@ describe('SendFundsPage', () => {
   });
 
   it('#presentScanner should create a modal with the scanner component', async () => {
-    const scanResult: ScanResult = { type: 'dismissed' };
-    const modalSpy = jasmine.createSpyObj('Modal', {
-      present: Promise.resolve(),
-      onDidDismiss: Promise.resolve({ data: scanResult }),
+    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
+      type: 'dismissed',
     });
-
-    const modalCreateSpy = spyOn(modalCtrl, 'create')
-      .withArgs({
-        component: ScannerPage,
-      })
-      .and.resolveTo(modalSpy);
 
     await component.presentScanner();
 
-    expect(modalCreateSpy).toHaveBeenCalled();
-    expect(modalSpy.present).toHaveBeenCalled();
+    expectModalScannerPresented(modalScannerSpies);
   });
 
   it('#execItemAction should call presentScanner', () => {
