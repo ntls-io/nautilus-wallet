@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { ModalController, NavController } from '@ionic/angular';
+import {
+  faKeyboard,
+  faQrcode,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  AlertController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ScannerPage } from '../scanner/scanner.page';
@@ -26,6 +34,12 @@ export class SendFundsPage implements OnInit {
       icon: faQrcode,
       action: 'presentScanner',
     },
+    {
+      label: 'Quick pay',
+      title: 'Enter address manually',
+      icon: faKeyboard,
+      action: 'presentTextArea',
+    },
     // {
     //   label: 'Add New Friend',
     //   title: 'Share my wallet address',
@@ -38,7 +52,8 @@ export class SendFundsPage implements OnInit {
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private notification: SwalHelper,
-    private scannerService: ScannerService
+    private scannerService: ScannerService,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {}
@@ -69,12 +84,49 @@ export class SendFundsPage implements OnInit {
     }
   }
 
+  async presentTextArea() {
+    const alert = await this.alertCtrl.create({
+      header: 'Wallet Address',
+      message: 'This is an alert message.',
+      inputs: [
+        {
+          name: 'wallet',
+          type: 'textarea',
+          placeholder: 'Please enter your wallet address',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Confirm Cancel');
+          },
+        },
+        {
+          text: 'Confirm',
+          cssClass: 'primary',
+          handler: () => {
+            console.log('Confirm Ok');
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    const { data } = await alert.onDidDismiss();
+    console.log(data);
+  }
+
   execItemAction(action: string | undefined) {
     switch (action) {
       case 'presentScanner':
         this.presentScanner();
         break;
-
+      case 'presentTextArea':
+        this.presentTextArea();
+        break;
       default:
         break;
     }
