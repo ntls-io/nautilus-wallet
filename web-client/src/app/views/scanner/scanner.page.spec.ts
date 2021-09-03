@@ -26,7 +26,10 @@ describe('ScannerPage', () => {
       await router.navigate(['scanner']);
       fixture = TestBed.createComponent(ScannerPage);
       component = fixture.componentInstance;
+
       modalCtrl = TestBed.get(ModalController);
+      await modalCtrl.create({ component: ScannerPage });
+
       fixture.detectChanges();
     })
   );
