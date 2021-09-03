@@ -46,7 +46,7 @@ export class SendFundsPage implements OnInit {
   async presentScanner() {
     const scanSuccess = async (address: string) => {
       await this.navCtrl.navigateForward('pay', {
-        queryParams: { recieverAddress: address },
+        queryParams: { receiverAddress: address },
       });
     };
 
