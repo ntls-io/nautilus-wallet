@@ -4,7 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { NewWalletService } from 'src/app/new-wallet.service';
 import { ScannerService } from 'src/app/services/scanner.service';
-import Swal from 'sweetalert2';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { ScannerPage } from '../scanner/scanner.page';
 
@@ -21,7 +21,8 @@ export class WalletAccessPage implements OnInit {
     private scannerService: ScannerService,
     private modalCtrl: ModalController,
     private walletService: NewWalletService,
-    private router: Router
+    private router: Router,
+    private notification: SwalHelper
   ) {}
 
   ngOnInit() {
@@ -45,17 +46,10 @@ export class WalletAccessPage implements OnInit {
 
       return await scanner.present();
     } else {
-      Swal.fire({
+      this.notification.swal.fire({
         icon: 'error',
         title: 'Permission required',
         text: `In order to scan a QR Code, you need to grant camera's permission`,
-        confirmButtonColor: 'var(--ion-color-primary)',
-        customClass: {
-          title: 'font-nasalization',
-        },
-        backdrop: true,
-        heightAuto: false,
-        allowOutsideClick: false,
       });
     }
   }
