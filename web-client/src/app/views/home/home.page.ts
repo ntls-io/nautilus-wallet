@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
     {
       title: 'My Profile',
       icon: faUserCircle,
+      disabled: true,
     },
   ];
   constructor() {}

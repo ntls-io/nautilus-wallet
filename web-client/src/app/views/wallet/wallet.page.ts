@@ -31,15 +31,18 @@ export class WalletPage implements OnInit {
     {
       title: 'Withdraw',
       icon: faHandHoldingUsd,
+      disabled: true,
     },
     {
       title: 'Receive',
       icon: faQrcode,
       path: '/wallet/receive',
+      disabled: true,
     },
     {
       title: 'My Transactions',
       icon: faReceipt,
+      disabled: true,
     },
   ]; // Placeholder icons until we get definite ones.
 
