@@ -6,7 +6,6 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { SessionQuery } from 'src/app/stores/session/session.query';
 
 @Injectable({
@@ -17,11 +16,7 @@ export class OpenWalletGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+  ): true | UrlTree {
     const sessionState = this.sessionQuery.getValue();
     if (sessionState.name && sessionState.walletId) {
       return true;
