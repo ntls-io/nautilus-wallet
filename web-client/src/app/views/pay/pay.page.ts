@@ -41,12 +41,15 @@ export class PayPage implements OnInit {
     if (this.paymentForm.valid) {
       const loading = await this.loadingCtrl.create();
       loading.present();
-      console.log(this.paymentForm.controls.amount.value);
-      await this.walletService.sendFunds(
-        this.wallet,
-        this.paymentForm.controls.amount.value
-      );
-      loading.dismiss();
+      try {
+        console.log(this.paymentForm.controls.amount.value);
+        await this.walletService.sendFunds(
+          this.wallet,
+          this.paymentForm.controls.amount.value
+        );
+      } finally {
+        loading.dismiss();
+      }
 
       this.notifySuccess(
         'R' + this.paymentForm.controls.amount.value,
