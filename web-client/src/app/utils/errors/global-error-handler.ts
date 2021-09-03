@@ -11,6 +11,13 @@ export class GlobalErrorHandler implements ErrorHandler {
   ) {}
 
   handleError(error: Error) {
+    if (error.message.includes('setOptions failed')) {
+      // XXX: Work around: Uncaught (in promise) DOMException: setOptions failed #297
+      //      https://github.com/zxing-js/ngx-scanner/issues/297
+      console.warn('GlobalErrorHandler ignoring:', error);
+      return;
+    }
+
     this.zone.run(
       async () =>
         await this.notification.swal
