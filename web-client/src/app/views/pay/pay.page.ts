@@ -20,7 +20,7 @@ export class PayPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private walletService: NewWalletService,
-    private walletQuery: WalletQuery,
+    public walletQuery: WalletQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper
   ) {
