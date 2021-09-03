@@ -54,7 +54,9 @@ export class WalletAccessPage implements OnInit {
         //TODO: perform action after scan result
         this.address = result.data;
         scanner.dismiss();
-        this.confirm();
+        if (this.address) {
+          this.confirm();
+        }
       });
 
       return await scanner.present();
