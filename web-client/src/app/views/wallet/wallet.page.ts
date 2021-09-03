@@ -27,19 +27,23 @@ export class WalletPage implements OnInit {
     {
       title: 'Top Up Wallet',
       icon: faDonate,
+      url: 'https://testnet.algoexplorer.io/dispenser',
     },
     {
       title: 'Withdraw',
       icon: faHandHoldingUsd,
+      disabled: true,
     },
     {
       title: 'Receive',
       icon: faQrcode,
       path: '/wallet/receive',
+      disabled: true,
     },
     {
       title: 'My Transactions',
       icon: faReceipt,
+      disabled: true,
     },
   ]; // Placeholder icons until we get definite ones.
 
