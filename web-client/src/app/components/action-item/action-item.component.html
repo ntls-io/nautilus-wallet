@@ -6,6 +6,7 @@
   class="app-item"
   [disabled]="disabled"
   [routerLink]="path"
+  (click)="goTo(url)"
 >
   <fa-icon *ngIf="icon" [icon]="icon" size="lg" slot="start"></fa-icon>
   <ion-label>
