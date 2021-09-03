@@ -9,6 +9,7 @@ export class SessionQuery extends Query<SessionState> {
   allState$ = this.select();
   selectName$ = this.select('name');
   selectWalletId$ = this.select('walletId');
+  selectBalance$ = this.select('balance');
 
   constructor(protected store: SessionStore) {
     super(store);
