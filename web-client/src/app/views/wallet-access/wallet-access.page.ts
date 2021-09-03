@@ -82,6 +82,9 @@ export class WalletAccessPage implements OnInit {
     if (this.address) {
       this.address = this.address.trim();
       const pin = await this.presentLock();
+      if (!pin) {
+        return;
+      }
       const loading = await this.loadingCtrl.create();
       loading.present();
       try {
@@ -107,7 +110,6 @@ export class WalletAccessPage implements OnInit {
     const result = lock.onWillDismiss();
 
     await lock.present();
-    console.log(await result);
     return (await result).data?.pin;
   }
 }
