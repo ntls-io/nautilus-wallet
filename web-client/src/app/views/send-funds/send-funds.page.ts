@@ -9,9 +9,9 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
-import { ScannerService } from 'src/app/services/scanner.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { never } from '../../new-wallet.service';
+import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 
 type ActionItem = {
@@ -39,7 +39,7 @@ export class SendFundsPage implements OnInit {
       label: 'Quick pay',
       title: 'Enter address manually',
       icon: faKeyboard,
-      action: 'presentTextArea',
+      action: 'presentAddressModal',
     },
     // {
     //   label: 'Add New Friend',
@@ -52,8 +52,6 @@ export class SendFundsPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private modalCtrl: ModalController,
-    private notification: SwalHelper,
-    private scannerService: ScannerService,
     private alertCtrl: AlertController,
     private notification: SwalHelper
   ) {}
@@ -116,39 +114,17 @@ export class SendFundsPage implements OnInit {
     await dismissed(await didDismissPromise);
   }
 
-  async presentTextArea() {
-    const alert = await this.alertCtrl.create({
-      header: 'Wallet Address',
-      message: 'This is an alert message.',
-      inputs: [
-        {
-          name: 'wallet',
-          type: 'textarea',
-          placeholder: 'Please enter your wallet address',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Confirm Cancel');
-          },
-        },
-        {
-          text: 'Confirm',
-          cssClass: 'primary',
-          handler: () => {
-            console.log('Confirm Ok');
-          },
-        },
-      ],
-    });
+  async presentAddressModal() {
+    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
 
-    await alert.present();
+    await modal.present();
 
-    const { data } = await alert.onDidDismiss();
-    console.log(data);
+    const { data } = await modal.onDidDismiss();
+    if (data?.success && data?.address) {
+      await this.navCtrl.navigateForward('pay', {
+        queryParams: { receiverAddress: data?.address },
+      });
+    }
   }
 
   execItemAction(action: string | undefined) {
@@ -156,8 +132,8 @@ export class SendFundsPage implements OnInit {
       case 'presentScanner':
         this.presentScanner();
         break;
-      case 'presentTextArea':
-        this.presentTextArea();
+      case 'presentAddressModal':
+        this.presentAddressModal();
         break;
       default:
         break;
