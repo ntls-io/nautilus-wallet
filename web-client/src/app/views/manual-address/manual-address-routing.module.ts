@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { ManualAddressPage } from './manual-address.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ManualAddressPage
-  }
+    component: ManualAddressPage,
+  },
 ];
 
 @NgModule({
