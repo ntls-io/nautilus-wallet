@@ -121,7 +121,7 @@ export class SendFundsPage implements OnInit {
 
     const { data } = await modal.onDidDismiss();
     if (data?.success && data?.address) {
-      await this.navCtrl.navigateForward('pay', {
+      this.navCtrl.navigateForward('pay', {
         queryParams: { receiverAddress: data?.address },
       });
     }

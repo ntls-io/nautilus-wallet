@@ -14,23 +14,24 @@
       <ion-col class="ion-align-self-center">
         <ion-icon name="wallet-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Wallet address</h1>
-        <ion-textarea
-          type="text"
-          placeholder="Enter recipient's wallet address"
-          [autofocus]="true"
-          class="p-0"
-          [(ngModel)]="address"
-        ></ion-textarea>
+        <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+          <ion-textarea
+            type="text"
+            placeholder="Enter recipient's wallet address"
+            class="p-0"
+            formControlName="address"
+          ></ion-textarea>
+          <p
+            class="text-danger text-sm"
+            *ngIf="!addressForm?.pristine && addressForm.errors?.invalidAddress"
+          >
+            This address is not valid
+          </p>
 
-        <ion-button
-          expand="block"
-          shape="round"
-          type="submit"
-          class="mt-4"
-          (click)="confirm()"
-          [disabled]="!address"
-          >Confirm</ion-button
-        >
+          <ion-button expand="block" shape="round" type="submit" class="mt-4">
+            Confirm
+          </ion-button>
+        </form>
       </ion-col>
     </ion-row>
   </ion-grid>
