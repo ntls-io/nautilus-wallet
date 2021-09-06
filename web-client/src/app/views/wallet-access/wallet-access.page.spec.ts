@@ -2,15 +2,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { ScannerService } from 'src/app/services/scanner.service';
-import Swal from 'sweetalert2';
-import { ScannerPage } from '../scanner/scanner.page';
+import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
+import {
+  expectModalScannerPresented,
+  stubModalScannerResult,
+} from '../scanner.helpers.spec';
 import { WalletAccessPage } from './wallet-access.page';
 
 describe('WalletAccessPage', () => {
   let component: WalletAccessPage;
   let fixture: ComponentFixture<WalletAccessPage>;
-  let scannerService: ScannerService;
   let modalCtrl: ModalController;
 
   beforeEach(
@@ -26,7 +27,6 @@ describe('WalletAccessPage', () => {
 
       fixture = TestBed.createComponent(WalletAccessPage);
       component = fixture.componentInstance;
-      scannerService = TestBed.get(ScannerService);
       modalCtrl = TestBed.get(ModalController);
       fixture.detectChanges();
     })
@@ -37,31 +37,34 @@ describe('WalletAccessPage', () => {
   });
 
   it('#openScanner should fire alert if camera permission request fails', async () => {
+    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
+      type: 'permissionDenied',
+    });
+
     // TODO: Implement this by wrapping swal in a service or using ngx-sweetalert2
 
-    spyOn(scannerService, 'requestPermissions').and.resolveTo(false);
-    const swalSpy = spyOn(Swal, 'fire');
+    const swalSpy: jasmine.Spy<SwalFire> = spyOn(Swal, 'fire');
     await component.openScanner();
-    expect(swalSpy).toHaveBeenCalled();
+
+    expect(swalSpy).toHaveBeenCalledOnceWith({
+      icon: 'error',
+      title: 'Permission required',
+      text: `In order to scan a QR Code, you need to grant camera's permission`,
+    });
+    expectModalScannerPresented(modalScannerSpies);
   });
 
   it('#openScanner should create the a modal with the scanner page if camera permission request succeeds', async () => {
-    const modalSpy = jasmine.createSpyObj('Modal', {
-      present: Promise.resolve(),
-      onWillDismiss: Promise.resolve('result'),
+    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
+      type: 'dismissed',
     });
 
-    const modalCreateSpy = spyOn(modalCtrl, 'create')
-      .withArgs({
-        component: ScannerPage,
-      })
-      .and.resolveTo(modalSpy);
-
-    spyOn(scannerService, 'requestPermissions').and.resolveTo(true);
-
     await component.openScanner();
-
-    expect(modalCreateSpy).toHaveBeenCalled();
-    expect(modalSpy.present).toHaveBeenCalled();
+    expectModalScannerPresented(modalScannerSpies);
   });
 });
+
+// XXX: Work around: @types/jasmine toHaveBeenCalledWith infers parameters for overloads incorrectly #42455
+//      https://github.com/DefinitelyTyped/DefinitelyTyped/issues/42455
+// (This forces the right overload.)
+type SwalFire = (options: SweetAlertOptions) => Promise<SweetAlertResult>;

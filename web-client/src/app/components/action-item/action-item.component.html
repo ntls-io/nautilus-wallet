@@ -1,12 +1,12 @@
 <ion-item
+  *ngIf="url; else notUrl"
   lines="none"
   button
   detail
-  detailIcon="chevron-forward-circle"
+  detailIcon="open-outline"
   class="app-item"
   [disabled]="disabled"
-  [routerLink]="path"
-  (click)="goTo(url)"
+  [href]="url"
 >
   <fa-icon *ngIf="icon" [icon]="icon" size="lg" slot="start"></fa-icon>
   <ion-label>
@@ -14,3 +14,21 @@
     <ion-text>{{ title }}</ion-text>
   </ion-label>
 </ion-item>
+
+<ng-template #notUrl>
+  <ion-item
+    lines="none"
+    button
+    detail
+    detailIcon="chevron-forward-circle"
+    class="app-item"
+    [disabled]="disabled"
+    [routerLink]="path"
+  >
+    <fa-icon *ngIf="icon" [icon]="icon" size="lg" slot="start"></fa-icon>
+    <ion-label>
+      <ion-text class="block font-bold">{{ preTitle }}</ion-text>
+      <ion-text>{{ title }}</ion-text>
+    </ion-label>
+  </ion-item>
+</ng-template>

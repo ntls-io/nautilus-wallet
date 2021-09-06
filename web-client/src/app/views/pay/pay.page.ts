@@ -32,7 +32,7 @@ export class PayPage implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       console.log(params);
-      this.wallet = params.recieverAddress;
+      this.wallet = params.receiverAddress;
     });
   }
 

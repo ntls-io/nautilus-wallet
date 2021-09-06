@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ScannerPage } from './scanner.page';
+import { ScannerPage, ScanResult } from './scanner.page';
 
 describe('ScannerPage', () => {
   let router: Router;
@@ -13,8 +13,8 @@ describe('ScannerPage', () => {
   let modalCtrl: ModalController;
 
   beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
+    waitForAsync(async () => {
+      await TestBed.configureTestingModule({
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
@@ -23,10 +23,13 @@ describe('ScannerPage', () => {
       }).compileComponents();
 
       router = TestBed.inject(Router);
-      router.navigate(['scanner']);
+      await router.navigate(['scanner']);
       fixture = TestBed.createComponent(ScannerPage);
       component = fixture.componentInstance;
+
       modalCtrl = TestBed.get(ModalController);
+      await modalCtrl.create({ component: ScannerPage });
+
       fixture.detectChanges();
     })
   );
@@ -36,20 +39,27 @@ describe('ScannerPage', () => {
   });
 
   it('#scanSuccessHandler should dismiss modal with the given data', () => {
-    const data = 'some data';
+    const success: ScanResult = {
+      type: 'scanSuccess',
+      result: 'some data',
+    };
 
     const dismissModalSpy = spyOn(modalCtrl, 'dismiss').and.resolveTo(true);
 
-    component.scanSuccessHandler(data);
+    component.scanSuccessHandler(success.result);
 
-    expect(dismissModalSpy).toHaveBeenCalledOnceWith(data);
+    expect(dismissModalSpy).toHaveBeenCalledOnceWith(success);
   });
 
   it('#dismissModal should dismiss the modal without data', () => {
+    const dismissed: ScanResult = {
+      type: 'dismissed',
+    };
+
     const dismissModalSpy = spyOn(modalCtrl, 'dismiss').and.resolveTo(true);
 
     component.dismissModal();
 
-    expect(dismissModalSpy).toHaveBeenCalledOnceWith();
+    expect(dismissModalSpy).toHaveBeenCalledOnceWith(dismissed);
   });
 });

@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { verifyNavigationTrigger } from 'src/tests/test.helpers';
+import { WalletStore } from '../../wallet.store';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -21,6 +22,10 @@ describe('WalletPage', () => {
           SharedModule,
         ],
       }).compileComponents();
+
+      // Satisfy OpenWalletGuard
+      const fakeWallet = { name: 'fake', walletId: 'fake' };
+      TestBed.inject(WalletStore).update(fakeWallet);
 
       router = TestBed.inject(Router);
       router.navigate(['wallet']);

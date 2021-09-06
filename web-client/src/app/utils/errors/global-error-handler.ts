@@ -11,6 +11,14 @@ export class GlobalErrorHandler implements ErrorHandler {
   ) {}
 
   handleError(error: Error) {
+    if (error.message.includes('setOptions failed')) {
+      // XXX: Work around: Uncaught (in promise) DOMException: setOptions failed #297
+      //      https://github.com/zxing-js/ngx-scanner/issues/297
+      console.warn('GlobalErrorHandler ignoring:', error);
+      return;
+    }
+
+    console.error('GlobalErrorHandler:', error);
     this.zone.run(
       async () =>
         await this.notification.swal
@@ -19,6 +27,7 @@ export class GlobalErrorHandler implements ErrorHandler {
             text: 'Unexpected Error Occurred',
           })
           .then(() => {
+            // XXX: See also modal closing code in LandingPage
             this.navCtrl.navigateRoot('');
           })
     );

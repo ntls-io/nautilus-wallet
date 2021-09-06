@@ -74,7 +74,7 @@ export class WalletService {
     const algodClient = this.getAlgodClient();
     const accountDetails = await algodClient.accountInformation(address).do();
     // https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
-    return accountDetails['amount'] as number;
+    return accountDetails.amount as number;
   }
 
   // Algorand network interface functions:
