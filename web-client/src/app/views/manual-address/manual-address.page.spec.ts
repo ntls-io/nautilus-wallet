@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ManualAddressPage } from './manual-address.page';
 
 describe('ManualAddressPage', () => {
@@ -10,7 +12,12 @@ describe('ManualAddressPage', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [IonicModule.forRoot(), RouterTestingModule],
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule,
+          ReactiveFormsModule,
+          SharedModule,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ManualAddressPage);
