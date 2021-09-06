@@ -85,8 +85,9 @@ ion-textarea {
   --border-radius: 9999px !important;
   --padding-start: 10px !important;
   --padding-end: 10px !important;
+  @apply bg-transparent #{!important};
   textarea {
-    @apply focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-opacity-70 rounded-full;
+    @apply border border-solid focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-opacity-70 rounded-full #{!important};
   }
 }
 
