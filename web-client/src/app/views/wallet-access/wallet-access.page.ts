@@ -60,11 +60,12 @@ export class WalletAccessPage implements OnInit {
     }
     if (this.address) {
       this.address = this.address.trim();
-      const pin = await this.presentLock();
+      const pinPromise = this.presentLock();
+      const loading = await this.loadingCtrl.create();
+      const pin = await pinPromise;
       if (!pin) {
         return;
       }
-      const loading = await this.loadingCtrl.create();
       await loading.present();
       try {
         const error = await this.walletService.openWallet(this.address, pin);
