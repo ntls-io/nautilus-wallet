@@ -26,7 +26,7 @@ FILES_U_H_F=$(addprefix $(CODEGEN_U), $(FILES_U_H))
 OUTPUT_W_FU=$(addprefix $(OBJ_U), $(OUTPUT_U))
 
 # All Rust and other source files that the Cargo build depends on.
-FILES_RUST_F = Cargo.toml Cargo.lock build.rs $(shell find src -name '*.rs') $(CODEGEN_U)Enclave_u.rs
+FILES_RUST_F = Cargo.toml Cargo.lock build.rs $(shell find src ../../http-service-impl/src -name '*.rs') $(CODEGEN_U)Enclave_u.rs
 
 # Contains compilation rules for the enclave part
 
@@ -72,7 +72,8 @@ $(CODEGEN_U)Enclave_u.rs: $(CODEGEN_U)Enclave_u.h
 	@bindgen \
 		--no-recursive-allowlist \
 		--raw-line 'use sgx_types::*;' \
-		--allowlist-function ecall_test \
+		--allowlist-function enclave_create_report \
+		--use-array-pointers-in-arguments \
 		--output $@ \
 		$? \
 		-- -I$(SGX_SDK)/include -I$(CUSTOM_EDL_PATH)

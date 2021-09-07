@@ -1,0 +1,10 @@
+[package]
+name = "sgx-helpers"
+version = "0.1.0"
+authors = ["Registree"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }

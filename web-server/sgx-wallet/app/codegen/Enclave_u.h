@@ -7,6 +7,7 @@
 #include <string.h>
 #include "sgx_edger8r.h" /* for sgx_status_t etc. */
 
+#include "sgx_report.h"
 #include "time.h"
 #include "inc/stat.h"
 #include "sys/uio.h"
@@ -242,7 +243,7 @@ int SGX_UBRIDGE(SGX_NOCONVENTION, u_dirfd_ocall, (int* error, void* dirp));
 int SGX_UBRIDGE(SGX_NOCONVENTION, u_fstatat64_ocall, (int* error, int dirfd, const char* pathname, struct stat64_t* buf, int flags));
 #endif
 
-sgx_status_t ecall_test(sgx_enclave_id_t eid, sgx_status_t* retval, const uint8_t* some_string, size_t len);
+sgx_status_t enclave_create_report(sgx_enclave_id_t eid, sgx_status_t* retval, const sgx_target_info_t* p_qe3_target, sgx_report_t* p_report, uint8_t enclave_data[32]);
 sgx_status_t t_global_init_ecall(sgx_enclave_id_t eid, uint64_t id, const uint8_t* path, size_t len);
 sgx_status_t t_global_exit_ecall(sgx_enclave_id_t eid);
 

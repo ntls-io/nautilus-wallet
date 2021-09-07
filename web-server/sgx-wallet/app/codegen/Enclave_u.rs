@@ -3,10 +3,11 @@
 use sgx_types::*;
 
 extern "C" {
-    pub fn ecall_test(
+    pub fn enclave_create_report(
         eid: sgx_enclave_id_t,
         retval: *mut sgx_status_t,
-        some_string: *const u8,
-        len: size_t,
+        p_qe3_target: *const sgx_target_info_t,
+        p_report: *mut sgx_report_t,
+        enclave_data: *mut [u8; 32usize],
     ) -> sgx_status_t;
 }

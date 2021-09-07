@@ -7,7 +7,13 @@ authors = ["Registree"]
 build = "build.rs"
 
 [dependencies]
+actix-web = "4.0.0-beta.8"
+
+# SGX SDK
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+
+http-service-impl = { path = "../../http-service-impl" }
+sgx-helpers = { path = "../../sgx-helpers" }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']

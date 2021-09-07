@@ -1,11 +1,14 @@
 enclave {
     from "sgx_tstd.edl" import *;
     from "sgx_backtrace.edl" import *;
-    trusted
-    {
-        public sgx_status_t ecall_test([in, size=len] const uint8_t* some_string, size_t len);
-    };
-    untrusted
-    {
+
+    include "sgx_report.h"
+
+    trusted {
+        public sgx_status_t enclave_create_report(
+            [in] const sgx_target_info_t* p_qe3_target,
+            [out] sgx_report_t* p_report,
+            [out] uint8_t enclave_data[32]
+        );
     };
 };

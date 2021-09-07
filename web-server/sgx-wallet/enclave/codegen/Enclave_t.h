@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include "sgx_edger8r.h" /* for sgx_ocall etc. */
 
+#include "sgx_report.h"
 #include "time.h"
 #include "inc/stat.h"
 #include "sys/uio.h"
@@ -20,7 +21,7 @@
 extern "C" {
 #endif
 
-sgx_status_t ecall_test(const uint8_t* some_string, size_t len);
+sgx_status_t enclave_create_report(const sgx_target_info_t* p_qe3_target, sgx_report_t* p_report, uint8_t enclave_data[32]);
 void t_global_init_ecall(uint64_t id, const uint8_t* path, size_t len);
 void t_global_exit_ecall(void);
 
