@@ -11,6 +11,7 @@
 #include "sys/uio.h"
 #include "inc/stat.h"
 #include "inc/dirent.h"
+#include "pwd.h"
 
 #include <stdlib.h> /* for size_t */
 
@@ -79,6 +80,29 @@ sgx_status_t SGX_CDECL u_readdir64_r_ocall(int* retval, void* dirp, struct diren
 sgx_status_t SGX_CDECL u_closedir_ocall(int* retval, int* error, void* dirp);
 sgx_status_t SGX_CDECL u_dirfd_ocall(int* retval, int* error, void* dirp);
 sgx_status_t SGX_CDECL u_fstatat64_ocall(int* retval, int* error, int dirfd, const char* pathname, struct stat64_t* buf, int flags);
+sgx_status_t SGX_CDECL u_environ_ocall(char*** retval);
+sgx_status_t SGX_CDECL u_getenv_ocall(char** retval, const char* name);
+sgx_status_t SGX_CDECL u_setenv_ocall(int* retval, int* error, const char* name, const char* value, int overwrite);
+sgx_status_t SGX_CDECL u_unsetenv_ocall(int* retval, int* error, const char* name);
+sgx_status_t SGX_CDECL u_chdir_ocall(int* retval, int* error, const char* dir);
+sgx_status_t SGX_CDECL u_getcwd_ocall(char** retval, int* error, char* buf, size_t buflen);
+sgx_status_t SGX_CDECL u_getpwuid_r_ocall(int* retval, unsigned int uid, struct passwd* pwd, char* buf, size_t buflen, struct passwd** passwd_result);
+sgx_status_t SGX_CDECL u_getuid_ocall(unsigned int* retval);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_exclusive_file_open(void** retval, const char* filename, uint8_t read_only, int64_t* file_size, int32_t* error_code);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_check_if_file_exists(uint8_t* retval, const char* filename);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_fread_node(int32_t* retval, void* f, uint64_t node_number, uint8_t* buffer, uint32_t node_size);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_fwrite_node(int32_t* retval, void* f, uint64_t node_number, uint8_t* buffer, uint32_t node_size);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_fclose(int32_t* retval, void* f);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_fflush(uint8_t* retval, void* f);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_remove(int32_t* retval, const char* filename);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_recovery_file_open(void** retval, const char* filename);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_fwrite_recovery_node(uint8_t* retval, void* f, uint8_t* data, uint32_t data_length);
+sgx_status_t SGX_CDECL u_sgxprotectedfs_do_file_recovery(int32_t* retval, const char* filename, const char* recovery_filename, uint32_t node_size);
+sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf);
+sgx_status_t SGX_CDECL sgx_thread_wait_untrusted_event_ocall(int* retval, const void* self);
+sgx_status_t SGX_CDECL sgx_thread_set_untrusted_event_ocall(int* retval, const void* waiter);
+sgx_status_t SGX_CDECL sgx_thread_setwait_untrusted_events_ocall(int* retval, const void* waiter, const void* self);
+sgx_status_t SGX_CDECL sgx_thread_set_multiple_untrusted_events_ocall(int* retval, const void** waiters, size_t total);
 
 #ifdef __cplusplus
 }

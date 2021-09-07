@@ -9,6 +9,7 @@ test = false
 
 [dependencies]
 # no_std
+hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
 
@@ -20,6 +21,8 @@ sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev 
 
 # Community SGX forks
 rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
+serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
+serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx" }
 thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
 
 # Our SGX forks

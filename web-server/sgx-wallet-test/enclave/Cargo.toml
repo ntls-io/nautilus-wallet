@@ -18,10 +18,14 @@ secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
 
 # SGX SDK
+sgx_rand = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+
+# Community SGX forks
+serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
 
 sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 
