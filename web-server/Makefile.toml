@@ -1,0 +1,13 @@
+[env]
+
+# https://github.com/sagiegurari/cargo-make#workspace-emulation
+CARGO_MAKE_WORKSPACE_EMULATION = true
+CARGO_MAKE_CRATE_WORKSPACE_MEMBERS = [
+    "sgx-wallet-impl",
+
+    "sgx-wallet-test/enclave",
+    "sgx-wallet-test/app",
+
+    "sgx-wallet/enclave",
+    "sgx-wallet/app",
+]

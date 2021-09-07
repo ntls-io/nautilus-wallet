@@ -1,0 +1,31 @@
+[package]
+name = "sgx-wallet-impl"
+version = "0.1.0"
+authors = ["Registree"]
+edition = "2018"
+
+[lib]
+test = false
+
+[dependencies]
+# no_std
+secrecy = "0.8.0"
+sodalite = { version = "0.4.0", default-features = false }
+
+# SGX SDK
+sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_tse = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+
+# Community SGX forks
+rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
+thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
+
+# Our SGX forks
+algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
+
+[patch.'https://github.com/apache/teaclave-sgx-sdk.git']
+sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
