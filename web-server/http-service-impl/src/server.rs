@@ -1,6 +1,7 @@
 use std::net::ToSocketAddrs;
 
 use actix::{Actor, Addr, Arbiter};
+use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 
 use crate::actors::WalletEnclaveActor;
@@ -25,11 +26,14 @@ where
         WalletEnclaveActor { wallet_enclave }
     });
 
+    // TODO: Test coverage
     let server = HttpServer::new(move || {
         let app_state = AppState {
             wallet_enclave_addr: wallet_enclave_addr.clone(),
         };
+        let cors = Cors::permissive(); // TODO: Tighten this a bit more?
         App::new()
+            .wrap(cors)
             .app_data(web::Data::new(app_state))
             .service(resources::enclave_report::get_enclave_report)
             .service(resources::wallet_operation::post_wallet_operation)

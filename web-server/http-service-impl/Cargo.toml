@@ -14,6 +14,7 @@ verbose-debug-logging = []
 [dependencies]
 actix = "0.12"
 actix-web = "4.0.0-beta.8"
+actix-cors = "0.6.0-beta.2"
 
 # XXX: Stop-gap
 rmp-serde =  "0.15.5"
