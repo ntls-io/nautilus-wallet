@@ -28,7 +28,7 @@
 
 
 typedef struct ms_run_tests_ecall_t {
-	sgx_status_t ms_retval;
+	size_t ms_retval;
 } ms_run_tests_ecall_t;
 
 typedef struct ms_t_global_init_ecall_t {

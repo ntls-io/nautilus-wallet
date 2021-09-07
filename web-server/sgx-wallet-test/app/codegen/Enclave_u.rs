@@ -3,5 +3,5 @@
 use sgx_types::*;
 
 extern "C" {
-    pub fn run_tests_ecall(eid: sgx_enclave_id_t, retval: *mut sgx_status_t) -> sgx_status_t;
+    pub fn run_tests_ecall(eid: sgx_enclave_id_t, retval: *mut size_t) -> sgx_status_t;
 }

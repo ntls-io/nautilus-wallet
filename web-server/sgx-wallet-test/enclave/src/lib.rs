@@ -13,10 +13,9 @@ use std::string::String;
 use std::vec::Vec;
 
 use sgx_tunittest::*;
-use sgx_types::sgx_status_t;
 
 #[no_mangle]
-pub extern "C" fn run_tests_ecall() -> sgx_status_t {
+pub extern "C" fn run_tests_ecall() -> usize {
     backtrace::enable_backtrace("enclave.signed.so", backtrace::PrintFormat::Short).unwrap();
 
     rsgx_unit_tests!(
@@ -41,7 +40,5 @@ pub extern "C" fn run_tests_ecall() -> sgx_status_t {
         wallet_operations::test_sign_transaction::sign_transaction_without_tag,
         wallet_operations::test_sign_transaction::sign_transaction_works,
         wallet_operations::test_sign_transaction_msgpack::prop_transaction_msgpack_roundtrips,
-    );
-
-    sgx_status_t::SGX_SUCCESS
+    )
 }

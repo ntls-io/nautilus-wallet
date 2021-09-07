@@ -3,17 +3,14 @@ extern crate sgx_urts;
 
 #[path = "../codegen/Enclave_u.rs"]
 mod enclave_u;
+mod safe_ecalls;
 
 use std::fs::create_dir_all;
 
-use sgx_types::{
-    sgx_attributes_t,
-    sgx_launch_token_t,
-    sgx_misc_attribute_t,
-    sgx_status_t,
-    SgxResult,
-};
+use sgx_types::{sgx_attributes_t, sgx_launch_token_t, sgx_misc_attribute_t, SgxResult};
 use sgx_urts::SgxEnclave;
+
+use crate::safe_ecalls::safe_run_tests_ecall;
 
 static ENCLAVE_FILE: &str = "enclave.signed.so";
 
@@ -36,34 +33,20 @@ fn init_enclave() -> SgxResult<SgxEnclave> {
     )
 }
 
-fn main() {
-    let enclave = match init_enclave() {
-        Ok(r) => {
-            println!("[+] Init Enclave Successful {}!", r.geteid());
-            r
-        }
-        Err(x) => {
-            println!("[-] Init Enclave Failed {}!", x.as_str());
-            return;
-        }
-    };
+fn main() -> Result<(), String> {
+    let enclave = init_enclave().map_err(|err| format!("init_enclave failed: {:?}", err))?;
 
     // FIXME: See WALLET_STORE_DIR
-    create_dir_all("wallet_store").unwrap();
+    create_dir_all("wallet_store")
+        .map_err(|err| format!("failed to create test wallet_store directory: {:?}", err))?;
 
-    let mut retval = sgx_status_t::SGX_ERROR_UNEXPECTED;
-
-    let result = unsafe { enclave_u::run_tests_ecall(enclave.geteid(), &mut retval) };
-
-    match result {
-        sgx_status_t::SGX_SUCCESS => {}
-        _ => {
-            println!("[-] ECALL Enclave Failed {}!", result.as_str());
-            return;
-        }
-    }
-
-    println!("[+] ecall_test success...");
+    let failed_tests = safe_run_tests_ecall(enclave.geteid())
+        .map_err(|err| format!("run_tests_ecall failed: {:?}", err))?;
 
     enclave.destroy();
+
+    match failed_tests {
+        0 => Ok(()),
+        _ => Err(format!("{} tests failed", failed_tests)),
+    }
 }
