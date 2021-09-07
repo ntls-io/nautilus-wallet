@@ -7,20 +7,28 @@ use sgx_wallet_impl::ported::crypto::SodaBoxCrypto;
 
 /// Encrypt and decrypt a message using [`SodaBoxCrypto`].
 pub(crate) fn prop_soda_box_roundtrips() {
-    proptest!(|(sender_seed: [u8; 32], receiver_seed: [u8; 32], plaintext: Box<[u8]>)| {
+    prop_soda_box_roundtrips_wrapper();
+}
+
+proptest! {
+    fn prop_soda_box_roundtrips_wrapper(
+        sender_seed: [u8; 32],
+        receiver_seed: [u8; 32],
+        plaintext: Box<[u8]>,
+    ) {
         prop_assume!(sender_seed != receiver_seed);
-        prop_soda_box_roundtrips_impl(sender_seed, receiver_seed, plaintext);
-    });
+        prop_soda_box_roundtrips_impl(sender_seed, receiver_seed, plaintext)?;
+    }
 }
 
 fn prop_soda_box_roundtrips_impl(
     sender_seed: [u8; 32],
     receiver_seed: [u8; 32],
     plaintext: Box<[u8]>,
-) {
+) -> Result<(), TestCaseError> {
     let mut sender = SodaBoxCrypto::from_seed(sender_seed);
     let receiver = SodaBoxCrypto::from_seed(receiver_seed);
-    assert_ne!(sender.get_pubkey(), receiver.get_pubkey());
+    prop_assert_ne!(sender.get_pubkey(), receiver.get_pubkey());
 
     let encrypted = sender
         .encrypt_message(&Secret::new(plaintext.clone()), &receiver.get_pubkey())
@@ -33,5 +41,7 @@ fn prop_soda_box_roundtrips_impl(
         )
         .unwrap();
 
-    assert_eq!(decrypted.expose_secret(), &plaintext);
+    prop_assert_eq!(decrypted.expose_secret(), &plaintext);
+
+    Ok(())
 }
