@@ -24,6 +24,16 @@
 # a SW-mode runner can't run a target built for HW-mode, and vice versa.
 # Docker doesn't allow eliminating this easily, so for now, the caller must match SGX_MODE with the runner variant.
 #
+# The enclave build stages optionally take an existing signing key as input.
+# To pass this to the enclave build steps, use something like:
+#
+#   --secret id=sgx-signing-key,src=<path>/Enclave_private.pem
+#
+# (If an existing key is not provided, the build will generate a new key.)
+#
+# XXX: Note that changing the key does NOT invalidate the docker instruction cache:
+#      the key will only be used for uncached steps.
+#
 # This assumes an up-to-date `.dockerignore`: see `generate-dockerignore.sh`
 
 # Pre-stage build args:
@@ -156,7 +166,7 @@ FROM rust-sgx-builder AS web-server-builder
 WORKDIR /build/web-server
 COPY --chown=user . .
 
-# STAGE: build-sgx-wallet-server (from web-server-builder, arg SGX_MODE)
+# STAGE: build-sgx-wallet-server (from web-server-builder, arg SGX_MODE, secret sgx-signing-key)
 # Build the sgx-wallet server, in the given mode.
 FROM web-server-builder AS build-sgx-wallet-server
 
@@ -165,6 +175,7 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet/app/target \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet/enclave/target \
+    --mount=type=secret,uid=1000,gid=1000,id=sgx-signing-key,target=/build/web-server/sgx-wallet/keys/Enclave_private.pem \
     . ~/.cargo/env && \
     . /build/intel/sgxsdk/environment && \
     CUSTOM_COMMON_PATH="/build/rust-sgx-sdk/common" \
@@ -172,7 +183,7 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     SGX_MODE="${SGX_MODE}" \
     make -C sgx-wallet
 
-# STAGE: build-sgx-wallet-test (from web-server-builder, arg SGX_MODE)
+# STAGE: build-sgx-wallet-test (from web-server-builder, arg SGX_MODE, secret sgx-signing-key)
 # Build the sgx-wallet tests, in the given mode.
 FROM web-server-builder AS build-sgx-wallet-test
 
@@ -181,6 +192,7 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet-test/app/target \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/web-server/sgx-wallet-test/enclave/target \
+    --mount=type=secret,uid=1000,gid=1000,id=sgx-signing-key,target=/build/web-server/sgx-wallet-test/keys/Enclave_private.pem \
     . ~/.cargo/env && \
     . /build/intel/sgxsdk/environment && \
     CUSTOM_COMMON_PATH="/build/rust-sgx-sdk/common" \
