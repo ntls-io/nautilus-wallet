@@ -48,7 +48,7 @@ pub trait KvStore<V> {
 
     /// Mutate the value of `key`.
     ///
-    /// This is like [`Self::mutate`], but only operates on existing values.
+    /// This is like [`Self::alter`], but only operates on existing values.
     fn mutate<F>(&mut self, key: &Key, mutate_fn: F) -> Result<Option<V>, Self::Error>
     where
         F: FnOnce(V) -> V,
