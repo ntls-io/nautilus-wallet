@@ -9,9 +9,11 @@ test = false
 
 [dependencies]
 # no_std
+base64 = { version = "0.13.0", default-features = false, features = ["alloc"] }
 hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
+zeroize = { version = "1.4.1", features = ["alloc", "zeroize_derive"] }
 
 # SGX SDK
 sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
@@ -21,12 +23,14 @@ sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev 
 
 # Community SGX forks
 rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
+rmp-serde = { git = "https://github.com/mesalock-linux/msgpack-rust-sgx" }
 serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
 serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx" }
 thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
 
 # Our SGX forks
 algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
+serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" } # SGX: registreerocks fork for 0.11.4
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
 sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }

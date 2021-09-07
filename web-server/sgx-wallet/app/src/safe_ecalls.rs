@@ -27,3 +27,32 @@ pub fn safe_enclave_create_report(
         sgx_success_and_then(retval, || (ret_report, ret_enclave_data))
     })
 }
+
+pub fn safe_wallet_operation(
+    eid: sgx_enclave_id_t,
+    sealed_request: &[u8],
+    sealed_response_capacity: usize,
+) -> SgxResult<SgxResult<Box<[u8]>>> {
+    let mut retval = sgx_status_t::SGX_ERROR_UNEXPECTED;
+    let mut sealed_response = vec![0; sealed_response_capacity];
+    let mut sealed_response_used = 0;
+
+    let result = unsafe {
+        enclave_u::wallet_operation(
+            eid,
+            &mut retval,
+            sealed_request.as_ptr(),
+            sealed_request.len(),
+            sealed_response.as_mut_ptr(),
+            sealed_response.len(),
+            &mut sealed_response_used,
+        )
+    };
+    sgx_success_and_then(result, || {
+        sgx_success_and_then(retval, || {
+            assert!(sealed_response_used <= sealed_response_capacity);
+            sealed_response.truncate(sealed_response_used);
+            sealed_response.into_boxed_slice()
+        })
+    })
+}

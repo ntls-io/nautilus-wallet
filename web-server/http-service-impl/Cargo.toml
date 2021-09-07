@@ -6,6 +6,11 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+# Enable verbose debug output.
+# (DO NOT enable outside of testing: This may expose enclave-sealed data.)
+verbose-debug-logging = []
+
 [dependencies]
 actix = "0.12"
 actix-web = "4.0.0-beta.8"

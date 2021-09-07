@@ -1,6 +1,10 @@
 enclave {
+    from "sgx_tstdc.edl" import *;
     from "sgx_tstd.edl" import *;
     from "sgx_backtrace.edl" import *;
+
+    from "sgx_env.edl" import *;
+    from "sgx_tprotected_fs.edl" import *;
 
     include "sgx_report.h"
 
@@ -9,6 +13,14 @@ enclave {
             [in] const sgx_target_info_t* p_qe3_target,
             [out] sgx_report_t* p_report,
             [out] uint8_t enclave_data[32]
+        );
+
+        public sgx_status_t wallet_operation(
+            [in, count=sealed_request_size] const uint8_t* sealed_request_buffer,
+            size_t sealed_request_size,
+            [out, count=sealed_response_capacity] uint8_t* sealed_response_buffer,
+            size_t sealed_response_capacity,
+            [out] size_t* sealed_response_used
         );
     };
 };
