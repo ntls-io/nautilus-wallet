@@ -34,8 +34,8 @@ jobs:
         with:
           context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:web-server"
           target: web-server-builder
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-sw
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-sw,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw,mode=max
 
   build-stage-run-sgx-wallet-server-hw:
     name: "Build server (HW)"
@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:web-server"
-          build-args: 'SGX_MODE=SW'
+          build-args: 'SGX_MODE=HW'
           secrets: |
             "sgx-signing-key=${{ secrets.SGX_SIGNING_KEY }}"
           target: run-sgx-wallet-server-hw
@@ -78,27 +78,21 @@ jobs:
       -
         uses: docker/setup-buildx-action@v1
       -
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/sgx-wallet-test-hw
-      -
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
-        name: "Build image: run-sgx-wallet-test-hw (SGX_MODE=SW)"
+        name: "Build image: run-sgx-wallet-test-hw (SGX_MODE=HW)"
         uses: docker/build-push-action@v2
         with:
           context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:web-server"
-          build-args: 'SGX_MODE=SW'
+          build-args: 'SGX_MODE=HW'
           secrets: |
             "sgx-signing-key=${{ secrets.SGX_SIGNING_KEY }}"
           target: run-sgx-wallet-test-hw
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: run-sgx-wallet-test-hw
           outputs: type=docker,dest=/tmp/run-sgx-wallet-test-hw.tar
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw
           cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw,mode=max
@@ -107,28 +101,3 @@ jobs:
         with:
           name: run-sgx-wallet-test-hw
           path: /tmp/run-sgx-wallet-test-hw.tar
-
-  build-stage-cargo-make-ci:
-    name: "cargo make (HW)"
-    runs-on: ubuntu-latest
-    needs:
-      - build-stage-run-sgx-wallet-server-hw
-      - build-stage-run-sgx-wallet-test-hw
-    steps:
-      -
-        uses: docker/setup-buildx-action@v1
-      -
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: "Build stage: build-cargo-make-ci (SGX_MODE=SW)"
-        uses: docker/build-push-action@v2
-        with:
-          context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:web-server"
-          build-args: 'SGX_MODE=SW'
-          target: build-cargo-make-ci
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-hw,mode=max
