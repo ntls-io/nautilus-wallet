@@ -18,6 +18,16 @@ see [rust-sgx-sdk-dev-env] for one way to do this.
 
 [rust-sgx-sdk-dev-env]: https://github.com/PiDelport/rust-sgx-sdk-dev-env
 
+You'll also need to install [bindgen], and its [requirements]:
+
+```shell
+cargo install bindgen
+sudo apt install llvm-dev libclang-dev clang
+```
+
+[bindgen]: https://crates.io/crates/bindgen
+[requirements]: https://rust-lang.github.io/rust-bindgen/requirements.html
+
 Once this is done, you can build and run the tests and server using `make` and `make run`:
 
 ```shell
