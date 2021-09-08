@@ -35,7 +35,7 @@ Once this is done, you can build and run the tests and server using `make` and `
 (cd sgx-wallet && make run)
 ```
 
-You can use [cargo make] to run cargo tasks for the whole codebase:
+You can use [cargo make] ([installation]) to run cargo tasks for the whole codebase:
 
 ```shell
 cargo make
@@ -47,6 +47,7 @@ cargo make --list-all-steps
 ```
 
 [cargo make]: https://github.com/sagiegurari/cargo-make
+[installation]: https://github.com/sagiegurari/cargo-make#installation
 
 ## Rust SGX SDK revision
 
