@@ -18,6 +18,16 @@ see [rust-sgx-sdk-dev-env] for one way to do this.
 
 [rust-sgx-sdk-dev-env]: https://github.com/PiDelport/rust-sgx-sdk-dev-env
 
+You'll also need to install [bindgen], and its [requirements]:
+
+```shell
+cargo install bindgen
+sudo apt install llvm-dev libclang-dev clang
+```
+
+[bindgen]: https://crates.io/crates/bindgen
+[requirements]: https://rust-lang.github.io/rust-bindgen/requirements.html
+
 Once this is done, you can build and run the tests and server using `make` and `make run`:
 
 ```shell
@@ -25,7 +35,7 @@ Once this is done, you can build and run the tests and server using `make` and `
 (cd sgx-wallet && make run)
 ```
 
-You can use [cargo make] to run cargo tasks for the whole codebase:
+You can use [cargo make] ([installation]) to run cargo tasks for the whole codebase:
 
 ```shell
 cargo make
@@ -37,6 +47,7 @@ cargo make --list-all-steps
 ```
 
 [cargo make]: https://github.com/sagiegurari/cargo-make
+[installation]: https://github.com/sagiegurari/cargo-make#installation
 
 ## Rust SGX SDK revision
 
