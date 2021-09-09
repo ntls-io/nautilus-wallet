@@ -2,7 +2,7 @@
 #include <errno.h>
 
 typedef struct ms_run_tests_ecall_t {
-	sgx_status_t ms_retval;
+	size_t ms_retval;
 } ms_run_tests_ecall_t;
 
 typedef struct ms_t_global_init_ecall_t {
@@ -1259,7 +1259,7 @@ static const struct {
 		(void*)Enclave_sgx_thread_set_multiple_untrusted_events_ocall,
 	}
 };
-sgx_status_t run_tests_ecall(sgx_enclave_id_t eid, sgx_status_t* retval)
+sgx_status_t run_tests_ecall(sgx_enclave_id_t eid, size_t* retval)
 {
 	sgx_status_t status;
 	ms_run_tests_ecall_t ms;

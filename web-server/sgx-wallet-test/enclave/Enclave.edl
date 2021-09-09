@@ -7,6 +7,6 @@ enclave {
 
     trusted
     {
-        public sgx_status_t run_tests_ecall();
+        public size_t run_tests_ecall();
     };
 };

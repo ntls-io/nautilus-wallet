@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-sgx_status_t run_tests_ecall(void);
+size_t run_tests_ecall(void);
 void t_global_init_ecall(uint64_t id, const uint8_t* path, size_t len);
 void t_global_exit_ecall(void);
 
