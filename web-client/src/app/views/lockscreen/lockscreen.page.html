@@ -23,7 +23,7 @@
             minlength="4"
             maxlength="10"
             [ngClass]="{'invalid': codeForm.dirty && codeForm.invalid}"
-            [brmasker]="{type:'num'}"
+            [inputMask]="numInputMask"
           ></ion-input>
 
           <ion-button expand="block" shape="round" type="submit"

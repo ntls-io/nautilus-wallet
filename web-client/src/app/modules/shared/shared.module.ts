@@ -4,9 +4,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
+import { InputMaskIonicModule } from '@ngneat/input-mask';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
-import { BrMaskerModule } from 'br-mask';
 import { NgxPrinterModule } from 'ngx-printer';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
@@ -22,7 +22,6 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     IonicModule,
     CommonModule,
     RouterModule,
-    BrMaskerModule,
     // XXX: The build doesn't actually fail when this FontAwesomeModule import is missing,
     //      but removing it silently breaks fa-icon rendering in production builds (but not development).
     FontAwesomeModule,
@@ -34,9 +33,9 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     HeaderComponent,
     ProfileCardHorizontalComponent,
     ActionItemComponent,
-    BrMaskerModule,
     ReactiveFormsModule,
     ZXingScannerModule,
+    InputMaskIonicModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

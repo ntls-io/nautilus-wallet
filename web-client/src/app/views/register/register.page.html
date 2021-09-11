@@ -32,7 +32,7 @@
         <ion-input
           type="text"
           formControlName="mobile"
-          [brmasker]="{type:'num'}"
+          [inputMask]="phoneInputMask"
         ></ion-input>
         <p
           *ngIf="(f.mobile.touched && f.mobile.errors?.required) ||!nonValidSubmit && f.mobile.errors?.required"
@@ -50,7 +50,9 @@
         <ion-input
           type="password"
           formControlName="pin"
-          [brmasker]="{type:'num', len: 10}"
+          min="4"
+          maxlength="10"
+          [inputMask]="numInputMask"
         ></ion-input>
         <p
           *ngIf="(f.pin.touched && f.pin.errors?.required) || !nonValidSubmit && f.pin.errors?.required"
@@ -73,7 +75,9 @@
         <ion-input
           type="password"
           formControlName="confirmPin"
-          [brmasker]="{type:'num', len: 10}"
+          min="4"
+          maxlength="10"
+          [inputMask]="numInputMask"
         ></ion-input>
         <p
           *ngIf="(f.confirmPin.touched && f.confirmPin.errors?.required) || !nonValidSubmit && f.confirmPin.errors?.required"

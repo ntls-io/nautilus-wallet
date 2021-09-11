@@ -39,13 +39,12 @@
       <ion-col>
         <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
           <ion-item lines="none">
-            <ion-label class="pr-2">R </ion-label>
             <ion-input
               inputmode="tel"
               placeholder="Amount"
               type="text"
               formControlName="amount"
-              [brmasker]="{money: true, thousand: ',',  decimalCaracter: '.', decimal: 2}"
+              [inputMask]="currencyInputMask"
             ></ion-input>
           </ion-item>
           <div class="m-5">

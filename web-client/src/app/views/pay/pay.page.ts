@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
+import { createMask } from '@ngneat/input-mask';
 import { WalletService } from 'src/app/services/wallet';
 import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -14,6 +15,15 @@ import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 export class PayPage implements OnInit {
   wallet!: string;
   paymentForm: FormGroup;
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: 'R ',
+    placeholder: '0',
+    autoUnmask: true,
+  });
 
   constructor(
     private formBuilder: FormBuilder,
