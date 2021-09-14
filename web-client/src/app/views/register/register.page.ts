@@ -16,13 +16,13 @@ export class RegisterPage implements OnInit {
   nonValidSubmit = true;
 
   constructor(private formBuilder: FormBuilder) {
-    this.initializeForm();
+    this.registrationForm = this.initializeForm();
   }
 
   ngOnInit() {}
 
-  initializeForm(): void {
-    this.registrationForm = this.formBuilder.group(
+  initializeForm(): FormGroup {
+    return this.formBuilder.group(
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
