@@ -1,0 +1,108 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true" class="h-full">
+    <ion-slide>
+      <ion-grid class="h-full px-3">
+        <ion-row class="h-full content-around">
+          <ion-col size="12">
+            <ion-img src="assets/img/kyc.svg" class="mx-auto w-2/3"></ion-img>
+          </ion-col>
+          <ion-col size="12">
+            <h1 class="font-nasalization">Verify Your Identity!</h1>
+            <p class="text-sm">
+              In order to complete your registration process please upload a
+              copy of your identity along with a clear selfie photo in order to
+              verify you are the identity holder
+            </p>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button expand="block" shape="round">NEXT</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid class="h-full">
+        <ion-row class="h-full content-around">
+          <ion-col class="px-3">
+            <h1 class="font-nasalization">Proof of Identity!</h1>
+            <p class="text-sm">
+              Please upload a copy of your identity along with a clear selfie
+              photo in order to verify you are the identity holder
+            </p>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list lines="none" mode="md" class="radio-list">
+              <ion-radio-group>
+                <ion-row>
+                  <ion-col size="4">
+                    <ion-item>
+                      <ion-radio value="id" class="mr-2"></ion-radio>
+                      <ion-label>
+                        <h4>ID Card</h4>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="4">
+                    <ion-item>
+                      <ion-radio value="passport" class="mr-2"></ion-radio>
+                      <ion-label>
+                        <h4>Passport</h4>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="4">
+                    <ion-item>
+                      <ion-radio value="refugee" class="mr-2"></ion-radio>
+                      <ion-label>
+                        <h4>Refugee</h4>
+                      </ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-radio-group>
+            </ion-list>
+          </ion-col>
+          <ion-col size="12" class="px-3">
+            <ion-list lines="none">
+              <ion-item *ngIf="false">
+                <ion-label>
+                  <h4>Upload Proof of Identity</h4>
+                  <p>We accept only</p>
+                  <p>ID, Passport, Refugee Status</p>
+                </ion-label>
+                <ion-icon
+                  name="document-attach"
+                  slot="end"
+                  size="large"
+                ></ion-icon>
+              </ion-item>
+              <ion-item class="border border-dashed">
+                <ion-label class="ion-text-wrap">
+                  <ion-text color="tertiary" class="font-bold">
+                    Take Selfie with Identity Document
+                  </ion-text>
+                  <h5>
+                    <span class="font-bold">Please note</span> screenshots,
+                    mobile bills are NOT accepted for verification
+                  </h5>
+                </ion-label>
+                <ion-icon name="camera" slot="end" size="large"></ion-icon>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button expand="block" shape="round">NEXT</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
