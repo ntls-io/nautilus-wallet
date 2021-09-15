@@ -42,7 +42,7 @@
           </ion-col>
           <ion-col size="12">
             <ion-list lines="none" mode="md" class="radio-list">
-              <ion-radio-group>
+              <ion-radio-group [(ngModel)]="idType">
                 <ion-row>
                   <ion-col size="4">
                     <ion-item>
@@ -86,7 +86,7 @@
                   size="large"
                 ></ion-icon>
               </ion-item>
-              <ion-item class="border border-dashed">
+              <ion-item class="border border-dashed" (click)="takePhoto()">
                 <ion-label class="ion-text-wrap">
                   <ion-text color="tertiary" class="font-bold">
                     Take Selfie with Identity Document
@@ -101,6 +101,7 @@
             </ion-list>
           </ion-col>
           <ion-col size="12">
+            <!-- //TODO: not sure about next button here -->
             <ion-button expand="block" shape="round">NEXT</ion-button>
           </ion-col>
         </ion-row>
