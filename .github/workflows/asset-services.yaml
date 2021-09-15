@@ -1,0 +1,119 @@
+name: "asset-services"
+
+on: push
+
+# See the web-server workflows for documentation.
+
+jobs:
+
+  build-stage-asset-services-builder:
+    name: "Builder"
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: docker/setup-buildx-action@v1
+      -
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: "Build stage: asset-services-builder"
+        uses: docker/build-push-action@v2
+        with:
+          context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:asset-services"
+          target: asset-services-builder
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services,mode=max
+
+  build-stage-build-asset-services:
+    name: "Build asset-services (release)"
+    runs-on: ubuntu-latest
+    needs: build-stage-asset-services-builder
+    steps:
+      -
+        uses: docker/setup-buildx-action@v1
+      -
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: "Build stage: build-asset-services"
+        uses: docker/build-push-action@v2
+        with:
+          context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:asset-services"
+          build-args: |
+            CARGO_BUILD_FLAGS=--release
+            CARGO_OUTPUT_PROFILE=release
+          target: build-asset-services
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services,mode=max
+
+  build-stage-run-asset-services-api:
+    name: "Push API server image (release)"
+    runs-on: ubuntu-latest
+    needs: build-stage-build-asset-services
+    steps:
+      -
+        uses: docker/setup-buildx-action@v1
+      -
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/asset-services-api
+      -
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: "Build stage: run-asset-services-api"
+        uses: docker/build-push-action@v2
+        with:
+          context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:asset-services"
+          build-args: |
+            CARGO_BUILD_FLAGS=--release
+            CARGO_OUTPUT_PROFILE=release
+          target: run-asset-services-api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services,mode=max
+
+  build-stage-run-asset-services-worker:
+    name: "Push worker image (release)"
+    runs-on: ubuntu-latest
+    needs: build-stage-build-asset-services
+    steps:
+      -
+        uses: docker/setup-buildx-action@v1
+      -
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/asset-services-worker
+      -
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: "Build stage: run-asset-services-worker"
+        uses: docker/build-push-action@v2
+        with:
+          context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:asset-services"
+          build-args: |
+            CARGO_BUILD_FLAGS=--release
+            CARGO_OUTPUT_PROFILE=release
+          target: run-asset-services-worker
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-asset-services,mode=max
