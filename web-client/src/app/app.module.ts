@@ -18,8 +18,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 Sentry.init(
   {
-    //TODO: set dsn after account created
-    // dsn: '',
+    dsn: 'https://912bcf8771494360aca2948bdefc46a5@o1000800.ingest.sentry.io/5960308',
     integrations: [new Integrations.BrowserTracing()],
   },
   SentryAngular.init
