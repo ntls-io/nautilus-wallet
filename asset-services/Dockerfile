@@ -78,6 +78,7 @@ RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/build/asset-services/target \
     . ~/.cargo/env && \
+    cargo check --all-targets ${CARGO_BUILD_FLAGS} && \
     cargo build --all-targets ${CARGO_BUILD_FLAGS} && \
     cp -p \
         /build/asset-services/target/${CARGO_OUTPUT_PROFILE}/asset-services-api \
