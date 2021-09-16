@@ -1,5 +1,6 @@
 # https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file
 [toolchain]
-# This crate's dependencies require Rust 1.51 for stable feature(min_const_generics)
-# https://github.com/rust-lang/rust/blob/master/RELEASES.md#version-1510-2021-03-25
-channel = "nightly-2021-03-25"
+# See: https://github.com/registreerocks/nautilus-wallet/wiki/Rust-SGX-SDK-toolchain-support-status
+#
+# This should match RUST_TOOLCHAIN in Dockerfile
+channel = "nightly-2021-05-10"

@@ -38,7 +38,8 @@
 
 # Pre-stage build args:
 
-ARG RUST_TOOLCHAIN="nightly-2021-03-25"
+# This should match rust-toolchain.toml
+ARG RUST_TOOLCHAIN="nightly-2021-05-10"
 
 # Intel SGX SDK 2.14
 # Docs: https://01.org/intel-softwareguard-extensions/downloads/intel-sgx-linux-2.14-release
