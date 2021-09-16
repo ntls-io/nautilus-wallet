@@ -1,0 +1,5 @@
+# https://rust-lang.github.io/rustfmt/
+
+imports_layout = "HorizontalVertical"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
