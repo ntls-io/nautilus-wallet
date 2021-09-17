@@ -26,6 +26,11 @@ where
         WalletEnclaveActor { wallet_enclave }
     });
 
+    let _guard = sentry::init(("https://52150892e1194e90b73b1c616e03fe69@o1000800.ingest.sentry.io/5962496", sentry::ClientOptions {
+        release: sentry::release_name!(),
+        ..Default::default()
+    }));
+
     // TODO: Test coverage
     let server = HttpServer::new(move || {
         let app_state = AppState {
