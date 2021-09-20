@@ -10,4 +10,6 @@ axum = "0.2"
 log = "0.4"
 tokio = { version = "1", features = ["macros"] }
 
+env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers" }
+
 asset-services-celery = { path = "../asset-services-celery" }

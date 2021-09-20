@@ -13,3 +13,5 @@ url = "2"
 celery = "0.4.0-rc10"
 # The celery::task macro requires serde here.
 serde = "1.0"
+
+env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers" }

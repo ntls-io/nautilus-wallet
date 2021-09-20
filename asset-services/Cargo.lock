@@ -69,6 +69,7 @@ version = "0.1.0"
 dependencies = [
  "asset-services-celery",
  "axum",
+ "env-var-helpers",
  "log",
  "tokio",
 ]
@@ -78,6 +79,7 @@ name = "asset-services-celery"
 version = "0.1.0"
 dependencies = [
  "celery",
+ "env-var-helpers",
  "env_logger",
  "serde",
  "url",
@@ -322,6 +324,14 @@ name = "dtoa"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56899898ce76aaf4a0f24d914c97ea6ed976d42fec6ad33fcbb0a1103e07b2b0"
+
+[[package]]
+name = "env-var-helpers"
+version = "0.1.0"
+source = "git+https://github.com/PiDelport/rust-env-var-helpers#89a15ddd524af1fbd4ab5a377d984dd990212dad"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "env_logger"
