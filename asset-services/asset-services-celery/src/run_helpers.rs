@@ -29,7 +29,7 @@ pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError>
     let celery = CeleryBox::build("celery", broker_url).await?;
 
     // Register our tasks:
-    celery.register_task::<tasks::ping>().await?;
+    celery.register_task::<tasks::misc::ping>().await?;
 
     Ok(celery)
 }

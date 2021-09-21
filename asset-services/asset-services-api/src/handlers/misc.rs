@@ -10,7 +10,7 @@ pub async fn ping(
     extract::Extension(celery): extract::Extension<Arc<CeleryBox>>,
 ) -> Result<String, CeleryErrorResponse> {
     let sent = celery
-        .send_task(tasks::ping::new("ping".to_string()))
+        .send_task(tasks::misc::ping::new("ping".to_string()))
         .await?;
     Ok(sent.task_id)
 }

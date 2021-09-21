@@ -1,5 +1,3 @@
-//! Celery task definitions.
-
 use celery::task::TaskResult;
 
 #[celery::task]
