@@ -30,6 +30,12 @@ pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError>
 
     // Register our tasks:
     celery.register_task::<tasks::misc::ping>().await?;
+    celery
+        .register_task::<tasks::verification::start_verify>()
+        .await?;
+    celery
+        .register_task::<tasks::verification::check_verify>()
+        .await?;
 
     Ok(celery)
 }

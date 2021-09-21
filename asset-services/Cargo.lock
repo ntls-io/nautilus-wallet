@@ -88,6 +88,7 @@ dependencies = [
  "env-var-helpers",
  "env_logger",
  "serde",
+ "twilio-verify",
  "url",
 ]
 
