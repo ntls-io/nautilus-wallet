@@ -4,4 +4,5 @@ members = [
     'asset-services-api',
     'asset-services-celery',
     'asset-services-worker',
+    'twilio-verify',
 ]

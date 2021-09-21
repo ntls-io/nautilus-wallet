@@ -10,3 +10,5 @@
 !asset-services-worker/src/
 !rust-toolchain.toml
 !rustfmt.toml
+!twilio-verify/Cargo.toml
+!twilio-verify/src/
