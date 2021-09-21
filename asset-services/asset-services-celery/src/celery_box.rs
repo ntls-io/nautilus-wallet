@@ -32,11 +32,13 @@ impl CeleryBox {
         let celery_box = match parsed_url.scheme() {
             "amqp" | "amqps" => Amqp(Arc::new(
                 Celery::<AMQPBroker>::builder(name, broker_url)
+                    .task_retry_for_unexpected(false)
                     .build()
                     .await?,
             )),
             "redis" | "rediss" | "redis+unix" => Redis(Arc::new(
                 Celery::<RedisBroker>::builder(name, broker_url)
+                    .task_retry_for_unexpected(false)
                     .build()
                     .await?,
             )),
