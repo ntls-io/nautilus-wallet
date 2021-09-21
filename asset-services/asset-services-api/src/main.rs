@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     celery.display_pretty().await;
 
     let axum_app = Router::new()
-        .route("/ping", get(handlers::ping))
+        .route("/ping", get(handlers::misc::ping))
         .layer(AddExtensionLayer::new(celery.clone()));
     let axum_server = axum::Server::bind(&bind_addr).serve(axum_app.into_make_service());
     log::info!("listening on http://{}", bind_addr);

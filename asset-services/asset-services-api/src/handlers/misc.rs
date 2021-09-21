@@ -1,5 +1,3 @@
-//! HTTP handlers.
-
 use std::sync::Arc;
 
 use asset_services_celery::celery_box::CeleryBox;
@@ -8,7 +6,7 @@ use axum::extract;
 
 use crate::errors::CeleryErrorResponse;
 
-pub(crate) async fn ping(
+pub async fn ping(
     extract::Extension(celery): extract::Extension<Arc<CeleryBox>>,
 ) -> Result<String, CeleryErrorResponse> {
     let sent = celery
