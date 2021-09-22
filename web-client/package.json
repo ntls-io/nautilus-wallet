@@ -48,7 +48,7 @@
     "@ionic/angular": "^5.5.2",
     "@ionic/pwa-elements": "^3.0.2",
     "@msgpack/msgpack": "^2.7.0",
-    "@ngneat/input-mask": "^1.2.0",
+    "@ngneat/input-mask": "^3.0.2",
     "@ngneat/transloco": "^2.22.0",
     "@zxing/browser": "^0.0.9",
     "@zxing/library": "^0.18.6",
