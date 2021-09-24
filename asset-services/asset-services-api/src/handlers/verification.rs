@@ -5,7 +5,7 @@ use asset_services_celery::tasks;
 use axum::extract;
 use serde::Deserialize;
 
-use crate::errors::CeleryErrorResponse;
+use crate::errors::AnyhowErrorResponse;
 
 #[derive(Deserialize)]
 pub(crate) struct StartVerify {
@@ -24,7 +24,7 @@ pub(crate) struct CheckVerify {
 pub(crate) async fn start_verify(
     extract::Extension(celery): extract::Extension<Arc<CeleryBox>>,
     extract::Json(StartVerify { phone_number }): extract::Json<StartVerify>,
-) -> Result<String, CeleryErrorResponse> {
+) -> Result<String, AnyhowErrorResponse> {
     let sent = celery
         .send_task(tasks::verification::start_verify::new(phone_number))
         .await?;
@@ -37,7 +37,7 @@ pub(crate) async fn start_verify(
 pub(crate) async fn check_verify(
     extract::Extension(celery): extract::Extension<Arc<CeleryBox>>,
     extract::Json(CheckVerify { sid, code }): extract::Json<CheckVerify>,
-) -> Result<String, CeleryErrorResponse> {
+) -> Result<String, AnyhowErrorResponse> {
     let sent = celery
         .send_task(tasks::verification::check_verify::new(sid, code))
         .await?;

@@ -1,25 +1,32 @@
 //! Error representation helpers.
 
-use asset_services_celery::exports::celery_prelude::CeleryError;
 use axum::http::{Response, StatusCode};
 use axum::response::IntoResponse;
 
-/// Map Celery errors to Internal Server Error responses.
-pub struct CeleryErrorResponse(CeleryError);
+/// Represent arbitrary errors as Axum Error responses using [`anyhow`].
+#[repr(transparent)]
+pub struct AnyhowErrorResponse(anyhow::Error);
 
-impl From<CeleryError> for CeleryErrorResponse {
-    fn from(err: CeleryError) -> Self {
-        CeleryErrorResponse(err)
+/// Convert `E` → [`anyhow::Error`] → [`AnyhowErrorResponse`].
+impl<E> From<E> for AnyhowErrorResponse
+where
+    E: Into<anyhow::Error>,
+{
+    fn from(err: E) -> Self {
+        Self(err.into())
     }
 }
 
-impl IntoResponse for CeleryErrorResponse {
+/// Convert [`AnyhowErrorResponse`] → [`anyhow::Error`] → ([`StatusCode`], [`String`]) → [`Response`].
+///
+/// This will show an [`StatusCode::INTERNAL_SERVER_ERROR`] with an error message in [`anyhow::Error`]'s `{:#}` formatting.
+impl IntoResponse for AnyhowErrorResponse {
     type Body = <(StatusCode, String) as IntoResponse>::Body;
     type BodyError = <(StatusCode, String) as IntoResponse>::BodyError;
 
     fn into_response(self) -> Response<Self::Body> {
-        let CeleryErrorResponse(err) = self;
-        let message = format!("Celery error: {}", err.to_string());
+        let AnyhowErrorResponse(err) = self;
+        let message = format!("{:#}", err);
         (StatusCode::INTERNAL_SERVER_ERROR, message).into_response()
     }
 }
