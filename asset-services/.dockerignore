@@ -8,6 +8,8 @@
 !asset-services-celery/src/
 !asset-services-worker/Cargo.toml
 !asset-services-worker/src/
+!onfido/Cargo.toml
+!onfido/src/
 !rust-toolchain.toml
 !rustfmt.toml
 !twilio-verify/Cargo.toml

@@ -31,6 +31,7 @@ services:
     init: true
     environment:
       BROKER_URL: "redis://redis:6379"
+      ONFIDO_API_TOKEN:
       TWILIO_ACCOUNT_SID:
       TWILIO_AUTH_TOKEN:
       TWILIO_VERIFY_SERVICE_SID:
