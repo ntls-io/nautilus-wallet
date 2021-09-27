@@ -47,8 +47,7 @@ export class WalletAccessPage implements OnInit {
   // FIXME: Duplication with SendFundsPage.presentScanner
   async openScanner() {
     const scanSuccess = async (address: string) => {
-      this.address = address;
-      await this.confirm();
+      await this.confirm(address);
     };
 
     // FIXME: fix import for OverlayEventDetail
@@ -99,18 +98,10 @@ export class WalletAccessPage implements OnInit {
     await dismissed(await didDismissPromise);
   }
 
-  async confirm() {
-    if (!this.isAdressValid()) {
-      // TODO: Implement better field validation
-      await this.notification.swal.fire({
-        icon: 'warning',
-        title: 'Invalid Address',
-        text: 'Please input a valid wallet address',
-      });
-      return;
-    }
-    if (this.address) {
-      this.address = this.address.trim();
+  async confirm(value: string | undefined) {
+    const address = value?.trim();
+
+    if (address && isValidAddress(address)) {
       const pinPromise = this.presentLock();
       const loading = await this.loadingCtrl.create();
       const pin = await pinPromise;
@@ -119,7 +110,7 @@ export class WalletAccessPage implements OnInit {
       }
       await loading.present();
       try {
-        const error = await this.walletService.openWallet(this.address, pin);
+        const error = await this.walletService.openWallet(address, pin);
         if (error) {
           await this.notification.swal.fire({
             icon: 'error',
@@ -132,6 +123,12 @@ export class WalletAccessPage implements OnInit {
       } finally {
         await loading.dismiss();
       }
+    } else {
+      await this.notification.swal.fire({
+        icon: 'warning',
+        title: 'Invalid Address',
+        text: 'Please input a valid wallet address',
+      });
     }
   }
 
@@ -139,8 +136,9 @@ export class WalletAccessPage implements OnInit {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
     const result = lock.onWillDismiss();
-
     await lock.present();
-    return (await result).data?.pin;
+
+    const { data } = await result;
+    return data?.pin;
   }
 }
