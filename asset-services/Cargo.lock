@@ -92,6 +92,7 @@ dependencies = [
 name = "asset-services-celery"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "celery",
  "chrono",
  "env-var-helpers",
