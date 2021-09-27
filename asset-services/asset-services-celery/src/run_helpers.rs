@@ -17,19 +17,19 @@ pub fn init_logging_from_env() {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
 }
 
-/// Initialise a [`Celery`] app instance with the broker specified by the `BROKER_URL` environment variable.
+/// Initialise a [`CeleryBox`] app instance with the broker specified by the `BROKER_URL` environment variable.
 pub async fn init_celery_from_env() -> Result<CeleryBox, CeleryError> {
     let broker_url = env_vars::var("BROKER_URL").map_err(io::Error::from)?;
     init_celery_app(&broker_url).await
 }
 
-/// Initialise a [`Celery`] app instance with the specified broker.
+/// Initialise a [`CeleryBox`] app instance with the specified broker.
 pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError> {
     // The name "celery" matches the default value of the celery::app! macro.
     let celery = CeleryBox::build("celery", broker_url).await?;
 
     // Register our tasks:
-    celery.register_task::<tasks::ping>().await?;
+    celery.register_task::<tasks::misc::ping>().await?;
 
     Ok(celery)
 }
