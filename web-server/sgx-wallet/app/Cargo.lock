@@ -479,6 +479,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "env-var-helpers"
+version = "0.1.0"
+source = "git+https://github.com/PiDelport/rust-env-var-helpers#8aed1f58daf2e68b880e2dc0defa3650987e69c6"
+dependencies = [
+ "thiserror",
+]
+
+[[package]]
 name = "flate2"
 version = "1.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1124,6 +1132,7 @@ name = "sgx-wallet-app"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "env-var-helpers",
  "http-service-impl",
  "sgx-helpers",
  "sgx_types",
@@ -1261,6 +1270,26 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-xid",
+]
+
+[[package]]
+name = "thiserror"
+version = "1.0.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "602eca064b2d83369e2b2f34b09c70b605402801927c65c11071ac911d299b88"
+dependencies = [
+ "thiserror-impl",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "1.0.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bad553cc2c78e8de258400763a647e80e6d1b31ee237275d756f6836d204494c"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

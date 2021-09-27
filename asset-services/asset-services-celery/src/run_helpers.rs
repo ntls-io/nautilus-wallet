@@ -1,8 +1,9 @@
 //! Helpers for running processes that interact with a Celery task queue.
 
-use std::{env, io};
+use std::io;
 
 use celery::error::CeleryError;
+use env_var_helpers::env_vars;
 
 use crate::celery_box::CeleryBox;
 use crate::tasks;
@@ -18,12 +19,7 @@ pub fn init_logging_from_env() {
 
 /// Initialise a [`Celery`] app instance with the broker specified by the `BROKER_URL` environment variable.
 pub async fn init_celery_from_env() -> Result<CeleryBox, CeleryError> {
-    let broker_url = env::var("BROKER_URL").map_err(|var_err| {
-        io::Error::new(
-            io::ErrorKind::InvalidInput,
-            format!("invalid BROKER_URL: {}", var_err),
-        )
-    })?;
+    let broker_url = env_vars::var("BROKER_URL").map_err(io::Error::from)?;
     init_celery_app(&broker_url).await
 }
 

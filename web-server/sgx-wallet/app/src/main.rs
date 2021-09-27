@@ -2,9 +2,10 @@ extern crate sgx_types;
 extern crate sgx_urts;
 
 use std::fs::create_dir_all;
+use std::io;
 use std::net::ToSocketAddrs;
-use std::{env, io};
 
+use env_var_helpers::env_vars;
 use http_service_impl::server::run_server;
 use sgx_types::{sgx_attributes_t, sgx_launch_token_t, sgx_misc_attribute_t, SgxResult};
 use sgx_urts::SgxEnclave;
@@ -52,11 +53,7 @@ async fn main() -> io::Result<()> {
     // FIXME: See WALLET_STORE_DIR
     create_dir_all("wallet_store")?;
 
-    let bind_addr = match env::var("BIND_ADDR") {
-        Err(env::VarError::NotPresent) => Ok("127.0.0.1:8080".to_string()),
-        otherwise => otherwise,
-    }
-    .map_err(|err| io::Error::new(io::ErrorKind::InvalidData, err))?;
+    let bind_addr = env_vars::var_default("BIND_ADDR", "127.0.0.1:8080")?;
 
     for socket_addr in bind_addr.to_socket_addrs()? {
         println!("run_server: binding to http://{}/", socket_addr);
