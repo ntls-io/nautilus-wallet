@@ -16,7 +16,6 @@ import { WalletQuery } from 'src/app/wallet.query';
 })
 export class WalletPage implements OnInit {
   faWallet = faWallet;
-  ownerName!: string;
 
   actionItems = [
     {
@@ -47,9 +46,7 @@ export class WalletPage implements OnInit {
     },
   ]; // Placeholder icons until we get definite ones.
 
-  constructor(public walletQuery: WalletQuery) {
-    this.ownerName = walletQuery.getValue().name;
-  }
+  constructor(public walletQuery: WalletQuery) {}
 
   ngOnInit() {}
 }

@@ -7,7 +7,7 @@ import { WalletState, WalletStore } from './wallet.store';
 })
 export class WalletQuery extends Query<WalletState> {
   allState$ = this.select();
-  selectName$ = this.select('name');
+  ownerName$ = this.select('name');
   selectWalletId$ = this.select('walletId');
   selectBalance$ = this.select('balance');
 
