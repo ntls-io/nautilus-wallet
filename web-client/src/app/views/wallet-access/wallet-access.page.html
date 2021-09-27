@@ -6,12 +6,42 @@
   <ion-grid class="h-full">
     <ion-row class="h-full content-around px-5">
       <ion-col size="12" class="text-center">
-        <ng-container *ngIf="hasCamera">
-          <ion-button expand="block" shape="round" (click)="openScanner()"
-            >Access via QR Code
-          </ion-button>
-          <p>OR</p>
-        </ng-container>
+        <ion-card color="white">
+          <ion-item
+            lines="none"
+            color="white"
+            (click)="scannerEnabled = !scannerEnabled"
+          >
+            <ng-container *ngIf="!scannerEnabled">
+              <ion-icon slot="start" name="camera"></ion-icon>
+              <ion-label>
+                <h2>Access via QR Code</h2>
+                <small>Permission required</small>
+              </ion-label>
+            </ng-container>
+            <ion-icon
+              slot="end"
+              name="close-circle"
+              *ngIf="scannerEnabled"
+            ></ion-icon>
+          </ion-item>
+          <ion-card-content [hidden]="!scannerEnabled">
+            <div class="wrapper">
+              <div>
+                <div class="content">
+                  <zxing-scanner
+                    class="h-full"
+                    [enable]="scannerEnabled"
+                  ></zxing-scanner>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+        <ion-button expand="block" shape="round" (click)="openScanner()"
+          >Access via QR Code
+        </ion-button>
+        <p>OR</p>
         <ion-textarea
           placeholder="Enter wallet address"
           [(ngModel)]="address"

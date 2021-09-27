@@ -19,6 +19,7 @@ export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
   address: string | undefined;
   error$ = this.walletQuery.selectError();
+  scannerEnabled = false;
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.

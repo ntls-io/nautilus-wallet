@@ -1,0 +1,28 @@
+:host zxing-scanner::ng-deep video {
+  @apply rounded-lg w-full h-full;
+}
+
+.wrapper {
+  display: grid;
+}
+
+.wrapper > div {
+  position: relative;
+}
+
+.wrapper > div:before {
+  display: table;
+  padding-top: 100%;
+  content: "";
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
