@@ -15,7 +15,7 @@ pub struct VerifyClient {
 }
 
 impl VerifyClient {
-    fn new(configuration: Configuration, service_sid: String) -> Self {
+    pub fn new(configuration: Configuration, service_sid: String) -> Self {
         Self {
             configuration,
             service_sid,
