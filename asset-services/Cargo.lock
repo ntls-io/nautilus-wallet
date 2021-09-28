@@ -77,6 +77,7 @@ dependencies = [
  "axum",
  "env-var-helpers",
  "log",
+ "serde",
  "tokio",
 ]
 
@@ -88,6 +89,7 @@ dependencies = [
  "env-var-helpers",
  "env_logger",
  "serde",
+ "twilio-verify",
  "url",
 ]
 

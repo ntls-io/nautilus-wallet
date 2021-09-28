@@ -22,6 +22,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let axum_app = Router::new()
         .route("/ping", post(handlers::misc::ping))
+        .route("/verify/start", post(handlers::verification::start_verify))
+        .route("/verify/check", post(handlers::verification::check_verify))
         .layer(AddExtensionLayer::new(celery.clone()));
     let axum_server = axum::Server::bind(&bind_addr).serve(axum_app.into_make_service());
     log::info!("listening on http://{}", bind_addr);

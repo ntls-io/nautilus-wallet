@@ -1,5 +1,6 @@
 //! Helpers for running processes that interact with a Celery task queue.
 
+use std::error::Error;
 use std::io;
 
 use celery::error::CeleryError;
@@ -30,6 +31,21 @@ pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError>
 
     // Register our tasks:
     celery.register_task::<tasks::misc::ping>().await?;
+    celery
+        .register_task::<tasks::verification::start_verify>()
+        .await?;
+    celery
+        .register_task::<tasks::verification::check_verify>()
+        .await?;
 
     Ok(celery)
+}
+
+/// Run task-related "preflight" checks, which should cause Celery workers to
+/// fail early if task dependencies are not met.
+///
+/// This should be called during worker startup.
+pub async fn celery_worker_preflight_checks() -> Result<(), Box<dyn Error>> {
+    tasks::verification::init_verify_client()?;
+    Ok(())
 }
