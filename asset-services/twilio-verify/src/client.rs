@@ -29,6 +29,33 @@ impl VerifyClient {
         ))
     }
 
+    /// Fetch the verification service configuration for the current service.
+    ///
+    /// See: [`Self::fetch_service`]
+    pub async fn fetch_current_service(
+        &self,
+    ) -> Result<models::VerifyV2Service, ApiError<api::FetchServiceError>> {
+        let params = api::FetchServiceParams {
+            sid: self.service_sid.clone(),
+        };
+        self.fetch_service(params).await
+    }
+
+    /// Fetch a verification service configuration.
+    ///
+    /// Docs: <https://www.twilio.com/docs/verify/api/service#fetch-a-service>
+    pub async fn fetch_service(
+        &self,
+        params: api::FetchServiceParams,
+    ) -> Result<models::VerifyV2Service, ApiError<api::FetchServiceError>> {
+        let response = api::fetch_service(&self.configuration, params).await?;
+        let service = match response.entity {
+            Some(api::FetchServiceSuccess::Status200(service)) if response.status == 200 => service,
+            _ => panic!("verification_check: unexpected response: {:?}", response),
+        };
+        Ok(service)
+    }
+
     /// Start a new verification.
     ///
     /// Docs: <https://www.twilio.com/docs/verify/api/verification#start-new-verification>
