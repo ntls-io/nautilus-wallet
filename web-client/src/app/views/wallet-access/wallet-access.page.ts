@@ -36,14 +36,6 @@ export class WalletAccessPage implements OnInit {
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
   }
 
-  isAdressValid(): boolean {
-    if (this.address) {
-      return isValidAddress(this.address);
-    } else {
-      return false;
-    }
-  }
-
   // FIXME: Duplication with SendFundsPage.presentScanner
   async openScanner() {
     const scanSuccess = async (address: string) => {
