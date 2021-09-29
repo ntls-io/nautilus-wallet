@@ -29,7 +29,34 @@ export class KycPage implements OnInit {
       if (token) {
         this.onfido = init({
           token,
-          customUI: {},
+          customUI: {
+            fontFamilyTitle: 'nasalization',
+            fontFamilyBody: 'Open Sans',
+            colorBackgroundSurfaceModal: 'var(--ion-color-primary-background)',
+            colorBorderSurfaceModal: 'var(--ion-color-primary-background)',
+            colorContentBody: 'var(--ion-color-white)',
+            colorContentTitle: 'var(--ion-color-white)',
+            colorContentSubtitle: 'var(--ion-color-white)',
+            colorBackgroundDocTypeButton: 'var(--ion-color-primary-background)',
+            colorContentDocTypeButton: 'var(--ion-color-white)',
+            colorBorderDocTypeButton: 'var(--ion-color-white)',
+            colorBorderDocTypeButtonHover: 'var(--ion-color-tertiary)',
+            colorBackgroundIcon: 'var(--ion-color-primary-background)',
+
+            colorContentButtonPrimaryText: 'var(--ion-color-white)',
+            colorBackgroundButtonPrimary: 'var(--ion-color-primary)',
+            colorBorderButtonPrimary: 'var(--ion-color-primary)',
+            colorBackgroundButtonPrimaryHover: 'var(--ion-color-primary-shade)',
+            colorBackgroundButtonPrimaryActive: 'var(--ion-color-primary-tint)',
+
+            colorBackgroundButtonIconHover: 'var(--ion-color-white)',
+            colorBackgroundButtonIconActive: 'var(--ion-color-white)',
+
+            colorBackgroundLinkHover: 'var(--ion-color-primary-shade)',
+            colorBorderLinkUnderline: 'var(--ion-color-primary)',
+            colorContentLinkTextHover: 'var(--ion-color-white)',
+            colorBackgroundLinkActive: 'var(--ion-color-primary-tint)',
+          },
           steps: [
             {
               type: 'document',
