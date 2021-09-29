@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 
 export interface OnfidoState {
-  token: string;
+  token: string | null;
 }
 
 export const createInitialState = (): OnfidoState => ({
-  token: 'api_sandbox.PTV5VS6ghrM.F1HzpgpoU54ZCwzJXCU9l-U3EL8nIoZY',
+  token: null,
 });
 
 @Injectable({ providedIn: 'root' })
