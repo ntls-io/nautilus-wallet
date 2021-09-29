@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { init } from 'onfido-sdk-ui';
-import { OnfidoQuery } from 'src/app/stores/onfido';
+import { OnfidoQuery, OnfidoService, OnfidoStore } from 'src/app/stores/onfido';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
@@ -19,7 +19,9 @@ export class KycPage implements OnInit {
 
   constructor(
     private notification: SwalHelper,
-    private onfidoQuery: OnfidoQuery
+    private onfidoQuery: OnfidoQuery,
+    private onfidoService: OnfidoService,
+    private onfidoStore: OnfidoStore
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,12 @@ export class KycPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.onfidoService.getToken();
+  }
+
   ionViewDidLeave() {
     this.onfido.tearDown();
+    this.onfidoStore.reset();
   }
 }
