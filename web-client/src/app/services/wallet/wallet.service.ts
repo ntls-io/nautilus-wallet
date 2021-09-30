@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { SessionStore } from 'src/app/stores/session';
 import { AlgorandTransactionSigned } from 'src/schema/entities';
 import { EnclaveService } from '../enclave';
-import { WalletStore } from './wallet.store';
+
+type MaybeError = string | undefined;
 
 @Injectable({ providedIn: 'root' })
 export class WalletService {
   constructor(
-    private walletStore: WalletStore,
     private sessionStore: SessionStore,
     private enclaveService: EnclaveService
   ) {}
@@ -21,14 +21,14 @@ export class WalletService {
 
       if ('Created' in res) {
         const { wallet_id: walletId } = res.Created;
-        this.walletStore.update({ walletId, name });
+        this.sessionStore.update({ walletId, name });
       } else if ('Failed' in res) {
-        this.walletStore.setError(res);
+        this.sessionStore.setError(res);
       } else {
         never(res);
       }
     } catch (err) {
-      this.walletStore.setError(err);
+      this.sessionStore.setError(err);
     }
   }
   async updateBalance() {
@@ -46,7 +46,7 @@ export class WalletService {
 
     if ('Opened' in res) {
       const { owner_name: name } = res.Opened;
-      this.walletStore.update({ walletId, name, pin });
+      this.sessionStore.update({ walletId, name, pin });
       await this.updateBalance();
       return undefined;
     } else if ('InvalidAuth' in res) {
@@ -75,7 +75,17 @@ export class WalletService {
       (res as { Signed: AlgorandTransactionSigned }).Signed
         .signed_transaction_bytes
     );
-    this.walletStore.update({ transactionId: submitRes.txId });
+    this.sessionStore.update({ transactionId: submitRes.txId });
     await this.updateBalance();
   }
 }
+
+/**
+ * Helper for exhaustiveness checking: mark unreachable values.
+ *
+ * TODO(Pi): Move this into a utility module somewhere.
+ */
+export const never = (value: never): never => {
+  console.error('expected never, got:', value);
+  throw new TypeError('expected never, got value (see error log)');
+};
