@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
-import { never, NewWalletService } from 'src/app/new-wallet.service';
-import { ScannerService } from 'src/app/services/scanner.service';
+import { never, WalletService } from 'src/app/services/wallet';
+import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { WalletQuery } from 'src/app/wallet.query';
 import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 
@@ -18,15 +17,13 @@ import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
   address: string | undefined;
-  error$ = this.walletQuery.selectError();
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
-    private scannerService: ScannerService,
     private modalCtrl: ModalController,
-    private walletService: NewWalletService,
+    private walletService: WalletService,
     private notification: SwalHelper,
-    private walletQuery: WalletQuery,
+    private sessionQuery: SessionQuery,
     private router: Router,
     private loadingCtrl: LoadingController
   ) {}

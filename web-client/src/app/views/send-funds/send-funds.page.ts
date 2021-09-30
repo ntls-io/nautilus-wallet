@@ -9,8 +9,8 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { never } from 'src/app/services/wallet';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { never } from '../../new-wallet.service';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { ScannerPage, ScanResult } from '../scanner/scanner.page';
 

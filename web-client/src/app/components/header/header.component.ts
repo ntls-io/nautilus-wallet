@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WalletQuery } from 'src/app/wallet.query';
+import { SessionQuery } from 'src/app/stores/session';
 
 @Component({
   selector: 'app-header',
@@ -8,7 +8,7 @@ import { WalletQuery } from 'src/app/wallet.query';
 })
 export class HeaderComponent implements OnInit {
   @Input() title = 'NAUTILUS';
-  constructor(public walletQuery: WalletQuery) {}
+  constructor(public sessionQuery: SessionQuery) {}
 
   ngOnInit() {}
 }

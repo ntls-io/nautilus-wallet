@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NewWalletService } from 'src/app/new-wallet.service';
+import { WalletService } from 'src/app/services/wallet';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +19,7 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private walletService: NewWalletService,
+    private walletService: WalletService,
     private router: Router
   ) {
     this.registrationForm = this.generateFormGroup();

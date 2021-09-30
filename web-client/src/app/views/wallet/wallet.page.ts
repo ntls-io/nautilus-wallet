@@ -7,7 +7,7 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { WalletQuery } from 'src/app/wallet.query';
+import { SessionQuery } from 'src/app/stores/session';
 
 @Component({
   selector: 'app-wallet',
@@ -47,9 +47,7 @@ export class WalletPage implements OnInit {
     },
   ]; // Placeholder icons until we get definite ones.
 
-  constructor(public walletQuery: WalletQuery) {
-    this.ownerName = walletQuery.getValue().name;
-  }
+  constructor(public sessionQuery: SessionQuery) {}
 
   ngOnInit() {}
 }

@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
-import { WalletQuery } from 'src/app/wallet.query';
+import { SessionQuery } from 'src/app/stores/session';
 
 @Component({
   selector: 'app-print-wallet',
@@ -9,14 +9,10 @@ import { WalletQuery } from 'src/app/wallet.query';
   styleUrls: ['./print-wallet.page.scss'],
 })
 export class PrintWalletPage implements OnInit {
-  @Input() wallet!: string;
-
   constructor(
     private toastCtrl: ToastController,
-    private walletQuery: WalletQuery
-  ) {
-    this.wallet = walletQuery.getValue().walletId;
-  }
+    public sessionQuery: SessionQuery
+  ) {}
 
   ngOnInit() {}
 

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
-import { NewWalletService } from 'src/app/new-wallet.service';
+import { WalletService } from 'src/app/services/wallet';
+import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { WalletQuery } from 'src/app/wallet.query';
 
 @Component({
   selector: 'app-pay',
@@ -19,8 +19,8 @@ export class PayPage implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private walletService: NewWalletService,
-    public walletQuery: WalletQuery,
+    private walletService: WalletService,
+    public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper
   ) {
@@ -53,10 +53,12 @@ export class PayPage implements OnInit {
         loading.dismiss();
       }
 
+      const { transactionId } = this.sessionQuery.getValue();
+
       this.notifySuccess(
         'R' + this.paymentForm.controls.amount.value,
         this.wallet,
-        this.walletQuery.getValue().transactionId,
+        transactionId,
         new Date()
       );
       //TODO: ()=>{send payment}
