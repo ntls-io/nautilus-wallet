@@ -1,5 +1,10 @@
 on: push
 
+# New pushes cancel in-progress builds.
+concurrency:
+  group: ${{ github.workflow }} - ${{ github.job }} - ${{ github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     working-directory: web-client
