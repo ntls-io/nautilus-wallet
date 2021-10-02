@@ -9,6 +9,9 @@ import { SessionQuery } from 'src/app/stores/session';
   styleUrls: ['./print-wallet.page.scss'],
 })
 export class PrintWalletPage implements OnInit {
+  // Hook for testing
+  public Clipboard = Clipboard;
+
   constructor(
     private toastCtrl: ToastController,
     public sessionQuery: SessionQuery
@@ -17,7 +20,7 @@ export class PrintWalletPage implements OnInit {
   ngOnInit() {}
 
   async copyAddress(address: string) {
-    await Clipboard.write({
+    await this.Clipboard.write({
       // eslint-disable-next-line id-blacklist
       string: address,
     })
