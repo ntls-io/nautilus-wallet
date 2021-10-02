@@ -17,6 +17,3 @@ const Template: Story<PrintWalletPage> = (args: PrintWalletPage) => ({
 });
 
 export const Default = Template.bind({});
-Default.args = {
-  wallet: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
-};
