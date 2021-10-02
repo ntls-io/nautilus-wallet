@@ -9,6 +9,7 @@
 </ion-header>
 
 <ion-content>
+  <!-- TODO(Pi): Factor this out to component with walletId as input? -->
   <ion-grid *ngIf="sessionQuery.walletId | async as walletId">
     <ion-row id="print-section">
       <ion-col size="12">
