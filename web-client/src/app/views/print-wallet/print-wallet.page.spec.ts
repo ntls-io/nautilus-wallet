@@ -1,23 +1,34 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Clipboard } from '@capacitor/clipboard';
+import { ClipboardPlugin } from '@capacitor/clipboard';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { QRCodeComponent } from 'angularx-qrcode';
+import {
+  assertShowsToast,
+  componentElement,
+} from '../../../tests/test.helpers';
+import { SharedModule } from '../../modules/shared/shared.module';
+import { SessionStore } from '../../stores/session';
 import { PrintWalletPage } from './print-wallet.page';
 
 describe('PrintWalletPage', () => {
   let component: PrintWalletPage;
   let fixture: ComponentFixture<PrintWalletPage>;
+  let sessionStore: SessionStore;
   let toastCtrl: ToastController;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PrintWalletPage],
-        imports: [IonicModule.forRoot(), RouterTestingModule],
+        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(PrintWalletPage);
       component = fixture.componentInstance;
+      sessionStore = TestBed.inject(SessionStore);
+      toastCtrl = TestBed.inject(ToastController);
       fixture.detectChanges();
     })
   );
@@ -26,23 +37,62 @@ describe('PrintWalletPage', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('copies content to clipboard upon click', async () => {
-    // eslint-disable-next-line id-blacklist
-    const data = { string: 'fake wallet id' };
-    const copyTo = spyOn(Clipboard, 'write');
-    await Clipboard.write(data);
-    expect(copyTo).toHaveBeenCalledWith(data);
+  it('shows empty by default', () => {
+    const content = componentElement(fixture, 'ion-content');
+    expect(Array.from(content.children)).toEqual([]);
   });
 
-  xit('Notify when clipboard is done', async () => {
-    const toast = await toastCtrl.create({
-      message: `test`,
-      color: 'white',
-      duration: 200,
+  const setWalletId = (walletId: string): void => {
+    sessionStore.update({ walletId });
+    fixture.detectChanges();
+  };
+
+  it('shows walletId as QR data', () => {
+    const walletId = 'placeholder walletId';
+    expect(
+      fixture.debugElement.query(By.directive(QRCodeComponent))
+    ).toBeNull();
+
+    setWalletId(walletId);
+    const qrcode: QRCodeComponent = fixture.debugElement.query(
+      By.directive(QRCodeComponent)
+    ).componentInstance;
+    expect(qrcode).not.toBeNull();
+    expect(qrcode.qrdata).toBe(walletId);
+  });
+
+  it('copy button copies walletId and shows toast', async () => {
+    const walletId = 'placeholder walletId';
+    component.Clipboard = jasmine.createSpyObj<ClipboardPlugin>('Clipboard', {
+      write: Promise.resolve(),
     });
+    setWalletId(walletId);
+    const copyButton = componentElement(fixture, '#copy-button');
 
-    const toPresent = spyOn(toast, 'present').and.callThrough();
+    const expectedToast = {
+      message: 'Address copied!',
+      color: 'white',
+      duration: 2000,
+    };
+    await assertShowsToast(toastCtrl, expectedToast, async () => {
+      copyButton.click();
+      await fixture.whenStable();
+      expect(component.Clipboard.write).toHaveBeenCalledWith({
+        // eslint-disable-next-line id-blacklist
+        string: walletId,
+      });
+    });
+  });
 
-    expect(toPresent).toHaveBeenCalled();
+  it('notice shows toast', async (): Promise<void> => {
+    const message = 'Test message';
+    const toastOptions = {
+      message,
+      color: 'white',
+      duration: 2000,
+    };
+    await assertShowsToast(toastCtrl, toastOptions, async () => {
+      await component.notice(message);
+    });
   });
 });
