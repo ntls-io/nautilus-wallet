@@ -10,12 +10,26 @@
     <ion-row>
       <ion-col>
         <ion-card class="mx-0">
-          <ion-item lines="none" color="white">
-            <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
-            <ion-label class="ion-text-wrap">
-              <p>{{wallet}}</p>
-            </ion-label>
-          </ion-item>
+          <ion-list lines="full" class="p-0">
+            <ion-item color="white">
+              <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h2 class="!font-black">From:</h2>
+                <p>{{sessionQuery.selectName$ | async}}</p>
+                <small>Available Balance</small>
+              </ion-label>
+              <ion-text slot="end" color="primary">
+                <h1 class="font-semibold m-0">R250</h1>
+              </ion-text>
+            </ion-item>
+            <ion-item color="white">
+              <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h2 class="!font-black">To:</h2>
+                <p>{{wallet}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
         </ion-card>
       </ion-col>
     </ion-row>
