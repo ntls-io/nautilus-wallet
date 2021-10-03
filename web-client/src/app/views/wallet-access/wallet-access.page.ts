@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { ScannerService } from 'src/app/services/scanner.service';
+import { WalletService } from 'src/app/services/wallet/wallet.service';
 import Swal from 'sweetalert2';
+import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { ScannerPage } from '../scanner/scanner.page';
 
 @Component({
@@ -12,10 +15,13 @@ import { ScannerPage } from '../scanner/scanner.page';
 })
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
+  address: string | undefined;
 
   constructor(
     private scannerService: ScannerService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private walletService: WalletService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -30,6 +36,7 @@ export class WalletAccessPage implements OnInit {
       });
 
       scanner.onWillDismiss().then((result) => {
+        // this.address = result;
         //TODO: perform action after scan result
         console.log(result);
       });
@@ -49,5 +56,27 @@ export class WalletAccessPage implements OnInit {
         allowOutsideClick: false,
       });
     }
+  }
+
+  async confirm() {
+    if (this.address) {
+      this.address = this.address.trim();
+      const pin = await this.presentLock();
+
+      await this.walletService.openWallet(this.address, pin);
+      this.router.navigate(['/wallet']);
+
+      // this.scannerService.presentLock(this.address);
+    }
+  }
+
+  async presentLock(): Promise<string> {
+    const lock = await this.modalCtrl.create({ component: LockscreenPage });
+
+    const result = lock.onWillDismiss();
+
+    await lock.present();
+    console.log(await result);
+    return (await result).data!.pin;
   }
 }

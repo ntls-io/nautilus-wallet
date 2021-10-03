@@ -9,8 +9,9 @@ export const environment = {
   // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {
     // XXX: Algodv2's parameter handling is a bit weird: the HTTP port must be passed separately.
-    baseServer: 'http://localhost/api/algorand',
-    port: 4200,
+    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
+    // baseServer: 'http://localhost/api/algorand',
+    port: 443,
     // FIXME: Development key
     token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
   },

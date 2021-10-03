@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { WalletService } from 'src/app/services/wallet/wallet.service';
+import { SessionQuery } from 'src/app/stores/session/session.query';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,22 +18,37 @@ export class PayPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private walletService: WalletService,
+    private sessionQuery: SessionQuery
   ) {
     this.paymentForm = this.formBuilder.group({
       amount: [0, Validators.compose([Validators.required])],
     });
+  }
 
-    this.route.params.subscribe(({ wallet }) => {
-      this.wallet = wallet;
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      console.log(params);
+      this.wallet = params.recieverAddress;
     });
   }
 
-  ngOnInit() {}
-
-  onSubmit() {
+  async onSubmit() {
     this.paymentForm.markAllAsTouched();
     if (this.paymentForm.valid) {
+      console.log(this.paymentForm.controls.amount.value);
+      await this.walletService.sendFunds(
+        this.wallet,
+        this.paymentForm.controls.amount.value
+      );
+
+      this.notifySuccess(
+        'R' + this.paymentForm.controls.amount.value,
+        this.wallet,
+        this.sessionQuery.getValue().transactionId,
+        new Date()
+      );
       //TODO: ()=>{send payment}
       //TODO: Display notification
       // if (success) {
@@ -71,7 +88,7 @@ export class PayPage implements OnInit {
       backdrop: true,
       heightAuto: false,
       allowOutsideClick: false,
-      footer: `<a href="https://algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
+      footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
     }).then(({ isConfirmed }) => {
       if (isConfirmed) {
         this.navCtrl.navigateRoot('wallet');

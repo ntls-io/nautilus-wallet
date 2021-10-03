@@ -71,6 +71,11 @@ export const routes: Routes = [
         (m) => m.WalletAccessPageModule //prettier-ignore
       ),
   },
+  {
+    path: 'pay',
+    loadChildren: () =>
+      import('./views/pay/pay.module').then((m) => m.PayPageModule),
+  },
 ];
 
 @NgModule({
