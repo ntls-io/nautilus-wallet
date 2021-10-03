@@ -79,6 +79,13 @@ export const routes: Routes = [
       import('./views/pay/pay.module').then((m) => m.PayPageModule),
     canActivate: [OpenWalletGuard],
   },
+  {
+    path: 'manual-address',
+    loadChildren: () =>
+      import('./views/manual-address/manual-address.module').then(
+        (m) => m.ManualAddressPageModule
+      ),
+  },
 ];
 
 @NgModule({
