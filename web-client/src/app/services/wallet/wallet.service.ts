@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/enclave.service';
 import { SessionStore } from 'src/app/stores/session/session.store';
-import { AlgorandTransactionSigned, WalletDisplay } from 'src/schema/entities';
+import { never } from 'src/helpers/helpers';
+import { AlgorandTransactionSigned } from 'src/schema/entities';
 
 @Injectable({
   providedIn: 'root',
@@ -19,13 +20,13 @@ export class WalletService {
         auth_pin: pin,
       });
 
-      if ((res as { Failed: string }).Failed) {
-        this.sessionStore.setError((res as { Failed: string }).Failed);
+      if ('Created' in res) {
+        const { wallet_id: walletId } = res.Created;
+        this.sessionStore.update({ walletId, name });
+      } else if ('Failed' in res) {
+        this.sessionStore.setError(res);
       } else {
-        this.sessionStore.update({
-          walletId: (res as { Created: WalletDisplay }).Created.wallet_id,
-          name,
-        });
+        never(res);
       }
     } catch (err) {
       this.sessionStore.setError(err);
@@ -40,15 +41,15 @@ export class WalletService {
       });
       console.log(res);
 
-      if ((res as { Failed: string }).Failed) {
-        this.sessionStore.setError((res as { Failed: string }).Failed);
+      if ('Opened' in res) {
+        const { owner_name: name } = res.Opened;
+        this.sessionStore.update({ walletId, name, pin });
+      } else if ('InvalidAuth' in res) {
+        this.sessionStore.setError(res);
+      } else if ('Failed' in res) {
+        this.sessionStore.setError(res);
       } else {
-        const opened = (res as { Opened: WalletDisplay }).Opened;
-        this.sessionStore.update({
-          walletId,
-          name: opened.owner_name,
-          pin,
-        });
+        never(res);
       }
     } catch (err) {
       this.sessionStore.setError(err);
