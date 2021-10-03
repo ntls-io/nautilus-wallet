@@ -49,6 +49,7 @@ describe('WalletAccessPage', () => {
     const modalSpy = jasmine.createSpyObj('Modal', {
       present: Promise.resolve(),
       onWillDismiss: Promise.resolve('result'),
+      dismiss: Promise.resolve(),
     });
 
     const modalCreateSpy = spyOn(modalCtrl, 'create')
