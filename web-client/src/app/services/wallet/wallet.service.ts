@@ -37,6 +37,14 @@ export class WalletService {
       this.sessionStore.setError(err);
     }
   }
+  async updateBalance() {
+    const balance =
+      (await this.enclaveService.getBalance(
+        this.sessionStore.getValue().walletId
+      )) / 100000;
+    console.log(balance);
+    this.sessionStore.update({ balance });
+  }
 
   async openWallet(walletId: string, pin: string): Promise<MaybeError> {
     const res = await this.enclaveService.openWallet({
@@ -45,9 +53,9 @@ export class WalletService {
     });
 
     if ('Opened' in res) {
-      const balance = (await this.ntlsService.getBalance(walletId)) / 100000;
       const { owner_name: name } = res.Opened;
-      this.sessionStore.update({ walletId, name, pin, balance });
+      this.sessionStore.update({ walletId, name, pin });
+      await this.updateBalance();
       return undefined;
     } else if ('InvalidAuth' in res) {
       return 'Authentication failed, please ensure that the address and password provided is correct.';
@@ -75,5 +83,6 @@ export class WalletService {
         .signed_transaction_bytes
     );
     this.sessionStore.update({ transactionId: submitRes.txId });
+    await this.updateBalance();
   }
 }
