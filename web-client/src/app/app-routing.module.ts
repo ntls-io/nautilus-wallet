@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { OpenWalletGuard } from './open-wallet.guard';
 
 // XXX(Pi): prettier ignore to work around compodoc bug: https://github.com/compodoc/compodoc/issues/954#issuecomment-708987583
 export const routes: Routes = [
@@ -14,6 +15,7 @@ export const routes: Routes = [
       import('./views/wallet/wallet.module').then(
         m => m.WalletPageModule // prettier-ignore
       ),
+    canActivate: [OpenWalletGuard],
   },
   {
     path: 'login',
@@ -75,6 +77,7 @@ export const routes: Routes = [
     path: 'pay',
     loadChildren: () =>
       import('./views/pay/pay.module').then((m) => m.PayPageModule),
+    canActivate: [OpenWalletGuard],
   },
 ];
 
