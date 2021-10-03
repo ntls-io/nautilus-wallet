@@ -9,22 +9,22 @@ import {
   OpenWalletResult,
   SignTransaction,
   SignTransactionResult,
-} from '../../schema/actions';
+} from 'src/schema/actions';
 import {
   makePaymentTxnHelper,
   OptionalParameters,
   RequiredParameters,
-} from '../../schema/algorand.helpers';
-import { AttestationReport } from '../../schema/attestation';
-import { PublicKey, TweetNaClCrypto } from '../../schema/crypto';
-import { from_msgpack_as } from '../../schema/msgpack';
-import { seal_msgpack_as, unseal_msgpack_as } from '../../schema/sealing';
-import { TransactionConfirmation, waitForConfirmation } from './algosdk.utils';
+} from 'src/schema/algorand.helpers';
+import { AttestationReport } from 'src/schema/attestation';
+import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
+import { from_msgpack_as } from 'src/schema/msgpack';
+import { seal_msgpack_as, unseal_msgpack_as } from 'src/schema/sealing';
+import { TransactionConfirmation, waitForConfirmation } from '../algosdk.utils';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WalletService {
+export class EnclaveService {
   constructor(private http: HttpClient) {}
 
   async getEnclaveReport(): Promise<AttestationReport> {
