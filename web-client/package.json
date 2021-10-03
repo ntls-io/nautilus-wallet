@@ -20,7 +20,7 @@
   },
   "akitaCli": {
     "template": "angular",
-    "basePath": "./src/app/stores",
+    "basePath": "./src/app",
     "customFolderName": "true"
   },
   "private": true,

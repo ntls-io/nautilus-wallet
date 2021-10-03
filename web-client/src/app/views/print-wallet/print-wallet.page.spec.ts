@@ -28,7 +28,7 @@ describe('PrintWalletPage', () => {
 
   xit('copies content to clipboard upon click', async () => {
     // eslint-disable-next-line id-blacklist
-    const data = { string: component.wallet };
+    const data = { string: 'fake wallet id' };
     const copyTo = spyOn(Clipboard, 'write');
     await Clipboard.write(data);
     expect(copyTo).toHaveBeenCalledWith(data);

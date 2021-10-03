@@ -9,11 +9,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="sessionQuery.walletId | async as walletId">
     <ion-row id="print-section">
       <ion-col size="12">
         <qrcode
-          [qrdata]="wallet"
+          [qrdata]="walletId"
           errorCorrectionLevel="H"
           elementType="svg"
           cssClass="children:w-full children:h-auto"
@@ -23,7 +23,7 @@
       <ion-col size="12" class="ion-text-center">
         <h2 class="font-nasalization">Address</h2>
         <div class="border-dashed border-2 rounded p-3 my-2">
-          <ion-text class="font-bold">{{wallet}}</ion-text>
+          <ion-text class="font-bold">{{walletId}}</ion-text>
         </div>
       </ion-col>
     </ion-row>
@@ -34,7 +34,7 @@
           fill="outline"
           color="white"
           shape="round"
-          (click)="copyAddress(wallet)"
+          (click)="copyAddress(walletId)"
         >
           <ion-icon name="copy-outline"></ion-icon> Copy address
         </ion-button>

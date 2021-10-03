@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
-import { EnclaveService } from 'src/app/services/enclave/enclave.service';
-import { SessionStore } from 'src/app/stores/session/session.store';
+import { SessionStore } from 'src/app/stores/session';
 import { never } from 'src/helpers/helpers';
 import { AlgorandTransactionSigned } from 'src/schema/entities';
+import { EnclaveService } from '../enclave';
 
 type MaybeError = string | undefined;
-@Injectable({
-  providedIn: 'root',
-})
+
+@Injectable({ providedIn: 'root' })
 export class WalletService {
   constructor(
     private sessionStore: SessionStore,
     private enclaveService: EnclaveService
   ) {}
-
-  async clearError() {
-    this.sessionStore.setError(undefined);
-  }
 
   async createWallet(name: string, pin: string) {
     try {
@@ -38,10 +33,8 @@ export class WalletService {
     }
   }
   async updateBalance() {
-    const balance =
-      (await this.enclaveService.getBalance(
-        this.sessionStore.getValue().walletId
-      )) / 100000;
+    const { walletId } = this.sessionStore.getValue();
+    const balance = (await this.enclaveService.getBalance(walletId)) / 100000;
     console.log(balance);
     this.sessionStore.update({ balance });
   }
@@ -68,18 +61,18 @@ export class WalletService {
   }
 
   async sendFunds(receiverId: string, amount: number) {
-    const sessionData = this.sessionStore.getValue();
+    const { walletId, pin } = this.sessionStore.getValue();
     const transaction = await this.enclaveService.createUnsignedTransaction({
       amount: amount * 100000,
-      from: sessionData.walletId,
+      from: walletId,
       to: receiverId,
     });
     const res = await this.enclaveService.signTransaction({
-      auth_pin: this.sessionStore.getValue().pin,
-      wallet_id: this.sessionStore.getValue().walletId,
+      auth_pin: pin,
+      wallet_id: walletId,
       algorand_transaction_bytes: transaction.bytesToSign(),
     });
-    const submitRes = await this.enclaveService.submitSignedTransaction(
+    const submitRes = await this.enclaveService.submitAndConfirmTransaction(
       (res as { Signed: AlgorandTransactionSigned }).Signed
         .signed_transaction_bytes
     );

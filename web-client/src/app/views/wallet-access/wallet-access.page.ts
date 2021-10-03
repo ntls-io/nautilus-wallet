@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
-import { ScannerService } from 'src/app/services/scanner.service';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
-import { SessionQuery } from 'src/app/stores/session/session.query';
+import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { handleScan } from '../scanner.helpers';
@@ -18,11 +17,9 @@ import { handleScan } from '../scanner.helpers';
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
   address: string | undefined;
-  error$ = this.sessionQuery.selectError();
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
-    private scannerService: ScannerService,
     private modalCtrl: ModalController,
     private walletService: WalletService,
     private notification: SwalHelper,
@@ -36,30 +33,14 @@ export class WalletAccessPage implements OnInit {
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
   }
 
-  isAdressValid(): boolean {
-    if (this.address) {
-      return isValidAddress(this.address);
-    } else {
-      return false;
-    }
-  }
-
   async openScanner() {
     await handleScan(this.modalCtrl, this.notification.swal, this.confirm);
   }
 
-  async confirm() {
-    if (!this.isAdressValid()) {
-      // TODO: Implement better field validation
-      await this.notification.swal.fire({
-        icon: 'warning',
-        title: 'Invalid Address',
-        text: 'Please input a valid wallet address',
-      });
-      return;
-    }
-    if (this.address) {
-      this.address = this.address.trim();
+  async confirm(value: string | undefined) {
+    const address = value?.trim();
+
+    if (address && isValidAddress(address)) {
       const pinPromise = this.presentLock();
       const loading = await this.loadingCtrl.create();
       const pin = await pinPromise;
@@ -68,7 +49,7 @@ export class WalletAccessPage implements OnInit {
       }
       await loading.present();
       try {
-        const error = await this.walletService.openWallet(this.address, pin);
+        const error = await this.walletService.openWallet(address, pin);
         if (error) {
           await this.notification.swal.fire({
             icon: 'error',
@@ -81,6 +62,12 @@ export class WalletAccessPage implements OnInit {
       } finally {
         await loading.dismiss();
       }
+    } else {
+      await this.notification.swal.fire({
+        icon: 'warning',
+        title: 'Invalid Address',
+        text: 'Please input a valid wallet address',
+      });
     }
   }
 
@@ -88,8 +75,9 @@ export class WalletAccessPage implements OnInit {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
     const result = lock.onWillDismiss();
-
     await lock.present();
-    return (await result).data?.pin;
+
+    const { data } = await result;
+    return data?.pin;
   }
 }

@@ -3,7 +3,7 @@
     <ion-back-button></ion-back-button>
   </ion-buttons>
   <ion-title class="font-audiowide font-bold">{{ title }}</ion-title>
-  <ion-buttons slot="end" *ngIf="sessionQuery.selectName$ | async">
+  <ion-buttons slot="end" *ngIf="sessionQuery.name | async">
     <ion-button routerLink="/" routerDirection="root"> Logout </ion-button>
   </ion-buttons>
 </ion-toolbar>
