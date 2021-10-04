@@ -12,6 +12,7 @@ use crate::schema::types::{
     AlgorandAddressBytes,
     WalletId,
     WalletPin,
+    XRPAddressBase32,
 };
 
 /// A Nautilus wallet's basic displayable details.
@@ -23,6 +24,7 @@ pub struct WalletDisplay {
     pub wallet_id: WalletId,
     pub owner_name: String,
     pub algorand_address_base32: AlgorandAddressBase32,
+    pub xrp_address_base32: XRPAddressBase32,
 }
 
 impl From<WalletStorable> for WalletDisplay {
@@ -31,6 +33,7 @@ impl From<WalletStorable> for WalletDisplay {
             wallet_id: storable.wallet_id.clone(),
             owner_name: storable.owner_name.clone(),
             algorand_address_base32: storable.algorand_account.address_base32(),
+            xrp_address_base32: storable.xrp_address_base32.address_base32(),
         }
     }
 }
