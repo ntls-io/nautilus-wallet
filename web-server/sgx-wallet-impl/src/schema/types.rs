@@ -19,3 +19,6 @@ pub type AlgorandAddressBytes = [u8; 32];
 
 /// Algorand account address, as base32 with checksum.
 pub type AlgorandAddressBase32 = String;
+
+/// XRP account address
+pub type XRPAddressBase32 = String;
