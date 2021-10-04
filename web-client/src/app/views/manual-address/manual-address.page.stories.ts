@@ -5,7 +5,7 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ManualAddressPage } from './manual-address.page';
 
 export default {
-  title: 'Views/LockscreenPage',
+  title: 'Views/ManualAddressPage',
   component: ManualAddressPage,
   decorators: [
     moduleMetadata({
