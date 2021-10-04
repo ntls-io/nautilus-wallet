@@ -6,6 +6,7 @@ import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
 import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { ScannerService } from '../../services/scanner.service';
 import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { handleScan } from '../scanner.helpers';
 
@@ -20,6 +21,7 @@ export class WalletAccessPage implements OnInit {
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
+    private scannerService: ScannerService,
     private modalCtrl: ModalController,
     private walletService: WalletService,
     private notification: SwalHelper,
