@@ -3,10 +3,21 @@
  */
 
 import { Provider } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { of } from 'rxjs';
 import {
   SessionState,
   SessionStore,
 } from 'src/app/stores/session/session.store';
+
+export const provideActivatedRouteQueryParams = (
+  queryParams: Params
+): Provider => ({
+  provide: ActivatedRoute,
+  useValue: {
+    queryParams: of(queryParams),
+  } as ActivatedRoute,
+});
 
 /**
  * Define a `SessionStore` provider initialised with the given session state.
