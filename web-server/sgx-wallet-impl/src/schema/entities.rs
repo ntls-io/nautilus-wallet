@@ -3,6 +3,7 @@
 use std::prelude::v1::{String, ToString};
 
 use algonaut::transaction::account::Account as AlgonautAccount;
+use ripple_keypairs::Seed;
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
@@ -12,7 +13,8 @@ use crate::schema::types::{
     AlgorandAddressBytes,
     WalletId,
     WalletPin,
-    XRPAddressBase32,
+    XrpAccountSeedBytes,
+    XrpAddressClassic,
 };
 
 /// A Nautilus wallet's basic displayable details.
@@ -24,7 +26,7 @@ pub struct WalletDisplay {
     pub wallet_id: WalletId,
     pub owner_name: String,
     pub algorand_address_base32: AlgorandAddressBase32,
-    pub xrp_address_base32: XRPAddressBase32,
+    pub xrp_address_classic: XrpAddressClassic,
 }
 
 impl From<WalletStorable> for WalletDisplay {
@@ -33,7 +35,7 @@ impl From<WalletStorable> for WalletDisplay {
             wallet_id: storable.wallet_id.clone(),
             owner_name: storable.owner_name.clone(),
             algorand_address_base32: storable.algorand_account.address_base32(),
-            xrp_address_base32: storable.xrp_address_base32.address_base32(),
+            xrp_address_classic: storable.xrpl_account.address_classic(),
         }
     }
 }
@@ -49,6 +51,7 @@ pub struct WalletStorable {
     pub auth_pin: WalletPin,
     pub owner_name: String,
     pub algorand_account: AlgorandAccount,
+    pub xrpl_account: XrplAccount,
 }
 
 /// An Algorand account.
@@ -57,6 +60,14 @@ pub struct WalletStorable {
 #[derive(Zeroize, ZeroizeOnDrop)] // zeroize
 pub struct AlgorandAccount {
     pub seed_bytes: AlgorandAccountSeedBytes,
+}
+
+/// An XRPL account.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct XrplAccount {
+    pub seed_bytes: XrpAccountSeedBytes,
 }
 
 impl AlgorandAccount {
@@ -84,5 +95,18 @@ impl AlgorandAccount {
 impl From<AlgorandAccount> for AlgonautAccount {
     fn from(account: AlgorandAccount) -> Self {
         account.as_algonaut_account()
+    }
+}
+
+impl XrplAccount {
+    pub(crate) fn generate() -> Self {
+        Self {
+            seed_bytes: Seed::random(),
+        }
+    }
+
+    pub fn address_classic(&self) -> XrpAddressClassic {
+        let (_, public_key) = self.seed_bytes.derive_keypair().unwrap();
+        public_key.derive_address()
     }
 }

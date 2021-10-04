@@ -3,6 +3,8 @@
 use std::boxed::Box;
 use std::prelude::v1::String;
 
+use ripple_keypairs::Seed;
+
 pub type Bytes = Box<[u8]>;
 
 /// Nautilus Wallet ID.
@@ -21,4 +23,7 @@ pub type AlgorandAddressBytes = [u8; 32];
 pub type AlgorandAddressBase32 = String;
 
 /// XRP account address
-pub type XRPAddressBase32 = String;
+pub type XrpAddressClassic = String;
+
+/// Xrp account seed,as bytes
+pub type XrpAccountSeedBytes = Seed;
