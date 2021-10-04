@@ -10,6 +10,13 @@ import {
   SessionStore,
 } from 'src/app/stores/session/session.store';
 
+/**
+ * Define a `ActivatedRoute` provider initialised with the given `queryParams`.
+ *
+ * FIXME(Pi): This doesn't currently respond properly to story args changes,
+ *            crashing somewhere in the subscription machinery instead,
+ *            but I'm not sure why.
+ */
 export const provideActivatedRouteQueryParams = (
   queryParams: Params
 ): Provider => ({
