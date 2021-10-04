@@ -5,6 +5,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { WalletService } from 'src/app/services/wallet/wallet.service';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +17,11 @@ export class RegisterPage implements OnInit {
   public registrationForm: FormGroup;
   nonValidSubmit = true;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private walletService: WalletService,
+    private router: Router
+  ) {
     this.registrationForm = this.generateFormGroup();
   }
 
@@ -55,12 +61,21 @@ export class RegisterPage implements OnInit {
     );
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
-      // TODO: Submit registration to the backend
-      console.log(this.registrationForm);
-      console.log(this.registrationForm.controls);
+      try {
+        await this.walletService.createWallet(
+          this.registrationForm.controls.firstName.value +
+            ' ' +
+            this.registrationForm.controls.lastName.value,
+          this.registrationForm.controls.pin.value
+        );
+        this.router.navigate(['/print-wallet']);
+      } catch (err) {
+        // TODO: error handling
+        console.log(err);
+      }
     } else {
       this.showErrors();
     }

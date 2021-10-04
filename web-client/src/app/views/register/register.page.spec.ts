@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ describe('RegisterPage', () => {
           RouterTestingModule.withRoutes(routes),
           ReactiveFormsModule,
           FormsModule,
+          HttpClientTestingModule,
         ],
       }).compileComponents();
 

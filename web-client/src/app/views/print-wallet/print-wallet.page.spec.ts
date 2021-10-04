@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Clipboard } from '@capacitor/clipboard';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { PrintWalletPage } from './print-wallet.page';
@@ -12,7 +13,7 @@ describe('PrintWalletPage', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PrintWalletPage],
-        imports: [IonicModule.forRoot()],
+        imports: [IonicModule.forRoot(), RouterTestingModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(PrintWalletPage);

@@ -15,7 +15,16 @@
         <ion-textarea
           placeholder="Enter wallet address"
           class="border border-solid !rounded-full"
+          [(ngModel)]="address"
         ></ion-textarea>
+        <ion-button
+          [disabled]="!address"
+          expand="block"
+          shape="round"
+          class="mt-4"
+          (click)="confirm()"
+          >Confirm</ion-button
+        >
       </ion-col>
     </ion-row>
   </ion-grid>

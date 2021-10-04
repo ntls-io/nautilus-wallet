@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { faLink, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ScannerPage } from '../scanner/scanner.page';
+
+type ActionItem = {
+  label: string;
+  title: string;
+  icon: IconDefinition;
+  action: string;
+  disabled?: boolean;
+};
 
 @Component({
   selector: 'app-send-funds',
@@ -9,19 +17,19 @@ import { ScannerPage } from '../scanner/scanner.page';
   styleUrls: ['./send-funds.page.scss'],
 })
 export class SendFundsPage implements OnInit {
-  actionItems = [
+  actionItems: Array<ActionItem> = [
     {
       label: 'Quick pay',
       title: 'Scan a QR code',
       icon: faQrcode,
       action: 'presentScanner',
     },
-    {
-      label: 'Add New Friend',
-      title: 'Share my wallet address',
-      icon: faLink,
-      disabled: true,
-    },
+    // {
+    //   label: 'Add New Friend',
+    //   title: 'Share my wallet address',
+    //   icon: faLink,
+    //   disabled: true,
+    // },
   ];
 
   constructor(
@@ -38,8 +46,10 @@ export class SendFundsPage implements OnInit {
 
     scanner.onWillDismiss().then((result) => {
       console.log(result);
-      if (false) {
-        // this.navCtrl.navigateForward('pay', { queryParams: { wallet } });
+      if (result.data) {
+        this.navCtrl.navigateForward('pay', {
+          queryParams: { recieverAddress: result.data },
+        });
       }
     });
 

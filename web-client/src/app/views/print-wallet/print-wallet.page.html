@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
+      <ion-button [routerLink]="['/']">
         <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -52,5 +52,7 @@
         </ion-button>
       </ion-col>
     </ion-row>
+
+    <ion-button expand="block" shape="round" routerLink="/">Home</ion-button>
   </ion-grid>
 </ion-content>

@@ -35,6 +35,7 @@ export class LockscreenPage implements OnInit {
   dismiss(success: boolean) {
     this.modalCtrl.dismiss({
       success,
+      pin: this.codeForm.controls.code.value,
     });
   }
   //TODO: implement function

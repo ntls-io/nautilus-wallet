@@ -4,13 +4,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { verifyNavigationTrigger } from 'src/tests/test.helpers';
+import { SessionStore } from 'src/app/stores/session/session.store';
+import {
+  componentElement,
+  verifyNavigationTrigger,
+} from 'src/tests/test.helpers';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
   let router: Router;
   let component: WalletPage;
   let fixture: ComponentFixture<WalletPage>;
+  let sessionStore: SessionStore;
 
   beforeEach(
     waitForAsync(() => {
@@ -26,12 +31,21 @@ describe('WalletPage', () => {
       router.navigate(['wallet']);
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
+
+      sessionStore = TestBed.inject(SessionStore);
+      sessionStore.update({ name: 'Wallet Owner' });
+
       fixture.detectChanges();
     })
   );
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('shows name from store', () => {
+    const heading = componentElement(fixture, 'h1');
+    expect(heading.textContent?.trim()).toBe(`Wallet Owner's Wallet`);
   });
 
   it('navigates to send funds', async (): Promise<void> => {

@@ -11,6 +11,32 @@ import {
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
+export type Constructor<T> = new (...args: any[]) => T;
+
+/**
+ * Helper: Check that o is an instance of the given class.
+ */
+export const checkClass = <T>(o: unknown, cls: Constructor<T>): T => {
+  if (o instanceof cls) {
+    return o;
+  } else {
+    const oClsName = (o as any)?.constructor?.name;
+    throw new TypeError(`expected ${cls.name}, got ${oClsName}: ${o}`);
+  }
+};
+
+/**
+ * Retrieve a test component DOM element.
+ */
+export const componentElement = <T extends Element>(
+  fixture: ComponentFixture<unknown>,
+  selectors: string
+): HTMLElement => {
+  const root = checkClass(fixture.nativeElement, HTMLElement);
+  const element = root.querySelector(selectors);
+  return checkClass(element, HTMLElement);
+};
+
 /**
  * Verify that the fixture has a button that successfully navigates to the given `routerLink`.
  */

@@ -22,13 +22,16 @@
     <ion-row>
       <ion-col>
         <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
-          <ion-input
-            inputmode="tel"
-            placeholder="Amount"
-            type="text"
-            formControlName="amount"
-            [brmasker]="{money: true, thousand: ',',  decimalCaracter: '.', decimal: 2}"
-          ></ion-input>
+          <ion-item lines="none">
+            <ion-label class="pr-2">R </ion-label>
+            <ion-input
+              inputmode="tel"
+              placeholder="Amount"
+              type="text"
+              formControlName="amount"
+              [brmasker]="{money: true, thousand: ',',  decimalCaracter: '.', decimal: 2}"
+            ></ion-input>
+          </ion-item>
           <div class="m-5">
             <ion-button expand="block" shape="round" type="submit"
               >PAY

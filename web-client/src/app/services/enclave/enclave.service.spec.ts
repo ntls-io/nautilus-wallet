@@ -3,7 +3,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -13,27 +13,27 @@ import {
   SignTransactionResult,
   WalletRequest,
   WalletResponse,
-} from '../../schema/actions';
-import { AttestationReport } from '../../schema/attestation';
-import { TweetNaClCrypto } from '../../schema/crypto';
-import { from_msgpack_as, to_msgpack_as } from '../../schema/msgpack';
+} from 'src/schema/actions';
+import { AttestationReport } from 'src/schema/attestation';
+import { TweetNaClCrypto } from 'src/schema/crypto';
+import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
   seal_msgpack_as,
   unseal_msgpack_as,
-} from '../../schema/sealing';
+} from 'src/schema/sealing';
 import {
   withNestedResolveContexts,
   withResolveContext,
-} from '../../tests/test.helpers';
+} from 'src/tests/test.helpers';
 import {
   arrayViewFromBuffer,
   bufferFromArrayView,
-  WalletService,
-} from './wallet.service';
+  EnclaveService,
+} from './enclave.service';
 
-describe('WalletService', () => {
-  let service: WalletService;
+describe('EnclaveService', () => {
+  let service: EnclaveService;
 
   let httpTestingController: HttpTestingController;
 
@@ -41,7 +41,7 @@ describe('WalletService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(WalletService);
+    service = TestBed.inject(EnclaveService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -339,7 +339,7 @@ const stubAttestationReport = (
   },
 });
 
-describe('WalletService array helpers', () => {
+describe('EnclaveService array helpers', () => {
   const nonArrayExamples: Array<[string, unknown]> = [
     ['undefined', undefined],
     ['null', null],
