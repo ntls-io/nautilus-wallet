@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss(false)">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <ion-grid class="h-full">
+    <ion-row class="h-full ion-justify-content-center px-5">
+      <ion-col class="ion-align-self-center">
+        <ion-icon name="wallet-outline" class="!text-5xl"></ion-icon>
+        <h1 class="font-semibold font-nasalization">Wallet address</h1>
+        <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+          <ion-textarea
+            type="text"
+            placeholder="Enter recipient's wallet address"
+            class="p-0"
+            formControlName="address"
+          ></ion-textarea>
+          <p
+            class="text-danger text-sm"
+            *ngIf="!addressForm?.pristine && addressForm.errors?.invalidAddress"
+          >
+            This address is not valid
+          </p>
+
+          <ion-button expand="block" shape="round" type="submit" class="mt-4">
+            Confirm
+          </ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

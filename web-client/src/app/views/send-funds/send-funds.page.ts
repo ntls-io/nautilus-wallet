@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { ModalController, NavController } from '@ionic/angular';
+import {
+  faKeyboard,
+  faQrcode,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  AlertController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
 
 type ActionItem = {
@@ -25,6 +34,12 @@ export class SendFundsPage implements OnInit {
       icon: faQrcode,
       action: 'presentScanner',
     },
+    {
+      label: 'Quick pay',
+      title: 'Enter address manually',
+      icon: faKeyboard,
+      action: 'presentAddressModal',
+    },
     // {
     //   label: 'Add New Friend',
     //   title: 'Share my wallet address',
@@ -36,6 +51,7 @@ export class SendFundsPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
     private notification: SwalHelper
   ) {}
 
@@ -50,12 +66,27 @@ export class SendFundsPage implements OnInit {
     await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
   }
 
+  async presentAddressModal() {
+    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success && data?.address) {
+      this.navCtrl.navigateForward('pay', {
+        queryParams: { receiverAddress: data?.address },
+      });
+    }
+  }
+
   execItemAction(action: string | undefined) {
     switch (action) {
       case 'presentScanner':
         this.presentScanner();
         break;
-
+      case 'presentAddressModal':
+        this.presentAddressModal();
+        break;
       default:
         break;
     }
