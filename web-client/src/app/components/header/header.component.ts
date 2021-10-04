@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SessionQuery } from 'src/app/stores/session/session.query';
+import { SessionQuery } from 'src/app/stores/session';
 
 @Component({
   selector: 'app-header',

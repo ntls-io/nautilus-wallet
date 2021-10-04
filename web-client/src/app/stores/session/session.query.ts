@@ -6,10 +6,9 @@ import { SessionState, SessionStore } from './session.store';
   providedIn: 'root',
 })
 export class SessionQuery extends Query<SessionState> {
-  allState$ = this.select();
-  selectName$ = this.select('name');
-  selectWalletId$ = this.select('walletId');
-  selectBalance$ = this.select('balance');
+  name = this.select('name');
+  walletId = this.select('walletId');
+  balance = this.select('balance');
 
   constructor(protected store: SessionStore) {
     super(store);

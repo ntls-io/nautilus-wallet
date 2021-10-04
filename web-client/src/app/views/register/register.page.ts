@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { WalletService } from 'src/app/services/wallet/wallet.service';
+import { WalletService } from 'src/app/services/wallet';
 
 @Component({
   selector: 'app-register',

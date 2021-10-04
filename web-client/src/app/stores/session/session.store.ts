@@ -17,9 +17,7 @@ export const createInitialState = (): SessionState => ({
   balance: null,
 });
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'session' })
 export class SessionStore extends Store<SessionState> {
   constructor() {

@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SessionStore } from 'src/app/stores/session/session.store';
+import { SessionStore } from 'src/app/stores/session';
 import {
   componentElement,
   verifyNavigationTrigger,

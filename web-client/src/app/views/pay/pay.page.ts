@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
-import { WalletService } from 'src/app/services/wallet/wallet.service';
-import { SessionQuery } from 'src/app/stores/session/session.query';
+import { WalletService } from 'src/app/services/wallet';
+import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
@@ -53,10 +53,12 @@ export class PayPage implements OnInit {
         loading.dismiss();
       }
 
+      const { transactionId } = this.sessionQuery.getValue();
+
       this.notifySuccess(
         'R' + this.paymentForm.controls.amount.value,
         this.wallet,
-        this.sessionQuery.getValue().transactionId,
+        transactionId,
         new Date()
       );
       //TODO: ()=>{send payment}

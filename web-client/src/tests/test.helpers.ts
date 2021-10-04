@@ -10,6 +10,7 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 export type Constructor<T> = new (...args: any[]) => T;
 
@@ -63,6 +64,24 @@ const getElementWithLink = (
 
   expect(trigger).not.toBeNull();
   return trigger;
+};
+
+/**
+ * Assert that `f` shows the given toast message.
+ */
+export const assertShowsToast = async (
+  toastController: ToastController,
+  toastOptions: Parameters<typeof ToastController.prototype.create>[0],
+  f: () => Promise<void>
+): Promise<void> => {
+  const toastSpy = jasmine.createSpyObj<HTMLIonToastElement>(
+    'HTMLIonToastElement',
+    { present: Promise.resolve() }
+  );
+  const createSpy = spyOn(toastController, 'create').and.resolveTo(toastSpy);
+  await f();
+  expect(createSpy).toHaveBeenCalledOnceWith(toastOptions);
+  expect(toastSpy.present).toHaveBeenCalledOnceWith();
 };
 
 /**
