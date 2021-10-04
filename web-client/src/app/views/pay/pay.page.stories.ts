@@ -1,7 +1,10 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SessionState } from 'src/app/stores/session/session.store';
-import { provideSessionStore } from 'src/stories/storybook.helpers';
+import {
+  provideActivatedRouteQueryParams,
+  provideSessionStore,
+} from 'src/stories/storybook.helpers';
 import { PayPage } from './pay.page';
 
 export default {
@@ -14,9 +17,14 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<SessionState> = (state: SessionState) => ({
+type Args = { receiverAddress: string } & SessionState;
+
+const Template: Story<Args> = ({ receiverAddress, ...state }: Args) => ({
   moduleMetadata: {
-    providers: [provideSessionStore(state)],
+    providers: [
+      provideActivatedRouteQueryParams({ receiverAddress }),
+      provideSessionStore(state),
+    ],
   },
 });
 
@@ -24,4 +32,5 @@ export const Default = Template.bind({});
 Default.args = {
   name: 'Test Owner',
   balance: 1234,
+  receiverAddress: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
 };
