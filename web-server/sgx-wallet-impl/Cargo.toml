@@ -31,6 +31,7 @@ thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
 # Our SGX forks
 algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
 serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" } # SGX: registreerocks fork for 0.11.4
+ripple-keypairs = { git = "https://github.com/registreerocks/ripple-keypairs-rust-sgx", branch = "v0.1.0-sgx" }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
 sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
