@@ -39,7 +39,9 @@ export class PayPage implements OnInit {
   async onSubmit() {
     this.paymentForm.markAllAsTouched();
     if (this.paymentForm.valid) {
-      const loading = await this.loadingCtrl.create();
+      const loading = await this.loadingCtrl.create({
+        message: 'Confirming Transaction',
+      });
       loading.present();
       try {
         console.log(this.paymentForm.controls.amount.value);
