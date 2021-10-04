@@ -12,6 +12,7 @@ export class ReceivePage implements OnInit {
       preTitle: 'Connect & receive money',
       title: 'Share link to connect',
       icon: faLink,
+      disabled: true,
     },
   ];
 

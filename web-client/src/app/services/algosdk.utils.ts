@@ -7,6 +7,7 @@ import { Algodv2, EncodedSignedTransaction } from 'algosdk';
 export type TransactionConfirmation = {
   txn: EncodedSignedTransaction;
   confirmedRound: number;
+  txId: string;
 };
 
 /** Subset of algosdk's PendingTransactionResponse, without bigint. */
@@ -38,7 +39,7 @@ export const waitForConfirmation = async (
 
     if (confirmedRound && 0 < confirmedRound) {
       // Transaction confirmed!
-      return { confirmedRound, txn };
+      return { confirmedRound, txn, txId };
     } else if (poolError !== '') {
       // TODO: Report rejections better.
       throw new Error(

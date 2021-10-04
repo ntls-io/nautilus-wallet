@@ -12,6 +12,7 @@ export class ActionItemComponent implements OnInit {
   @Input() icon: IconProp | undefined;
   @Input() path: string | undefined;
   @Input() disabled: boolean | undefined;
+  @Input() url: string | undefined;
 
   constructor() {}
 

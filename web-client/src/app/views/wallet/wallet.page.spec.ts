@@ -26,14 +26,16 @@ describe('WalletPage', () => {
           SharedModule,
         ],
       }).compileComponents();
-
       router = TestBed.inject(Router);
       router.navigate(['wallet']);
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
 
       sessionStore = TestBed.inject(SessionStore);
-      sessionStore.update({ name: 'Wallet Owner' });
+      sessionStore.update({
+        name: 'Wallet Owner',
+        walletId: 'fake', // Satisfy OpenWalletGuard
+      });
 
       fixture.detectChanges();
     })

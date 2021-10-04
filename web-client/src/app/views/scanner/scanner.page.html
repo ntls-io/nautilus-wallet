@@ -10,9 +10,13 @@
 </ion-header>
 
 <ion-content>
+  <!-- TODO: Show a waiting state while scanner loads. -->
   <zxing-scanner
     class="h-full p-4"
     (scanSuccess)="scanSuccessHandler($event)"
     (scanError)="scanErrorHandler($event)"
+    (camerasFound)="camerasFoundHandler($event)"
+    (camerasNotFound)="camerasNotFoundHandler($event)"
+    (permissionResponse)="permissionResponseHandler($event)"
   ></zxing-scanner>
 </ion-content>

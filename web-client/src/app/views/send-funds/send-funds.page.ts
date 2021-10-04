@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faQrcode, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
-import { ScannerPage } from '../scanner/scanner.page';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { handleScan } from '../scanner.helpers';
 
 type ActionItem = {
   label: string;
@@ -34,26 +35,19 @@ export class SendFundsPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private notification: SwalHelper
   ) {}
 
   ngOnInit() {}
 
   async presentScanner() {
-    const scanner = await this.modalCtrl.create({
-      component: ScannerPage,
-    });
-
-    scanner.onWillDismiss().then((result) => {
-      console.log(result);
-      if (result.data) {
-        this.navCtrl.navigateForward('pay', {
-          queryParams: { recieverAddress: result.data },
-        });
-      }
-    });
-
-    return await scanner.present();
+    const scanSuccess = async (address: string) => {
+      await this.navCtrl.navigateForward('pay', {
+        queryParams: { receiverAddress: address },
+      });
+    };
+    await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
   }
 
   execItemAction(action: string | undefined) {

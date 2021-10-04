@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { isValidAddress } from 'algosdk';
 import { ScannerService } from 'src/app/services/scanner.service';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
-import Swal from 'sweetalert2';
+import { SessionQuery } from 'src/app/stores/session/session.query';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { LockscreenPage } from '../lockscreen/lockscreen.page';
-import { ScannerPage } from '../scanner/scanner.page';
+import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-wallet-access',
@@ -16,57 +18,68 @@ import { ScannerPage } from '../scanner/scanner.page';
 export class WalletAccessPage implements OnInit {
   hasCamera: boolean | undefined;
   address: string | undefined;
+  error$ = this.sessionQuery.selectError();
 
   constructor(
+    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
     private scannerService: ScannerService,
     private modalCtrl: ModalController,
     private walletService: WalletService,
-    private router: Router
+    private notification: SwalHelper,
+    private sessionQuery: SessionQuery,
+    private router: Router,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
+    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
   }
 
-  async openScanner() {
-    const allowed = await this.scannerService.requestPermissions();
-    if (allowed) {
-      const scanner = await this.modalCtrl.create({
-        component: ScannerPage,
-      });
-
-      scanner.onWillDismiss().then((result) => {
-        // this.address = result;
-        //TODO: perform action after scan result
-        this.address = result.data;
-        scanner.dismiss();
-        this.confirm();
-      });
-
-      return await scanner.present();
+  isAdressValid(): boolean {
+    if (this.address) {
+      return isValidAddress(this.address);
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Permission required',
-        text: `In order to scan a QR Code, you need to grant camera's permission`,
-        confirmButtonColor: 'var(--ion-color-primary)',
-        customClass: {
-          title: 'font-nasalization',
-        },
-        backdrop: true,
-        heightAuto: false,
-        allowOutsideClick: false,
-      });
+      return false;
     }
   }
 
+  async openScanner() {
+    await handleScan(this.modalCtrl, this.notification.swal, this.confirm);
+  }
+
   async confirm() {
+    if (!this.isAdressValid()) {
+      // TODO: Implement better field validation
+      await this.notification.swal.fire({
+        icon: 'warning',
+        title: 'Invalid Address',
+        text: 'Please input a valid wallet address',
+      });
+      return;
+    }
     if (this.address) {
       this.address = this.address.trim();
       const pin = await this.presentLock();
-
-      await this.walletService.openWallet(this.address, pin);
-      this.router.navigate(['/wallet']);
+      if (!pin) {
+        return;
+      }
+      const loading = await this.loadingCtrl.create();
+      await loading.present();
+      try {
+        const error = await this.walletService.openWallet(this.address, pin);
+        if (error) {
+          await this.notification.swal.fire({
+            icon: 'error',
+            title: 'Open Wallet Failed',
+            text: error,
+          });
+        } else {
+          this.router.navigate(['/wallet']);
+        }
+      } finally {
+        await loading.dismiss();
+      }
     }
   }
 
@@ -76,7 +89,6 @@ export class WalletAccessPage implements OnInit {
     const result = lock.onWillDismiss();
 
     await lock.present();
-    console.log(await result);
     return (await result).data?.pin;
   }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SessionQuery } from 'src/app/stores/session/session.query';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() title = 'NAUTILUS';
-  constructor() {}
+  constructor(public sessionQuery: SessionQuery) {}
 
   ngOnInit() {}
 }
