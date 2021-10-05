@@ -9,7 +9,7 @@ use std::prelude::v1::String;
 use serde::{Deserialize, Serialize};
 use zeroize::Zeroize;
 
-use crate::schema::entities::{AlgorandTransactionSigned, WalletDisplay};
+use crate::schema::entities::{AlgorandTransactionSigned, WalletDisplay, XrpTransactionSigned};
 use crate::schema::macros::derive_schema_traits;
 use crate::schema::types::{Bytes, WalletId, WalletPin};
 
@@ -46,14 +46,20 @@ derive_schema_traits!(
     pub struct SignTransaction {
         pub wallet_id: WalletId,
         pub auth_pin: WalletPin,
-        #[serde(with = "serde_bytes")]
-        pub algorand_transaction_bytes: Bytes,
+
+        // TODO(Pi): Separate these out better.
+        #[serde(with = "serde_bytes", skip_serializing_if = "Option::is_none")]
+        pub algorand_transaction_bytes: Option<Bytes>,
+
+        #[serde(with = "serde_bytes", skip_serializing_if = "Option::is_none")]
+        pub xrp_transaction_bytes: Option<Bytes>,
     }
 );
 
 derive_schema_traits!(
     pub enum SignTransactionResult {
         Signed(AlgorandTransactionSigned),
+        SignedXrp(XrpTransactionSigned),
         InvalidAuth,
         Failed(String),
     }
