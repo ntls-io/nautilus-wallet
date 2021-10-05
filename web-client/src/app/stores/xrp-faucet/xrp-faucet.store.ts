@@ -3,24 +3,24 @@ import { Store, StoreConfig } from '@datorama/akita';
 
 export interface XrpFaucetState {
   account: {
-    xAddress: string | null;
-    secret: string | null;
-    classicAddress: string | null;
-    address: string | null;
+    xAddress: string;
+    secret: string;
+    classicAddress: string;
+    address: string;
   };
-  amount: number | null;
-  balance: number | null;
+  amount: number;
+  balance: number;
 }
 
 export const createInitialState = (): XrpFaucetState => ({
   account: {
-    xAddress: null,
-    secret: null,
-    classicAddress: null,
-    address: null,
+    xAddress: '',
+    secret: '',
+    classicAddress: '',
+    address: '',
   },
-  amount: null,
-  balance: null,
+  amount: 0,
+  balance: 0,
 });
 
 @Injectable({ providedIn: 'root' })
