@@ -7,7 +7,9 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "skipLibCheck": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
@@ -17,7 +19,10 @@
     // XXX(Pi): Webpack 5 no longer includes a crypto polyfill by default.
     //          This seems to be the most straightforward way to get it to work, for now.
     "paths": {
-      "crypto": ["node_modules/crypto-js"]
+      "crypto": ["node_modules/crypto-browserify"],
+      "stream": ["node_modules/stream-browserify"],
+      "https": ["node_modules/https-browserify"],
+      "http": ["node_modules/stream-http"]
     }
   },
   "angularCompilerOptions": {
