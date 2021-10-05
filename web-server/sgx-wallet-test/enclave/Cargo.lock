@@ -823,6 +823,7 @@ dependencies = [
  "rmp-serde",
  "secrecy",
  "serde",
+ "serde_json",
  "sgx-wallet-impl",
  "sgx_rand",
  "sgx_tcrypto",
