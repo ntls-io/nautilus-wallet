@@ -29,6 +29,7 @@ sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev 
 # Community SGX forks
 rmp-serde = { git = "https://github.com/mesalock-linux/msgpack-rust-sgx" }
 serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
+serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx" }
 
 # Our SGX forks
 algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
