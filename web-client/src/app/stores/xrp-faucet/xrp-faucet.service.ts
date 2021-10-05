@@ -1,55 +1,88 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RippleAPI } from 'ripple-lib';
+import { RippleAPI, TransactionJSON } from 'ripple-lib';
 import { tap } from 'rxjs/operators';
-import { XrpFaucetStore } from './xrp-faucet.store';
+import { XrpFaucetQuery, XrpFaucetStore } from '.';
 
 const ripple = new RippleAPI({
-  server: '', //TODO: set server address
+  server: 'wss://s.altnet.rippletest.net:51233/',
 });
 
 @Injectable({ providedIn: 'root' })
 export class XrpFaucetService {
   constructor(
     private xrpFaucetStore: XrpFaucetStore,
+    private xrpFaucetQuery: XrpFaucetQuery,
     private http: HttpClient
   ) {}
 
   async setAccount() {
-    this.xrpFaucetStore.setLoading(true);
-
     await this.http
       .post('https://faucet.altnet.rippletest.net/accounts', {})
       .pipe(tap((entities) => this.xrpFaucetStore.update(entities)))
       .toPromise();
-
-    this.xrpFaucetStore.setLoading(false);
   }
 
   async sendFunds(
-    fromAddress: string,
-    toAddress: string,
     amount: number,
+    destinationAddress: string,
     destinationTag?: number
   ) {
-    const { validatedLedger } = await ripple.getServerInfo();
+    this.xrpFaucetStore.setLoading(true);
 
-    const txJSON = {
-      Account: fromAddress,
-      TransactionType: 'Payment',
-      LastLedgerSequence: validatedLedger.ledgerVersion + 4, // not sure of this
-      Destination: toAddress,
-      Amount: ripple.xrpToDrops(amount),
-      DestinationTag: destinationTag,
-    };
+    await this.setAccount();
 
-    if (!destinationTag) {
-      delete txJSON.DestinationTag;
-    }
+    await ripple
+      .connect()
+      .then(async () => {
+        let txJSON: TransactionJSON;
 
-    await ripple.prepareTransaction(txJSON);
-    //TODO: send or sign transaction
-    //
+        try {
+          const { validatedLedger } = await ripple.getServerInfo();
+          const { account } = this.xrpFaucetQuery.getValue();
+
+          txJSON = {
+            Account: account.address,
+            TransactionType: 'Payment',
+            LastLedgerSequence: validatedLedger.ledgerVersion + 4,
+            Destination: destinationAddress,
+            Amount: ripple.xrpToDrops(amount),
+          };
+
+          if (destinationTag) {
+            txJSON.DestinationTag = destinationTag;
+          }
+
+          try {
+            const { signedTransaction } = await this.prepareTx(
+              txJSON,
+              account.secret
+            );
+
+            const { resultCode } = await ripple.submit(signedTransaction);
+
+            if (resultCode === 'tesSUCCESS') {
+              //TODO: do something on success
+            }
+          } catch (e) {
+            console.log(e);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      })
+      .catch(console.error)
+      .finally(async () => {
+        this.xrpFaucetStore.setLoading(false);
+        this.xrpFaucetStore.reset();
+        await ripple.disconnect();
+      });
+  }
+
+  async prepareTx(json: TransactionJSON, secret: string) {
+    const { txJSON } = await ripple.prepareTransaction(json);
+
+    return ripple.sign(txJSON, secret);
   }
 
   validateAddress(address: string) {
