@@ -1,1 +1,1 @@
-# Nautilus Wallet
+# Nautilus Wallet [XRPL hackathon]
