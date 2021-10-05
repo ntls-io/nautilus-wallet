@@ -24,7 +24,8 @@ pub(crate) fn sign_transaction_works() {
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        algorand_transaction_bytes: Some(algorand_transaction_bytes),
+        xrp_transaction_bytes: None,
     };
     let signed = &match sign_transaction(request) {
         Result::Signed(signed) => signed,
@@ -51,7 +52,8 @@ pub(crate) fn sign_transaction_without_tag() {
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        algorand_transaction_bytes: Some(algorand_transaction_bytes),
+        xrp_transaction_bytes: None,
     };
     match sign_transaction(request) {
         Result::Failed(err) => assert!(
@@ -75,7 +77,8 @@ pub(crate) fn sign_transaction_empty() {
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        algorand_transaction_bytes: Some(algorand_transaction_bytes),
+        xrp_transaction_bytes: None,
     };
     match sign_transaction(request) {
         Result::Failed(err) => {
@@ -98,7 +101,8 @@ pub(crate) fn sign_transaction_malformed_transaction() {
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes: malformed,
+        algorand_transaction_bytes: Some(malformed),
+        xrp_transaction_bytes: None,
     };
     match sign_transaction(request) {
         Result::Failed(err) => {
