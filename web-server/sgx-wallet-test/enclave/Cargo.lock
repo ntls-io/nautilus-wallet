@@ -799,6 +799,7 @@ dependencies = [
  "base64",
  "hex",
  "rand 0.7.3",
+ "ripple-address-codec",
  "ripple-keypairs",
  "rmp-serde",
  "secrecy",

@@ -17,8 +17,8 @@ pub(crate) fn wallet_operation_sealing_works() {
 
     // Seal
     let wallet_request = &WalletRequest::OpenWallet(OpenWallet {
-        wallet_id: "123".to_string(),
-        auth_pin: "456".to_string(),
+        wallet_id: "123456".to_string(),
+        auth_pin: "1234".to_string(),
     });
     let sealed_request_bytes =
         &seal_msgpack(wallet_request, &enclave_crypto.get_pubkey(), client_crypto).unwrap();
@@ -33,6 +33,9 @@ pub(crate) fn wallet_operation_sealing_works() {
     // Check
     assert_eq!(
         unsealed_message.expose_secret(),
-        &OpenWalletResult::Failed("key_from_id failed for wallet_id = \"123\": Error decoding base32: DecodeError { position: 2, kind: Length }".to_string()).into()
+        &OpenWalletResult::Failed(
+            "key_from_id failed for wallet_id = \"123456\": decode error".to_string()
+        )
+        .into()
     );
 }
