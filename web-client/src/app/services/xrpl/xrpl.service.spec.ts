@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { sign } from 'ripple-keypairs';
 import { RippleAPI } from 'ripple-lib';
 import { XrplService } from './xrpl.service';
-import { sign } from 'ripple-keypairs';
 
 describe('XrplService', () => {
   let service: XrplService;
