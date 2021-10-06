@@ -72,7 +72,6 @@ export class RegisterPage implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    console.log(this.registrationForm);
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       try {
