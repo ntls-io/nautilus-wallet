@@ -213,6 +213,11 @@ const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
   wallet_id: 'placeholder wallet id',
   owner_name,
   algorand_address_base32: 'placeholder algorand address',
+  xrp_account: {
+    key_type: 'secp256k1',
+    public_key_hex: 'placeholder public key hex',
+    address_base58: 'placeholder xrp address',
+  },
 });
 
 /**
