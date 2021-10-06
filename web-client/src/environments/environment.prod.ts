@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
+  // TODO(Pi): Use a modal switch for the choice of ledger to use, for now.
+  ledger: 'XRP' as 'Algorand' | 'XRP',
   // TODO: Production endpoint
   nautilusWalletServer: 'https://ntls-api.registree.io/',
   nautilusAssetServices: 'https://ntls-services.registree.io/',
