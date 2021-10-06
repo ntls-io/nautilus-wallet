@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RippleAPI, TransactionJSON } from 'ripple-lib';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import binaryCodec from 'ripple-binary-codec';
+import { FormattedSubmitResponse } from 'ripple-lib/dist/npm/transaction/submit';
 
 @Injectable({
   providedIn: 'root',
@@ -54,20 +55,23 @@ export class XrplService {
   }
 
   // For Reference: https://github.com/XRPLF/xrpl.js/blob/6e4868e6c7a03f0d48de1ddee5d9a88700ab5a7c/src/transaction/sign.ts#L54
-  async submitTransaction(tx: TransactionJSON, signature: string) {
+  async submitTransaction(
+    tx: TransactionJSON,
+    signature: string
+  ): Promise<FormattedSubmitResponse> {
     const signedTx: TransactionJSON = { ...tx, TxnSignature: signature };
 
     const encodedTx = binaryCodec.encode(signedTx);
 
     await this.api.connect();
-    let res = await this.api.submit(encodedTx);
+    const res = await this.api.submit(encodedTx);
     await this.api.disconnect();
 
     if (res.resultCode !== 'tesSUCCESS') {
       throw new Error('');
     } else {
       console.log(res);
-      res;
+      return res;
     }
   }
 }
