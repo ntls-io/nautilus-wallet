@@ -5,10 +5,10 @@ import { sign } from 'ripple-keypairs';
 
 describe('XrplService', () => {
   let service: XrplService;
-  let address = 'r4442Uyod51PqEkYh2EwxViBmcVw9kuPE9';
-  let secret = 'shLaVojVmVwbXtBCpmtChZ9enYZmZ';
-  let api = new RippleAPI();
-  let toAddress = 'rLME1vdZEUN8DyWVHkPV2kEvRRevyq9vqj';
+  const address = 'r4442Uyod51PqEkYh2EwxViBmcVw9kuPE9';
+  const secret = 'shLaVojVmVwbXtBCpmtChZ9enYZmZ';
+  const api = new RippleAPI();
+  const toAddress = 'rLME1vdZEUN8DyWVHkPV2kEvRRevyq9vqj';
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -28,13 +28,10 @@ describe('XrplService', () => {
       keypair.publicKey
     );
 
-    const sig = signTransactionBytes(encoded, keypair.privateKey);
+    // Will be done in the enclave when deployed
+    const sig = sign(encoded, keypair.privateKey);
 
     const res = await service.submitTransaction(txJSON, sig);
     console.log(res);
   });
 });
-
-const signTransactionBytes = (encodedTx: string, privateKey: any) => {
-  return sign(encodedTx, privateKey);
-};
