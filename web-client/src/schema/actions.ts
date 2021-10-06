@@ -1,6 +1,10 @@
 /** Core request / response message types. */
 
-import { AlgorandTransactionSigned, WalletDisplay } from './entities';
+import {
+  AlgorandTransactionSigned,
+  WalletDisplay,
+  XrpTransactionSigned,
+} from './entities';
 import { Bytes, WalletId, WalletPin } from './types';
 
 export type CreateWallet = {
@@ -25,11 +29,15 @@ export type OpenWalletResult =
 export type SignTransaction = {
   wallet_id: WalletId;
   auth_pin: WalletPin;
-  algorand_transaction_bytes: Bytes;
+
+  // TODO(Pi): Separate these out better.
+  algorand_transaction_bytes?: Bytes;
+  xrp_transaction_bytes?: Bytes;
 };
 
 export type SignTransactionResult =
   | { Signed: AlgorandTransactionSigned }
+  | { SignedXrp: XrpTransactionSigned }
   | { InvalidAuth: null }
   | { Failed: string };
 
