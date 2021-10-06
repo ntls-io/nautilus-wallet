@@ -16,6 +16,7 @@ import {
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { TweetNaClCrypto } from 'src/schema/crypto';
+import { WalletDisplay } from 'src/schema/entities';
 import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
@@ -83,11 +84,7 @@ describe('EnclaveService', () => {
 
     it('Created', async () => {
       const stubResultCreated: CreateWalletResult = {
-        Created: {
-          wallet_id: 'placeholder wallet id',
-          owner_name: requestCreate.owner_name,
-          algorand_address_base32: 'placeholder algorand address',
-        },
+        Created: placeholderWalletDisplay(requestCreate.owner_name),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -120,11 +117,7 @@ describe('EnclaveService', () => {
 
     it('Opened', async () => {
       const stubResultOpened: OpenWalletResult = {
-        Opened: {
-          wallet_id: 'placeholder wallet id',
-          owner_name: 'placeholder owner name',
-          algorand_address_base32: 'placeholder algorand address',
-        },
+        Opened: placeholderWalletDisplay('placeholder owner name'),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -214,6 +207,12 @@ describe('EnclaveService', () => {
       await expect(result).toEqual(stubResultFailed);
     });
   });
+});
+
+const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
+  wallet_id: 'placeholder wallet id',
+  owner_name,
+  algorand_address_base32: 'placeholder algorand address',
 });
 
 /**
