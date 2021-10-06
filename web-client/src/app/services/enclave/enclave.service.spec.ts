@@ -84,9 +84,9 @@ describe('EnclaveService', () => {
     it('Created', async () => {
       const stubResultCreated: CreateWalletResult = {
         Created: {
-          wallet_id: 'dummy wallet id',
+          wallet_id: 'placeholder wallet id',
           owner_name: requestCreate.owner_name,
-          algorand_address_base32: 'dummy algorand address',
+          algorand_address_base32: 'placeholder algorand address',
         },
       };
       const result = await simulateWalletOperation(
@@ -114,16 +114,16 @@ describe('EnclaveService', () => {
 
   describe('openWallet', () => {
     const requestOpen: OpenWallet = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
     };
 
     it('Opened', async () => {
       const stubResultOpened: OpenWalletResult = {
         Opened: {
-          wallet_id: 'dummy wallet id',
-          owner_name: 'dummy owner name',
-          algorand_address_base32: 'dummy algorand address',
+          wallet_id: 'placeholder wallet id',
+          owner_name: 'placeholder owner name',
+          algorand_address_base32: 'placeholder algorand address',
         },
       };
       const result = await simulateWalletOperation(
@@ -164,10 +164,10 @@ describe('EnclaveService', () => {
 
   describe('signTransaction', () => {
     const requestSign: SignTransaction = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
       algorand_transaction_bytes: new TextEncoder().encode(
-        'dummy unsigned transaction'
+        'placeholder unsigned transaction'
       ),
     };
 
@@ -175,7 +175,7 @@ describe('EnclaveService', () => {
       const stubResultSigned: SignTransactionResult = {
         Signed: {
           signed_transaction_bytes: new TextEncoder().encode(
-            'dummy signed transaction'
+            'placeholder signed transaction'
           ),
         },
       };
