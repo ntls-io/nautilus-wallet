@@ -28,7 +28,7 @@ export class PayPage implements OnInit {
     groupSeparator: ',',
     digits: 2,
     digitsOptional: false,
-    prefix: 'R ',
+    prefix: 'XRP ',
     placeholder: '0',
     autoUnmask: true,
     allowMinus: false,
@@ -87,7 +87,7 @@ export class PayPage implements OnInit {
       );
 
       this.notifySuccess(
-        'R' + this.paymentForm.controls.amount.value,
+        'XRP' + this.paymentForm.controls.amount.value,
         this.wallet,
         confirmation.txId,
         new Date()
