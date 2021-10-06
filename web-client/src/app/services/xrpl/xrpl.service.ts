@@ -74,4 +74,17 @@ export class XrplService {
       return res;
     }
   }
+
+  async getBalance(address: string): Promise<string> {
+    await this.api.connect();
+    try {
+      const res = await this.api.getBalances(address);
+      return res?.find((b) => b.currency === 'XRP')?.value || '0';
+    } catch (e) {
+      console.log(e);
+      return '0';
+    } finally {
+      await this.api.disconnect();
+    }
+  }
 }
