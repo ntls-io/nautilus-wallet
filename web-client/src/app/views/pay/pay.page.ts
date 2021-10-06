@@ -130,7 +130,7 @@ export class PayPage implements OnInit {
               <small>Completed on ${timestamp.toLocaleString()}</small>
             </div>`,
         confirmButtonText: 'DONE',
-        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
+        footer: `<a href="https://testnet.xrpl.org/transactions/${txid}" target="_blank" >TxID</a>`,
       })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
