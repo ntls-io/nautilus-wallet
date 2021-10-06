@@ -11,6 +11,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import Spy = jasmine.Spy;
 
 export type Constructor<T> = new (...args: any[]) => T;
 
@@ -119,6 +120,26 @@ export const assertShowsToast = async (
   await f();
   expect(createSpy).toHaveBeenCalledOnceWith(toastOptions);
   expect(toastSpy.present).toHaveBeenCalledOnceWith();
+};
+
+/**
+ * Assert what `f` logs to the console.
+ */
+export const assertConsoleLogs = async (
+  expected: { log?: unknown[][]; error?: unknown[][] },
+  f: () => Promise<void>
+) => {
+  type ConsoleSpy = Spy<typeof console.log>;
+  const logSpy: ConsoleSpy = spyOn(console, 'log');
+  const errorSpy: ConsoleSpy = spyOn(console, 'error');
+  await f();
+
+  const getCallParams: (spy: ConsoleSpy) => unknown[][] = (
+    spy: Spy<(...data: unknown[]) => void>
+  ) => spy.calls.all().map((call) => call.args);
+
+  await expect(getCallParams(logSpy)).toEqual(expected.log ?? []);
+  await expect(getCallParams(errorSpy)).toEqual(expected.error ?? []);
 };
 
 /**
