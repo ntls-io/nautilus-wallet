@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import binaryCodec from 'ripple-binary-codec';
 import { RippleAPI, TransactionJSON } from 'ripple-lib';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
-import binaryCodec from 'ripple-binary-codec';
 import { FormattedSubmitResponse } from 'ripple-lib/dist/npm/transaction/submit';
 
 @Injectable({
