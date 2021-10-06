@@ -48,9 +48,9 @@ derive_schema_traits!(
         pub auth_pin: WalletPin,
 
         // TODO(Pi): Separate these out better.
-        #[serde(with = "serde_bytes", skip_serializing_if = "Option::is_none")]
-        pub algorand_transaction_bytes: Option<Bytes>,
-
+        // FIXME(Pi): https://github.com/serde-rs/bytes/issues/14
+        // #[serde(with = "serde_bytes", skip_serializing_if = "Option::is_none")]
+        // pub algorand_transaction_bytes: Option<ByteBuf>,
         #[serde(with = "serde_bytes", skip_serializing_if = "Option::is_none")]
         pub xrp_transaction_bytes: Option<Bytes>,
     }

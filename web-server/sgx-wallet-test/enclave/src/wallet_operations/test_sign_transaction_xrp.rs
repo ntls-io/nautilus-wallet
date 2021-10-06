@@ -16,7 +16,7 @@ pub(crate) fn sign_transaction_empty() {
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes: None,
+        /*algorand_transaction_bytes: None,*/
         xrp_transaction_bytes: Some(xrp_transaction_bytes),
     };
     let signature = match sign_transaction(request) {
