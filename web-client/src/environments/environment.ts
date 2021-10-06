@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  // TODO(Pi): Use a modal switch for the choice of ledger to use, for now.
+  ledger: 'XRP' as 'Algorand' | 'XRP',
   nautilusWalletServer: 'http://localhost:4200/api/nautilus/', // trailing slash matters
   nautilusAssetServices: 'http://localhost:4200/api/asset-services/', // trailing slash matters
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
