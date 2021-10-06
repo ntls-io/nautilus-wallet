@@ -683,6 +683,7 @@ dependencies = [
  "base64",
  "hex",
  "rand",
+ "ripple-address-codec",
  "ripple-keypairs",
  "rmp-serde",
  "secrecy",
