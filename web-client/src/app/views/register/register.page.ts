@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { createMask } from '@ngneat/input-mask';
 import { WalletService } from 'src/app/services/wallet';
 
 @Component({
@@ -16,6 +17,15 @@ import { WalletService } from 'src/app/services/wallet';
 export class RegisterPage implements OnInit {
   public registrationForm: FormGroup;
   nonValidSubmit = true;
+  numInputMask = createMask({
+    alias: 'numeric',
+    rightAlign: false,
+    placeholder: '',
+  });
+  phoneInputMask = createMask({
+    mask: '(999) 999-99-99',
+    autoUnmask: true,
+  });
 
   constructor(
     private formBuilder: FormBuilder,

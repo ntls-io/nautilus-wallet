@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, ToastController } from '@ionic/angular';
+import { createMask } from '@ngneat/input-mask';
 
 @Component({
   selector: 'app-lockscreen',
@@ -11,6 +12,11 @@ export class LockscreenPage implements OnInit {
   @Input() autofocus = true;
 
   codeForm: FormGroup;
+  numInputMask = createMask({
+    alias: 'numeric',
+    rightAlign: false,
+    placeholder: '',
+  });
 
   constructor(
     private modalCtrl: ModalController,

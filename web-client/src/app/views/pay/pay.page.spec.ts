@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { InputMaskModule } from '@ngneat/input-mask';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { PayPage } from './pay.page';
 
@@ -18,6 +19,7 @@ describe('PayPage', () => {
           RouterTestingModule,
           SharedModule,
           HttpClientTestingModule,
+          InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
         ],
       }).compileComponents();
 
