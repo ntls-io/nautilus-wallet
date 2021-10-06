@@ -27,6 +27,9 @@ export class RegisterPage implements OnInit {
     autoUnmask: true,
   });
 
+  // XXX(Pi): Temporarily disable.
+  enableMobile = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private walletService: WalletService,
@@ -42,14 +45,18 @@ export class RegisterPage implements OnInit {
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
-        mobile: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
-          ]),
-        ],
+        ...(this.enableMobile
+          ? {
+              mobile: [
+                '',
+                Validators.compose([
+                  Validators.required,
+                  Validators.minLength(10),
+                  Validators.maxLength(10),
+                ]),
+              ],
+            }
+          : {}),
         pin: [
           '',
           Validators.compose([

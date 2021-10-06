@@ -27,7 +27,7 @@
           Last Name Is Required
         </p>
       </ng-container>
-      <ng-container>
+      <ng-container *ngIf="enableMobile">
         <ion-label position="stacked" for="mobile">Mobile</ion-label>
         <ion-input
           type="text"
