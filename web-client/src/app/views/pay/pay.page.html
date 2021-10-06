@@ -19,10 +19,15 @@
                 <small>Available Balance</small>
               </ion-label>
               <ion-text slot="end" color="primary">
-                <h1 class="font-semibold m-0">
-                  R{{sessionQuery.balance| async}}
-                </h1>
+                <h3 class="font-semibold m-0">
+                  {{sessionQuery.balance| async}}
+                </h3>
               </ion-text>
+              <ion-icon
+                src="assets/icon/xrp-symbol-black.svg"
+                size="small"
+                slot="end"
+              ></ion-icon>
             </ion-item>
             <ion-item color="white">
               <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
@@ -46,14 +51,19 @@
               formControlName="amount"
               [inputMask]="currencyInputMask"
             ></ion-input>
+            <ion-icon
+              src="assets/icon/xrp-symbol-white.svg"
+              size="small"
+              slot="end"
+            ></ion-icon>
           </ion-item>
           <div class="m-5">
             <ion-button expand="block" shape="round" type="submit"
               >PAY
             </ion-button>
             <p class="text-sm text-center">
-              Please check payment amount carefully. Transaction fees up to
-              R0.01 apply.
+              Please check payment amount carefully. Transaction fees up to XRP
+              1 apply.
             </p>
           </div>
         </form>
