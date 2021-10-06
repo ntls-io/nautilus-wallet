@@ -34,4 +34,9 @@ describe('XrplService', () => {
     const res = await service.submitTransaction(txJSON, sig);
     console.log(res);
   });
+
+  it('get balance should work', async () => {
+    const balance = await service.getBalance(address);
+    console.log(balance);
+  });
 });
