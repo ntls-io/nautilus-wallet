@@ -5,6 +5,8 @@ use algonaut::crypto::HashDigest;
 use algonaut::transaction::account::Account;
 use algonaut::transaction::{Pay, Transaction, TxnBuilder};
 
+// FIXME(Pi): Temporarily disable.
+#[cfg(any())]
 pub(crate) fn create_test_transaction() -> Transaction {
     let account = Account::generate();
 

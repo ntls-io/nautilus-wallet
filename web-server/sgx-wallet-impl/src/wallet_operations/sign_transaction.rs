@@ -34,7 +34,7 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
 
     // TODO(Pi): Dispatch this better
     match (
-        &request.algorand_transaction_bytes,
+        &None, /*request.algorand_transaction_bytes*/
         &request.xrp_transaction_bytes,
     ) {
         (Some(algorand_transaction_bytes), None) => {
