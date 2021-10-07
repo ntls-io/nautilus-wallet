@@ -86,6 +86,11 @@ export const routes: Routes = [
         (m) => m.ManualAddressPageModule
       ),
   },
+  {
+    path: 'kyc',
+    loadChildren: () =>
+      import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
+  },
 ];
 
 @NgModule({
