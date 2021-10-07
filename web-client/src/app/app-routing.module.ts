@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { OpenWalletGuard } from './open-wallet.guard';
 
-// XXX(Pi): prettier ignore to work around compodoc bug: https://github.com/compodoc/compodoc/issues/954#issuecomment-708987583
+// XXX(Pi, 2021-07-05): prettier ignore to work around compodoc bug: https://github.com/compodoc/compodoc/issues/954#issuecomment-708987583
+// XXX(Pi, 2021-10-07): Is this workaround still needed?
 export const routes: Routes = [
   {
     path: '',
