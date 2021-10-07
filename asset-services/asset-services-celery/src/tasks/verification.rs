@@ -4,14 +4,19 @@ use twilio_verify::exports::{models, ApiError};
 use twilio_verify::types::{CheckVerify, StartVerify};
 
 use crate::exports::celery_prelude::TaskError;
+use crate::task_records::callbacks::{save_failure, save_success};
+
+/// Docs: <https://www.twilio.com/docs/verify/api/verification#verification-response-properties>
+pub type VerificationResponse = models::VerifyV2ServiceVerification;
 
 /// Send a verification code to a phone number using SMS.
 ///
 /// This parses a free-form `phone_number` to E.164, or raises an unexpected task error.
-///
-/// Return: <https://www.twilio.com/docs/verify/api/verification#verification-response-properties>
-#[celery::task]
-pub async fn start_verify(phone_number: String) -> TaskResult<models::VerifyV2ServiceVerification> {
+#[celery::task(
+    on_success = save_success,
+    on_failure = save_failure,
+)]
+pub async fn start_verify(phone_number: String) -> TaskResult<VerificationResponse> {
     let phone_number = &phone_number;
     let client = init_verify_client()?;
 
@@ -27,14 +32,12 @@ pub async fn start_verify(phone_number: String) -> TaskResult<models::VerifyV2Se
         .map_err(handle_api_error)
 }
 
+/// Docs: <https://www.twilio.com/docs/verify/api/verification-check#verificationcheck-response-properties>
+pub type VerificationCheckResponse = models::VerifyV2ServiceVerificationCheck;
+
 /// Check a received verification code.
-///
-/// Return: <https://www.twilio.com/docs/verify/api/verification-check#verificationcheck-response-properties>
 #[celery::task]
-pub async fn check_verify(
-    sid: String,
-    code: String,
-) -> TaskResult<models::VerifyV2ServiceVerificationCheck> {
+pub async fn check_verify(sid: String, code: String) -> TaskResult<VerificationCheckResponse> {
     let client = init_verify_client()?;
 
     let check = CheckVerify::sid(sid, code);

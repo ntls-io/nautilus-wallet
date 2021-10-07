@@ -7,12 +7,20 @@ edition = "2018"
 
 [dependencies]
 env_logger = "0.9"
+thiserror = "1.0"
 url = "2"
 
-# We want the 0.4 pre-release, for Redis broker support.
-celery = "0.4.0-rc10"
+# See: feat(error): derive Serialize, Deserialize for TaskError #274
+#      https://github.com/rusty-celery/rusty-celery/pull/274
+celery = { git = "https://github.com/PiDelport/rusty-celery", branch = "feat-task-error-derive-serde" }
 # The celery::task macro requires serde here.
 serde = "1.0"
+
+# For our task_records backend
+chrono = "*"
+redis = "*"
+serde_json = "*"
+tokio = "*"
 
 env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers" }
 twilio-verify = { path = "../twilio-verify" }
