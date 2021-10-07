@@ -38,6 +38,22 @@ pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError>
         .register_task::<tasks::verification::check_verify>()
         .await?;
 
+    celery
+        .register_task::<tasks::kyc::create_applicant>()
+        .await?;
+    celery
+        .register_task::<tasks::kyc::generate_sdk_token>()
+        .await?;
+    celery.register_task::<tasks::kyc::create_check>().await?;
+    celery.register_task::<tasks::kyc::retrieve_check>().await?;
+
+    celery
+        .register_task::<tasks::kyc::upload_document>()
+        .await?;
+    celery
+        .register_task::<tasks::kyc::upload_live_photo>()
+        .await?;
+
     Ok(celery)
 }
 
