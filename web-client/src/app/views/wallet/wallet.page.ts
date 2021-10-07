@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   faCreditCard,
   faDonate,
+  faFingerprint,
   faHandHoldingUsd,
   faQrcode,
   faReceipt,
@@ -27,6 +28,11 @@ export class WalletPage implements OnInit {
       title: 'Top Up Wallet',
       icon: faDonate,
       url: 'https://testnet.algoexplorer.io/dispenser',
+    },
+    {
+      title: 'Verify Profile',
+      icon: faFingerprint,
+      path: '../kyc',
     },
     {
       title: 'Withdraw',
