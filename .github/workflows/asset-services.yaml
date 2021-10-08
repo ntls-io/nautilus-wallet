@@ -2,6 +2,11 @@ name: "asset-services"
 
 on: push
 
+# New pushes cancel in-progress builds.
+concurrency:
+  group: ${{ github.workflow }} - ${{ github.job }} - ${{ github.ref }}
+  cancel-in-progress: true
+
 # See the web-server workflows for documentation.
 
 jobs:
