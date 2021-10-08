@@ -2,8 +2,9 @@
 # name matches APP_U in Makefile
 name = "sgx-wallet-test-app"
 version = "0.1.0"
+authors = ["Nautilus team"]
+
 edition = "2018"
-authors = ["Registree"]
 build = "build.rs"
 
 [dependencies]
