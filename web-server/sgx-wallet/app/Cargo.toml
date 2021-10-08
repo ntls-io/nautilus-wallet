@@ -2,8 +2,10 @@
 # name matches APP_U in Makefile
 name = "sgx-wallet-app"
 version = "0.1.0"
+authors = ["Nautilus team"]
+license = "Apache-2.0"
+
 edition = "2018"
-authors = ["Registree"]
 build = "build.rs"
 
 [dependencies]

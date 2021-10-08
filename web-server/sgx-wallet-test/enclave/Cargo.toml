@@ -2,8 +2,10 @@
 # name matches ENCLAVE_CARGO_LIB in Makefile
 name = "sgx-wallet-test-enclave"
 version = "0.1.0"
+authors = ["Nautilus team"]
+license = "Apache-2.0"
+
 edition = "2018"
-authors = ["Registree"]
 
 [lib]
 crate-type = ["staticlib"]

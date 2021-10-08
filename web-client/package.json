@@ -1,8 +1,9 @@
 {
   "name": "nautilus-wallet",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Nautilus team",
+  "homepage": "https://ntls.io/",
+  "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
