@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "author": "Nautilus team",
   "homepage": "https://ntls.io/",
+  "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
