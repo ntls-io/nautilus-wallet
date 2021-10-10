@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { KycPageRoutingModule } from './kyc-routing.module';
 import { KycPage } from './kyc.page';
+import { OnfidoFormComponent } from './onfido-form/onfido-form.component';
+import { OnfidoWidgetComponent } from './onfido-widget/onfido-widget.component';
 
 @NgModule({
   imports: [
@@ -14,6 +16,7 @@ import { KycPage } from './kyc.page';
     KycPageRoutingModule,
     SharedModule,
   ],
-  declarations: [KycPage],
+  declarations: [KycPage, OnfidoFormComponent, OnfidoWidgetComponent],
+  exports: [KycPage, OnfidoFormComponent, OnfidoWidgetComponent],
 })
 export class KycPageModule {}
