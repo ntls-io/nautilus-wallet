@@ -88,30 +88,40 @@ const nautilusSteps: Array<StepConfig> = [
 // - <https://developers.onfido.com/guide/sdk-customization#web>
 
 const nautilusCustomUI: UICustomizationOptions = {
+  // Typography options
   fontFamilyTitle: 'nasalization',
   fontFamilyBody: 'Open Sans',
-  colorBackgroundSurfaceModal: 'var(--ion-color-primary-background)',
-  colorBorderSurfaceModal: 'var(--ion-color-primary-background)',
-  colorContentBody: 'var(--ion-color-white)',
   colorContentTitle: 'var(--ion-color-white)',
   colorContentSubtitle: 'var(--ion-color-white)',
+  colorContentBody: 'var(--ion-color-white)',
+
+  // Modal (SDK main container)
+  colorBackgroundSurfaceModal: 'var(--ion-color-primary-background)',
+  colorBorderSurfaceModal: 'var(--ion-color-primary-background)',
+
+  // Primary Buttons
+  colorContentButtonPrimaryText: 'var(--ion-color-white)',
+  colorBackgroundButtonPrimary: 'var(--ion-color-primary)',
+  colorBackgroundButtonPrimaryHover: 'var(--ion-color-primary-shade)',
+  colorBackgroundButtonPrimaryActive: 'var(--ion-color-primary-tint)',
+  colorBorderButtonPrimary: 'var(--ion-color-primary)',
+
+  // Document Type Buttons
   colorBackgroundDocTypeButton: 'var(--ion-color-primary-background)',
   colorContentDocTypeButton: 'var(--ion-color-white)',
   colorBorderDocTypeButton: 'var(--ion-color-white)',
   colorBorderDocTypeButtonHover: 'var(--ion-color-tertiary)',
+
+  // Icon Background option
   colorBackgroundIcon: 'var(--ion-color-primary-background)',
 
-  colorContentButtonPrimaryText: 'var(--ion-color-white)',
-  colorBackgroundButtonPrimary: 'var(--ion-color-primary)',
-  colorBorderButtonPrimary: 'var(--ion-color-primary)',
-  colorBackgroundButtonPrimaryHover: 'var(--ion-color-primary-shade)',
-  colorBackgroundButtonPrimaryActive: 'var(--ion-color-primary-tint)',
+  // Links
+  colorContentLinkTextHover: 'var(--ion-color-white)',
+  colorBorderLinkUnderline: 'var(--ion-color-primary)',
+  colorBackgroundLinkHover: 'var(--ion-color-primary-shade)',
+  colorBackgroundLinkActive: 'var(--ion-color-primary-tint)',
 
+  // Icon Buttons
   colorBackgroundButtonIconHover: 'var(--ion-color-white)',
   colorBackgroundButtonIconActive: 'var(--ion-color-white)',
-
-  colorBackgroundLinkHover: 'var(--ion-color-primary-shade)',
-  colorBorderLinkUnderline: 'var(--ion-color-primary)',
-  colorContentLinkTextHover: 'var(--ion-color-white)',
-  colorBackgroundLinkActive: 'var(--ion-color-primary-tint)',
 };
