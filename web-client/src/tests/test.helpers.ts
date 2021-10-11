@@ -2,7 +2,7 @@
  * Nautilus Wallet test helpers.
  */
 
-import { DebugElement } from '@angular/core';
+import { DebugElement, EventEmitter } from '@angular/core';
 import {
   ComponentFixture,
   fakeAsync,
@@ -24,6 +24,20 @@ export const checkClass = <T>(o: unknown, cls: Constructor<T>): T => {
     const oClsName = (o as any)?.constructor?.name;
     throw new TypeError(`expected ${cls.name}, got ${oClsName}: ${o}`);
   }
+};
+
+/**
+ * Collect and return the events emitted while executing `f`.
+ */
+export const eventsEmitted = <T>(emitter: EventEmitter<T>, f: () => void) => {
+  const emitted: Array<T> = [];
+  const subscription = emitter.subscribe((value) => emitted.push(value));
+  try {
+    f();
+  } finally {
+    subscription.unsubscribe();
+  }
+  return emitted;
 };
 
 /**
