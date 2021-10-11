@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   // TODO: Production endpoint
   nautilusWalletServer: 'https://ntls-api.registree.io/',
+  nautilusAssetServices: 'https://ntls-services.registree.io/',
   algod: {
     baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
     port: '',
