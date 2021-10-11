@@ -37,7 +37,7 @@ export class OnfidoWidgetComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.onfidoHandle = init({
       token: this.getToken(),
-      // customUI: nautilusCustomUI, // TODO: Text colour?
+      customUI: nautilusCustomUI,
       steps: nautilusSteps,
 
       onComplete: (sdkResponse) => {
@@ -97,14 +97,21 @@ const nautilusCustomUI: UICustomizationOptions = {
 
   // Modal (SDK main container)
   colorBackgroundSurfaceModal: 'var(--ion-color-primary-background)',
-  colorBorderSurfaceModal: 'var(--ion-color-primary-background)',
+  borderStyleSurfaceModal: 'none',
 
   // Primary Buttons
-  colorContentButtonPrimaryText: 'var(--ion-color-white)',
+  colorContentButtonPrimaryText: 'var(--ion-color-primary-contrast)',
   colorBackgroundButtonPrimary: 'var(--ion-color-primary)',
-  colorBackgroundButtonPrimaryHover: 'var(--ion-color-primary-shade)',
+  colorBackgroundButtonPrimaryHover: 'var(--ion-color-primary-tint)',
   colorBackgroundButtonPrimaryActive: 'var(--ion-color-primary-tint)',
   colorBorderButtonPrimary: 'var(--ion-color-primary)',
+
+  // Secondary Buttons
+  colorContentButtonSecondaryText: 'var(--ion-color-secondary-contrast)',
+  colorBackgroundButtonSecondary: 'var(--ion-color-secondary)',
+  colorBackgroundButtonSecondaryHover: 'var(--ion-color-secondary-tint)',
+  colorBackgroundButtonSecondaryActive: 'var(--ion-color-secondary-tint)',
+  colorBorderButtonSecondary: 'var(--ion-color-secondary)',
 
   // Document Type Buttons
   colorBackgroundDocTypeButton: 'var(--ion-color-primary-background)',
