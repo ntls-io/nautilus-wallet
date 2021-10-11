@@ -53,6 +53,29 @@ export const componentElement = <T extends Element>(
 };
 
 /**
+ * Retrieve a test component `DebugElement`, by CSS selector.
+ */
+export const componentDebugElement = (
+  fixture: ComponentFixture<unknown>,
+  selector: string
+) => checkClass(fixture.debugElement.query(By.css(selector)), DebugElement);
+
+/**
+ * Trigger a `DebugElement` event inside a test component.
+ *
+ * Related docs: <https://angular.io/guide/testing-components-scenarios#click-helper>
+ */
+export const componentDebugEvent = (
+  fixture: ComponentFixture<unknown>,
+  selector: string,
+  eventName: string,
+  eventObj?: unknown
+): void => {
+  const debugElement = componentDebugElement(fixture, selector);
+  debugElement.triggerEventHandler(eventName, eventObj);
+};
+
+/**
  * Verify that the fixture has a button that successfully navigates to the given `routerLink`.
  */
 export const verifyNavigationTrigger = async (
