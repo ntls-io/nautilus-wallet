@@ -8,6 +8,15 @@
     },
     "logLevel": "debug"
   },
+  "/api/asset-services": {
+    "target": "https://ntls-services.registree.io/",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/asset-services": ""
+    },
+    "logLevel": "debug"
+  },
   "/api/algorand": {
     "target": "https://testnet-algorand.api.purestake.io/ps2",
     "secure": true,
