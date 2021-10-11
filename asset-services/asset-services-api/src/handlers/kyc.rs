@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::errors::AnyhowErrorResponse;
 
-const DEFAULT_TIMEOUT: Duration = Duration::from_secs(5);
+const DEFAULT_TIMEOUT: Duration = Duration::from_secs(15);
 
 /// Request for [`start_kyc`].
 #[derive(Deserialize)]
