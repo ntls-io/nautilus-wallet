@@ -86,6 +86,7 @@ dependencies = [
  "log",
  "serde",
  "tokio",
+ "tower-http",
 ]
 
 [[package]]
@@ -1830,8 +1831,7 @@ dependencies = [
 [[package]]
 name = "tower-http"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b7b56efe69aa0ad2b5da6b942e57ea9f6fe683b7a314d4ff48662e2c8838de1"
+source = "git+https://github.com/tower-rs/tower-http?branch=cors#9f09fc55bf74b5b9a8bd79cbede7e73d37a3e79b"
 dependencies = [
  "bytes",
  "futures-core",
