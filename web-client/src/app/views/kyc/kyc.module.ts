@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { KycPageRoutingModule } from './kyc-routing.module';
@@ -12,6 +12,7 @@ import { OnfidoWidgetComponent } from './onfido-widget/onfido-widget.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     KycPageRoutingModule,
     SharedModule,

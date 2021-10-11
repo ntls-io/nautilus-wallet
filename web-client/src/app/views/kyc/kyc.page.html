@@ -3,5 +3,9 @@
 </ion-header>
 
 <ion-content>
-  <div id="onfido-mount" class="h-full mx-5 pb-10"></div>
+  <app-onfido-form
+    *ngIf="!token"
+    (submitted)="onSubmit($event)"
+  ></app-onfido-form>
+  <app-onfido-widget *ngIf="token" [token]="token"></app-onfido-widget>
 </ion-content>
