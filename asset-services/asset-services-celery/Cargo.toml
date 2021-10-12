@@ -8,6 +8,8 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0"
 env_logger = "0.9"
+log = "0.4"
+strum = { version = "0.21", features = ["derive"] }
 thiserror = "1.0"
 url = "2"
 
