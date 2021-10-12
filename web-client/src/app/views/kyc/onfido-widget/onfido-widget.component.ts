@@ -42,11 +42,13 @@ export class OnfidoWidgetComponent implements OnInit, OnDestroy {
 
       onComplete: (sdkResponse) => {
         this.completed.emit(sdkResponse);
+        this.onfidoHandle?.tearDown();
       },
     });
   }
 
   ngOnDestroy() {
+    console.log('OnfidoWidgetComponent tearDown');
     this.onfidoHandle?.tearDown();
   }
 
@@ -75,7 +77,7 @@ const nautilusSteps: Array<StepConfig> = [
   {
     type: 'face',
     options: {
-      uploadFallback: false,
+      uploadFallback: true,
       requestedVariant: 'video',
     },
   },
