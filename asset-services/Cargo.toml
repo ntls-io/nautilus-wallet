@@ -7,3 +7,9 @@ members = [
     'onfido',
     'twilio-verify',
 ]
+
+
+[patch.crates-io]
+# XXX(Pi): Upstream PR: Add Cors for setting CORS headers
+#          <https://github.com/tower-rs/tower-http/pull/112>
+tower-http = { git = "https://github.com/tower-rs/tower-http", branch = "cors" }
