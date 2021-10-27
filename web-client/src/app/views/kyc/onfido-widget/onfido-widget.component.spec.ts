@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { OnfidoWidgetComponent } from './onfido-widget.component';
 
@@ -10,19 +10,17 @@ describe('OnfidoWidgetComponent', () => {
   let component: OnfidoWidgetComponent;
   let fixture: ComponentFixture<OnfidoWidgetComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [OnfidoWidgetComponent],
-        imports: [IonicModule.forRoot()],
-      }).compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [OnfidoWidgetComponent],
+      imports: [IonicModule.forRoot()],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(OnfidoWidgetComponent);
-      component = fixture.componentInstance;
-      component.token = PLACEHOLDER_JWT;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(OnfidoWidgetComponent);
+    component = fixture.componentInstance;
+    component.token = PLACEHOLDER_JWT;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
