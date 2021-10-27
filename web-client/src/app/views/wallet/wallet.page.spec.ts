@@ -50,7 +50,11 @@ describe('WalletPage', () => {
     expect(heading.textContent?.trim()).toBe(`Wallet Owner's Wallet`);
   });
 
-  const routerLinks: string[] = ['/wallet/send-funds', '/wallet/receive'];
+  const routerLinks: string[] = [
+    '/wallet/send-funds',
+    '/wallet/receive',
+    '/kyc',
+  ];
 
   for (const routerLink of routerLinks) {
     it(`navigates to ${routerLink}`, async (): Promise<void> => {
