@@ -6,7 +6,7 @@ import {
   Check,
   OnfidoKycStarted,
   OnfidoService,
-} from 'src/app/stores/onfido/onfido.service';
+} from 'src/app/services/onfido.service';
 import { KycPage } from './kyc.page';
 import { OnfidoFormValue } from './onfido-form/onfido-form.component';
 import Spy = jasmine.Spy;

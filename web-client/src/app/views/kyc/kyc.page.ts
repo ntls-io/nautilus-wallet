@@ -5,7 +5,7 @@ import {
   Check,
   OnfidoKycStarted,
   OnfidoService,
-} from 'src/app/stores/onfido/onfido.service';
+} from 'src/app/services/onfido.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlay } from 'src/app/utils/loading.helpers';
 import { OnfidoFormValue } from 'src/app/views/kyc/onfido-form/onfido-form.component';
