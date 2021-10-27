@@ -2,7 +2,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
-import { Check, OnfidoKycStarted, OnfidoService } from 'src/app/stores/onfido';
+import {
+  Check,
+  OnfidoKycStarted,
+  OnfidoService,
+} from 'src/app/stores/onfido/onfido.service';
 import { KycPage } from './kyc.page';
 import { OnfidoFormValue } from './onfido-form/onfido-form.component';
 import Spy = jasmine.Spy;

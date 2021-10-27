@@ -1,7 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
-import { Check, OnfidoKycStarted, OnfidoService } from 'src/app/stores/onfido';
+import {
+  Check,
+  OnfidoKycStarted,
+  OnfidoService,
+} from 'src/app/stores/onfido/onfido.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlay } from 'src/app/utils/loading.helpers';
 import { OnfidoFormValue } from 'src/app/views/kyc/onfido-form/onfido-form.component';
