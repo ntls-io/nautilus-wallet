@@ -36,7 +36,11 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Install dependencies (NPM)
-        run: npm ci
+        # XXX(Pi): "npm ci" is currently broken: <https://github.com/npm/cli/issues/3947>
+        #          Work around this by using "npm install" followed by a git working copy check.
+        run: |
+          npm install
+          git diff --exit-code
 
       # TODO: The steps below could be done in parallel.
 
