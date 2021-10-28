@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SessionStore } from 'src/app/stores/session';
 import {
   componentElement,
   verifyNavigationTrigger,
 } from 'src/tests/test.helpers';
+import { WalletPageModule } from './wallet.module';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -23,7 +23,7 @@ describe('WalletPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
-          SharedModule,
+          WalletPageModule,
         ],
       }).compileComponents();
       router = TestBed.inject(Router);
@@ -35,6 +35,12 @@ describe('WalletPage', () => {
       sessionStore.update({
         name: 'Wallet Owner',
         walletId: 'fake', // Satisfy OpenWalletGuard
+
+        // For the balance checks:
+        algorandAccount: {
+          address: 'placeholder address',
+          amount: 0,
+        },
       });
 
       fixture.detectChanges();
