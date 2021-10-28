@@ -9,9 +9,11 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
+import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { WalletService } from 'src/app/services/wallet';
 import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pay',
@@ -76,22 +78,24 @@ export class PayPage implements OnInit {
         message: 'Confirming Transaction',
       });
       loading.present();
+      const amount = parseFloat(this.paymentForm.controls.amount.value);
+      console.log('PayPage.onSubmit: sending', { amount });
+      let confirmation: TransactionConfirmation;
       try {
-        console.log(this.paymentForm.controls.amount.value);
-        await this.walletService.sendFunds(
+        confirmation = await this.walletService.sendAssetFunds(
+          environment.defaultAlgorandAssetId,
           this.wallet,
-          this.paymentForm.controls.amount.value
+          amount
         );
       } finally {
         loading.dismiss();
       }
 
-      const { transactionId } = this.sessionQuery.getValue();
-
       this.notifySuccess(
-        'R' + this.paymentForm.controls.amount.value,
+        // TODO(Pi): Use asset unit, rather than 'R'
+        'R' + amount,
         this.wallet,
-        transactionId,
+        confirmation.txId,
         new Date()
       );
       //TODO: ()=>{send payment}
@@ -118,9 +122,12 @@ export class PayPage implements OnInit {
   notifySuccess(
     amount: string,
     address: string,
-    txid: string,
+    txId: string,
     timestamp: Date
   ) {
+    const txIdHtml = environment.algorandTransactionUrlPrefix
+      ? `<a href="${environment.algorandTransactionUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
     this.notification.swal
       .fire({
         icon: 'success',
@@ -128,11 +135,11 @@ export class PayPage implements OnInit {
         text: `Your money was sent successfully.`,
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
-              <p class="text-xs">${address}</p>
-              <small>Completed on ${timestamp.toLocaleString()}</small>
+              <p class="text-xs"><b>Receiver:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
         confirmButtonText: 'DONE',
-        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
       })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
