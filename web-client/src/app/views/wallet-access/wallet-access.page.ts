@@ -6,8 +6,11 @@ import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
 import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import {
+  LockscreenPage,
+  LockscreenResult,
+} from 'src/app/views/lockscreen/lockscreen.page';
 import { ScannerService } from '../../services/scanner.service';
-import { LockscreenPage } from '../lockscreen/lockscreen.page';
 import { handleScan } from '../scanner.helpers';
 
 @Component({
@@ -73,10 +76,10 @@ export class WalletAccessPage implements OnInit {
     }
   }
 
-  async presentLock(): Promise<string> {
+  async presentLock(): Promise<string | undefined> {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
-    const result = lock.onWillDismiss();
+    const result = lock.onDidDismiss<LockscreenResult>();
     await lock.present();
 
     const { data } = await result;

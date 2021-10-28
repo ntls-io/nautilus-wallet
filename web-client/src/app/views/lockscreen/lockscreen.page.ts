@@ -3,6 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, ToastController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
 
+export type LockscreenResult = {
+  success: boolean;
+  pin: string;
+};
+
 @Component({
   selector: 'app-lockscreen',
   templateUrl: './lockscreen.page.html',
@@ -42,7 +47,7 @@ export class LockscreenPage implements OnInit {
     this.modalCtrl.dismiss({
       success,
       pin: this.codeForm.controls.code.value,
-    });
+    } as LockscreenResult);
   }
   //TODO: implement function
   onSubmit() {
