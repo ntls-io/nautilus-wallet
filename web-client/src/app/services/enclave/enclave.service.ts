@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import algosdk from 'algosdk';
+import algosdk, { Transaction } from 'algosdk';
 import { lastValueFrom } from 'rxjs';
+import {
+  AccountData,
+  TransactionConfirmation,
+  waitForConfirmation,
+} from 'src/app/services/algosdk.utils';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
@@ -12,6 +17,8 @@ import {
   SignTransactionResult,
 } from 'src/schema/actions';
 import {
+  AssetTransferRequiredParameters,
+  makeAssetTransferTxnHelper,
   makePaymentTxnHelper,
   OptionalParameters,
   RequiredParameters,
@@ -20,7 +27,6 @@ import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
 import { from_msgpack_as } from 'src/schema/msgpack';
 import { seal_msgpack_as, unseal_msgpack_as } from 'src/schema/sealing';
-import { TransactionConfirmation, waitForConfirmation } from '../algosdk.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -71,14 +77,33 @@ export class EnclaveService {
     return result;
   }
 
-  async getBalance(address: string): Promise<number> {
+  // Algorand network interface functions:
+
+  async getAccount(address: string): Promise<AccountData> {
     const algodClient = this.getAlgodClient();
-    const accountDetails = await algodClient.accountInformation(address).do();
-    // https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
-    return accountDetails.amount as number;
+    return (await algodClient.accountInformation(address).do()) as AccountData;
   }
 
-  // Algorand network interface functions:
+  async createUnsignedAssetTransferTxn(
+    required: AssetTransferRequiredParameters,
+    optional?: OptionalParameters
+  ): Promise<Transaction> {
+    const algodClient = this.getAlgodClient();
+    const suggestedParams = await algodClient.getTransactionParams().do();
+    return makeAssetTransferTxnHelper(suggestedParams, required, optional);
+  }
+
+  async createUnsignedAssetOptInTxn(
+    address: string,
+    assetIndex: number
+  ): Promise<Transaction> {
+    return await this.createUnsignedAssetTransferTxn({
+      from: address,
+      to: address,
+      amount: 0,
+      assetIndex,
+    });
+  }
 
   async createUnsignedTransaction(
     required: RequiredParameters,
