@@ -2,11 +2,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
-import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import {
   expectModalScannerPresented,
   stubModalScannerResult,
-} from '../scanner.helpers.spec';
+} from 'src/tests/modal.helpers.spec';
+import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import { WalletAccessPage } from './wallet-access.page';
 
 describe('WalletAccessPage', () => {

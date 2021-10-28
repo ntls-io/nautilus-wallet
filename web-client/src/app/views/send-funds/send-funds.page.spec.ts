@@ -6,7 +6,7 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 import {
   expectModalScannerPresented,
   stubModalScannerResult,
-} from '../scanner.helpers.spec';
+} from 'src/tests/modal.helpers.spec';
 import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 

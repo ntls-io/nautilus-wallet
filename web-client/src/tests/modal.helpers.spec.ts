@@ -1,5 +1,5 @@
 import { ModalController } from '@ionic/angular';
-import { ScannerPage, ScanResult } from './scanner/scanner.page';
+import { ScannerPage, ScanResult } from 'src/app/views/scanner/scanner.page';
 
 export type ModalScannerSpies = {
   modalCreateSpy: jasmine.Spy<ModalController['create']>;
