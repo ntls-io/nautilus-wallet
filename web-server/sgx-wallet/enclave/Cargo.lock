@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "algonaut"
 version = "0.3.0"
-source = "git+https://github.com/registreerocks/algonaut-sgx?branch=v0.3.0-sgx#765e6cb79df50d9fc06e7a23f34ef45cfde19c6c"
+source = "git+https://github.com/registreerocks/algonaut-sgx?branch=main-sgx#4c2a24f5ba08e6623f0103853396f417b10d097b"
 dependencies = [
  "algonaut_core",
  "algonaut_crypto",
@@ -16,7 +16,7 @@ dependencies = [
 [[package]]
 name = "algonaut_core"
 version = "0.3.0"
-source = "git+https://github.com/registreerocks/algonaut-sgx?branch=v0.3.0-sgx#765e6cb79df50d9fc06e7a23f34ef45cfde19c6c"
+source = "git+https://github.com/registreerocks/algonaut-sgx?branch=main-sgx#4c2a24f5ba08e6623f0103853396f417b10d097b"
 dependencies = [
  "algonaut_crypto",
  "algonaut_encoding",
@@ -33,7 +33,7 @@ dependencies = [
 [[package]]
 name = "algonaut_crypto"
 version = "0.3.0"
-source = "git+https://github.com/registreerocks/algonaut-sgx?branch=v0.3.0-sgx#765e6cb79df50d9fc06e7a23f34ef45cfde19c6c"
+source = "git+https://github.com/registreerocks/algonaut-sgx?branch=main-sgx#4c2a24f5ba08e6623f0103853396f417b10d097b"
 dependencies = [
  "algonaut_encoding",
  "data-encoding",
@@ -51,7 +51,7 @@ dependencies = [
 [[package]]
 name = "algonaut_encoding"
 version = "0.3.0"
-source = "git+https://github.com/registreerocks/algonaut-sgx?branch=v0.3.0-sgx#765e6cb79df50d9fc06e7a23f34ef45cfde19c6c"
+source = "git+https://github.com/registreerocks/algonaut-sgx?branch=main-sgx#4c2a24f5ba08e6623f0103853396f417b10d097b"
 dependencies = [
  "data-encoding",
  "serde",
@@ -61,7 +61,7 @@ dependencies = [
 [[package]]
 name = "algonaut_transaction"
 version = "0.3.0"
-source = "git+https://github.com/registreerocks/algonaut-sgx?branch=v0.3.0-sgx#765e6cb79df50d9fc06e7a23f34ef45cfde19c6c"
+source = "git+https://github.com/registreerocks/algonaut-sgx?branch=main-sgx#4c2a24f5ba08e6623f0103853396f417b10d097b"
 dependencies = [
  "algonaut_core",
  "algonaut_crypto",
@@ -75,7 +75,6 @@ dependencies = [
  "rmp-serde",
  "serde",
  "serde_bytes",
- "serde_json",
  "sgx_tstd",
  "sha2",
  "thiserror",

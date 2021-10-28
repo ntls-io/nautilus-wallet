@@ -31,7 +31,7 @@ serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx" }
 thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
 
 # Our SGX forks
-algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
+algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "main-sgx" }
 serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" } # SGX: registreerocks fork for 0.11.4
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
