@@ -2,11 +2,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
-import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import {
-  expectModalScannerPresented,
-  stubModalScannerResult,
-} from '../scanner.helpers.spec';
+  LockscreenPage,
+  LockscreenResult,
+} from 'src/app/views/lockscreen/lockscreen.page';
+import {
+  withStubbedModal,
+  withStubbedModalScanner,
+} from 'src/tests/modal.helpers.spec';
+import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
+import { WalletAccessPageModule } from './wallet-access.module';
 import { WalletAccessPage } from './wallet-access.page';
 
 describe('WalletAccessPage', () => {
@@ -20,6 +25,7 @@ describe('WalletAccessPage', () => {
         declarations: [WalletAccessPage],
         imports: [
           IonicModule.forRoot(),
+          WalletAccessPageModule,
           RouterTestingModule,
           HttpClientTestingModule,
         ],
@@ -37,30 +43,64 @@ describe('WalletAccessPage', () => {
   });
 
   it('#openScanner should fire alert if camera permission request fails', async () => {
-    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
-      type: 'permissionDenied',
-    });
-
     // TODO: Implement this by wrapping swal in a service or using ngx-sweetalert2
 
     const swalSpy: jasmine.Spy<SwalFire> = spyOn(Swal, 'fire');
-    await component.openScanner();
+
+    await withStubbedModalScanner(
+      modalCtrl,
+      { type: 'permissionDenied' },
+      async () => {
+        await component.openScanner();
+      }
+    );
 
     expect(swalSpy).toHaveBeenCalledOnceWith({
       icon: 'error',
       title: 'Permission required',
       text: `In order to scan a QR Code, you need to grant camera's permission`,
     });
-    expectModalScannerPresented(modalScannerSpies);
   });
 
   it('#openScanner should create the a modal with the scanner page if camera permission request succeeds', async () => {
-    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
-      type: 'dismissed',
+    await withStubbedModalScanner(
+      modalCtrl,
+      { type: 'dismissed' },
+      async () => {
+        await component.openScanner();
+      }
+    );
+  });
+
+  describe('presentLock', () => {
+    // This test checks that the LockscreenPage and its dependencies load correctly,
+    // to catch things like incorrect imports.
+    it('loads and dismisses', async () => {
+      const promise = component.presentLock();
+
+      // XXX(Pi): We can only call modalCtrl.dismiss() after presentLock() calls present(),
+      //          but we don't have an easy way to wait for that.
+      //          This hacky setTimeout works, for now.
+      //          (500 ms seems to be about the right amount to wait reliably; 100 ms is too low.)
+      setTimeout(async () => {
+        await modalCtrl.dismiss();
+      }, 500);
+
+      const result = await promise;
+      expect(result).toBe(undefined);
     });
 
-    await component.openScanner();
-    expectModalScannerPresented(modalScannerSpies);
+    it('returns pin', async () => {
+      await withStubbedModal<LockscreenResult>(
+        modalCtrl,
+        LockscreenPage,
+        { success: true, pin: '1234' },
+        async () => {
+          const pin = await component.presentLock();
+          expect(pin).toBe('1234');
+        }
+      );
+    });
   });
 });
 

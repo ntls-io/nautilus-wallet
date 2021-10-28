@@ -3,10 +3,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import {
-  expectModalScannerPresented,
-  stubModalScannerResult,
-} from '../scanner.helpers.spec';
+import { withStubbedModalScanner } from 'src/tests/modal.helpers.spec';
 import { routes } from '../wallet/wallet-routing.module';
 import { SendFundsPage } from './send-funds.page';
 
@@ -40,13 +37,13 @@ describe('SendFundsPage', () => {
   });
 
   it('#presentScanner should create a modal with the scanner component', async () => {
-    const modalScannerSpies = stubModalScannerResult(modalCtrl, {
-      type: 'dismissed',
-    });
-
-    await component.presentScanner();
-
-    expectModalScannerPresented(modalScannerSpies);
+    await withStubbedModalScanner(
+      modalCtrl,
+      { type: 'dismissed' },
+      async () => {
+        await component.presentScanner();
+      }
+    );
   });
 
   it('#execItemAction should call presentScanner', () => {
