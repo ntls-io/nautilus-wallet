@@ -1,4 +1,4 @@
-use std::prelude::v1::{String, Vec};
+use std::prelude::v1::{String, ToString, Vec};
 
 use algonaut::core::{Address, MicroAlgos, Round};
 use algonaut::crypto::HashDigest;
@@ -34,7 +34,7 @@ pub(crate) fn prop_transaction_msgpack_roundtrips() {
             }
         );
 
-        prop_transaction_msgpack_roundtrips_impl(&Transaction {
+        prop_transaction_msgpack_roundtrips_impl(Transaction {
             fee: MicroAlgos(fee),
             first_valid: Round(first_valid),
             genesis_hash: HashDigest(genesis_hash),
@@ -49,8 +49,30 @@ pub(crate) fn prop_transaction_msgpack_roundtrips() {
     });
 }
 
-fn prop_transaction_msgpack_roundtrips_impl(transaction: &Transaction) {
-    let bytes = &algorand_network_compatible::to_msgpack(transaction).unwrap();
-    let transaction2 = &algorand_network_compatible::from_msgpack(bytes).unwrap();
-    assert_eq!(transaction, transaction2);
+fn prop_transaction_msgpack_roundtrips_impl(transaction: Transaction) {
+    let bytes = algorand_network_compatible::to_msgpack(&transaction).unwrap();
+    let transaction2 = algorand_network_compatible::from_msgpack(&bytes).unwrap();
+
+    // XXX: See the serialization documentation comments for [`ApiTransaction`].
+    //      The transaction serialization will discard certain default / "empty" values,
+    //      treating them as absent. The test expects the same here.
+    let expected = Transaction {
+        genesis_id: collapse("".to_string(), transaction.genesis_id),
+        note: collapse(vec![], transaction.note),
+        ..transaction
+    };
+
+    assert_eq!(expected, transaction2);
+}
+
+/// Helper: Collapse `Some(empty)` to `None`.
+fn collapse<T>(empty: T, value: Option<T>) -> Option<T>
+where
+    T: PartialEq,
+{
+    if value == Some(empty) {
+        None
+    } else {
+        value
+    }
 }

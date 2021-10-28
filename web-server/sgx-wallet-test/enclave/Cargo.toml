@@ -31,7 +31,7 @@ rmp-serde = { git = "https://github.com/mesalock-linux/msgpack-rust-sgx" }
 serde = { git = "https://github.com/mesalock-linux/serde-sgx" }
 
 # Our SGX forks
-algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "v0.3.0-sgx" }
+algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "main-sgx" }
 
 sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 
