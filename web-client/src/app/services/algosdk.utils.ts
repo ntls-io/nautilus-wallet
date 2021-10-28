@@ -3,6 +3,7 @@
  */
 
 import { Algodv2, EncodedSignedTransaction } from 'algosdk';
+import { defined, panic } from 'src/app/utils/errors/panic';
 
 export type TransactionConfirmation = {
   txn: EncodedSignedTransaction;
@@ -101,4 +102,43 @@ const checkString = (value: unknown): string => {
     console.error(message, value);
     throw new TypeError(`${message}: ${value}`);
   }
+};
+
+// Extract a single asset balance from an `AccountData` result.
+export const extractAlgorandAssetBalance = (
+  algorandAccount: AccountData,
+  assetId: number
+) => {
+  for (const asset of defined(algorandAccount?.assets)) {
+    if (asset['asset-id'] === assetId) {
+      return noBigintSupport(asset.amount);
+    }
+  }
+  return null;
+};
+
+// Panic if value is `bigint`, for now.
+export const noBigintSupport = (value: number | bigint): number => {
+  if (typeof value === 'bigint') {
+    throw panic('bigint support not implemented yet', value);
+  }
+  return value;
+};
+
+// XXX(Pi): Algosdk does not seem to expose the network (dashed-identifier) versions of these types,
+//          so define a subset here.
+
+// Docs: https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
+export type AccountData = {
+  address: string;
+  amount: number;
+  assets?: AssetHolding[];
+};
+
+// Docs: https://developer.algorand.org/docs/rest-apis/algod/v2/#assetholding
+export type AssetHolding = {
+  amount: number;
+  'asset-id': number;
+  creator: string;
+  'is-frozen': boolean;
 };
