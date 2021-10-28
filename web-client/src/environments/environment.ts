@@ -15,6 +15,7 @@ export const environment = {
     // FIXME: Development key
     token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
+  algorandTransactionUrlPrefix: undefined,
   // FIXME: Development asset
   defaultAlgorandAssetId: 2,
 };
