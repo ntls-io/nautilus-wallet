@@ -3,14 +3,15 @@ import { Environment } from 'src/environments/types';
 export const environment: Environment = {
   production: true,
   // TODO: Production endpoint
-  nautilusWalletServer: 'https://ntls-api.registree.io/',
+  nautilusWalletServer: 'https://algo-api.registree.io/',
   nautilusAssetServices: 'https://ntls-services.registree.io/',
+
   algod: {
-    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
+    baseServer: 'https://api.customer-one.xyz/ps2',
     port: '',
-    // FIXME: Development key
-    token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
+    token: { 'X-API-Key': 'xL4X4Gh9r163Pxx3tnF5K9KQYWGfpikB6wLsBnFJ' },
   },
-  algorandTransactionUrlPrefix: 'https://testnet.algoexplorer.io/tx/',
-  defaultAlgorandAssetDecimals: 3, // TODO: Obtain this from the asset params.
+  algorandTransactionUrlPrefix:
+    'https://goalseeker.customer-one.xyz/c1/mainnet/transaction/',
+  defaultAlgorandAssetId: 54398,
 };
