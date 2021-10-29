@@ -78,7 +78,12 @@ export class PayPage implements OnInit {
         message: 'Confirming Transaction',
       });
       loading.present();
-      const amount = parseFloat(this.paymentForm.controls.amount.value);
+
+      // Convert the entered amount from display decimals to asset units.
+      const amount =
+        parseFloat(this.paymentForm.controls.amount.value) *
+        10 ** environment.defaultAlgorandAssetDecimals;
+
       console.log('PayPage.onSubmit: sending', { amount });
       let confirmation: TransactionConfirmation;
       try {
