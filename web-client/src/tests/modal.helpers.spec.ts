@@ -1,5 +1,5 @@
 import { ModalController } from '@ionic/angular';
-import { ComponentRef } from '@ionic/core';
+import { ModalOptions } from '@ionic/core';
 import { ScannerPage, ScanResult } from 'src/app/views/scanner/scanner.page';
 
 export type ModalSpies = {
@@ -23,11 +23,9 @@ export const stubModalResult = <R>(
 /** Expect a modal with the given component to have been presented. */
 export const expectModalComponentPresented = (
   spies: ModalSpies,
-  expectedComponent: ComponentRef
+  expectedCreateOpts: ModalOptions
 ): void => {
-  expect(spies.modalCreateSpy).toHaveBeenCalledOnceWith({
-    component: expectedComponent,
-  });
+  expect(spies.modalCreateSpy).toHaveBeenCalledOnceWith(expectedCreateOpts);
   expect(spies.modalSpy.present).toHaveBeenCalledOnceWith();
 };
 
@@ -36,13 +34,13 @@ export const expectModalComponentPresented = (
  */
 export const withStubbedModal = async <R>(
   modalCtrl: ModalController,
-  expectedComponent: ComponentRef,
+  expectedCreateOpts: ModalOptions,
   dismissResult: R,
   f: () => Promise<void>
 ): Promise<void> => {
   const modalSpies = stubModalResult(modalCtrl, dismissResult);
   await f();
-  expectModalComponentPresented(modalSpies, expectedComponent);
+  expectModalComponentPresented(modalSpies, expectedCreateOpts);
 };
 
 /**
@@ -55,7 +53,7 @@ export const withStubbedModalScanner = async (
 ): Promise<void> => {
   await withStubbedModal<ScanResult>(
     modalCtrl,
-    ScannerPage,
+    { component: ScannerPage },
     dismissResult,
     async () => {
       await f();

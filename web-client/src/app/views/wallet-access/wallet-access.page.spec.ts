@@ -93,7 +93,7 @@ describe('WalletAccessPage', () => {
     it('returns pin', async () => {
       await withStubbedModal<LockscreenResult>(
         modalCtrl,
-        LockscreenPage,
+        { component: LockscreenPage },
         { success: true, pin: '1234' },
         async () => {
           const { pin } = await component.presentLock();
