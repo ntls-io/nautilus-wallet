@@ -29,7 +29,9 @@ export const provideActivatedRouteQueryParams = (
 /**
  * Define a `SessionStore` provider initialised with the given session state.
  */
-export const provideSessionStore = (state: SessionState): Provider => ({
+export const provideSessionStore = (
+  state: Partial<SessionState>
+): Provider => ({
   provide: SessionStore,
   useValue: newSessionStore(state),
 });
