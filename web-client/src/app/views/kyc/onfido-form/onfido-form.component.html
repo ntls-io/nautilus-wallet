@@ -1,0 +1,35 @@
+<form [formGroup]="nameForm" (ngSubmit)="onSubmit()">
+  <ion-text color="white">
+    <h1 class="text-center font-nasalization">Verify Identity</h1>
+  </ion-text>
+
+  <ion-item lines="none">
+    <ion-label position="stacked">First name(s)</ion-label>
+    <ion-input
+      name="firstName"
+      formControlName="firstName"
+      required="true"
+      inputmode="text"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="stacked">Last name</ion-label>
+    <ion-input
+      name="lastName"
+      formControlName="lastName"
+      required="true"
+      inputmode="text"
+    ></ion-input>
+  </ion-item>
+
+  <div class="ion-padding">
+    <ion-button
+      type="submit"
+      expand="block"
+      shape="round"
+      [disabled]="nameForm.invalid"
+      >Start</ion-button
+    >
+  </div>
+</form>

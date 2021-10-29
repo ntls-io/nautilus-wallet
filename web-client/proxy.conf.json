@@ -1,10 +1,19 @@
 {
   "/api/nautilus": {
     "target": "https://ntls-api.registree.io/",
-    "secure": false,
+    "secure": true,
     "changeOrigin": true,
     "pathRewrite": {
       "^/api/nautilus": ""
+    },
+    "logLevel": "debug"
+  },
+  "/api/asset-services": {
+    "target": "https://ntls-services.registree.io/",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/asset-services": ""
     },
     "logLevel": "debug"
   },

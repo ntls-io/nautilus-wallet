@@ -1,0 +1,25 @@
+#onfido-mount {
+  // Replace var(--ion-color-step-900)
+  --ods-color-neutral-900: 230, 235, 238;
+  --ods-color-neutral-800: 204, 214, 220;
+  --ods-color-neutral-700: 179, 194, 203;
+  --ods-color-neutral-600: 153, 174, 185;
+  --ods-color-neutral-500: 128, 154, 168;
+  --ods-color-neutral-400: 102, 133, 150;
+  --ods-color-neutral-300: 77, 113, 133;
+  --ods-color-neutral-200: 51, 93, 115;
+  --ods-color-neutral-050: 13, 62, 89;
+
+  // FIXME(Pi): Replace these with an SCSS function (troubleshoot why this isn't being processed?):
+  //            @function rgb-triplet($color) { @return red($color), green($color), blue($color); }
+  //            --ods-color-neutral-900: rgb-triplet(var(--ion-color-step-900));
+}
+
+// Fix some hardcoded Onfido widget styles that don't work with dark backgrounds.
+// XXX(Pi): ::ng-deep seems to be the least terrible way of doing this, right now?
+:host ::ng-deep {
+  .onfido-sdk-ui-CountrySelector-custom__input,
+  .onfido-sdk-ui-CountrySelector-custom__menu {
+    background-color: rgba(var(--ods-color-neutral-050));
+  }
+}

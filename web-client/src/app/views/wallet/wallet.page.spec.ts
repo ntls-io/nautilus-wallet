@@ -50,21 +50,15 @@ describe('WalletPage', () => {
     expect(heading.textContent?.trim()).toBe(`Wallet Owner's Wallet`);
   });
 
-  it('navigates to send funds', async (): Promise<void> => {
-    await verifyNavigationTrigger(
-      router,
-      fixture,
-      '/wallet',
-      '/wallet/send-funds'
-    );
-  });
+  const routerLinks: string[] = [
+    '/wallet/send-funds',
+    '/wallet/receive',
+    '/kyc',
+  ];
 
-  it('navigates to receive', async (): Promise<void> => {
-    await verifyNavigationTrigger(
-      router,
-      fixture,
-      '/wallet',
-      '/wallet/receive'
-    );
-  });
+  for (const routerLink of routerLinks) {
+    it(`navigates to ${routerLink}`, async (): Promise<void> => {
+      await verifyNavigationTrigger(router, fixture, '/wallet', routerLink);
+    });
+  }
 });

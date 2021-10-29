@@ -91,6 +91,9 @@ ion-textarea {
   }
 }
 
+.onfido-sdk-ui-Modal-inner {
+  @apply w-full h-full #{!important};
+}
 // iOS specific (not supported atm)
 .ios {
   --ion-toolbar-background: var(--ion-color-primary-background);

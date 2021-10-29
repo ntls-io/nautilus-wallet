@@ -2,7 +2,7 @@
  * Nautilus Wallet test helpers.
  */
 
-import { DebugElement } from '@angular/core';
+import { DebugElement, EventEmitter } from '@angular/core';
 import {
   ComponentFixture,
   fakeAsync,
@@ -11,6 +11,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import Spy = jasmine.Spy;
 
 export type Constructor<T> = new (...args: any[]) => T;
 
@@ -27,6 +28,20 @@ export const checkClass = <T>(o: unknown, cls: Constructor<T>): T => {
 };
 
 /**
+ * Collect and return the events emitted while executing `f`.
+ */
+export const eventsEmitted = <T>(emitter: EventEmitter<T>, f: () => void) => {
+  const emitted: Array<T> = [];
+  const subscription = emitter.subscribe((value) => emitted.push(value));
+  try {
+    f();
+  } finally {
+    subscription.unsubscribe();
+  }
+  return emitted;
+};
+
+/**
  * Retrieve a test component DOM element.
  */
 export const componentElement = <T extends Element>(
@@ -36,6 +51,29 @@ export const componentElement = <T extends Element>(
   const root = checkClass(fixture.nativeElement, HTMLElement);
   const element = root.querySelector(selectors);
   return checkClass(element, HTMLElement);
+};
+
+/**
+ * Retrieve a test component `DebugElement`, by CSS selector.
+ */
+export const componentDebugElement = (
+  fixture: ComponentFixture<unknown>,
+  selector: string
+) => checkClass(fixture.debugElement.query(By.css(selector)), DebugElement);
+
+/**
+ * Trigger a `DebugElement` event inside a test component.
+ *
+ * Related docs: <https://angular.io/guide/testing-components-scenarios#click-helper>
+ */
+export const componentDebugEvent = (
+  fixture: ComponentFixture<unknown>,
+  selector: string,
+  eventName: string,
+  eventObj?: unknown
+): void => {
+  const debugElement = componentDebugElement(fixture, selector);
+  debugElement.triggerEventHandler(eventName, eventObj);
 };
 
 /**
@@ -82,6 +120,26 @@ export const assertShowsToast = async (
   await f();
   expect(createSpy).toHaveBeenCalledOnceWith(toastOptions);
   expect(toastSpy.present).toHaveBeenCalledOnceWith();
+};
+
+/**
+ * Assert what `f` logs to the console.
+ */
+export const assertConsoleLogs = async (
+  expected: { log?: unknown[][]; error?: unknown[][] },
+  f: () => Promise<void>
+) => {
+  type ConsoleSpy = Spy<typeof console.log>;
+  const logSpy: ConsoleSpy = spyOn(console, 'log');
+  const errorSpy: ConsoleSpy = spyOn(console, 'error');
+  await f();
+
+  const getCallParams: (spy: ConsoleSpy) => unknown[][] = (
+    spy: Spy<(...data: unknown[]) => void>
+  ) => spy.calls.all().map((call) => call.args);
+
+  await expect(getCallParams(logSpy)).toEqual(expected.log ?? []);
+  await expect(getCallParams(errorSpy)).toEqual(expected.error ?? []);
 };
 
 /**
