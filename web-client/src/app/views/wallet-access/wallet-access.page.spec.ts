@@ -91,9 +91,13 @@ describe('WalletAccessPage', () => {
     });
 
     it('returns pin', async () => {
+      component.address = 'wallet address';
       await withStubbedModal<LockscreenResult>(
         modalCtrl,
-        { component: LockscreenPage },
+        {
+          component: LockscreenPage,
+          componentProps: { hiddenAutocompleteUsername: 'wallet address' },
+        },
         { success: true, pin: '1234' },
         async () => {
           const { pin } = await component.presentLock();

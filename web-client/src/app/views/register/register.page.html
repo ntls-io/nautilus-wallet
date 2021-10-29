@@ -52,6 +52,9 @@
           formControlName="pin"
           minlength="4"
           maxlength="10"
+          inputmode="numeric"
+          pattern="\d{4,10}"
+          autocomplete="new-password"
           [inputMask]="numInputMask"
         ></ion-input>
         <p
@@ -77,6 +80,9 @@
           formControlName="confirmPin"
           minlength="4"
           maxlength="10"
+          inputmode="numeric"
+          pattern="\d{4,10}"
+          autocomplete="new-password"
           [inputMask]="numInputMask"
         ></ion-input>
         <p

@@ -16,6 +16,15 @@ export type LockscreenResult = {
 export class LockscreenPage implements OnInit {
   @Input() autofocus = true;
 
+  /**
+   * Optionally render a hidden `autocomplete="username"` input with the given value.
+   *
+   * The browser will associate this value with the entered PIN, if the user chooses to save it.
+   *
+   * @see https://www.chromium.org/developers/design-documents/form-styles-that-chromium-understands
+   */
+  @Input() hiddenAutocompleteUsername?: string;
+
   codeForm: FormGroup;
   numInputMask = createMask({
     alias: 'numeric',

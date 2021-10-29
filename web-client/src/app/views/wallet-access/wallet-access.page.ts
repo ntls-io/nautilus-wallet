@@ -72,7 +72,12 @@ export class WalletAccessPage implements OnInit {
   }
 
   async presentLock(): Promise<LockscreenResult> {
-    const lock = await this.modalCtrl.create({ component: LockscreenPage });
+    const lock = await this.modalCtrl.create({
+      component: LockscreenPage,
+      componentProps: {
+        hiddenAutocompleteUsername: this.address,
+      },
+    });
 
     const dismiss = lock.onDidDismiss();
     await lock.present();

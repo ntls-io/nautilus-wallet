@@ -12,18 +12,24 @@
           </ion-button>
           <p>OR</p>
         </ng-container>
-        <ion-textarea
-          placeholder="Enter wallet address"
-          [(ngModel)]="address"
-        ></ion-textarea>
-        <ion-button
-          [disabled]="!address"
-          expand="block"
-          shape="round"
-          class="mt-4"
-          (click)="confirm(address)"
-          >Confirm</ion-button
-        >
+        <form>
+          <ion-input
+            type="text"
+            name="address"
+            placeholder="Enter wallet address"
+            autocomplete="username"
+            [(ngModel)]="address"
+          ></ion-input>
+          <ion-button
+            type="submit"
+            [disabled]="!address"
+            expand="block"
+            shape="round"
+            class="mt-4"
+            (click)="confirm(address)"
+            >Confirm</ion-button
+          >
+        </form>
       </ion-col>
     </ion-row>
   </ion-grid>

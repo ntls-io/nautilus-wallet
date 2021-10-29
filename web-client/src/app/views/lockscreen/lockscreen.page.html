@@ -15,6 +15,14 @@
         <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
         <h1 class="font-semibold font-nasalization">Enter Pin</h1>
         <form [formGroup]="codeForm" (ngSubmit)="onSubmit()">
+          <input
+            *ngIf="hiddenAutocompleteUsername !== undefined"
+            type="text"
+            [attr.value]="hiddenAutocompleteUsername"
+            hidden
+            autocomplete="username"
+          />
+
           <ion-input
             type="password"
             formControlName="code"
@@ -24,6 +32,7 @@
             maxlength="10"
             [ngClass]="{'invalid': codeForm.dirty && codeForm.invalid}"
             [inputMask]="numInputMask"
+            autocomplete="current-password"
           ></ion-input>
 
           <ion-button expand="block" shape="round" type="submit"
