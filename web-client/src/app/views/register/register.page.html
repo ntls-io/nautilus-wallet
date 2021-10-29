@@ -11,6 +11,7 @@
           type="text"
           formControlName="firstName"
           name="firstName"
+          autocomplete="given-name"
         ></ion-input>
         <p
           *ngIf="(f.firstName.touched && f.firstName.errors?.required) || !nonValidSubmit && f.firstName.errors?.required"
@@ -20,7 +21,11 @@
       </ng-container>
       <ng-container>
         <ion-label position="stacked" for="lastName">Last Name</ion-label>
-        <ion-input type="text" formControlName="lastName"></ion-input>
+        <ion-input
+          type="text"
+          formControlName="lastName"
+          autocomplete="family-name"
+        ></ion-input>
         <p
           *ngIf="(f.lastName.touched && f.lastName.dirty && f.lastName.errors?.required) || !nonValidSubmit && f.lastName.errors?.required"
         >
@@ -32,6 +37,7 @@
         <ion-input
           type="text"
           formControlName="mobile"
+          autocomplete="tel"
           [inputMask]="phoneInputMask"
         ></ion-input>
         <p
