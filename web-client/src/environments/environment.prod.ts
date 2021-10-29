@@ -12,4 +12,5 @@ export const environment = {
   algorandTransactionUrlPrefix:
     'https://goalseeker.customer-one.xyz/c1/mainnet/transaction/',
   defaultAlgorandAssetId: 54398,
+  defaultAlgorandAssetDecimals: 3, // TODO: Obtain this from the asset params.
 };

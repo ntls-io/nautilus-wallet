@@ -18,6 +18,7 @@ export const environment = {
   algorandTransactionUrlPrefix: undefined,
   // FIXME: Development asset
   defaultAlgorandAssetId: 2,
+  defaultAlgorandAssetDecimals: 0,
 };
 
 /*
