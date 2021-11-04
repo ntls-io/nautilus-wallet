@@ -33,6 +33,7 @@ export class WalletPage implements OnInit {
       title: 'Verify Profile',
       icon: faFingerprint,
       path: '/kyc',
+      disabled: true,
     },
     {
       title: 'Withdraw',
