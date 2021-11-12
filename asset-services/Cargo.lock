@@ -1830,8 +1830,9 @@ dependencies = [
 
 [[package]]
 name = "tower-http"
-version = "0.1.1"
-source = "git+https://github.com/tower-rs/tower-http?branch=cors#9f09fc55bf74b5b9a8bd79cbede7e73d37a3e79b"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6f70061b0592867f0a60e67a6e699da5fe000c88a360a5b92ebdba9d73b2238c"
 dependencies = [
  "bytes",
  "futures-core",
