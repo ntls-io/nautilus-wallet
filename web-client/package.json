@@ -60,7 +60,7 @@
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.14.0",
     "rxjs": "~6.6.0",
-    "sweetalert2": "^11.1.3",
+    "sweetalert2": "^11.2.0",
     "tailwindcss-children": "^2.1.0",
     "tslib": "^2.0.0",
     "tweetnacl": "^1.0.3",
