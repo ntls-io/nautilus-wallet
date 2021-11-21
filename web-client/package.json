@@ -50,7 +50,7 @@
     "@ionic/pwa-elements": "^3.0.2",
     "@msgpack/msgpack": "^2.7.0",
     "@ngneat/input-mask": "^3.0.4",
-    "@ngneat/transloco": "^2.22.0",
+    "@ngneat/transloco": "^3.1.1",
     "@zxing/browser": "^0.0.10",
     "@zxing/library": "^0.18.6",
     "@zxing/ngx-scanner": "^3.3.0",
