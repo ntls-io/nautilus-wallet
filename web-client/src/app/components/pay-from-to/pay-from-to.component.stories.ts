@@ -1,15 +1,9 @@
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Meta, Story } from '@storybook/angular';
 import { PayFromToComponent } from './pay-from-to.component';
 
 export default {
   title: 'Components/PayFromTo',
   component: PayFromToComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [FontAwesomeModule],
-    }),
-  ],
 } as Meta;
 
 const Template: Story<PayFromToComponent> = (args: PayFromToComponent) => ({
