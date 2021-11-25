@@ -3,4 +3,4 @@
 # See: https://github.com/registreerocks/nautilus-wallet/wiki/Rust-SGX-SDK-toolchain-support-status
 #
 # This should match RUST_TOOLCHAIN in Dockerfile
-channel = "nightly-2021-05-10"
+channel = "nightly-2021-09-13"
