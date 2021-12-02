@@ -1,18 +1,28 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import * as SentryAngular from '@sentry/angular';
+import * as Sentry from '@sentry/capacitor';
+import { Integrations as TracingIntegrations } from '@sentry/tracing';
 import { NgxPrinterModule } from 'ngx-printer';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ErrorHandlerModule } from './modules/error-handler.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
+
+Sentry.init(
+  {
+    dsn: 'https://67b1d83771ef47bfb176012e478f8a6f@o1082240.ingest.sentry.io/6090433',
+    integrations: [new TracingIntegrations.BrowserTracing()],
+  },
+  SentryAngular.init
+);
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,8 +42,8 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
-      provide: NG_ENTITY_SERVICE_CONFIG,
-      useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' },
+      provide: ErrorHandler,
+      useValue: SentryAngular.createErrorHandler(),
     },
   ],
   bootstrap: [AppComponent],
