@@ -18,7 +18,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 Sentry.init(
   {
-    dsn: 'https://912bcf8771494360aca2948bdefc46a5@o1000800.ingest.sentry.io/5960308',
+    dsn: 'https://67b1d83771ef47bfb176012e478f8a6f@o1082240.ingest.sentry.io/6090433',
     integrations: [new Integrations.BrowserTracing()],
   },
   SentryAngular.init
@@ -46,7 +46,6 @@ Sentry.init(
     },
     {
       provide: ErrorHandler,
-      // Attach the Sentry ErrorHandler
       useValue: SentryAngular.createErrorHandler(),
     },
   ],
