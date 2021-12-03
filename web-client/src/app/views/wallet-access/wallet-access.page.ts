@@ -4,13 +4,11 @@ import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
-import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import {
   LockscreenPage,
   LockscreenResult,
 } from 'src/app/views/lockscreen/lockscreen.page';
-import { ScannerService } from '../../services/scanner.service';
 import { handleScan } from '../scanner.helpers';
 
 @Component({
@@ -24,11 +22,9 @@ export class WalletAccessPage implements OnInit {
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
-    private scannerService: ScannerService,
     private modalCtrl: ModalController,
     private walletService: WalletService,
     private notification: SwalHelper,
-    private sessionQuery: SessionQuery,
     private router: Router,
     private loadingCtrl: LoadingController
   ) {}
@@ -46,26 +42,25 @@ export class WalletAccessPage implements OnInit {
     const address = value?.trim();
 
     if (address && isValidAddress(address)) {
-      const pinPromise = this.presentLock();
+      const pinPromise = await this.presentLock();
       const loading = await this.loadingCtrl.create();
-      const pin = await pinPromise;
-      if (!pin) {
-        return;
-      }
-      await loading.present();
-      try {
-        const error = await this.walletService.openWallet(address, pin);
-        if (error) {
-          await this.notification.swal.fire({
-            icon: 'error',
-            title: 'Open Wallet Failed',
-            text: error,
-          });
-        } else {
-          this.router.navigate(['/wallet']);
+      const { success, pin } = pinPromise;
+      if (success) {
+        await loading.present();
+        try {
+          const error = await this.walletService.openWallet(address, pin);
+          if (error) {
+            await this.notification.swal.fire({
+              icon: 'error',
+              title: 'Open Wallet Failed',
+              text: error,
+            });
+          } else {
+            this.router.navigate(['/wallet']);
+          }
+        } finally {
+          await loading.dismiss();
         }
-      } finally {
-        await loading.dismiss();
       }
     } else {
       await this.notification.swal.fire({
@@ -76,13 +71,14 @@ export class WalletAccessPage implements OnInit {
     }
   }
 
-  async presentLock(): Promise<string | undefined> {
+  async presentLock(): Promise<LockscreenResult> {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
-    const result = lock.onDidDismiss<LockscreenResult>();
+    const result = lock.onDidDismiss();
     await lock.present();
 
     const { data } = await result;
-    return data?.pin;
+
+    return data;
   }
 }
