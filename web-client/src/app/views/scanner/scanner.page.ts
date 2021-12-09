@@ -52,6 +52,7 @@ export class ScannerPage implements OnInit {
   // TODO: UI to select device?
   camerasFoundHandler(devices: MediaDeviceInfo[]) {
     console.log('ScannerPage camerasFound:', devices);
+    this.cameraReady = Boolean(devices.length);
   }
 
   async camerasNotFoundHandler(error?: DOMException) {

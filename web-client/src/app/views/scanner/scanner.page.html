@@ -10,8 +10,11 @@
 </ion-header>
 
 <ion-content>
-  <!-- TODO: Show a waiting state while scanner loads. -->
+  <div class="h-full flex justify-center" *ngIf="!cameraReady">
+    <ion-spinner class="self-center"></ion-spinner>
+  </div>
   <zxing-scanner
+    [hidden]="!cameraReady"
     class="h-full p-4"
     (scanSuccess)="scanSuccessHandler($event)"
     (scanError)="scanErrorHandler($event)"
