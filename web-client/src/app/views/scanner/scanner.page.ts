@@ -21,47 +21,52 @@ export type ScanResult =
   styleUrls: ['./scanner.page.scss'],
 })
 export class ScannerPage implements OnInit {
-  @ViewChild(ZXingScannerComponent, { static: false })
-  scanner!: ZXingScannerComponent;
+  @ViewChild('scanner') scanner: ZXingScannerComponent =
+    new ZXingScannerComponent();
+
+  availableDevices: MediaDeviceInfo[] = [];
+  deviceCurrent: MediaDeviceInfo | undefined;
+  hasDevices: boolean | undefined;
+  cameraReady = false;
 
   constructor(private modalCtrl: ModalController) {}
 
-  ngOnInit() {}
-
-  /** Dismiss the modal, returning the given result. */
-  async returnScanResult(scanResult: ScanResult) {
-    console.log('ScannerPage returning scan result:', scanResult);
-    await this.modalCtrl.dismiss(scanResult);
-  }
+  async ngOnInit() {}
 
   async dismissModal() {
-    await this.returnScanResult({ type: 'dismissed' });
+    await this.modalCtrl.dismiss();
   }
 
-  // Modal event handlers:
-
   async scanSuccessHandler(result: string) {
-    await this.returnScanResult({ type: 'scanSuccess', result });
+    await this.modalCtrl.dismiss({ type: 'scanSuccess', result });
   }
 
   //TODO: handle scan error
   async scanErrorHandler(error: Error) {
-    await this.returnScanResult({ type: 'scanError', error });
+    await this.modalCtrl.dismiss({ type: 'scanError', error });
   }
 
-  // TODO: UI to select device?
   camerasFoundHandler(devices: MediaDeviceInfo[]) {
     console.log('ScannerPage camerasFound:', devices);
+    this.availableDevices = devices;
     this.cameraReady = Boolean(devices.length);
+    this.hasDevices = Boolean(devices.length > 1);
   }
 
   async camerasNotFoundHandler(error?: DOMException) {
-    await this.returnScanResult({ type: 'camerasNotFound' });
+    await this.modalCtrl.dismiss({ type: 'camerasNotFound' });
   }
+
   async permissionResponseHandler(hasPermission: boolean) {
     console.log('ScannerPage hasPermission:', hasPermission);
     if (!hasPermission) {
-      await this.returnScanResult({ type: 'permissionDenied' });
+      await this.modalCtrl.dismiss({ type: 'permissionDenied' });
     }
+  }
+
+  switchCamera() {
+    this.deviceCurrent = this.availableDevices.find(
+      (device) => device.deviceId !== this.deviceCurrent?.deviceId
+    );
   }
 }
