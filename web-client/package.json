@@ -103,7 +103,7 @@
     "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
-    "@webcomponents/custom-elements": "^1.4.3",
+    "@webcomponents/custom-elements": "^1.5.0",
     "autoprefixer": "^10.2.5",
     "babel-loader": "^8.2.3",
     "chromatic": "^5.9.2",
