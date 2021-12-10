@@ -81,7 +81,7 @@
     "@angular/language-service": "<12.0.4",
     "@babel/core": "^7.14.6",
     "@capacitor/cli": "^3.3.3",
-    "@compodoc/compodoc": "^1.1.15",
+    "@compodoc/compodoc": "^1.1.16",
     "@datorama/akita-cli": "^6.1.1",
     "@datorama/akita-ngdevtools": "^6.0.0",
     "@ionic/angular-toolkit": "^5.0.3",
