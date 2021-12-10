@@ -54,7 +54,7 @@ export class PayPage implements OnInit {
     const { balance } = this.sessionQuery.getValue();
 
     return amount === 0 || amount > (balance ?? 0)
-      ? { insuffisant: true }
+      ? { insufficient: true }
       : null;
   }
 
@@ -106,7 +106,7 @@ export class PayPage implements OnInit {
       // } else {
       //   this.notifyError(errorMessage);
       // }
-    } else if (this.paymentForm.errors?.insuffisant) {
+    } else if (this.paymentForm.errors?.insufficient) {
       this.notifyError(
         Number(this.f.amount.value) === 0
           ? 'You cannot send 0'
