@@ -57,8 +57,7 @@
 
 .app-item {
   @apply border border-solid rounded-lg m-3;
-  --padding-top: 12px;
-  --padding-bottom: 12px;
+  --min-height: 72px;
   --detail-icon-opacity: 1;
 }
 
