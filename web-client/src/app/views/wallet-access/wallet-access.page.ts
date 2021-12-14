@@ -45,7 +45,7 @@ export class WalletAccessPage implements OnInit {
       const pinPromise = await this.presentLock();
       const loading = await this.loadingCtrl.create();
       const { success, pin } = pinPromise;
-      if (success) {
+      if (success && pin) {
         await loading.present();
         try {
           const error = await this.walletService.openWallet(address, pin);
@@ -74,11 +74,12 @@ export class WalletAccessPage implements OnInit {
   async presentLock(): Promise<LockscreenResult> {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
-    const result = lock.onDidDismiss();
+    const dismiss = lock.onDidDismiss();
     await lock.present();
 
-    const { data } = await result;
+    const result = await dismiss;
 
-    return data;
+    return result.data ?? { success: false, pin: null };
+    // failsafe for when modal is dismissed without data (via back button, backdrop click, escape key, etc.)
   }
 }

@@ -5,7 +5,7 @@ import { createMask } from '@ngneat/input-mask';
 
 export type LockscreenResult = {
   success: boolean;
-  pin: string;
+  pin: string | null;
 };
 
 @Component({

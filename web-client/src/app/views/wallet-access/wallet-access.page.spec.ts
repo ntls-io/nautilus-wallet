@@ -86,8 +86,6 @@ describe('WalletAccessPage', () => {
         await modalCtrl.dismiss();
       }, 500);
 
-      console.log();
-
       const { success } = await promise;
       expect(success).toBe(false);
     });
