@@ -86,8 +86,10 @@ describe('WalletAccessPage', () => {
         await modalCtrl.dismiss();
       }, 500);
 
-      const result = await promise;
-      expect(result).toBe(undefined);
+      console.log();
+
+      const { success } = await promise;
+      expect(success).toBe(false);
     });
 
     it('returns pin', async () => {
@@ -96,7 +98,7 @@ describe('WalletAccessPage', () => {
         LockscreenPage,
         { success: true, pin: '1234' },
         async () => {
-          const pin = await component.presentLock();
+          const { pin } = await component.presentLock();
           expect(pin).toBe('1234');
         }
       );
