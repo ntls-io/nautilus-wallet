@@ -24,7 +24,7 @@
     detailIcon="chevron-forward-circle"
     class="app-item"
     [disabled]="disabled"
-    [routerLink]="path"
+    [routerLink]="path ?? []"
   >
     <fa-icon *ngIf="icon" [icon]="icon" size="lg" slot="start"></fa-icon>
     <ion-label>

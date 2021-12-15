@@ -26,12 +26,12 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "<12.0.4",
-    "@angular/core": "<12.0.4",
-    "@angular/forms": "<12.0.4",
-    "@angular/platform-browser": "<12.0.4",
-    "@angular/platform-browser-dynamic": "<12.0.4",
-    "@angular/router": "<12.0.4",
+    "@angular/common": "13.1.0",
+    "@angular/core": "13.1.0",
+    "@angular/forms": "13.1.0",
+    "@angular/platform-browser": "13.1.0",
+    "@angular/platform-browser-dynamic": "13.1.0",
+    "@angular/router": "13.1.0",
     "@capacitor/app": "^1.0.7",
     "@capacitor/browser": "^1.0.6",
     "@capacitor/camera": "^1.2.2",
@@ -69,16 +69,16 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "<12.0.4",
+    "@angular-devkit/build-angular": "13.1.1",
     "@angular-eslint/builder": "<12.0.4",
     "@angular-eslint/eslint-plugin": "<12.0.4",
     "@angular-eslint/eslint-plugin-template": "<12.0.4",
     "@angular-eslint/template-parser": "<12.0.4",
-    "@angular/cli": "<12.0.4",
-    "@angular/compiler": "<12.0.4",
-    "@angular/compiler-cli": "<12.0.4",
-    "@angular/elements": "<12.0.4",
-    "@angular/language-service": "<12.0.4",
+    "@angular/cli": "13.1.1",
+    "@angular/compiler": "13.1.0",
+    "@angular/compiler-cli": "13.1.0",
+    "@angular/elements": "13.1.0",
+    "@angular/language-service": "13.1.0",
     "@babel/core": "^7.14.6",
     "@capacitor/cli": "^3.3.3",
     "@compodoc/compodoc": "^1.1.16",
@@ -126,7 +126,7 @@
     "protractor": "~7.0.0",
     "tailwindcss": "^2.2.19",
     "ts-node": "~8.3.0",
-    "typescript": "~4.2.4"
+    "typescript": "~4.5.4"
   },
   "description": "An Ionic project"
 }
