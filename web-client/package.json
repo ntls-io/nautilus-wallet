@@ -61,7 +61,7 @@
     "inputmask": "^5.0.6",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
-    "rxjs": "~6.6.0",
+    "rxjs": "^7.4.0",
     "sweetalert2": "^11.3.0",
     "tailwindcss-children": "^2.1.0",
     "tslib": "^2.0.0",
