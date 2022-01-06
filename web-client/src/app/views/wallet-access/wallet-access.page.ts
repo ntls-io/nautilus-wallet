@@ -40,26 +40,25 @@ export class WalletAccessPage implements OnInit {
     const address = value?.trim();
 
     if (address && isValidAddress(address)) {
-      const pinPromise = this.presentLock();
+      const pinPromise = await this.presentLock();
       const loading = await this.loadingCtrl.create();
-      const pin = await pinPromise;
-      if (!pin) {
-        return;
-      }
-      await loading.present();
-      try {
-        const error = await this.walletService.openWallet(address, pin);
-        if (error) {
-          await this.notification.swal.fire({
-            icon: 'error',
-            title: 'Open Wallet Failed',
-            text: error,
-          });
-        } else {
-          this.router.navigate(['/wallet']);
+      const { success, pin } = pinPromise;
+      if (success && pin) {
+        await loading.present();
+        try {
+          const error = await this.walletService.openWallet(address, pin);
+          if (error) {
+            await this.notification.swal.fire({
+              icon: 'error',
+              title: 'Open Wallet Failed',
+              text: error,
+            });
+          } else {
+            this.router.navigate(['/wallet']);
+          }
+        } finally {
+          await loading.dismiss();
         }
-      } finally {
-        await loading.dismiss();
       }
     } else {
       await this.notification.swal.fire({
@@ -70,13 +69,15 @@ export class WalletAccessPage implements OnInit {
     }
   }
 
-  async presentLock(): Promise<string | undefined> {
+  async presentLock(): Promise<LockscreenResult> {
     const lock = await this.modalCtrl.create({ component: LockscreenPage });
 
-    const result = lock.onDidDismiss<LockscreenResult>();
+    const dismiss = lock.onDidDismiss();
     await lock.present();
 
-    const { data } = await result;
-    return data?.pin;
+    const result = await dismiss;
+
+    return result.data ?? { success: false, pin: null };
+    // failsafe for when modal is dismissed without data (via back button, backdrop click, escape key, etc.)
   }
 }
