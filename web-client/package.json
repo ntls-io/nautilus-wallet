@@ -57,7 +57,7 @@
     "@zxing/library": "^0.18.6",
     "@zxing/ngx-scanner": "^3.3.0",
     "algosdk": "^1.12.0",
-    "angularx-qrcode": "^11.0.0",
+    "angularx-qrcode": "^13.0.1",
     "inputmask": "^5.0.6",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
