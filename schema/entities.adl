@@ -1,0 +1,40 @@
+//! Structures representing various entities.
+
+module entities {
+    import types.*;
+
+    /// A Nautilus wallet's basic displayable details.
+    ///
+    /// This is what gets sent to clients.
+    struct WalletDisplay {
+        WalletId wallet_id;
+        String owner_name;
+        AlgorandAddressBase32 algorand_address_base32;
+    };
+
+    /// A Nautilus wallet's full details.
+    ///
+    /// This is everything that gets persisted in the wallet store.
+    struct WalletStorable {
+        WalletId wallet_id;
+        WalletPin auth_pin;
+        String owner_name;
+        AlgorandAccount algorand_account;
+    };
+
+    /// An Algorand account.
+    struct AlgorandAccount {
+        AlgorandAccountSeedBytes seed_bytes;
+    };
+
+    /// An unsigned Algorand transaction.
+    struct AlgorandTransaction {
+        Bytes transaction_bytes;
+    };
+
+    /// A signed Algorand transaction.
+    struct AlgorandTransactionSigned {
+        Bytes signed_transaction_bytes;
+    };
+
+};

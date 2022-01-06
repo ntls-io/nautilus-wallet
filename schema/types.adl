@@ -1,0 +1,19 @@
+module types
+{
+    newtype Bytes32 = Bytes;
+
+    /// Nautilus Wallet ID.
+    type WalletId = String;
+
+    /// A wallet owner's authenticating PIN.
+    type WalletPin = String;
+
+    /// Algorand account seed, as bytes.
+    type AlgorandAccountSeedBytes = Bytes32;
+
+    /// Algorand account address, as bytes.
+    type AlgorandAddressBytes = Bytes32;
+
+    /// Algorand account address, as base32 with checksum.
+    type AlgorandAddressBase32 = String;
+};
