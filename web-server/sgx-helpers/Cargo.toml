@@ -9,4 +9,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }

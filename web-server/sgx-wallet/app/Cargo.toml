@@ -14,8 +14,8 @@ actix-web = "4.0.0-beta.8"
 env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers", default-features = false }
 
 # SGX SDK
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
 
 http-service-impl = { path = "../../http-service-impl" }
 sgx-helpers = { path = "../../sgx-helpers" }

@@ -9,7 +9,7 @@ edition = "2021"
 build = "build.rs"
 
 [dependencies]
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_urts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']

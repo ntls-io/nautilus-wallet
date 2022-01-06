@@ -1142,12 +1142,12 @@ dependencies = [
 [[package]]
 name = "sgx_types"
 version = "1.1.4"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=863378876c55025084572e22554bbedd57eead97#863378876c55025084572e22554bbedd57eead97"
+source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=565960cd7b4b36d1188459d75652619971c43f7e#565960cd7b4b36d1188459d75652619971c43f7e"
 
 [[package]]
 name = "sgx_urts"
 version = "1.1.4"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=863378876c55025084572e22554bbedd57eead97#863378876c55025084572e22554bbedd57eead97"
+source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=565960cd7b4b36d1188459d75652619971c43f7e#565960cd7b4b36d1188459d75652619971c43f7e"
 dependencies = [
  "libc",
  "sgx_types",

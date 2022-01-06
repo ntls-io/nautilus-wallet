@@ -17,12 +17,12 @@ default = []
 
 [dependencies]
 # SGX SDK
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
 
 sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
-sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }

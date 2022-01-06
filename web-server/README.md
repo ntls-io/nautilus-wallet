@@ -53,7 +53,7 @@ cargo make --list-all-steps
 
 The codebase is currently pinned to the following revision:
 
-- Commit: [863378876c55025084572e22554bbedd57eead97](https://github.com/apache/incubator-teaclave-sgx-sdk/commit/863378876c55025084572e22554bbedd57eead97)
+- Commit: [565960cd7b4b36d1188459d75652619971c43f7e](https://github.com/apache/incubator-teaclave-sgx-sdk/commit/565960cd7b4b36d1188459d75652619971c43f7e)
 - Issue: [upgrade SDK and rust compiler urgently needed #360](https://github.com/apache/incubator-teaclave-sgx-sdk/issues/360)
 - Branch: [v1.1.4-testing](https://github.com/apache/incubator-teaclave-sgx-sdk/compare/v1.1.4-testing) (merged)
 

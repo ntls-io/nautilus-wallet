@@ -19,10 +19,10 @@ sodalite = { version = "0.4.0", default-features = false }
 zeroize = { version = "1.4.1", features = ["alloc", "zeroize_derive"] }
 
 # SGX SDK
-sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_tse = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_tse = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
 
 # Community SGX forks
 rand = { git = "https://github.com/mesalock-linux/rand-sgx" }
@@ -36,6 +36,6 @@ algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "m
 serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" } # SGX: registreerocks fork for 0.11.4
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
-sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "863378876c55025084572e22554bbedd57eead97" }
+sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "565960cd7b4b36d1188459d75652619971c43f7e" }
