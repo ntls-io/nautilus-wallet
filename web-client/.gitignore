@@ -28,6 +28,12 @@ npm-debug.log*
 /documentation
 /node_modules
 /platforms
+/ios
+/android
 /plugins
 /storybook-static
 /www
+resources/android/icon
+resources/android/splash
+resources/ios/icon
+resources/ios/splash
