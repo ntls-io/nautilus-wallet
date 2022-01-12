@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ntls.wallet',
-  appName: 'Nautilus wallet',
+  appId: 'io.ntls.connect',
+  appName: 'Nautilus Connect',
   webDir: 'www',
   bundledWebRuntime: false,
 };
