@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
@@ -8,7 +9,7 @@ import {
   LockscreenPage,
   LockscreenResult,
 } from 'src/app/views/lockscreen/lockscreen.page';
-import { ScannerService } from '../../services/scanner.service';
+import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-wallet-access',
@@ -16,10 +17,11 @@ import { ScannerService } from '../../services/scanner.service';
   styleUrls: ['./wallet-access.page.scss'],
 })
 export class WalletAccessPage implements OnInit {
+  hasCamera: boolean | undefined;
   address: string | undefined;
 
   constructor(
-    private scannerService: ScannerService,
+    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
     private modalCtrl: ModalController,
     private walletService: WalletService,
     private notification: SwalHelper,
@@ -27,13 +29,13 @@ export class WalletAccessPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
+    this.hasCamera = Capacitor.isPluginAvailable('Camera');
+  }
 
-  async handleScanner() {
-    const { data } = await this.scannerService.scannerHandler();
-    if (data?.type === 'scanSuccess') {
-      this.confirm(data.result);
-    }
+  async openScanner() {
+    await handleScan(this.modalCtrl, this.notification.swal, this.confirm);
   }
 
   async confirm(value: string | undefined) {
