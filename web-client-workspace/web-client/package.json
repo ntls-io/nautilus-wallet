@@ -59,6 +59,7 @@
     "algosdk": "^1.12.0",
     "angularx-qrcode": "^11.0.0",
     "inputmask": "^5.0.6",
+    "nautilus-wallet-client-core": "file:../sdk-typescript/packages/nautilus-wallet-client-core",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
     "rxjs": "~6.6.0",
