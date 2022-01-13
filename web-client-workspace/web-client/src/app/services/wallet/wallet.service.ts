@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AlgorandTransactionSigned } from 'nautilus-wallet-client-core/schema/entities';
 import { SessionStore } from 'src/app/stores/session';
 import { never } from 'src/helpers/helpers';
-import { AlgorandTransactionSigned } from 'src/schema/entities';
 import { EnclaveService } from '../enclave';
 
 type MaybeError = string | undefined;
