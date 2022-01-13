@@ -2,9 +2,13 @@
  * Interface patterned after `SodaBoxCrypto` on the server, but implemented using TweetNaCl.
  */
 
+import {
+  Bytes,
+  Bytes24,
+  Bytes32,
+} from 'nautilus-wallet-client-core/schema/types';
 import * as nacl from 'tweetnacl';
 import { BoxKeyPair } from 'tweetnacl';
-import { Bytes, Bytes24, Bytes32 } from './types';
 
 export type PublicKey = Bytes32;
 export type PrivateKey = Bytes32;

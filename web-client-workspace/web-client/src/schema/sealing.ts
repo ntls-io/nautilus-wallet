@@ -1,8 +1,8 @@
 /** [`SealedMessage`] sealing and unsealing. */
 
+import { Bytes } from 'nautilus-wallet-client-core/schema/types';
 import { Nonce, PublicKey, TweetNaClCrypto } from './crypto';
 import { from_msgpack, from_msgpack_as, to_msgpack } from './msgpack';
-import { Bytes } from './types';
 
 /** A sealed message */
 export type SealedMessage = {

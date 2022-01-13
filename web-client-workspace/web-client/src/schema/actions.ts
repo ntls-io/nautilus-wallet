@@ -1,7 +1,11 @@
 /** Core request / response message types. */
 
+import {
+  Bytes,
+  WalletId,
+  WalletPin,
+} from 'nautilus-wallet-client-core/schema/types';
 import { AlgorandTransactionSigned, WalletDisplay } from './entities';
-import { Bytes, WalletId, WalletPin } from './types';
 
 export type CreateWallet = {
   owner_name: string;

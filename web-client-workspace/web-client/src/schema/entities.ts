@@ -5,7 +5,7 @@ import {
   AlgorandAddressBase32,
   Bytes,
   WalletId,
-} from './types';
+} from 'nautilus-wallet-client-core/schema/types';
 
 /** A Nautilus wallet's basic displayable details. */
 export type WalletDisplay = {
