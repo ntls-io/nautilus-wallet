@@ -64,7 +64,7 @@ export class WalletAccessPage implements OnInit {
       await this.notification.swal.fire({
         icon: 'warning',
         title: 'Invalid Address',
-        text: 'Please input a valid wallet address',
+        text: 'Please provide a valid wallet address',
       });
     }
   }
