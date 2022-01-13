@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import algosdk from 'algosdk';
-import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -9,7 +8,8 @@ import {
   OpenWalletResult,
   SignTransaction,
   SignTransactionResult,
-} from 'src/schema/actions';
+} from 'nautilus-wallet-client-core/schema/actions';
+import { environment } from 'src/environments/environment';
 import {
   makePaymentTxnHelper,
   OptionalParameters,

@@ -3,12 +3,12 @@
 import {
   AlgorandTransactionSigned,
   WalletDisplay,
-} from 'nautilus-wallet-client-core/schema/entities';
+} from './entities';
 import {
   Bytes,
   WalletId,
   WalletPin,
-} from 'nautilus-wallet-client-core/schema/types';
+} from './types';
 
 export type CreateWallet = {
   owner_name: string;
