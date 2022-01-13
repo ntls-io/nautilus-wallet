@@ -9,9 +9,10 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { isValidAddress } from 'algosdk';
+import { ScannerService } from 'src/app/services/scanner.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
-import { handleScan } from '../scanner.helpers';
 
 type ActionItem = {
   label: string;
@@ -52,18 +53,27 @@ export class SendFundsPage implements OnInit {
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private scannerService: ScannerService
   ) {}
 
   ngOnInit() {}
 
   async presentScanner() {
-    const scanSuccess = async (address: string) => {
-      await this.navCtrl.navigateForward('pay', {
-        queryParams: { receiverAddress: address },
-      });
-    };
-    await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
+    const { data } = await this.scannerService.scannerHandler();
+    if (data?.type === 'scanSuccess') {
+      if (isValidAddress(data?.result)) {
+        await this.navCtrl.navigateForward('pay', {
+          queryParams: { receiverAddress: data?.result },
+        });
+      } else {
+        await this.notification.swal.fire({
+          icon: 'warning',
+          title: 'Invalid Address',
+          text: 'Please provide a valid wallet address',
+        });
+      }
+    }
   }
 
   async presentAddressModal() {
