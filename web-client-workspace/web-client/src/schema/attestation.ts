@@ -1,5 +1,5 @@
+import { Bytes } from 'nautilus-wallet-client-core/schema/types';
 import { PublicKey } from './crypto';
-import { Bytes } from './types';
 
 export type AttestationReport = {
   report: SgxReport;

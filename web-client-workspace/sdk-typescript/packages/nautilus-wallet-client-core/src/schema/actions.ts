@@ -1,7 +1,14 @@
 /** Core request / response message types. */
 
-import { AlgorandTransactionSigned, WalletDisplay } from './entities';
-import { Bytes, WalletId, WalletPin } from './types';
+import {
+  AlgorandTransactionSigned,
+  WalletDisplay,
+} from './entities';
+import {
+  Bytes,
+  WalletId,
+  WalletPin,
+} from './types';
 
 export type CreateWallet = {
   owner_name: string;

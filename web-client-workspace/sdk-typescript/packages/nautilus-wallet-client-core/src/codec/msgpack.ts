@@ -1,7 +1,7 @@
 /** MessagePack helper functions. */
 
 import { Decoder, Encoder } from '@msgpack/msgpack';
-import { Bytes } from './types';
+import { Bytes } from '../schema/types';
 
 /// Enable for verbose from_msgpack / to_msgpack console debugging logs.
 const LOG_DEBUG = false;
