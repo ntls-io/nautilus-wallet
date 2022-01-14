@@ -4,6 +4,10 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
+  from_msgpack_as,
+  to_msgpack_as,
+} from 'nautilus-wallet-client-core/codec/msgpack';
+import {
   CreateWallet,
   CreateWalletResult,
   OpenWallet,
@@ -16,7 +20,6 @@ import {
 import { environment } from 'src/environments/environment';
 import { AttestationReport } from 'src/schema/attestation';
 import { TweetNaClCrypto } from 'src/schema/crypto';
-import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
   seal_msgpack_as,

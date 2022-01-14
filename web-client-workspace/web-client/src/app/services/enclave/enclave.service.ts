@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import algosdk from 'algosdk';
+import { from_msgpack_as } from 'nautilus-wallet-client-core/codec/msgpack';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -17,7 +18,6 @@ import {
 } from 'src/schema/algorand.helpers';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
-import { from_msgpack_as } from 'src/schema/msgpack';
 import { seal_msgpack_as, unseal_msgpack_as } from 'src/schema/sealing';
 import { TransactionConfirmation, waitForConfirmation } from '../algosdk.utils';
 
