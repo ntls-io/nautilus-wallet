@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss(false)">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="font-audiowide font-bold">Country Selection</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      animated
+      placeholder="Search for a country"
+      (ionChange)="onSearchChange($event)"
+      class="!pt-3"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="h-full flex justify-center" *ngIf="isBusy; else isReady">
+    <ion-spinner class="self-center"></ion-spinner>
+  </div>
+  <ng-template #isReady>
+    <ion-list lines="full">
+      <ng-container *ngFor="let country of filteredCountries">
+        <ion-item
+          detail
+          *ngIf="country?.idd?.root"
+          (click)="selectCountry(country)"
+        >
+          <ion-img
+            [src]="country?.flags?.png"
+            slot="start"
+            class="w-8"
+          ></ion-img>
+          <ion-label>{{ country?.name?.common }}</ion-label>
+          <ion-text slot="end">
+            {{ country?.idd?.root }}{{ country?.idd?.root === "+1" ? "" :
+            country?.idd?.suffixes[0]?.slice(0, 2) }}
+          </ion-text>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </ng-template>
+</ion-content>

@@ -6,8 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
 import { WalletService } from 'src/app/services/wallet';
+import { CountrySelectionPage } from '../country-selection/country-selection.page';
 
 @Component({
   selector: 'app-register',
@@ -23,14 +25,15 @@ export class RegisterPage implements OnInit {
     placeholder: '',
   });
   phoneInputMask = createMask({
-    mask: '(999) 999-99-99',
+    mask: '(99) 999-99-99',
     autoUnmask: true,
   });
 
   constructor(
     private formBuilder: FormBuilder,
     private walletService: WalletService,
-    private router: Router
+    private router: Router,
+    private modalCtrl: ModalController
   ) {
     this.registrationForm = this.generateFormGroup();
   }
@@ -42,6 +45,7 @@ export class RegisterPage implements OnInit {
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
+        country: ['', Validators.compose([Validators.required])],
         mobile: [
           '',
           Validators.compose([
@@ -106,5 +110,17 @@ export class RegisterPage implements OnInit {
 
   showErrors() {
     this.nonValidSubmit = false;
+  }
+
+  async selectCountry() {
+    const modal = await this.modalCtrl.create({
+      component: CountrySelectionPage,
+    });
+
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    if (data?.prefix) {
+      this.registrationForm.controls.country.setValue(data.prefix);
+    }
   }
 }
