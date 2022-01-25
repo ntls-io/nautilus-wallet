@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoadingController, ModalController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -23,7 +26,7 @@ export class WalletAccessPage implements OnInit {
     private modalCtrl: ModalController,
     private walletService: WalletService,
     private notification: SwalHelper,
-    private router: Router,
+    private navCtrl: NavController,
     private loadingCtrl: LoadingController
   ) {}
 
@@ -54,7 +57,7 @@ export class WalletAccessPage implements OnInit {
               text: error,
             });
           } else {
-            this.router.navigate(['/wallet']);
+            this.navCtrl.navigateRoot('/wallet');
           }
         } finally {
           await loading.dismiss();
