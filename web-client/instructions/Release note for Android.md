@@ -27,12 +27,20 @@ To open the project in Android Studio, run:
 
 ## Generate signed Bundle steps
 
-[![Select build menu](https://i.postimg.cc/66r9HH0x/Screenshot-2022-01-27-at-19-43-33.png)](https://postimg.cc/z3fZvF6x)
+![Select build menu](https://i.postimg.cc/66r9HH0x/Screenshot-2022-01-27-at-19-43-33.png)
 
-[![Select Bundle or APK](https://i.postimg.cc/15VKhq8S/Screenshot-2022-01-27-at-19-50-21.png)](https://postimg.cc/PPhD1NbV)
+![Select Bundle or APK](https://i.postimg.cc/15VKhq8S/Screenshot-2022-01-27-at-19-50-21.png)
 
-[![Fill signing details](https://i.postimg.cc/NjsChxrn/Screenshot-2022-01-27-at-20-26-47.png)](https://postimg.cc/dLfjrr6R)
+![Fill signing details](https://i.postimg.cc/NjsChxrn/Screenshot-2022-01-27-at-20-26-47.png)
 
-[![Select build type](https://i.postimg.cc/sfTnRWsH/Screenshot-2022-01-27-at-20-12-33.png)](https://postimg.cc/QVWgQHBc)
+![Select build type](https://i.postimg.cc/sfTnRWsH/Screenshot-2022-01-27-at-20-12-33.png)
 
-[![Success](https://i.postimg.cc/kgLjVPp0/Screenshot-2022-01-27-at-20-38-20.png)](https://postimg.cc/TKqjSFG0)
+![Success](https://i.postimg.cc/kgLjVPp0/Screenshot-2022-01-27-at-20-38-20.png)
+
+## Upload signed Bundle
+
+![Select app](https://i.postimg.cc/V6TspRLQ/Screenshot-2022-01-27-at-20-54-33.png)
+![Select track](https://i.postimg.cc/3x7GtKcj/Screenshot-2022-01-27-at-20-54-43.png)
+![Create release](https://i.postimg.cc/Y2GQ9DFF/Screenshot-2022-01-27-at-20-54-54.png)
+![Upload bundle](https://i.postimg.cc/MZCVj00F/Screenshot-2022-01-27-at-20-55-03.png)
+![Release notes](https://i.postimg.cc/Fs0cbfDs/Screenshot-2022-01-27-at-20-55-24.png)
