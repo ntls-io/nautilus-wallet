@@ -26,7 +26,7 @@
       <ng-container *ngFor="let country of filteredCountries">
         <ion-item
           detail
-          *ngIf="country?.callingCodes[0]"
+          *ngIf="country?.idd?.root"
           (click)="selectCountry(country)"
         >
           <ion-img
@@ -34,8 +34,11 @@
             slot="start"
             class="w-8"
           ></ion-img>
-          <ion-label>{{ country?.name }}</ion-label>
-          <ion-text slot="end"> +{{ country?.callingCodes[0]}} </ion-text>
+          <ion-label>{{ country?.name?.common }}</ion-label>
+          <ion-text slot="end">
+            {{ country?.idd?.root }}{{ country?.idd?.root === "+1" ? "" :
+            country?.idd?.suffixes[0]?.slice(0, 2) }}
+          </ion-text>
         </ion-item>
       </ng-container>
     </ion-list>
