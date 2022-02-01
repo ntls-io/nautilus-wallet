@@ -2,6 +2,8 @@
 
 ## Prerequisite
 * Android studio
+* Android SDK
+* Java
 
 ## [Configuration](https://capacitorjs.com/docs/android/configuration#configuring-androidmanifestxml)
 
