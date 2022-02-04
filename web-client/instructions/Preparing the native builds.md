@@ -67,7 +67,7 @@ Will do the following:
 
 | iOS | Android |
 |-----|---------|
-|`$ ionic capacitor sync ios`| `$ ionic capacitor sync android` |
+|`$ ionic capacitor update ios`| `$ ionic capacitor update android` |
 
 > use `--prod` for optimized production native builds
 
