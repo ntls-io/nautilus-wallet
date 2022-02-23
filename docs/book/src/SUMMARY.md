@@ -1,14 +1,16 @@
 # Summary
 
-[Overview]()
+[Nautilus Wallet](nautilus-wallet.md)
 
-# System architecture
+# Design
 
-- [Platform]()
-- [Wallet service]()
-- [Wallet Connector App]()
-- [Asset services]()
-  - [KYC]()
+- [Overview](design/overview.md)
+- [Ledger platform](design/ledger-platform.md)
+- [Wallet](design/wallet.md)
+  - [Wallet TEE](design/wallet-tee.md)
+  - [Wallet Connector app](design/wallet-connector-app.md)
+- [Asset services](design/asset-services.md)
+  - [KYC service]()
   - [User verification]()
 
 # Operations
