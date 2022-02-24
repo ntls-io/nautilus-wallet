@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Nautilus Wallet</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="nautilus-wallet.html">Nautilus Wallet</a></li><li class="chapter-item expanded affix "><li class="part-title">Design</li><li class="chapter-item expanded "><a href="design/overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="design/ledger-platform.html"><strong aria-hidden="true">2.</strong> Ledger platform</a></li><li class="chapter-item expanded "><a href="design/wallet.html"><strong aria-hidden="true">3.</strong> Wallet</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="design/wallet-tee.html"><strong aria-hidden="true">3.1.</strong> Wallet TEE</a></li><li class="chapter-item expanded "><a href="design/wallet-connector-app.html"><strong aria-hidden="true">3.2.</strong> Wallet Connector app</a></li></ol></li><li class="chapter-item expanded "><a href="design/asset-services.html"><strong aria-hidden="true">4.</strong> Asset services</a></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> KYC service</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> User verification</div></li></ol></li><li class="chapter-item expanded "><li class="part-title">Operations</li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Building</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Deployment</div></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Nautilus Wallet</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Show the text logo with a background colour, to be compatible with light and dark themes. -->
+<div style="
+    background-color: #003450;
+    border-radius: 2em;
+    display: inline-flex;
+    padding: 1.5em 2em;
+">
+    <img src="images/logo-title.svg" alt="Nautilus Wallet logo">
+</div>
+<p>The <strong>Nautilus Wallet</strong> project is a <a href="https://en.wikipedia.org/wiki/Trusted_execution_environment">TEE</a>-hosted, non-custodial cryptographic wallet that's accessible to users who don't own a smartphone or device.</p>
+<p>The project also includes services for managing and governing assets in a <a href="https://en.wikipedia.org/wiki/Central_bank_digital_currency">CBDC</a> context.</p>
+<h2 id="links"><a class="header" href="#links">Links</a></h2>
+<ul>
+<li><a href="https://github.com/ntls-io/nautilus-wallet">GitHub</a></li>
+</ul>
+<h2 id="see-also"><a class="header" href="#see-also">See also</a></h2>
+<ul>
+<li><a href="https://github.com/ntls-io/nautilus-wallet/wiki/Technical-Architecture">Technical Architecture</a> (GitHub Wiki)</li>
+<li><a href="https://docs.google.com/document/d/1gCRxOZiuo6qXNpZOcoovM_wTNUc_8u-GfyyraEGTaWA/edit">Nautilus Wallet &amp; CBDC Suite - Technical Architecture</a> (Google Docs)</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<p>The Nautilus Wallet system consists of the following high systems:</p>
+<ol>
+<li>An underlying <a href="design/ledger-platform.html">ledger platform</a> and its asset(s)</li>
+<li>The <a href="design/wallet.html">Wallet</a> itself:
+<ul>
+<li>The <a href="design/wallet-tee.html">Wallet TEE</a> (server) hosts and provides access to the Wallet SGX enclave</li>
+<li>The <a href="design/wallet-connector-app.html">Wallet Connector app</a> (client) securely connects wallet owners with their wallets</li>
+</ul>
+</li>
+<li><a href="design/asset-services.html">Asset services</a>, which help manage and govern the asset:
+<ul>
+<li>The <a href="design/kyc-service.html">KYC service</a></li>
+<li>User verification service</li>
+</ul>
+</li>
+</ol>
+<h2 id="system-landscape-diagram"><a class="header" href="#system-landscape-diagram">System Landscape diagram</a></h2>
+<p><a href="design/diagrams/SystemLandscape.svg"><img src="design/diagrams/SystemLandscape.svg" alt="System Landscape diagram" /></a></p>
+<p><strong>Figure:</strong> <a href="https://c4model.com/#SystemLandscapeDiagram">System Landscape diagram</a> of Nautilus Wallet and the systems it interacts with.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ledger-platform"><a class="header" href="#ledger-platform">Ledger platform</a></h1>
+<p>Nautilus Wallet's design supports interfacing with a choice of underlying ledger platform(s).</p>
+<p>The system currently supports the following ledgers and asset types:</p>
+<h2 id="algorand"><a class="header" href="#algorand">Algorand</a></h2>
+<p>The <a href="https://www.algorand.com/">Algorand</a> ledger supports transacting using <a href="design/(https://developer.algorand.org/docs/get-details/asa/)">Algorand Standard Assets (ASAs)</a>.</p>
+<p>The Wallet TEE uses an SGX port of the <a href="https://github.com/manuelmauro/algonaut">algonaut</a> SDK to implement key generation and transaction signing.</p>
+<p>The Wallet Connector uses <a href="https://github.com/algorand/js-algorand-sdk">js-algorand-sdk</a> to communicate with the Algorand network.</p>
+<h2 id="xrpl"><a class="header" href="#xrpl">XRPL</a></h2>
+<p>The <a href="https://xrpl.org/">XRP Ledger</a> supports transacting using <a href="https://xrpl.org/issued-currencies-overview.html">Issued Currencies</a>.</p>
+<p>The Wallet TEE uses SGX ports of <a href="https://github.com/otov4its/ripple-keypairs-rust">ripple-keypairs-rust</a> and <a href="https://github.com/otov4its/ripple-address-codec-rust">ripple-address-codec-rust</a> to implement key generation and transaction signing.</p>
+<p>The Wallet Connector uses <a href="https://github.com/XRPLF/xrpl.js">xrpl.js</a> to communicate with the XRP network.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wallet"><a class="header" href="#wallet">Wallet</a></h1>
+<p>This provides the functionality of a non-custodial wallet to end-users without smartphones, accessible through a smartphone-based connector app with limited trust.</p>
+<h2 id="container-diagram"><a class="header" href="#container-diagram">Container diagram</a></h2>
+<p><a href="design/diagrams/WalletApp-Container.svg"><img src="design/diagrams/WalletApp-Container.svg" alt="Container diagram: Wallet" /></a></p>
+<p><strong>Figure:</strong> <a href="https://c4model.com/#ContainerDiagram">Container diagram</a> of the Wallet TEE and Connector app.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wallet-tee"><a class="header" href="#wallet-tee">Wallet TEE</a></h1>
+<p>The Wallet TEE consists of a trusted SGX enclave, alongside an untrusted host service.</p>
+<h2 id="sgx-enclave"><a class="header" href="#sgx-enclave">SGX enclave</a></h2>
+<p>The Wallet SGX enclave contains the system's <a href="https://en.wikipedia.org/wiki/Trusted_computing_base">Trusted Computing Base (TCB)</a>, and is responsible for all security-sensitive wallet operations:</p>
+<ul>
+<li>Generating and managing account keypairs</li>
+<li>Performing privileged operations such as transaction signing</li>
+</ul>
+<p>Once generated, secret keys and other sensitive data never leaves the enclave unencrypted. All persistent storage is cryptographically sealed and authenticated, and all trusted communication with the enclave occurs over cryptographically attested and mutually-authenticated channels.</p>
+<h2 id="host-service"><a class="header" href="#host-service">Host service</a></h2>
+<p>The SGX enclave is embedded in an untrusted host service, which facilitates communication between the enclave and the outside world.</p>
+<ul>
+<li>Remote attestation, which allows the Connector app to remotely verify the identity and integrity of the enclave, and exchange keys to set up a trusted communication channel</li>
+<li>Sealed message exchange, which allows the Connector app to request wallet operations, and receive results</li>
+</ul>
+<h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
+<ul>
+<li><a href="https://github.com/ntls-io/nautilus-wallet/tree/main/web-server">https://github.com/ntls-io/nautilus-wallet/tree/main/web-server</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wallet-connector-app"><a class="header" href="#wallet-connector-app">Wallet Connector app</a></h1>
+<p>The Wallet Connector app runs on web and smartphone (Android, iOS) devices, and allows users other than the device owner to create and access their wallets, using a combination of QR code and PIN based authentication.</p>
+<h2 id="source-code-1"><a class="header" href="#source-code-1">Source code</a></h2>
+<ul>
+<li><a href="https://github.com/ntls-io/nautilus-wallet/tree/main/web-client">https://github.com/ntls-io/nautilus-wallet/tree/main/web-client</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="asset-services"><a class="header" href="#asset-services">Asset services</a></h1>
+<h2 id="container-diagram-1"><a class="header" href="#container-diagram-1">Container diagram</a></h2>
+<p><a href="design/diagrams/CBDCServices-Container.svg"><img src="design/diagrams/CBDCServices-Container.svg" alt="Container diagram: Asset services" /></a></p>
+<p><strong>Figure:</strong> <a href="https://c4model.com/#ContainerDiagram">Container diagram</a> of the Nautilus asset services.</p>
+<h2 id="source-code-2"><a class="header" href="#source-code-2">Source code</a></h2>
+<ul>
+<li><a href="https://github.com/ntls-io/nautilus-wallet/tree/main/asset-services">https://github.com/ntls-io/nautilus-wallet/tree/main/asset-services</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>
