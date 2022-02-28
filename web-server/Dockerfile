@@ -47,7 +47,8 @@ ARG INTEL_SGX_SDK_INSTALLER_URL="https://download.01.org/intel-sgx/sgx-linux/2.1
 
 # Rust SGX SDK 1.1.4 (merge of v1.1.4-testing branch)
 # Upstream issue: https://github.com/apache/incubator-teaclave-sgx-sdk/issues/360
-ARG RUST_SGX_SDK_REVISION="565960cd7b4b36d1188459d75652619971c43f7e"
+# Latest compatible revision since then: https://github.com/apache/incubator-teaclave-sgx-sdk/commit/e8a9fc22939befa27ff67f5509b2c2dfe8499945
+ARG RUST_SGX_SDK_REVISION="e8a9fc22939befa27ff67f5509b2c2dfe8499945"
 
 ARG SGX_MODE="SW"
 
