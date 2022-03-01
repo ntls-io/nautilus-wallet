@@ -13,7 +13,7 @@ The Wallet TEE uses an SGX port of the [algonaut] SDK to implement key generatio
 The Wallet Connector uses [js-algorand-sdk] to communicate with the Algorand network.
 
 [Algorand]: https://www.algorand.com/
-[ASA]: (https://developer.algorand.org/docs/get-details/asa/)
+[ASA]: https://developer.algorand.org/docs/get-details/asa/
 [algonaut]: https://github.com/manuelmauro/algonaut
 [js-algorand-sdk]: https://github.com/algorand/js-algorand-sdk
 
