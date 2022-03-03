@@ -8,6 +8,7 @@ export class SwalHelper {
   public swal = Swal.mixin({
     confirmButtonColor: 'var(--ion-color-primary)',
     customClass: {
+      actions: '!w-full',
       confirmButton: 'w-1/2 !rounded-full',
       title: 'font-nasalization',
     },
