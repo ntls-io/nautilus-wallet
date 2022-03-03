@@ -1,6 +1,3 @@
-extern crate sgx_types;
-extern crate sgx_urts;
-
 use std::fs::create_dir_all;
 use std::io;
 use std::net::ToSocketAddrs;
