@@ -12,7 +12,7 @@ pub(crate) fn create_wallet_works() {
     };
     let display = &match create_wallet(request) {
         Result::Created(created) => created,
-        Result::Failed(failed) => panic!(failed),
+        Result::Failed(failed) => panic!("{}", failed),
     };
 
     assert_eq!(display.owner_name, request.owner_name);

@@ -24,7 +24,7 @@ pub(crate) fn wallet_operation_sealing_works() {
         &seal_msgpack(wallet_request, &enclave_crypto.get_pubkey(), client_crypto).unwrap();
 
     // Call
-    let sealed_response_bytes = &wallet_operation_impl(&sealed_request_bytes);
+    let sealed_response_bytes = &wallet_operation_impl(sealed_request_bytes);
 
     // Unseal
     let unsealed_message: Secret<WalletResponse> =

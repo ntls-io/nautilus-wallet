@@ -1,6 +1,3 @@
-extern crate sgx_types;
-extern crate sgx_urts;
-
 #[path = "../codegen/Enclave_u.rs"]
 mod enclave_u;
 mod safe_ecalls;

@@ -30,7 +30,7 @@ pub fn seal(
     receiver_public_key: &PublicKey,
     sender_crypto: &mut SodaBoxCrypto,
 ) -> Result<SealedMessage, CryptoError> {
-    let encrypted_message = sender_crypto.encrypt_message(message_bytes, &receiver_public_key)?;
+    let encrypted_message = sender_crypto.encrypt_message(message_bytes, receiver_public_key)?;
     Ok(SealedMessage {
         ciphertext: encrypted_message.ciphertext,
         nonce: encrypted_message.nonce,
@@ -76,7 +76,7 @@ where
     T: ToMessagePack,
 {
     let message_bytes = &SecretBytes::new(message.to_msgpack()?);
-    let sealed_message = seal(message_bytes, &receiver_public_key, sender_crypto)?;
+    let sealed_message = seal(message_bytes, receiver_public_key, sender_crypto)?;
     let sealed_message_bytes = sealed_message.to_msgpack()?;
     Ok(sealed_message_bytes)
 }

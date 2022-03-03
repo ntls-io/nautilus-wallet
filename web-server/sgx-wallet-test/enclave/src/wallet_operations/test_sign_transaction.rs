@@ -61,6 +61,7 @@ pub(crate) fn sign_transaction_without_tag() {
                 ( error = expected TX, got [137, 163] )\n\
                 [ unsigned transaction msgpack = "
             ),
+            "{}",
             err
         ),
         otherwise => panic!("{:?}", otherwise),

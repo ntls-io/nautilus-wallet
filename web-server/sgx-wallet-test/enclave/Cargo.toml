@@ -5,10 +5,11 @@ version = "0.1.0"
 authors = ["Nautilus team"]
 license = "Apache-2.0"
 
-edition = "2018"
+edition = "2021"
 
 [lib]
 crate-type = ["staticlib"]
+bench = false
 test = false
 
 [features]
@@ -20,11 +21,11 @@ secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
 
 # SGX SDK
-sgx_rand = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_rand = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 
 # Community SGX forks
 rmp-serde = { git = "https://github.com/mesalock-linux/msgpack-rust-sgx" }
@@ -40,6 +41,6 @@ sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 proptest = { version = "1.0.0", default-features = false, features = ["alloc", "hardware-rng"] }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
-sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "d107bd0718f723221750a4f2973451b386cbf9d2" }
+sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_trts = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
