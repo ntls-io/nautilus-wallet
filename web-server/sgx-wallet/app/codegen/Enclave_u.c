@@ -367,6 +367,16 @@ typedef struct ms_u_link_ocall_t {
 	const char* ms_newpath;
 } ms_u_link_ocall_t;
 
+typedef struct ms_u_linkat_ocall_t {
+	int ms_retval;
+	int* ms_error;
+	int ms_olddirfd;
+	const char* ms_oldpath;
+	int ms_newdirfd;
+	const char* ms_newpath;
+	int ms_flags;
+} ms_u_linkat_ocall_t;
+
 typedef struct ms_u_rename_ocall_t {
 	int ms_retval;
 	int* ms_error;
@@ -945,6 +955,14 @@ static sgx_status_t SGX_CDECL Enclave_u_link_ocall(void* pms)
 	return SGX_SUCCESS;
 }
 
+static sgx_status_t SGX_CDECL Enclave_u_linkat_ocall(void* pms)
+{
+	ms_u_linkat_ocall_t* ms = SGX_CAST(ms_u_linkat_ocall_t*, pms);
+	ms->ms_retval = u_linkat_ocall(ms->ms_error, ms->ms_olddirfd, ms->ms_oldpath, ms->ms_newdirfd, ms->ms_newpath, ms->ms_flags);
+
+	return SGX_SUCCESS;
+}
+
 static sgx_status_t SGX_CDECL Enclave_u_rename_ocall(void* pms)
 {
 	ms_u_rename_ocall_t* ms = SGX_CAST(ms_u_rename_ocall_t*, pms);
@@ -1187,9 +1205,9 @@ static sgx_status_t SGX_CDECL Enclave_u_sgxprotectedfs_do_file_recovery(void* pm
 
 static const struct {
 	size_t nr_ocall;
-	void * table[78];
+	void * table[79];
 } ocall_table_Enclave = {
-	78,
+	79,
 	{
 		(void*)Enclave_sgx_oc_cpuidex,
 		(void*)Enclave_sgx_thread_wait_untrusted_event_ocall,
@@ -1239,6 +1257,7 @@ static const struct {
 		(void*)Enclave_u_fchmod_ocall,
 		(void*)Enclave_u_unlink_ocall,
 		(void*)Enclave_u_link_ocall,
+		(void*)Enclave_u_linkat_ocall,
 		(void*)Enclave_u_rename_ocall,
 		(void*)Enclave_u_chmod_ocall,
 		(void*)Enclave_u_readlink_ocall,

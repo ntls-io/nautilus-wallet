@@ -1,5 +1,6 @@
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import * as Sentry from '@sentry/angular';
 import { SwalHelper } from '../notification/swal-helper';
 
 @Injectable()
@@ -19,6 +20,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
 
     console.error('GlobalErrorHandler:', error);
+    Sentry.captureException(error);
     this.zone.run(
       async () =>
         await this.notification.swal

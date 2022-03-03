@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
@@ -23,6 +29,7 @@ export class PayPage implements OnInit {
     prefix: 'R ',
     placeholder: '0',
     autoUnmask: true,
+    allowMinus: false,
   });
 
   constructor(
@@ -34,9 +41,25 @@ export class PayPage implements OnInit {
     private loadingCtrl: LoadingController,
     private notification: SwalHelper
   ) {
-    this.paymentForm = this.formBuilder.group({
-      amount: [0, Validators.compose([Validators.required])],
-    });
+    this.paymentForm = this.formBuilder.group(
+      {
+        amount: [0, Validators.compose([Validators.required])],
+      },
+      { validators: this.validateAmount.bind(this) }
+    );
+  }
+
+  validateAmount(control: AbstractControl): ValidationErrors | null {
+    const amount = Number(control.get('amount')?.value);
+    const { balance } = this.sessionQuery.getValue();
+
+    return amount === 0 || amount > (balance ?? 0)
+      ? { insufficient: true }
+      : null;
+  }
+
+  get f() {
+    return this.paymentForm.controls;
   }
 
   ngOnInit() {
@@ -83,6 +106,12 @@ export class PayPage implements OnInit {
       // } else {
       //   this.notifyError(errorMessage);
       // }
+    } else if (this.paymentForm.errors?.insufficient) {
+      this.notifyError(
+        Number(this.f.amount.value) === 0
+          ? 'You cannot send 0'
+          : 'Insufficient funds'
+      );
     }
   }
 
