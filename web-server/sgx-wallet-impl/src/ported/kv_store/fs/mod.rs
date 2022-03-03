@@ -129,7 +129,7 @@ pub fn encode_to_fs_safe(key: &Key) -> String {
 // FIXME: Just use a generic String as the error type, for now.
 pub fn decode_from_fs_safe(file_name: &str) -> Result<Vec<u8>, String> {
     let encoded: &str = file_name
-        .strip_prefix("x")
+        .strip_prefix('x')
         .ok_or_else(|| format!("decode_from_fs_safe: missing x prefix for {:?}", file_name))?;
     let bytes: Vec<u8> = hex::decode(encoded).map_err(|err| err.to_string())?;
     Ok(bytes)

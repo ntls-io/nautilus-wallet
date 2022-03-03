@@ -104,7 +104,7 @@ impl SodaBoxCrypto {
         match sodalite::box_open(
             &mut message,
             padded_ciphertext,
-            &nonce,
+            nonce,
             their_pk,
             self.private_key.expose_secret(),
         ) {
