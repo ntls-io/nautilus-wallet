@@ -1,9 +1,10 @@
 # Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
 
 [build]
-base = "web-client"
-publish = "www"
-command = "npm run build:prod"
+# NOTE: Build the whole workspace, to include the SDK libraries.
+base = "web-client-workspace"
+publish = "web-client/www"
+command = "npm run --workspace web-client build:prod"
 
 # Set fallback
 #

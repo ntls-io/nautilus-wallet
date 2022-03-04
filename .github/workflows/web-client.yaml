@@ -9,7 +9,7 @@ concurrency:
 
 defaults:
   run:
-    working-directory: web-client
+    working-directory: web-client-workspace/web-client
 
 jobs:
   test:
@@ -36,6 +36,8 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Install dependencies (NPM)
+        # NOTE: For npm's workspace support, the install command must be run from the workspace root.
+        working-directory: web-client-workspace
         # XXX(Pi): "npm ci" is currently broken: <https://github.com/npm/cli/issues/3947>
         #          Work around this by using "npm install" followed by a git working copy check.
         run: |
@@ -110,7 +112,13 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Install dependencies (NPM)
-        run: npm ci
+        # NOTE: For npm's workspace support, the install command must be run from the workspace root.
+        working-directory: web-client-workspace
+        # XXX(Pi): "npm ci" is currently broken: <https://github.com/npm/cli/issues/3947>
+        #          Work around this by using "npm install" followed by a git working copy check.
+        run: |
+          npm install
+          git diff --exit-code
 
       # TODO: Factor out the steps above, somehow.
 
@@ -118,6 +126,6 @@ jobs:
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:
-          workingDir: web-client
+          workingDir: web-client-workspace/web-client
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
