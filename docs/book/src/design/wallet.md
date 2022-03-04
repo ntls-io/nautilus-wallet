@@ -1,6 +1,6 @@
 # Wallet
 
-This provides the functionality of a non-custodial wallet to end-users without smartphones, accessible through a smartphone-based connector app with limited trust.
+This provides the functionality of a non-custodial wallet to end-users who don't own a smartphone themselves, accessible through a smartphone-based connector app that requires only limited trust from the transacting user.
 
 ## Container diagram
 
