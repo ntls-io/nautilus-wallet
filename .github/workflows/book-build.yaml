@@ -1,0 +1,21 @@
+# Docs: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: book (build)
+
+on: push
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: 📦️ Checkout
+        # Docs: https://github.com/actions/checkout#readme
+        uses: actions/checkout@v3
+      -
+        name: 🧰 Install mdBook
+        # Docs: https://github.com/peaceiris/actions-mdbook#readme
+        uses: peaceiris/actions-mdbook@v1
+      -
+        name: 🚧 Build mdBook
+        run: mdbook build
+        working-directory: docs/book
