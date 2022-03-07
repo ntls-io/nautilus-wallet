@@ -1,0 +1,30 @@
+# Docs: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: book (deploy to gh-pages 🚀)
+
+# For now, only run this manual dispatch.
+on: workflow_dispatch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency: ${{ github.workflow }}-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    steps:
+      -
+        name: 📦️ Checkout
+        # Docs: https://github.com/actions/checkout#readme
+        uses: actions/checkout@v3
+      -
+        name: 🧰 Install mdBook
+        # Docs: https://github.com/peaceiris/actions-mdbook#readme
+        uses: peaceiris/actions-mdbook@v1
+      -
+        name: 🚧 Build mdBook
+        run: mdbook build
+        working-directory: docs/book
+      -
+        name: 🚀️ Deploy to GitHub Pages
+        # Docs: https://github.com/JamesIves/github-pages-deploy-action#readme
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages
+          folder: docs/book/book
