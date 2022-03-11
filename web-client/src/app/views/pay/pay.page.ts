@@ -49,6 +49,10 @@ export class PayPage implements OnInit {
     );
   }
 
+  get f() {
+    return this.paymentForm.controls;
+  }
+
   validateAmount(control: AbstractControl): ValidationErrors | null {
     const amount = Number(control.get('amount')?.value);
     const { balance } = this.sessionQuery.getValue();
@@ -56,10 +60,6 @@ export class PayPage implements OnInit {
     return amount === 0 || amount > (balance ?? 0)
       ? { insufficient: true }
       : null;
-  }
-
-  get f() {
-    return this.paymentForm.controls;
   }
 
   ngOnInit() {

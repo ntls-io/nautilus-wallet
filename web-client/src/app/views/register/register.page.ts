@@ -35,6 +35,10 @@ export class RegisterPage implements OnInit {
     this.registrationForm = this.generateFormGroup();
   }
 
+  get f() {
+    return this.registrationForm.controls;
+  }
+
   ngOnInit() {}
 
   generateFormGroup(): FormGroup {
@@ -89,10 +93,6 @@ export class RegisterPage implements OnInit {
     } else {
       this.showErrors();
     }
-  }
-
-  get f() {
-    return this.registrationForm.controls;
   }
 
   pinValidator(control: AbstractControl): { [key: string]: boolean } | null {
