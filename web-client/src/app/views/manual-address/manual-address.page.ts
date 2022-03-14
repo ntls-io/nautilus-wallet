@@ -18,8 +18,9 @@ export class ManualAddressPage implements OnInit {
     this.addressForm = this.formBuilder.group(
       {
         address: ['', Validators.compose([Validators.required])],
-      },
-      { validator: this.addressValidator }
+      }
+      // XXX(Pi): Temporarily disable.
+      // { validator: this.addressValidator }
     );
   }
 
