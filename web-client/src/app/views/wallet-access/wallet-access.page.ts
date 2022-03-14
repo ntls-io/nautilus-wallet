@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { isValidAddress } from 'algosdk';
 import { WalletService } from 'src/app/services/wallet/wallet.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import {
@@ -41,7 +40,7 @@ export class WalletAccessPage implements OnInit {
   async confirm(value: string | undefined) {
     const address = value?.trim();
 
-    if (address && isValidAddress(address)) {
+    if (address /* XXX(Pi)  && isValidAddress(address)*/) {
       const pinPromise = await this.presentLock();
       const loading = await this.loadingCtrl.create();
       const { success, pin } = pinPromise;
