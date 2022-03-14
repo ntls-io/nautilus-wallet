@@ -121,10 +121,12 @@ export class EnclaveService {
 
   protected async walletApiGetBytes(path: string): Promise<Uint8Array> {
     const url = this.getWalletApiUrl(path);
-    const arrayBuffer = this.http.get(url, {
-      responseType: 'arraybuffer',
-    });
-    return arrayViewFromBuffer(await lastValueFrom(arrayBuffer));
+    const arrayBuffer = await lastValueFrom(
+      this.http.get(url, {
+        responseType: 'arraybuffer',
+      })
+    );
+    return arrayViewFromBuffer(arrayBuffer);
   }
 
   protected async walletApiPostBytes(
@@ -133,10 +135,12 @@ export class EnclaveService {
   ): Promise<Uint8Array> {
     const url = this.getWalletApiUrl(path);
     const body = bufferFromArrayView(bytes);
-    const arrayBuffer = this.http.post(url, body, {
-      responseType: 'arraybuffer',
-    });
-    return arrayViewFromBuffer(await lastValueFrom(arrayBuffer));
+    const arrayBuffer = await lastValueFrom(
+      this.http.post(url, body, {
+        responseType: 'arraybuffer',
+      })
+    );
+    return arrayViewFromBuffer(arrayBuffer);
   }
 
   protected async postSealedExchange<Request, Response>(
