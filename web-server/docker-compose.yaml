@@ -10,7 +10,7 @@
 
 services:
 
-  server- :
+  server-sw:
     profiles: ["sw"]
     build:
       context: .
