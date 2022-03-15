@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import algosdk from 'algosdk';
+import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
@@ -120,9 +121,11 @@ export class EnclaveService {
 
   protected async walletApiGetBytes(path: string): Promise<Uint8Array> {
     const url = this.getWalletApiUrl(path);
-    const arrayBuffer = await this.http
-      .get(url, { responseType: 'arraybuffer' })
-      .toPromise();
+    const arrayBuffer = await lastValueFrom(
+      this.http.get(url, {
+        responseType: 'arraybuffer',
+      })
+    );
     return arrayViewFromBuffer(arrayBuffer);
   }
 
@@ -132,9 +135,11 @@ export class EnclaveService {
   ): Promise<Uint8Array> {
     const url = this.getWalletApiUrl(path);
     const body = bufferFromArrayView(bytes);
-    const arrayBuffer = await this.http
-      .post(url, body, { responseType: 'arraybuffer' })
-      .toPromise();
+    const arrayBuffer = await lastValueFrom(
+      this.http.post(url, body, {
+        responseType: 'arraybuffer',
+      })
+    );
     return arrayViewFromBuffer(arrayBuffer);
   }
 

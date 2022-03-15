@@ -18,8 +18,6 @@ type EncryptedMessage = {
 export class TweetNaClCrypto {
   constructor(public keyPair: BoxKeyPair) {}
 
-  static new = (): TweetNaClCrypto => new TweetNaClCrypto(nacl.box.keyPair());
-
   get public_key(): PublicKey {
     return this.keyPair.publicKey;
   }
@@ -27,6 +25,8 @@ export class TweetNaClCrypto {
   get secret_key(): PrivateKey {
     return this.keyPair.secretKey;
   }
+
+  static new = (): TweetNaClCrypto => new TweetNaClCrypto(nacl.box.keyPair());
 
   decrypt_message = (
     ciphertext: Bytes,
