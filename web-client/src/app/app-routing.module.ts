@@ -7,7 +7,7 @@ import { OpenWalletGuard } from './open-wallet.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'landing',
+    redirectTo: 'accounts',
     pathMatch: 'full',
   },
   {
@@ -91,6 +91,13 @@ export const routes: Routes = [
     path: 'kyc',
     loadChildren: () =>
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
+  },
+  {
+    path: 'accounts',
+    loadChildren: () =>
+      import('./views/accounts/accounts.module').then(
+        (m) => m.AccountsPageModule
+      ),
   },
 ];
 

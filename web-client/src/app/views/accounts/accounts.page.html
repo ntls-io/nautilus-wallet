@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Accounts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card
+    class="m-2 bg-white"
+    *ngFor="let account of accountQuery.wallets | async"
+  >
+    <ion-item color="white" lines="none">
+      <ion-icon slot="start" name="logo-bitcoin"></ion-icon>
+      <ion-label>
+        <h2>{{account.currency}}</h2>
+        <p>{{account.walletId}}</p>
+      </ion-label>
+      <ion-text slot="end">{{account.balance}}</ion-text>
+    </ion-item>
+  </ion-card>
+</ion-content>
