@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountQuery, AccountService } from 'src/app/stores/account';
+import { Account } from 'src/app/stores/account';
 
 @Component({
   selector: 'app-accounts',
@@ -7,14 +7,28 @@ import { AccountQuery, AccountService } from 'src/app/stores/account';
   styleUrls: ['./accounts.page.scss'],
 })
 export class AccountsPage implements OnInit {
-  constructor(
-    private accountService: AccountService,
-    public accountQuery: AccountQuery
-  ) {}
+  accounts: Account[] = [
+    {
+      walletId: '0x1j97f8d6gf9fdfg',
+      currency: 'Algorand',
+      balance: '1,000,000',
+      code: 'Algo',
+      hasAssets: true,
+      symbol: 'ALGO',
+    },
+    {
+      walletId: '97df8g6r8fghubkbdsfgkbd7',
+      currency: 'Ripple',
+      balance: '1,000,000',
+      code: 'XRP',
+      hasAssets: false,
+      symbol: 'XRP',
+    },
+  ];
 
-  ngOnInit() {
-    this.accountService.createAccounts();
-  }
+  constructor() {}
+
+  ngOnInit() {}
 
   addAccounts() {}
 }

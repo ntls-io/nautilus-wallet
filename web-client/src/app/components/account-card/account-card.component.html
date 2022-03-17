@@ -1,0 +1,31 @@
+<ion-card class="m-2">
+  <ion-item color="white" lines="full">
+    <ion-icon slot="start" name="logo-bitcoin"></ion-icon>
+    <ion-label>
+      <h2>{{ account?.currency }}</h2>
+      <p>{{ account?.walletId }}</p>
+    </ion-label>
+    <ion-text slot="end">{{ account?.balance }}</ion-text>
+  </ion-item>
+
+  <ion-accordion-group *ngIf="account?.hasAssets">
+    <ion-accordion value="shapes">
+      <ion-item slot="header" color="white">
+        <ion-label>
+          <p>Show Assets</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-list slot="content" lines="full" class="py-0 asset-list">
+        <ion-item *ngFor="let asset of assets" color="white">
+          <ion-icon slot="start" name="logo-usd"></ion-icon>
+          <ion-label>
+            <h2>{{ asset.name }}</h2>
+            <p>{{ asset.code }}</p>
+          </ion-label>
+          <ion-text slot="end">{{ asset.balance }}</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-card>

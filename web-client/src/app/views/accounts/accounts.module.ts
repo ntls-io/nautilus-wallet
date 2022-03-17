@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { AccountsPageRoutingModule } from './accounts-routing.module';
-
 import { AccountsPage } from './accounts.page';
 
 @NgModule({
@@ -13,8 +11,9 @@ import { AccountsPage } from './accounts.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AccountsPageRoutingModule
+    AccountsPageRoutingModule,
+    SharedModule,
   ],
-  declarations: [AccountsPage]
+  declarations: [AccountsPage],
 })
 export class AccountsPageModule {}

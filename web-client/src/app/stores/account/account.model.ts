@@ -5,7 +5,8 @@ export interface Account {
   currency: string;
   symbol: string;
   code: string;
-  balance: number | null;
+  balance: number | string | null;
+  hasAssets: boolean;
 }
 
 export function createAccount(params: Partial<Account>) {
