@@ -5,7 +5,19 @@
 </ion-header>
 
 <ion-content>
-  <ng-container *ngFor="let account of accounts">
-    <app-account-card [account]="account"></app-account-card>
-  </ng-container>
+  <div
+    *ngIf="accountQuery.isLoading | async; else isNotLoading"
+    class="m-3 text-center"
+  >
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ng-template #isNotLoading>
+    <ng-container *ngFor="let account of accountQuery.wallets | async">
+      <app-account-card
+        [account]="account"
+        (click)="selectAccount(account.walletId)"
+      ></app-account-card>
+    </ng-container>
+  </ng-template>
 </ion-content>

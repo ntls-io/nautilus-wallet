@@ -5,6 +5,7 @@ import { AccountState, AccountStore } from './account.store';
 @Injectable({ providedIn: 'root' })
 export class AccountQuery extends QueryEntity<AccountState> {
   wallets = this.selectAll();
+  isLoading = this.selectLoading();
 
   constructor(protected store: AccountStore) {
     super(store);
