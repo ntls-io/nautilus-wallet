@@ -99,6 +99,10 @@ export const routes: Routes = [
         (m) => m.AccountsPageModule
       ),
   },
+  {
+    path: 'account',
+    loadChildren: () => import('./views/account/account.module').then( m => m.AccountPageModule)
+  },
 ];
 
 @NgModule({
