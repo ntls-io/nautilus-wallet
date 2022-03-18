@@ -16,7 +16,7 @@
     <ng-container *ngFor="let account of accountQuery.wallets | async">
       <app-account-card
         [account]="account"
-        (click)="selectAccount(account.walletId)"
+        (selectedAccount)="selectAccount($event)"
       ></app-account-card>
     </ng-container>
   </ng-template>

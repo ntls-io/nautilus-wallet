@@ -1,14 +1,18 @@
 <ion-card class="m-2">
-  <ion-item color="white" lines="full">
+  <ion-item
+    color="white"
+    lines="full"
+    (click)="selectAccount(account.walletId)"
+  >
     <ion-icon slot="start" name="logo-bitcoin"></ion-icon>
     <ion-label>
-      <h2>{{ account?.currency }}</h2>
-      <p>{{ account?.walletId }}</p>
+      <h2>{{ account.currency }}</h2>
+      <p>{{ account.walletId }}</p>
     </ion-label>
-    <ion-text slot="end">{{ account?.balance }}</ion-text>
+    <ion-text slot="end">{{ account.balance }}</ion-text>
   </ion-item>
 
-  <ion-accordion-group *ngIf="account?.hasAssets">
+  <ion-accordion-group *ngIf="account.hasAssets">
     <ion-accordion value="shapes">
       <ion-item slot="header" color="white">
         <ion-label>
