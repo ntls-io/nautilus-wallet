@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Account } from 'src/app/stores/account';
+import { ID } from '@datorama/akita';
+import { NavController } from '@ionic/angular';
+import {
+  Account,
+  AccountQuery,
+  AccountService,
+  AccountStore,
+} from 'src/app/stores/account';
 
 @Component({
   selector: 'app-accounts',
@@ -26,9 +33,19 @@ export class AccountsPage implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(
+    private accountService: AccountService,
+    public accountQuery: AccountQuery,
+    public accountStore: AccountStore,
+    private navCtrl: NavController
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.accountService.createAccounts();
+  }
 
-  addAccounts() {}
+  selectAccount(walletId: ID) {
+    this.accountStore.setActive(walletId);
+    this.navCtrl.navigateForward(['/account']);
+  }
 }
