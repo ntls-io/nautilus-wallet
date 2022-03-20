@@ -2,11 +2,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SessionStore } from 'src/app/state/session.store';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import {
+  assertShowsToast,
   componentElement,
   verifyNavigationTrigger,
 } from 'src/tests/test.helpers';
@@ -15,8 +16,21 @@ import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
   let router: Router;
+  let toastCtrl: ToastController;
+
   let component: WalletPage;
   let fixture: ComponentFixture<WalletPage>;
+
+  const assertShowsStartupToast = (f: () => void): void => {
+    assertShowsToast(
+      toastCtrl,
+      {
+        message: 'No account balance. Deposit some Algo to get started.',
+        duration: 5000,
+      },
+      async () => f()
+    );
+  };
 
   beforeEach(
     waitForAsync(() => {
@@ -28,8 +42,11 @@ describe('WalletPage', () => {
           WalletPageModule,
         ],
       }).compileComponents();
+
       router = TestBed.inject(Router);
       router.navigate(['wallet']);
+      toastCtrl = TestBed.inject(ToastController);
+
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
 
@@ -46,7 +63,9 @@ describe('WalletPage', () => {
         },
       });
 
-      fixture.detectChanges();
+      assertShowsStartupToast(() => {
+        fixture.detectChanges();
+      });
     })
   );
 
