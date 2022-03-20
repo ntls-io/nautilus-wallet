@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { PayFromToComponent } from './pay-from-to.component';
 
 describe('PayFromToComponent', () => {
@@ -9,8 +10,7 @@ describe('PayFromToComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [PayFromToComponent],
-        imports: [IonicModule.forRoot()],
+        imports: [IonicModule.forRoot(), SharedModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(PayFromToComponent);
