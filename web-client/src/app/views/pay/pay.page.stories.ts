@@ -1,4 +1,5 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { PayFromToDefaultArgs } from 'src/app/components/pay-from-to/pay-from-to.component.stories';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SessionState } from 'src/app/stores/session/session.store';
 import {
@@ -29,3 +30,4 @@ const Template: Story<Args> = ({ receiverAddress, ...state }: Args) => ({
 });
 
 export const Default = Template.bind({});
+Default.args = PayFromToDefaultArgs;
