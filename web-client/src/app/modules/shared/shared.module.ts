@@ -9,6 +9,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
+import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     HeaderComponent,
     ActionItemComponent,
     ProfileCardHorizontalComponent,
+    PayFromToComponent,
   ],
   imports: [
     IonicModule,
@@ -29,11 +31,12 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     FontAwesomeModule,
     QRCodeModule,
     NgxPrinterModule,
+    ReactiveFormsModule,
+    ZXingScannerModule,
     HeaderComponent,
     ProfileCardHorizontalComponent,
     ActionItemComponent,
-    ReactiveFormsModule,
-    ZXingScannerModule,
+    PayFromToComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
