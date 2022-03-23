@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   randBitcoinAddress,
@@ -12,7 +11,7 @@ import { AccountStore } from './account.store';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  constructor(private accountStore: AccountStore, private http: HttpClient) {}
+  constructor(private accountStore: AccountStore) {}
 
   async createAccounts() {
     this.accountStore.setLoading(true);

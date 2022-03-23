@@ -54,6 +54,6 @@ export class AccountsPage implements OnInit {
 
   selectAccount(walletId: ID) {
     this.accountStore.setActive(walletId);
-    this.navCtrl.navigateForward(['/account']);
+    this.navCtrl.navigateForward('account');
   }
 }
