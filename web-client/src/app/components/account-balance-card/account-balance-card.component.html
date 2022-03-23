@@ -1,0 +1,31 @@
+<ion-card
+  color="primary-background"
+  class="mb-2 border border-solid border-white"
+>
+  <ion-card-header class="text-center">
+    <b>Current {{ account ? "Account" : "Wallet" }} Balance</b>
+    <h1 class="m-0 font-audiowide !font-extrabold">
+      {{ balance | currency: "R" }}
+    </h1>
+  </ion-card-header>
+  <ion-card-content class="p-0" *ngIf="account">
+    <ion-grid class="px-0">
+      <ion-row class="justify-around">
+        <ion-col size="auto">
+          <ion-button shape="round" size="small">Pay</ion-button>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-button shape="round" size="small">Receive</ion-button>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-button shape="round" size="small">
+            <ion-icon
+              slot="icon-only"
+              name="ellipsis-horizontal-outline"
+            ></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

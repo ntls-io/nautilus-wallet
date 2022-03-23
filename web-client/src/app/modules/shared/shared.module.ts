@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
+import { AccountBalanceCardComponent } from 'src/app/components/account-balance-card/account-balance-card.component';
 import { AccountCardComponent } from 'src/app/components/account-card/account-card.component';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
@@ -18,6 +19,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ActionItemComponent,
     ProfileCardHorizontalComponent,
     AccountCardComponent,
+    AccountBalanceCardComponent,
   ],
   imports: [
     IonicModule,
@@ -37,6 +39,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ActionItemComponent,
     ReactiveFormsModule,
     ZXingScannerModule,
+    AccountBalanceCardComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
