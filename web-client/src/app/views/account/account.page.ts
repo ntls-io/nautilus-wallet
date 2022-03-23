@@ -10,10 +10,9 @@ export class AccountPage implements OnInit {
   account: Account | undefined;
 
   constructor(private accountQuery: AccountQuery) {
-    this.accountQuery.selectActive((account) => {
-      console.log(account);
-      this.account = account;
-    });
+    this.accountQuery
+      .selectActive()
+      .subscribe((account) => (this.account = account));
   }
 
   ngOnInit() {}

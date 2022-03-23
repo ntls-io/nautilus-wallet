@@ -18,7 +18,7 @@ export class AccountsPage implements OnInit {
     {
       walletId: '0x1j97f8d6gf9fdfg',
       currency: 'Algorand',
-      balance: '1,000,000',
+      balance: 1000000,
       code: 'Algo',
       hasAssets: true,
       symbol: 'ALGO',
@@ -26,19 +26,27 @@ export class AccountsPage implements OnInit {
     {
       walletId: '97df8g6r8fghubkbdsfgkbd7',
       currency: 'Ripple',
-      balance: '1,000,000',
+      balance: 1000000,
       code: 'XRP',
       hasAssets: false,
       symbol: 'XRP',
     },
   ];
+  totalBalance: number | undefined;
 
   constructor(
-    private accountService: AccountService,
+    public accountService: AccountService,
     public accountQuery: AccountQuery,
     public accountStore: AccountStore,
     private navCtrl: NavController
-  ) {}
+  ) {
+    this.accountQuery.selectAll().subscribe((accounts) => {
+      this.totalBalance = accounts.reduce(
+        (total, { balance }) => Number(total) + Number(balance),
+        0
+      );
+    });
+  }
 
   ngOnInit() {
     this.accountService.createAccounts();

@@ -5,7 +5,7 @@ export interface Account {
   currency: string;
   symbol: string;
   code: string;
-  balance: number | string | null;
+  balance: number;
   hasAssets: boolean;
 }
 

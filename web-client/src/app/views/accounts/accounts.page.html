@@ -1,10 +1,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Accounts</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="accountService.createAccounts()">
+        <ion-icon name="sync"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <app-account-balance-card [balance]="totalBalance"></app-account-balance-card>
+
   <div
     *ngIf="accountQuery.isLoading | async; else isNotLoading"
     class="m-3 text-center"

@@ -7,4 +7,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <app-account-balance-card
+    [balance]="account?.balance"
+    [account]="true"
+  ></app-account-balance-card>
+</ion-content>
