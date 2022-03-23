@@ -1,5 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {
+  randBitcoinAddress,
+  randBoolean,
+  randCurrencyCode,
+  randCurrencyName,
+  randFloat,
+  randSvg,
+} from '@ngneat/falso';
 import { AccountStore } from './account.store';
 
 @Injectable({ providedIn: 'root' })
@@ -8,13 +16,21 @@ export class AccountService {
 
   async createAccounts() {
     this.accountStore.setLoading(true);
-    await this.http
-      .get('https://6232485a6f4ffe00fb86341c.mockapi.io/account/create')
-      .toPromise()
-      .then((account: any) => {
-        console.log(account);
-        this.accountStore.add(account);
-      })
-      .finally(() => this.accountStore.setLoading(false));
+    this.accountStore.reset();
+
+    Array.from({ length: 3 }, (x, id) => {
+      const account: any = {
+        walletId: randBitcoinAddress(),
+        balance: randFloat(),
+        symbol: randSvg(),
+        currency: randCurrencyName(),
+        code: randCurrencyCode(),
+        hasAssets: randBoolean(),
+        id,
+      };
+      console.log(account);
+      this.accountStore.add(account);
+    });
+    this.accountStore.setLoading(false);
   }
 }
