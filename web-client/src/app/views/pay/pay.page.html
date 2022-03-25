@@ -34,6 +34,11 @@
             </ion-item>
           </ion-list>
         </ion-card>
+        <app-pay-from-to
+          [name]="sessionQuery.name | async"
+          [balance]="sessionQuery.balance | async"
+          [receiverAddress]="wallet"
+        ></app-pay-from-to>
       </ion-col>
     </ion-row>
     <ion-row>

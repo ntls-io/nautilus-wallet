@@ -11,6 +11,7 @@ import { AccountBalanceCardComponent } from 'src/app/components/account-balance-
 import { AccountCardComponent } from 'src/app/components/account-card/account-card.component';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
+import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ProfileCardHorizontalComponent,
     AccountCardComponent,
     AccountBalanceCardComponent,
+    PayFromToComponent,
   ],
   imports: [
     IonicModule,
@@ -33,6 +35,8 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     FontAwesomeModule,
     QRCodeModule,
     NgxPrinterModule,
+    ReactiveFormsModule,
+    ZXingScannerModule,
     HeaderComponent,
     ProfileCardHorizontalComponent,
     AccountCardComponent,
@@ -40,6 +44,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ReactiveFormsModule,
     ZXingScannerModule,
     AccountBalanceCardComponent,
+    PayFromToComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
