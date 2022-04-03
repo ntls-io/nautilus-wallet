@@ -13,6 +13,7 @@ const Template: Story<AccountCardComponent> = (args: AccountCardComponent) => ({
 export const Default = Template.bind({});
 Default.args = {
   account: {
+    id: 1,
     walletId: '97df8g6r8fghubkbdsfgkbd7',
     currency: 'Ripple',
     balance: 1000000,
@@ -26,6 +27,7 @@ Default.args = {
 export const WithAssets = Template.bind({});
 WithAssets.args = {
   account: {
+    id: 1,
     walletId: '0x1j97f8d6gf9fdfg',
     currency: 'Algorand',
     balance: 1000000,
