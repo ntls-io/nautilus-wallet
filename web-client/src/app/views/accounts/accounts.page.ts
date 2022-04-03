@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ID } from '@datorama/akita';
 import { NavController } from '@ionic/angular';
 import {
-  Account,
   AccountQuery,
   AccountService,
   AccountStore,
@@ -14,24 +12,6 @@ import {
   styleUrls: ['./accounts.page.scss'],
 })
 export class AccountsPage implements OnInit {
-  accounts: Account[] = [
-    {
-      walletId: '0x1j97f8d6gf9fdfg',
-      currency: 'Algorand',
-      balance: 1000000,
-      code: 'Algo',
-      hasAssets: true,
-      symbol: 'ALGO',
-    },
-    {
-      walletId: '97df8g6r8fghubkbdsfgkbd7',
-      currency: 'Ripple',
-      balance: 1000000,
-      code: 'XRP',
-      hasAssets: false,
-      symbol: 'XRP',
-    },
-  ];
   totalBalance: number | undefined;
 
   constructor(
@@ -52,7 +32,7 @@ export class AccountsPage implements OnInit {
     this.accountService.createAccounts();
   }
 
-  selectAccount(walletId: ID) {
+  selectAccount(walletId: string) {
     this.accountStore.setActive(walletId);
     this.navCtrl.navigateForward('account');
   }
