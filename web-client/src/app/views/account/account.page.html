@@ -11,5 +11,7 @@
   <app-account-balance-card
     [balance]="account?.balance"
     [account]="true"
+    (showAddress)="showAddress()"
+    (payToAddress)="payToAddress()"
   ></app-account-balance-card>
 </ion-content>

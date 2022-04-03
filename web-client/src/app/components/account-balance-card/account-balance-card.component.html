@@ -12,10 +12,16 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button expand="block" shape="round" size="small">Pay</ion-button>
+          <ion-button expand="block" shape="round" size="small" (click)="pay()"
+            >Pay
+          </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button expand="block" shape="round" size="small"
+          <ion-button
+            expand="block"
+            shape="round"
+            size="small"
+            (click)="receive()"
             >Receive
           </ion-button>
         </ion-col>

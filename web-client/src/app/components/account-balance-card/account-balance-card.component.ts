@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-account-balance-card',
@@ -9,8 +9,18 @@ export class AccountBalanceCardComponent implements OnInit {
   @Input() balance: number | undefined;
   @Input() currency: string | undefined;
   @Input() account = false;
+  @Output() showAddress = new EventEmitter<any>();
+  @Output() payToAddress = new EventEmitter<any>();
 
   constructor() {}
 
   ngOnInit() {}
+
+  pay() {
+    this.payToAddress.emit();
+  }
+
+  receive() {
+    this.showAddress.emit();
+  }
 }
