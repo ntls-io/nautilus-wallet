@@ -1,0 +1,48 @@
+<ion-grid>
+  <ion-row class="ion-justify-content-center" id="print-section">
+    <ion-col size="12" size-md="6">
+      <ion-card color="white" class="m-4">
+        <ion-card-content>
+          <qrcode
+            [qrdata]="address"
+            errorCorrectionLevel="H"
+            elementType="img"
+            [width]="1000"
+            [margin]="0"
+          ></qrcode>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size="12" size-md="auto" class="ion-text-center">
+      <ion-text class="font-nasalization"
+        >Address
+        <ng-container *ngIf="currency"
+          >for <b>{{ currency }}</b>
+        </ng-container>
+      </ion-text>
+      <div class="border-dashed border-2 rounded p-3 my-2">
+        <ion-text class="font-bold">{{ address }}</ion-text>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="auto">
+      <ion-button shape="round" (click)="copyAddress()"> Copy </ion-button>
+    </ion-col>
+    <ion-col size="auto" *ngIf="canShare">
+      <ion-button shape="round" (click)="shareAddress()"> Share </ion-button>
+    </ion-col>
+
+    <ion-col size="auto">
+      <ion-button
+        fill="outline"
+        color="white"
+        shape="round"
+        ngxPrintItemButton
+        divID="print-section"
+      >
+        Print
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
