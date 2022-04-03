@@ -1,7 +1,8 @@
 import { ID } from '@datorama/akita';
 
 export interface Account {
-  walletId: ID;
+  id: ID;
+  walletId: string;
   currency: string;
   symbol: string;
   code: string;

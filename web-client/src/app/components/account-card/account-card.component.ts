@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ID } from '@datorama/akita';
 import { Account } from 'src/app/stores/account';
 
 @Component({
@@ -9,7 +8,7 @@ import { Account } from 'src/app/stores/account';
 })
 export class AccountCardComponent implements OnInit {
   @Input() account!: Account;
-  @Output() selectedAccount = new EventEmitter<ID>();
+  @Output() selectedAccount = new EventEmitter<string>();
 
   assets = [
     { name: 'USDC', code: null, balance: '1,000,000' },
@@ -20,7 +19,7 @@ export class AccountCardComponent implements OnInit {
 
   ngOnInit() {}
 
-  selectAccount(walletId: ID) {
+  selectAccount(walletId: string) {
     this.selectedAccount.emit(walletId);
   }
 }
