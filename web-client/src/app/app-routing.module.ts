@@ -81,6 +81,13 @@ export const routes: Routes = [
     canActivate: [OpenWalletGuard],
   },
   {
+    path: 'send-funds',
+    loadChildren: () =>
+      import('./views/send-funds/send-funds.module').then(
+        (m) => m.SendFundsPageModule
+      ),
+  },
+  {
     path: 'manual-address',
     loadChildren: () =>
       import('./views/manual-address/manual-address.module').then(
@@ -101,7 +108,8 @@ export const routes: Routes = [
   },
   {
     path: 'account',
-    loadChildren: () => import('./views/account/account.module').then( m => m.AccountPageModule)
+    loadChildren: () =>
+      import('./views/account/account.module').then((m) => m.AccountPageModule),
   },
 ];
 
