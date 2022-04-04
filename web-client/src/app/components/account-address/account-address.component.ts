@@ -38,7 +38,7 @@ export class AccountAddressComponent implements OnInit {
       title: 'See cool stuff',
       text: 'Really awesome thing you need to see right meow',
       dialogTitle: 'Share with buddies',
-    });
+    }).catch((error) => console.log(error.message));
   }
 
   async notice(message: string, success: boolean = true) {
