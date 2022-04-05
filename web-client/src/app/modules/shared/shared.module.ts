@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgModule,
+  NO_ERRORS_SCHEMA,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -7,6 +11,9 @@ import { IonicModule } from '@ionic/angular';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
+import { AccountAddressComponent } from 'src/app/components/account-address/account-address.component';
+import { AccountBalanceCardComponent } from 'src/app/components/account-balance-card/account-balance-card.component';
+import { AccountCardComponent } from 'src/app/components/account-card/account-card.component';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
@@ -17,7 +24,10 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     HeaderComponent,
     ActionItemComponent,
     ProfileCardHorizontalComponent,
+    AccountCardComponent,
+    AccountBalanceCardComponent,
     PayFromToComponent,
+    AccountAddressComponent,
   ],
   imports: [
     IonicModule,
@@ -35,9 +45,14 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ZXingScannerModule,
     HeaderComponent,
     ProfileCardHorizontalComponent,
+    AccountCardComponent,
     ActionItemComponent,
+    ReactiveFormsModule,
+    ZXingScannerModule,
+    AccountBalanceCardComponent,
     PayFromToComponent,
+    AccountAddressComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class SharedModule {}

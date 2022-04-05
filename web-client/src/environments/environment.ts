@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  nautilusWalletServer: 'http://localhost:4200/api/nautilus/', // trailing slash matters
-  nautilusAssetServices: 'http://localhost:4200/api/asset-services/', // trailing slash matters
+  // TODO(Pi): Use a modal switch for the choice of ledger to use, for now.
+  ledger: 'XRP' as 'Algorand' | 'XRP',
+  nautilusWalletServer: 'https://xrpl-api.registree.io/',
+  nautilusAssetServices: 'https://ntls-services.registree.io/',
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
   // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {

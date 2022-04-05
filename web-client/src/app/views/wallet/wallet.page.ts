@@ -27,12 +27,13 @@ export class WalletPage implements OnInit {
     {
       title: 'Top Up Wallet',
       icon: faDonate,
-      url: 'https://testnet.algoexplorer.io/dispenser',
+      url: 'https://yusufsahinhamza.github.io/xrp-testnet-faucet/',
     },
     {
       title: 'Verify Profile',
       icon: faFingerprint,
       path: '/kyc',
+      disabled: true,
     },
     {
       title: 'Withdraw',

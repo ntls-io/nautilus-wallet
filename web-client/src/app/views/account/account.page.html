@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{account?.currency}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-account-balance-card
+    [balance]="account?.balance"
+    [account]="true"
+    (showAddress)="showAddress()"
+    (payToAddress)="payToAddress()"
+  ></app-account-balance-card>
+</ion-content>

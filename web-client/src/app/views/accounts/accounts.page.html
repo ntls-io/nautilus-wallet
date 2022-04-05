@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Accounts</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="accountService.createAccounts()">
+        <ion-icon name="sync"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-account-balance-card [balance]="totalBalance"></app-account-balance-card>
+
+  <div
+    *ngIf="accountQuery.isLoading | async; else isNotLoading"
+    class="m-3 text-center"
+  >
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ng-template #isNotLoading>
+    <ng-container *ngFor="let account of accountQuery.wallets | async">
+      <app-account-card
+        [account]="account"
+        (selectedAccount)="selectAccount($event)"
+      ></app-account-card>
+    </ng-container>
+  </ng-template>
+</ion-content>

@@ -5,7 +5,7 @@ use algonaut::crypto::HashDigest;
 use algonaut::transaction::transaction::Payment;
 use algonaut::transaction::{Transaction, TransactionType};
 use proptest::{prop_assume, proptest};
-use sgx_wallet_impl::wallet_operations::sign_transaction::algorand_network_compatible;
+use sgx_wallet_impl::wallet_operations::sign_transaction_algorand::algorand_network_compatible;
 
 pub(crate) fn prop_transaction_msgpack_roundtrips() {
     proptest!(

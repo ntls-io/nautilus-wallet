@@ -9,6 +9,31 @@
   <ion-grid>
     <ion-row>
       <ion-col>
+        <ion-card class="mx-0">
+          <ion-list lines="full" class="p-0">
+            <ion-item color="white">
+              <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h2 class="!font-black">From:</h2>
+                <p>{{sessionQuery.name | async}}</p>
+                <small>Available Balance</small>
+              </ion-label>
+              <ion-icon src="assets/icon/xrp-symbol-black.svg"></ion-icon>
+              <ion-text slot="end" color="primary">
+                <h3 class="font-semibold m-0">
+                  {{sessionQuery.balance| async}}
+                </h3>
+              </ion-text>
+            </ion-item>
+            <ion-item color="white">
+              <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h2 class="!font-black">To:</h2>
+                <p>{{wallet}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card>
         <app-pay-from-to
           [name]="sessionQuery.name | async"
           [balance]="sessionQuery.balance | async"
@@ -33,8 +58,7 @@
               >PAY
             </ion-button>
             <p class="text-sm text-center">
-              Please check payment amount carefully. Transaction fees up to
-              R0.01 apply.
+              Please check payment amount carefully. Transaction fees apply.
             </p>
           </div>
         </form>

@@ -52,8 +52,8 @@ export class LockscreenPage implements OnInit {
   //TODO: implement function
   onSubmit() {
     this.codeForm.markAllAsTouched();
-
-    if (this.codeForm.valid) {
+    //TODO: better error handling
+    if (!this.codeForm.errors) {
       //()=>{validate pin}
       if ('success') {
         this.dismiss(true);

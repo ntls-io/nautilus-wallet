@@ -5,10 +5,8 @@
 import { Provider } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { of } from 'rxjs';
-import {
-  SessionState,
-  SessionStore,
-} from 'src/app/stores/session/session.store';
+import { AccountState, AccountStore } from 'src/app/stores/account';
+import { SessionState, SessionStore } from 'src/app/stores/session';
 
 /**
  * Define a `ActivatedRoute` provider initialised with the given `queryParams`.
@@ -39,6 +37,17 @@ export const provideSessionStore = (state: SessionState): Provider => ({
  */
 const newSessionStore = (state: Partial<SessionState>): SessionStore => {
   const store = new SessionStore();
+  store.update(state);
+  return store;
+};
+
+export const provideAccountStore = (state: AccountState): Provider => ({
+  provide: AccountStore,
+  useValue: newAccountStore(state),
+});
+
+const newAccountStore = (state: Partial<AccountState>): AccountStore => {
+  const store = new AccountStore();
   store.update(state);
   return store;
 };

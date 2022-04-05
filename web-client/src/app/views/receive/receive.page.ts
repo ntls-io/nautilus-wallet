@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { Account } from 'src/app/stores/account';
 
 @Component({
   selector: 'app-receive',
@@ -7,16 +8,13 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./receive.page.scss'],
 })
 export class ReceivePage implements OnInit {
-  actionItems = [
-    {
-      preTitle: 'Connect & receive money',
-      title: 'Share link to connect',
-      icon: faLink,
-      disabled: true,
-    },
-  ];
+  @Input() account!: Account;
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
+
+  dismiss() {
+    this.modalCtrl.dismiss();
+  }
 }
