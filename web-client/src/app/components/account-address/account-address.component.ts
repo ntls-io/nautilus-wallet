@@ -10,7 +10,7 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./account-address.component.scss'],
 })
 export class AccountAddressComponent implements OnInit {
-  @Input() address!: string;
+  @Input() address: string | undefined;
   @Input() currency: string | undefined;
   // Hook for testing
   public Clipboard = Clipboard;
