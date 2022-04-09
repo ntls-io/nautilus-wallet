@@ -17,9 +17,7 @@ export class SessionQuery extends Query<SessionState> {
 
   // XXX(Pi): Just use Algorand asset balance, for now.
   balance: Observable<SessionState['balance']> = this.select((state) =>
-    state.algorandAccount
-      ? assetBalanceForDisplay(state.algorandAccount)
-      : undefined
+    state.algorandAccount ? assetBalanceForDisplay(state.algorandAccount) : null
   );
 
   constructor(protected store: SessionStore) {
