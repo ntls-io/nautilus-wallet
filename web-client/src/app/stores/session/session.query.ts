@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Query } from '@datorama/akita';
+import { Observable } from 'rxjs';
 import {
   AccountData,
   extractAlgorandAssetBalance,
@@ -11,11 +12,11 @@ import { SessionState, SessionStore } from './session.store';
   providedIn: 'root',
 })
 export class SessionQuery extends Query<SessionState> {
-  name = this.select('name');
-  walletId = this.select('walletId');
+  name: Observable<SessionState['name']> = this.select('name');
+  walletId: Observable<SessionState['walletId']> = this.select('walletId');
 
   // XXX(Pi): Just use Algorand asset balance, for now.
-  balance = this.select((state) =>
+  balance: Observable<SessionState['balance']> = this.select((state) =>
     state.algorandAccount
       ? assetBalanceForDisplay(state.algorandAccount)
       : undefined
