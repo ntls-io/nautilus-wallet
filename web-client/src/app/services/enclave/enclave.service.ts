@@ -121,11 +121,11 @@ export class EnclaveService {
   // Configuration helpers:
 
   protected getWalletApiUrl(path: string): string {
-    const nautilusBaseUrl = environment.nautilusWalletServer;
-    if (nautilusBaseUrl === undefined) {
-      throw new Error('environment.algod.token not configured');
+    const nautilusWalletServer = environment.nautilusWalletServer;
+    if (nautilusWalletServer === undefined) {
+      throw new Error('environment.nautilusWalletServer not configured');
     }
-    return new URL(path, nautilusBaseUrl).toString();
+    return new URL(path, nautilusWalletServer).toString();
   }
 }
 
