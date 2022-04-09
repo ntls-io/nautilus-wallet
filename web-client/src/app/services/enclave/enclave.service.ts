@@ -1,12 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import algosdk, { Transaction } from 'algosdk';
 import { lastValueFrom } from 'rxjs';
-import {
-  AccountData,
-  TransactionConfirmation,
-  waitForConfirmation,
-} from 'src/app/services/algosdk.utils';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
@@ -16,13 +10,6 @@ import {
   SignTransaction,
   SignTransactionResult,
 } from 'src/schema/actions';
-import {
-  AssetTransferRequiredParameters,
-  makeAssetTransferTxnHelper,
-  makePaymentTxnHelper,
-  OptionalParameters,
-  RequiredParameters,
-} from 'src/schema/algorand.helpers';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
 import { from_msgpack_as } from 'src/schema/msgpack';
@@ -75,71 +62,6 @@ export class EnclaveService {
     >(walletRequest);
     const { SignTransaction: result } = response;
     return result;
-  }
-
-  // Algorand network interface functions:
-
-  async getAccount(address: string): Promise<AccountData> {
-    const algodClient = this.getAlgodClient();
-    return (await algodClient.accountInformation(address).do()) as AccountData;
-  }
-
-  async createUnsignedAssetTransferTxn(
-    required: AssetTransferRequiredParameters,
-    optional?: OptionalParameters
-  ): Promise<Transaction> {
-    const algodClient = this.getAlgodClient();
-    const suggestedParams = await algodClient.getTransactionParams().do();
-    return makeAssetTransferTxnHelper(suggestedParams, required, optional);
-  }
-
-  async createUnsignedAssetOptInTxn(
-    address: string,
-    assetIndex: number
-  ): Promise<Transaction> {
-    return await this.createUnsignedAssetTransferTxn({
-      from: address,
-      to: address,
-      amount: 0,
-      assetIndex,
-    });
-  }
-
-  async createUnsignedTransaction(
-    required: RequiredParameters,
-    optional?: OptionalParameters
-  ) {
-    const algodClient = this.getAlgodClient();
-    const suggestedParams = await algodClient.getTransactionParams().do();
-    console.log('createUnsignedTransaction', 'got:', { suggestedParams });
-    const transaction = makePaymentTxnHelper(
-      suggestedParams,
-      required,
-      optional
-    );
-    console.log('createUnsignedTransaction', 'created:', { transaction });
-    return transaction;
-  }
-
-  async submitSignedTransaction(
-    signedTxn: Uint8Array
-  ): Promise<{ txId: string }> {
-    return await this.getAlgodClient().sendRawTransaction(signedTxn).do();
-  }
-
-  async waitForTransactionConfirmation(
-    txId: string
-  ): Promise<TransactionConfirmation> {
-    // TODO: Report rejection and timeout in a way the UI can use.
-    return waitForConfirmation(this.getAlgodClient(), txId, 4);
-  }
-
-  /** Combine {@link submitSignedTransaction} and {@link waitForTransactionConfirmation}. */
-  async submitAndConfirmTransaction(
-    signedTxn: Uint8Array
-  ): Promise<TransactionConfirmation> {
-    const { txId } = await this.submitSignedTransaction(signedTxn);
-    return await this.waitForTransactionConfirmation(txId);
   }
 
   // HTTP helpers
@@ -204,14 +126,6 @@ export class EnclaveService {
       throw new Error('environment.algod.token not configured');
     }
     return new URL(path, nautilusBaseUrl).toString();
-  }
-
-  protected getAlgodClient() {
-    const algod = environment.algod;
-    if (algod.token === undefined) {
-      throw new Error('environment.algod.token not configured');
-    }
-    return new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
   }
 }
 

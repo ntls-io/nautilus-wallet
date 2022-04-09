@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Transaction } from 'algosdk';
+import { AlgodService } from 'src/app/services/algod.service';
 import {
   extractAlgorandAssetBalance,
   noBigintSupport,
@@ -17,7 +18,8 @@ type MaybeError = string | undefined;
 export class WalletService {
   constructor(
     private sessionStore: SessionStore,
-    private enclaveService: EnclaveService
+    private enclaveService: EnclaveService,
+    private algodService: AlgodService
   ) {}
 
   /**
@@ -51,9 +53,7 @@ export class WalletService {
 
   async updateBalance() {
     const algorandAddress = this.storedAlgorandAddress();
-    const algorandAccount = await this.enclaveService.getAccount(
-      algorandAddress
-    );
+    const algorandAccount = await this.algodService.getAccount(algorandAddress);
     const balance = noBigintSupport(algorandAccount.amount);
     this.sessionStore.update({ algorandAccount, balance });
   }
@@ -81,7 +81,7 @@ export class WalletService {
 
   async sendFunds(receiverId: string, amount: number) {
     const { walletId, pin } = this.sessionStore.getValue();
-    const transaction = await this.enclaveService.createUnsignedTransaction({
+    const transaction = await this.algodService.createUnsignedTransaction({
       amount: amount * 100000,
       from: walletId,
       to: receiverId,
@@ -91,7 +91,7 @@ export class WalletService {
       wallet_id: walletId,
       algorand_transaction_bytes: transaction.bytesToSign(),
     });
-    const submitRes = await this.enclaveService.submitAndConfirmTransaction(
+    const submitRes = await this.algodService.submitAndConfirmTransaction(
       (res as { Signed: AlgorandTransactionSigned }).Signed
         .signed_transaction_bytes
     );
@@ -141,10 +141,9 @@ export class WalletService {
     });
     if ('Signed' in signResult) {
       console.log('sendTransaction: submitting and confirming');
-      const confirmation =
-        await this.enclaveService.submitAndConfirmTransaction(
-          signResult.Signed.signed_transaction_bytes
-        );
+      const confirmation = await this.algodService.submitAndConfirmTransaction(
+        signResult.Signed.signed_transaction_bytes
+      );
       console.log('sendTransaction: confirmed', { confirmation });
       await this.updateBalance();
       return confirmation;
@@ -163,7 +162,7 @@ export class WalletService {
   }
 
   async sendAssetOptIn(assetId: number): Promise<TransactionConfirmation> {
-    const transaction = await this.enclaveService.createUnsignedAssetOptInTxn(
+    const transaction = await this.algodService.createUnsignedAssetOptInTxn(
       this.storedAlgorandAddress(),
       assetId
     );
@@ -175,13 +174,12 @@ export class WalletService {
     receiverId: string,
     amount: number
   ): Promise<TransactionConfirmation> {
-    const transaction =
-      await this.enclaveService.createUnsignedAssetTransferTxn({
-        from: this.storedAlgorandAddress(),
-        to: receiverId,
-        amount,
-        assetIndex: assetId,
-      });
+    const transaction = await this.algodService.createUnsignedAssetTransferTxn({
+      from: this.storedAlgorandAddress(),
+      to: receiverId,
+      amount,
+      assetIndex: assetId,
+    });
     return await this.sendTransaction(transaction);
   }
 }
