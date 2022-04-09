@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AlgodService } from 'src/app/services/algod.service';
 import { SessionStore } from 'src/app/stores/session';
 import { never } from 'src/helpers/helpers';
 import { AlgorandTransactionSigned } from 'src/schema/entities';
@@ -10,7 +11,8 @@ type MaybeError = string | undefined;
 export class WalletService {
   constructor(
     private sessionStore: SessionStore,
-    private enclaveService: EnclaveService
+    private enclaveService: EnclaveService,
+    private algodService: AlgodService
   ) {}
 
   async createWallet(name: string, pin: string) {
@@ -32,9 +34,10 @@ export class WalletService {
       this.sessionStore.setError(err);
     }
   }
+
   async updateBalance() {
     const { walletId } = this.sessionStore.getValue();
-    const balance = (await this.enclaveService.getBalance(walletId)) / 100000;
+    const balance = (await this.algodService.getBalance(walletId)) / 100000;
     console.log(balance);
     this.sessionStore.update({ balance });
   }
@@ -62,7 +65,7 @@ export class WalletService {
 
   async sendFunds(receiverId: string, amount: number) {
     const { walletId, pin } = this.sessionStore.getValue();
-    const transaction = await this.enclaveService.createUnsignedTransaction({
+    const transaction = await this.algodService.createUnsignedTransaction({
       amount: amount * 100000,
       from: walletId,
       to: receiverId,
@@ -72,7 +75,7 @@ export class WalletService {
       wallet_id: walletId,
       algorand_transaction_bytes: transaction.bytesToSign(),
     });
-    const submitRes = await this.enclaveService.submitAndConfirmTransaction(
+    const submitRes = await this.algodService.submitAndConfirmTransaction(
       (res as { Signed: AlgorandTransactionSigned }).Signed
         .signed_transaction_bytes
     );
