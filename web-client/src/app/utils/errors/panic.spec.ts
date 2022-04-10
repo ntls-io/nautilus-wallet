@@ -1,4 +1,4 @@
-import { assertConsoleLogs } from '../../../tests/test.helpers';
+import { assertConsoleLogs } from 'src/tests/test.helpers';
 import { defined, panic } from './panic';
 
 describe('panic', () => {
@@ -16,6 +16,7 @@ describe('defined', () => {
   for (const value of values) {
     it(`returns defined ${value}`, () => {
       expect(defined(value)).toBe(value);
+      expect(defined(value, 'some message')).toBe(value);
     });
   }
 
@@ -26,5 +27,14 @@ describe('defined', () => {
         expect(() => defined(undefined)).toThrowError('unexpected undefined');
       }
     );
+  });
+
+  it('panics with message', () => {
+    const expectedMessage = 'something went wrong';
+    assertConsoleLogs({ error: [[expectedMessage, undefined]] }, async () => {
+      expect(() => defined(undefined, expectedMessage)).toThrowError(
+        expectedMessage
+      );
+    });
   });
 });
