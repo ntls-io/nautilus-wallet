@@ -2,23 +2,21 @@ import { LoadingController } from '@ionic/angular';
 import { LoadingOptions } from '@ionic/core';
 
 // Show the default loading overlay around `f()`.
-export const withLoadingOverlay = async (
+export const withLoadingOverlay = async <T>(
   loadingController: LoadingController,
-  f: () => Promise<void>
-): Promise<void> => {
-  await withLoadingOverlayOpts(loadingController, {}, f);
-};
+  f: () => Promise<T>
+): Promise<T> => await withLoadingOverlayOpts(loadingController, {}, f);
 
 // Show a loading overlay with `options` around `f()`.
-export const withLoadingOverlayOpts = async (
+export const withLoadingOverlayOpts = async <T>(
   loadingController: LoadingController,
   options: LoadingOptions,
-  f: () => Promise<void>
-): Promise<void> => {
+  f: () => Promise<T>
+): Promise<T> => {
   const loading = await loadingController.create(options);
   await loading.present();
   try {
-    await f();
+    return await f();
   } finally {
     await loading.dismiss();
   }
