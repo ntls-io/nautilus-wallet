@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from 'src/environments/types';
+
+export const environment: Environment = {
   production: true,
   // TODO: Production endpoint
   nautilusWalletServer: 'https://ntls-api.registree.io/',

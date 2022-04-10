@@ -2,10 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { Environment } from 'src/environments/types';
+
+export const environment: Environment = {
   production: false,
-  nautilusWalletServer: 'http://localhost:4200/api/nautilus/', // trailing slash matters
-  nautilusAssetServices: 'http://localhost:4200/api/asset-services/', // trailing slash matters
+  nautilusWalletServer: 'http://localhost:4200/api/nautilus/',
+  nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
   // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {
