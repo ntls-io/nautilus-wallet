@@ -15,6 +15,9 @@ import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
 import { from_msgpack_as } from 'src/schema/msgpack';
 import { seal_msgpack_as, unseal_msgpack_as } from 'src/schema/sealing';
 
+/**
+ * This service handles communication with the wallet enclave.
+ */
 @Injectable({
   providedIn: 'root',
 })
