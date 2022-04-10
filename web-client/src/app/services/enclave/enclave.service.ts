@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import algosdk from 'algosdk';
 import { lastValueFrom } from 'rxjs';
+import { defined } from 'src/app/utils/errors/panic';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
@@ -174,18 +175,14 @@ export class EnclaveService {
   // Configuration helpers:
 
   protected getWalletApiUrl(path: string): string {
-    const nautilusBaseUrl = environment.nautilusWalletServer;
-    if (nautilusBaseUrl === undefined) {
-      throw new Error('environment.algod.token not configured');
-    }
-    return new URL(path, nautilusBaseUrl).toString();
+    return new URL(path, environment.nautilusWalletServer).toString();
   }
 
   protected getAlgodClient() {
-    const algod = environment.algod;
-    if (algod.token === undefined) {
-      throw new Error('environment.algod.token not configured');
-    }
+    const algod = defined(
+      environment.algod,
+      'environment.algod not configured'
+    );
     return new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
   }
 }
