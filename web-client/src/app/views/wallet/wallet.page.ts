@@ -9,7 +9,7 @@ import {
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastController } from '@ionic/angular';
-import { WalletService } from 'src/app/services/wallet';
+import { WalletAlgorandService } from 'src/app/services/wallet-algorand.service';
 import { SessionQuery } from 'src/app/stores/session';
 import { defined } from 'src/app/utils/errors/panic';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -64,7 +64,7 @@ export class WalletPage implements OnInit {
     private notification: SwalHelper,
 
     public sessionQuery: SessionQuery,
-    private walletService: WalletService
+    private walletAlgorandService: WalletAlgorandService
   ) {}
 
   /**
@@ -74,12 +74,12 @@ export class WalletPage implements OnInit {
    * - If the account has an Algo balance but no asset balance, attempt to send an asset opt-in.
    */
   async ngOnInit(): Promise<void> {
-    if (this.walletService.hasAlgorandAlgoBalance()) {
+    if (this.walletAlgorandService.hasAlgorandAlgoBalance()) {
       const assetId = defined(environment.defaultAlgorandAssetId);
-      if (!this.walletService.hasAlgorandAssetBalance(assetId)) {
+      if (!this.walletAlgorandService.hasAlgorandAssetBalance(assetId)) {
         const sending = await this.toast('Sending asset opt-in…');
         try {
-          await this.walletService.sendAssetOptIn(assetId);
+          await this.walletAlgorandService.sendAssetOptIn(assetId);
         } catch (err) {
           await sending.dismiss();
           await this.errorNotification('Asset opt-in failed', err);

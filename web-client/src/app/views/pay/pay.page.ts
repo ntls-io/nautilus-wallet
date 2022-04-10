@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
-import { WalletService } from 'src/app/services/wallet';
+import { WalletAlgorandService } from 'src/app/services/wallet-algorand.service';
 import { SessionQuery } from 'src/app/stores/session';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
@@ -38,7 +38,7 @@ export class PayPage implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private walletService: WalletService,
+    private walletAlgorandService: WalletAlgorandService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper
@@ -87,7 +87,7 @@ export class PayPage implements OnInit {
       console.log('PayPage.onSubmit: sending', { amount });
       let confirmation: TransactionConfirmation;
       try {
-        confirmation = await this.walletService.sendAssetFunds(
+        confirmation = await this.walletAlgorandService.sendAssetFunds(
           environment.defaultAlgorandAssetId,
           this.wallet,
           amount
