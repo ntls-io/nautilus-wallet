@@ -132,6 +132,11 @@ export const noBigintSupport = (value: number | bigint): number => {
 
 // XXX(Pi): Algosdk does not seem to expose the network (dashed-identifier) versions of these types,
 //          so define a subset here.
+//
+// XXX(Pi): Several of the `number` types below rely on the algosdk client being configured with IntDecoding.SAFE for correctness.
+//
+// TODO(Pi): See <https://github.com/ntls-io/nautilus-wallet/issues/165>
+//           (Clean up `algosdk.utils` (network representation type handling) #165)
 
 /**
  * Account information at a given round.
