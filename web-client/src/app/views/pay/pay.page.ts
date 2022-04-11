@@ -80,7 +80,7 @@ export class PayPage implements OnInit {
         this.loadingCtrl,
         { message: 'Confirming Transaction' },
         () =>
-          this.sessionAlgorandService.sendFunds(
+          this.sessionAlgorandService.sendAlgos(
             this.wallet,
             this.paymentForm.controls.amount.value
           )

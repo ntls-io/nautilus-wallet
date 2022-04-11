@@ -38,9 +38,9 @@ export class SessionAlgorandService {
   }
 
   /**
-   * Send funds to another account.
+   * Send Algos to another account.
    */
-  async sendFunds(
+  async sendAlgos(
     receiverId: string,
     amountInAlgos: Algos
   ): Promise<TransactionConfirmation> {
