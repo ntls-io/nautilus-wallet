@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import algosdk from 'algosdk';
+import algosdk, { IntDecoding } from 'algosdk';
 import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
 import {
   AccountData,
@@ -77,7 +77,14 @@ export class AlgodService {
   }
 }
 
-const getAlgodClientFromEnvironment = () => {
+/**
+ * Construct an {@link AlgodClient} from {@link environment.algod}.
+ *
+ * In particular, this enforces {@link IntDecoding.SAFE}: we don't currently accommodate `bigint` values.
+ */
+const getAlgodClientFromEnvironment = (): AlgodClient => {
   const algod = defined(environment.algod, 'environment.algod not configured');
-  return new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
+  const client = new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
+  client.setIntEncoding(IntDecoding.SAFE);
+  return client;
 };
