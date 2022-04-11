@@ -30,6 +30,7 @@ export class AlgodService {
   protected algodClient: AlgodClient;
 
   constructor() {
+    // TODO: Convert this DI-provided argument?
     this.algodClient = getAlgodClientFromEnvironment();
   }
 
