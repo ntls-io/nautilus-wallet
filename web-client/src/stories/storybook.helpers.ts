@@ -5,10 +5,7 @@
 import { Provider } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { of } from 'rxjs';
-import {
-  SessionState,
-  SessionStore,
-} from 'src/app/stores/session/session.store';
+import { SessionState, SessionStore } from 'src/app/state/session.store';
 
 /**
  * Define a `ActivatedRoute` provider initialised with the given `queryParams`.

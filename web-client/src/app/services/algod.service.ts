@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import algosdk from 'algosdk';
 import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
 import {
+  AccountData,
   TransactionConfirmation,
   waitForConfirmation,
 } from 'src/app/services/algosdk.utils';
@@ -32,12 +33,10 @@ export class AlgodService {
     this.algodClient = getAlgodClientFromEnvironment();
   }
 
-  async getBalance(address: string): Promise<number> {
-    const accountDetails = await this.algodClient
-      .accountInformation(address)
-      .do();
-    // https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
-    return accountDetails.amount as number;
+  async getAccountData(address: string): Promise<AccountData> {
+    const accountData = await this.algodClient.accountInformation(address).do();
+    // FIXME(Pi): Unchecked cast; should be validated.
+    return accountData as AccountData;
   }
 
   async createUnsignedTransaction(

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Clipboard } from '@capacitor/clipboard';
 import { ToastController } from '@ionic/angular';
-import { SessionQuery } from 'src/app/stores/session';
+import { SessionQuery } from 'src/app/state/session.query';
 
 @Component({
   selector: 'app-print-wallet',

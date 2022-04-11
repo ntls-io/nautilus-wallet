@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SessionState } from 'src/app/stores/session/session.store';
+import { WalletDisplay } from 'src/schema/entities';
 import { provideSessionStore } from 'src/stories/storybook.helpers';
 import { WalletPage } from './wallet.page';
 
@@ -14,11 +14,11 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<SessionState> = (state: SessionState) => ({
+const Template: Story<WalletDisplay> = (wallet: WalletDisplay) => ({
   moduleMetadata: {
-    providers: [provideSessionStore(state)],
+    providers: [provideSessionStore({ wallet })],
   },
 });
 
 export const Default = Template.bind({});
-Default.args = { name: 'Test Owner' };
+Default.args = { owner_name: 'Test Owner' };

@@ -4,7 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SessionStore } from 'src/app/stores/session';
+import { SessionStore } from 'src/app/state/session.store';
+import { stubActiveSession } from 'src/tests/state.helpers';
 import {
   componentElement,
   verifyNavigationTrigger,
@@ -15,7 +16,6 @@ describe('WalletPage', () => {
   let router: Router;
   let component: WalletPage;
   let fixture: ComponentFixture<WalletPage>;
-  let sessionStore: SessionStore;
 
   beforeEach(
     waitForAsync(() => {
@@ -31,10 +31,9 @@ describe('WalletPage', () => {
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
 
-      sessionStore = TestBed.inject(SessionStore);
-      sessionStore.update({
-        name: 'Wallet Owner',
-        walletId: 'fake', // Satisfy OpenWalletGuard
+      // Satisfy OpenWalletGuard
+      stubActiveSession(TestBed.inject(SessionStore), {
+        wallet: { owner_name: 'Wallet Owner' },
       });
 
       fixture.detectChanges();

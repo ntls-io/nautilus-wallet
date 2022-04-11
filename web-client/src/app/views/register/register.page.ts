@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createMask } from '@ngneat/input-mask';
-import { WalletService } from 'src/app/services/wallet';
+import { SessionService } from 'src/app/state/session.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +29,7 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private walletService: WalletService,
+    private sessionService: SessionService,
     private router: Router
   ) {
     this.registrationForm = this.generateFormGroup();
@@ -79,7 +79,7 @@ export class RegisterPage implements OnInit {
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       try {
-        await this.walletService.createWallet(
+        await this.sessionService.createWallet(
           this.registrationForm.controls.firstName.value +
             ' ' +
             this.registrationForm.controls.lastName.value,
