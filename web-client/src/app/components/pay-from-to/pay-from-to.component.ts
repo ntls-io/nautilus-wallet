@@ -6,9 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./pay-from-to.component.scss'],
 })
 export class PayFromToComponent implements OnInit {
-  @Input() balance!: number | null;
-  @Input() receiverAddress!: string | null;
-  @Input() name!: string | null;
+  // XXX(Pi): Add null to type for async pipe. See: <https://github.com/angular/angular/issues/43727>
+
+  @Input() balance?: number | null;
+  @Input() receiverAddress?: string | null;
+  @Input() name?: string | null;
 
   constructor() {}
 
