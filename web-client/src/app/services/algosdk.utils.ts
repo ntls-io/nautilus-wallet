@@ -2,7 +2,12 @@
  * Supporting code from the algosdk examples / utils.
  */
 
-import { Algodv2, EncodedSignedTransaction } from 'algosdk';
+import {
+  Algodv2,
+  algosToMicroalgos,
+  EncodedSignedTransaction,
+  microalgosToAlgos,
+} from 'algosdk';
 import { defined, panic } from 'src/app/utils/errors/panic';
 
 export type TransactionConfirmation = {
@@ -161,3 +166,25 @@ export type AssetHolding = {
   // whether or not the holding is frozen
   'is-frozen': boolean;
 };
+
+/** Type alias for Algos. */
+export type Algos = number;
+
+/** Type alias for MicroAlgos. */
+export type MicroAlgos = number;
+
+/**
+ * Convert MicroAlgos to Algos.
+ *
+ * (Type alias for {@link microalgosToAlgos}.)
+ */
+export const convertToAlgos = (microAlgos: MicroAlgos): Algos =>
+  microalgosToAlgos(microAlgos);
+
+/**
+ * Convert Algos to MicroAlgos.
+ *
+ * (Type alias for {@link algosToMicroalgos}.)
+ */
+export const convertToMicroAlgos = (algos: Algos): MicroAlgos =>
+  algosToMicroalgos(algos);
