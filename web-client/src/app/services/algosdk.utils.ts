@@ -128,17 +128,36 @@ export const noBigintSupport = (value: number | bigint): number => {
 // XXX(Pi): Algosdk does not seem to expose the network (dashed-identifier) versions of these types,
 //          so define a subset here.
 
-// Docs: https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
+/**
+ * Account information at a given round.
+ *
+ * @see https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
+ */
 export type AccountData = {
+  // the account public key
   address: string;
+
+  // total number of MicroAlgos in the account
   amount: number;
+
+  // assets held by this account
   assets?: AssetHolding[];
 };
 
-// Docs: https://developer.algorand.org/docs/rest-apis/algod/v2/#assetholding
+/**
+ * Describes an asset held by an account.
+ *
+ * @see https://developer.algorand.org/docs/rest-apis/algod/v2/#assetholding
+ */
 export type AssetHolding = {
+  // number of units held
   amount: number;
+
+  // Asset ID of the holding
   'asset-id': number;
+
   creator: string;
+
+  // whether or not the holding is frozen
   'is-frozen': boolean;
 };
