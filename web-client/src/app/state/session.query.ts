@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   Algos,
   convertToAlgos,
+  extractAlgorandAssetBalance,
   MicroAlgos,
 } from 'src/app/services/algosdk.utils';
 import { defined } from 'src/app/utils/errors/panic';
@@ -63,6 +64,25 @@ export class SessionQuery extends Query<SessionState> {
 
   hasAlgorandBalance() {
     return 0 < (this.getAlgorandBalanceInMicroAlgos() ?? 0);
+  }
+
+  /**
+   * Get the current Algorand account's balance for the given ASA.
+   *
+   * @return 0 if a zero-balance asset holding exists (account is opted-in to the ASA)
+   * @return null if no asset holding exists (account is not opted-in to the ASA)
+   *
+   * @throws Error if `sessionStore.algorandAccountData` is not defined
+   */
+  getAlgorandAssetBalance(assetId: number): null | number {
+    return extractAlgorandAssetBalance(
+      defined(this.getValue().algorandAccountData),
+      assetId
+    );
+  }
+
+  hasAlgorandAssetBalance(assetId: number): boolean {
+    return this.getAlgorandAssetBalance(assetId) !== null;
   }
 
   /**
