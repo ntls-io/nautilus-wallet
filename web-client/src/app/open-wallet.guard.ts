@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { SessionQuery } from './stores/session';
+import { SessionQuery } from 'src/app/state/session.query';
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +8,7 @@ import { SessionQuery } from './stores/session';
 export class OpenWalletGuard implements CanActivate {
   constructor(private sessionQuery: SessionQuery, private router: Router) {}
   canActivate(): true | UrlTree {
-    const { name, walletId } = this.sessionQuery.getValue();
-    if (name && walletId) {
+    if (this.sessionQuery.isActiveSession()) {
       return true;
     } else {
       return this.router.parseUrl('/landing');

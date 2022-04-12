@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { PayFromToDefaultArgs } from 'src/app/components/pay-from-to/pay-from-to.component.stories';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SessionState } from 'src/app/stores/session/session.store';
+import { convertToMicroAlgos } from 'src/app/services/algosdk.utils';
 import {
   provideActivatedRouteQueryParams,
   provideSessionStore,
@@ -18,13 +18,23 @@ export default {
   ],
 } as Meta;
 
-type Args = { receiverAddress: string } & SessionState;
+type Args = typeof PayFromToDefaultArgs;
 
-const Template: Story<Args> = ({ receiverAddress, ...state }: Args) => ({
+const Template: Story<Args> = ({ name, balance, receiverAddress }) => ({
   moduleMetadata: {
     providers: [
       provideActivatedRouteQueryParams({ receiverAddress }),
-      provideSessionStore(state),
+      provideSessionStore({
+        wallet: {
+          wallet_id: 'id',
+          owner_name: name,
+          algorand_address_base32: 'address',
+        },
+        algorandAccountData: {
+          address: 'address',
+          amount: convertToMicroAlgos(balance),
+        },
+      }),
     ],
   },
 });

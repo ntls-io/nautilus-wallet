@@ -2,19 +2,20 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { Environment } from 'src/environments/types';
+
+export const environment: Environment = {
   production: false,
-  nautilusWalletServer: 'http://localhost:4200/api/nautilus/', // trailing slash matters
-  nautilusAssetServices: 'http://localhost:4200/api/asset-services/', // trailing slash matters
+  nautilusWalletServer: 'http://localhost:4200/api/nautilus/',
+  nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
   // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {
     // XXX: Algodv2's parameter handling is a bit weird: the HTTP port must be passed separately.
-    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
-    // baseServer: 'http://localhost/api/algorand',
-    port: 443,
+    baseServer: 'http://localhost/api/algorand',
+    port: 4200,
     // FIXME: Development key
-    token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
+    token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
 };
 

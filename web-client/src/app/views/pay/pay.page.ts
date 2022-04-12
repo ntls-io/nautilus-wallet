@@ -9,8 +9,10 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
-import { WalletService } from 'src/app/services/wallet';
-import { SessionQuery } from 'src/app/stores/session';
+import { Algos } from 'src/app/services/algosdk.utils';
+import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionQuery } from 'src/app/state/session.query';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
@@ -36,7 +38,7 @@ export class PayPage implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private walletService: WalletService,
+    private sessionAlgorandService: SessionAlgorandService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper
@@ -55,7 +57,9 @@ export class PayPage implements OnInit {
 
   validateAmount(control: AbstractControl): ValidationErrors | null {
     const amount = Number(control.get('amount')?.value);
-    const { balance } = this.sessionQuery.getValue();
+
+    const balance: Algos | undefined =
+      this.sessionQuery.getAlgorandBalanceInAlgos();
 
     return amount === 0 || amount > (balance ?? 0)
       ? { insufficient: true }
@@ -72,26 +76,20 @@ export class PayPage implements OnInit {
   async onSubmit() {
     this.paymentForm.markAllAsTouched();
     if (this.paymentForm.valid) {
-      const loading = await this.loadingCtrl.create({
-        message: 'Confirming Transaction',
-      });
-      loading.present();
-      try {
-        console.log(this.paymentForm.controls.amount.value);
-        await this.walletService.sendFunds(
-          this.wallet,
-          this.paymentForm.controls.amount.value
-        );
-      } finally {
-        loading.dismiss();
-      }
-
-      const { transactionId } = this.sessionQuery.getValue();
+      const confirmation = await withLoadingOverlayOpts(
+        this.loadingCtrl,
+        { message: 'Confirming Transaction' },
+        () =>
+          this.sessionAlgorandService.sendAlgos(
+            this.wallet,
+            this.paymentForm.controls.amount.value
+          )
+      );
 
       this.notifySuccess(
         'R' + this.paymentForm.controls.amount.value,
         this.wallet,
-        transactionId,
+        confirmation.txId,
         new Date()
       );
       //TODO: ()=>{send payment}

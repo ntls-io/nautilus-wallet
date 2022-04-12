@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { SessionStore } from 'src/app/stores/session';
+import { SessionStore } from 'src/app/state/session.store';
+import { stubActiveSession } from 'src/tests/state.helpers';
 import { verifyNavigationTrigger } from '../../../tests/test.helpers';
 import { routes } from '../../app-routing.module';
 import { LoginPage } from './login.page';
@@ -22,8 +23,7 @@ describe('LoginPage', () => {
       }).compileComponents();
 
       // Satisfy OpenWalletGuard
-      const fakeWallet = { name: 'fake', walletId: 'fake' };
-      TestBed.inject(SessionStore).update(fakeWallet);
+      stubActiveSession(TestBed.inject(SessionStore));
 
       router = TestBed.inject(Router);
       router.navigate(['login']);

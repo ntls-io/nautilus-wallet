@@ -35,12 +35,7 @@ export class OnfidoService {
   }
 
   protected getAssetServicesUrl(path: string): string {
-    const base = environment.nautilusAssetServices;
-    if (base) {
-      return new URL(path, base).toString();
-    } else {
-      throw new Error('environment.nautilusAssetServices not configured');
-    }
+    return new URL(path, environment.nautilusAssetServices).toString();
   }
 }
 

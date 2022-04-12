@@ -8,7 +8,7 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { SessionQuery } from 'src/app/stores/session';
+import { SessionQuery } from 'src/app/state/session.query';
 
 @Component({
   selector: 'app-wallet',

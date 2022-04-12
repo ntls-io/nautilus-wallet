@@ -2,7 +2,13 @@
  * Supporting code from the algosdk examples / utils.
  */
 
-import { Algodv2, EncodedSignedTransaction } from 'algosdk';
+import {
+  Algodv2,
+  algosToMicroalgos,
+  EncodedSignedTransaction,
+  microalgosToAlgos,
+} from 'algosdk';
+import { defined, panic } from 'src/app/utils/errors/panic';
 
 export type TransactionConfirmation = {
   txn: EncodedSignedTransaction;
@@ -102,3 +108,88 @@ const checkString = (value: unknown): string => {
     throw new TypeError(`${message}: ${value}`);
   }
 };
+
+// Extract a single asset balance from an `AccountData` result.
+export const extractAlgorandAssetBalance = (
+  algorandAccount: AccountData,
+  assetId: number
+) => {
+  for (const asset of defined(algorandAccount?.assets)) {
+    if (asset['asset-id'] === assetId) {
+      return noBigintSupport(asset.amount);
+    }
+  }
+  return null;
+};
+
+// Panic if value is `bigint`, for now.
+export const noBigintSupport = (value: number | bigint): number => {
+  if (typeof value === 'bigint') {
+    throw panic('bigint support not implemented yet', value);
+  }
+  return value;
+};
+
+// XXX(Pi): Algosdk does not seem to expose the network (dashed-identifier) versions of these types,
+//          so define a subset here.
+//
+// XXX(Pi): Several of the `number` types below rely on the algosdk client being configured with IntDecoding.SAFE for correctness.
+//
+// TODO(Pi): See <https://github.com/ntls-io/nautilus-wallet/issues/165>
+//           (Clean up `algosdk.utils` (network representation type handling) #165)
+
+/**
+ * Account information at a given round.
+ *
+ * @see https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
+ */
+export type AccountData = {
+  // the account public key
+  address: string;
+
+  // total number of MicroAlgos in the account
+  amount: number;
+
+  // assets held by this account
+  assets?: AssetHolding[];
+};
+
+/**
+ * Describes an asset held by an account.
+ *
+ * @see https://developer.algorand.org/docs/rest-apis/algod/v2/#assetholding
+ */
+export type AssetHolding = {
+  // number of units held
+  amount: number;
+
+  // Asset ID of the holding
+  'asset-id': number;
+
+  creator: string;
+
+  // whether or not the holding is frozen
+  'is-frozen': boolean;
+};
+
+/** Type alias for Algos. */
+export type Algos = number;
+
+/** Type alias for MicroAlgos. */
+export type MicroAlgos = number;
+
+/**
+ * Convert MicroAlgos to Algos.
+ *
+ * (Type alias for {@link microalgosToAlgos}.)
+ */
+export const convertToAlgos = (microAlgos: MicroAlgos): Algos =>
+  microalgosToAlgos(microAlgos);
+
+/**
+ * Convert Algos to MicroAlgos.
+ *
+ * (Type alias for {@link algosToMicroalgos}.)
+ */
+export const convertToMicroAlgos = (algos: Algos): MicroAlgos =>
+  algosToMicroalgos(algos);
