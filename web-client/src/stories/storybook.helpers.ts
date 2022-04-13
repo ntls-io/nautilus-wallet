@@ -4,8 +4,36 @@
 
 import { Provider } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import {
+  Viewport,
+  ViewportMap,
+} from '@storybook/addon-viewport/dist/ts3.9/models';
 import { of } from 'rxjs';
 import { SessionState, SessionStore } from 'src/app/state/session.store';
+
+// Docs: https://ionicframework.com/docs/layout/grid#grid-size
+// Defaults: https://github.com/storybookjs/storybook/blob/master/addons/viewport/src/defaults.ts
+export const IONIC_VIEWPORTS: ViewportMap = Object.fromEntries(
+  (
+    [
+      ['xs', 360, 9 / 16, 'mobile'],
+      ['sm', 576, 2 / 3, 'mobile'],
+      ['md', 768, 3 / 4, 'tablet'],
+      ['lg', 992, 4 / 3, 'lg'],
+      ['xl', 1200, 16 / 9, 'desktop'],
+    ] as Array<[string, number, number, Viewport['type']]>
+  ).map(([name, width, aspect, type]): [string, Viewport] => [
+    `ionic-${name}`,
+    {
+      name: `Ionic ${name}`,
+      styles: {
+        width: `${width}px`,
+        height: ((height) => `${height}px`)(width / aspect),
+      },
+      type,
+    },
+  ])
+);
 
 /**
  * Define a `ActivatedRoute` provider initialised with the given `queryParams`.
