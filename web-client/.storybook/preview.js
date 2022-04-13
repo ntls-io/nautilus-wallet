@@ -23,6 +23,19 @@ export const parameters = {
     // Docs: https://storybook.js.org/docs/angular/writing-docs/docs-page#inline-stories-vs-iframe-stories
     inlineStories: true,
   },
+
+  // Add Ionic's theme background to the list of available backgrounds, and set it as the default.
+  // (This works better than the default "light", for this dark-background app.)
+  //
+  // Docs: https://storybook.js.org/docs/angular/essentials/backgrounds#configuration
+  backgrounds: {
+    default: "Ionic theme",
+    values: [
+      { name: "Ionic theme", value: "var(--ion-background-color)" },
+      { name: "light", value: "#F8F8F8" },
+      { name: "dark", value: "#333333" },
+    ],
+  },
 };
 
 // Provide context for Ionic components
