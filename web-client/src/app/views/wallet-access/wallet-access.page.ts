@@ -17,8 +17,8 @@ import { handleScan } from '../scanner.helpers';
   styleUrls: ['./wallet-access.page.scss'],
 })
 export class WalletAccessPage implements OnInit {
-  hasCamera: boolean | undefined;
-  address: string | undefined;
+  hasCamera?: boolean;
+  address?: string;
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
