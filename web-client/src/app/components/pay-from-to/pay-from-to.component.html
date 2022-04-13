@@ -15,7 +15,8 @@
       <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h2 class="!font-black">To:</h2>
-        <p>{{ receiverAddress }}</p>
+        <!-- This field value can be a long string of characters: line-break anywhere to avoid overflow. -->
+        <p style="overflow-wrap: anywhere">{{ receiverAddress }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
