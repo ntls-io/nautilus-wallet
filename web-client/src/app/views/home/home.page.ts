@@ -1,5 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { faUserCircle, faWallet } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUserCircle,
+  faWallet,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+
+type ActionItem = {
+  title: string;
+  icon: IconDefinition;
+  path?: string;
+  disabled?: boolean;
+};
 
 @Component({
   selector: 'app-home',
@@ -7,7 +18,7 @@ import { faUserCircle, faWallet } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  actionItems = [
+  actionItems: Array<ActionItem> = [
     {
       title: 'My Wallet',
       icon: faWallet,
