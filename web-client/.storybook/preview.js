@@ -18,7 +18,11 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  docs: { inlineStories: true },
+
+  docs: {
+    // Docs: https://storybook.js.org/docs/angular/writing-docs/docs-page#inline-stories-vs-iframe-stories
+    inlineStories: true,
+  },
 };
 
 // Provide context for Ionic components
