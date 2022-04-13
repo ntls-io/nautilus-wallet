@@ -6,9 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./profile-card-horizontal.component.scss'],
 })
 export class ProfileCardHorizontalComponent implements OnInit {
-  @Input() title: string | undefined;
-  @Input() fullName!: string;
-  @Input() cellphone!: string;
+  @Input() title?: string;
+  @Input() fullName?: string;
+  @Input() cellphone?: string;
   @Input() avatar = 'assets/img/logo.svg';
 
   constructor() {}
