@@ -3,32 +3,34 @@
 </ion-header>
 
 <ion-content>
-  <div class="ion-text-center">
-    <h1 class="font-semibold font-nasalization">Receive</h1>
-  </div>
-  <ion-card color="white" class="mx-3 my-0">
-    <ion-card-header class="ion-text-center">
-      <ion-text class="text-2xl font-bold" color="tertiary"
-        >Scan to pay me
-      </ion-text>
-    </ion-card-header>
-    <ion-card-content>
-      <qrcode
-        [qrdata]="'Your data string'"
-        errorCorrectionLevel="H"
-        elementType="img"
-        [width]="1000"
-        [margin]="2"
-      ></qrcode>
-    </ion-card-content>
-  </ion-card>
-  <ion-list>
-    <app-action-item
-      *ngFor="let item of actionItems"
-      [preTitle]="item.preTitle"
-      [title]="item.title"
-      [icon]="item.icon"
-      [disabled]="item.disabled"
-    ></app-action-item>
-  </ion-list>
+  <ion-grid fixed>
+    <div class="ion-text-center">
+      <h1 class="font-semibold font-nasalization">Receive</h1>
+    </div>
+    <ion-card color="white" class="mx-3 my-0">
+      <ion-card-header class="ion-text-center">
+        <ion-text class="text-2xl font-bold" color="tertiary"
+          >Scan to pay me
+        </ion-text>
+      </ion-card-header>
+      <ion-card-content>
+        <qrcode
+          [qrdata]="'Your data string'"
+          errorCorrectionLevel="H"
+          elementType="img"
+          [width]="1000"
+          [margin]="2"
+        ></qrcode>
+      </ion-card-content>
+    </ion-card>
+    <ion-list>
+      <app-action-item
+        *ngFor="let item of actionItems"
+        [preTitle]="item.preTitle"
+        [title]="item.title"
+        [icon]="item.icon"
+        [disabled]="item.disabled"
+      ></app-action-item>
+    </ion-list>
+  </ion-grid>
 </ion-content>
