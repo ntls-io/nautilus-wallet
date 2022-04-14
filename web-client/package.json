@@ -16,8 +16,8 @@
     "format-check": "prettier --check .",
     "docs": "compodoc src -p ./tsconfig.json",
     "docs:json": "compodoc src -p ./tsconfig.json -e json",
-    "storybook": "npm run docs:json && start-storybook -p 6006",
-    "build-storybook": "npm run docs:json && build-storybook"
+    "storybook": "ng run app:storybook --port 6006",
+    "build-storybook": "ng run app:build-storybook"
   },
   "akitaCli": {
     "template": "angular",
