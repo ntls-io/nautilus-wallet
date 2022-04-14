@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -23,6 +24,7 @@ describe('WalletPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
+          HttpClientTestingModule,
           SharedModule,
         ],
       }).compileComponents();
@@ -32,8 +34,16 @@ describe('WalletPage', () => {
       component = fixture.componentInstance;
 
       // Satisfy OpenWalletGuard
-      stubActiveSession(TestBed.inject(SessionStore), {
+      const sessionStore = TestBed.inject(SessionStore);
+      stubActiveSession(sessionStore, {
         wallet: { owner_name: 'Wallet Owner' },
+      });
+      // For the balance checks:
+      sessionStore.update({
+        algorandAccountData: {
+          address: 'placeholder address',
+          amount: 0,
+        },
       });
 
       fixture.detectChanges();

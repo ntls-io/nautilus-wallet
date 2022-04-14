@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletDisplay } from 'src/schema/entities';
@@ -13,7 +14,7 @@ export default ionicStoryMeta<WalletDisplay>(
     component: WalletPage,
   },
   {
-    imports: [SharedModule],
+    imports: [HttpClientTestingModule, SharedModule],
     controls: { shown: ['owner_name'] },
     layoutType: 'page',
   }
