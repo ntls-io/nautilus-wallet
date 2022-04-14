@@ -35,6 +35,22 @@ export type Environment = {
    * Algorand Algod client connection details.
    */
   algod?: Algodv2Params;
+
+  /**
+   * (Optional) A base URL to use to link transaction IDs.
+   *
+   * This should generally point at an explorer for the configured Algorand network.
+   *
+   * @see import('src/app/views/pay/pay.page').PayPage.notifySuccess
+   */
+  algorandTransactionUrlPrefix?: string;
+
+  /**
+   * (Optional) An Algorand ASA to try to opt in to by default.
+   *
+   * @see import('src/app/views/wallet/wallet.page').WalletPage.checkAlgorandAssetOptIn
+   */
+  defaultAlgorandAssetId?: number;
 };
 
 /**
