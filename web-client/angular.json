@@ -166,7 +166,8 @@
         "storybook": {
           "builder": "@storybook/angular:start-storybook",
           "options": {
-            "browserTarget": "app:build"
+            "browserTarget": "app:build",
+            "compodocArgs": ["-e", "json", "--silent"]
           }
         },
         "build-storybook": {
