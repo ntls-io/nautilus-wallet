@@ -4,7 +4,12 @@ import { Story } from '@storybook/angular';
 import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
 import { PayFromToDefaultArgs } from 'src/app/components/pay-from-to/pay-from-to.component.stories';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { convertToMicroAlgos } from 'src/app/services/algosdk.utils';
+import {
+  AccountData,
+  convertToMicroAlgos,
+} from 'src/app/services/algosdk.utils';
+import { defined } from 'src/app/utils/errors/panic';
+import { environment } from 'src/environments/environment';
 import {
   ionicStoryMeta,
   provideActivatedRouteQueryParams,
@@ -54,3 +59,20 @@ const Template: Story<Args> = ({ name, balance, receiverAddress }) => ({
 
 export const Default = Template.bind({});
 Default.args = PayFromToDefaultArgs;
+
+// Helper: Construct an Algorand account value that will display as the given value.
+const algorandAccountWithDefaultAssetBalance = (
+  balance: number
+): AccountData => ({
+  address: 'unused',
+  amount: 0, // unused
+  assets: [
+    {
+      // The displayed `balance` is decimal-adjusted: store the value as asset units.
+      amount: balance * 10 ** defined(environment.defaultAlgorandAssetDecimals),
+      'asset-id': defined(environment.defaultAlgorandAssetId),
+      creator: 'unused',
+      'is-frozen': false,
+    },
+  ],
+});
