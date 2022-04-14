@@ -28,6 +28,11 @@ export type Environment = {
    * Algorand Algod client connection details.
    */
   algod?: Algodv2Params;
+
+  algorandTransactionUrlPrefix?: string;
+
+  defaultAlgorandAssetId?: number;
+  defaultAlgorandAssetDecimals?: number;
 };
 
 /**
