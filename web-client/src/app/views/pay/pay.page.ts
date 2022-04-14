@@ -12,8 +12,10 @@ import { createMask } from '@ngneat/input-mask';
 import { Algos } from 'src/app/services/algosdk.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pay',
@@ -76,18 +78,22 @@ export class PayPage implements OnInit {
   async onSubmit() {
     this.paymentForm.markAllAsTouched();
     if (this.paymentForm.valid) {
+      const amount = parseFloat(this.paymentForm.controls.amount.value);
+      console.log('PayPage.onSubmit: sending', { amount });
+
       const confirmation = await withLoadingOverlayOpts(
         this.loadingCtrl,
         { message: 'Confirming Transaction' },
         () =>
-          this.sessionAlgorandService.sendAlgos(
+          this.sessionAlgorandService.sendAssetFunds(
+            defined(environment.defaultAlgorandAssetId),
             this.wallet,
-            this.paymentForm.controls.amount.value
+            amount
           )
       );
-
       this.notifySuccess(
-        'R' + this.paymentForm.controls.amount.value,
+        // TODO(Pi): Use asset unit, rather than 'R'
+        'R' + amount,
         this.wallet,
         confirmation.txId,
         new Date()
@@ -116,9 +122,12 @@ export class PayPage implements OnInit {
   notifySuccess(
     amount: string,
     address: string,
-    txid: string,
+    txId: string,
     timestamp: Date
   ) {
+    const txIdHtml = environment.algorandTransactionUrlPrefix
+      ? `<a href="${environment.algorandTransactionUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
     this.notification.swal
       .fire({
         icon: 'success',
@@ -126,11 +135,11 @@ export class PayPage implements OnInit {
         text: `Your money was sent successfully.`,
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
-              <p class="text-xs">${address}</p>
-              <small>Completed on ${timestamp.toLocaleString()}</small>
+              <p class="text-xs"><b>Receiver:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
         confirmButtonText: 'DONE',
-        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
       })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
