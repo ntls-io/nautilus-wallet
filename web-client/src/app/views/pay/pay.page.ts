@@ -6,6 +6,11 @@ import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import {
+  convertFromAssetAmountAsaToLedger,
+  isAssetAmountAsa,
+} from 'src/app/utils/assets/assets.algo.asa';
 import {
   AssetAmount,
   formatAssetAmount,
@@ -49,18 +54,30 @@ export class PayPage implements OnInit {
     amount,
     option: { receiverAddress },
   }: Payment): Promise<void> {
-    if (amount.assetDisplay.assetSymbol !== 'ALGO') {
-      panic('PayPage.onPaymentSubmitted: expected ALGO, got:', amount);
-    }
-
-    const amountInAlgos = amount.amount;
     const confirmation = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Confirming Transaction' },
-      () =>
-        this.sessionAlgorandService.sendAlgos(receiverAddress, amountInAlgos)
+      () => {
+        if (isAssetAmountAlgo(amount)) {
+          return this.sessionAlgorandService.sendAlgos(
+            receiverAddress,
+            amount.amount
+          );
+        } else if (isAssetAmountAsa(amount)) {
+          const { amount: amountInLedgerUnits, assetId } =
+            convertFromAssetAmountAsaToLedger(amount);
+          return this.sessionAlgorandService.sendAssetFunds(
+            assetId,
+            receiverAddress,
+            amountInLedgerUnits
+          );
+        } else {
+          throw panic('PayPage.onPaymentSubmitted: unexpected amount', {
+            amount,
+          });
+        }
+      }
     );
-
     this.notifySuccess(
       `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
       receiverAddress,
