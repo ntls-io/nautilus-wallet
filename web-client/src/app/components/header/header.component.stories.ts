@@ -1,10 +1,11 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { HeaderComponent } from './header.component';
 
-export default {
+export default ionicStoryMeta<HeaderComponent>({
   title: 'Components/HeaderComponent',
   component: HeaderComponent,
-} as Meta;
+});
 
 const Template: Story<HeaderComponent> = (args: HeaderComponent) => ({
   props: args,

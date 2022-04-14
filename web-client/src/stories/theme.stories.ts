@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 
-export default {
-  title: 'Theme',
-} as Meta;
+export default ionicStoryMeta<Record<string, never>>(
+  {
+    title: 'Theme',
+  },
+  {
+    layoutType: 'page',
+  }
+);
 
 export const Theme: Story<void> = () => ThemeComponent;
 

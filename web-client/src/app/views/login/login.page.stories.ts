@@ -1,10 +1,16 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { LoginPage } from './login.page';
 
-export default {
-  title: 'Views/LoginPage',
-  component: LoginPage,
-} as Meta;
+export default ionicStoryMeta<LoginPage>(
+  {
+    title: 'Views/LoginPage',
+    component: LoginPage,
+  },
+  {
+    layoutType: 'page',
+  }
+);
 
 const Template: Story<LoginPage> = (args: LoginPage) => ({
   props: args,

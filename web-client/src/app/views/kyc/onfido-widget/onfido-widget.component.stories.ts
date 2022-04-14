@@ -1,10 +1,19 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { OnfidoWidgetComponent } from './onfido-widget.component';
 
-export default {
-  title: 'Components/KYC/OnfidoWidgetComponent',
-  component: OnfidoWidgetComponent,
-} as Meta;
+export default ionicStoryMeta<OnfidoWidgetComponent>(
+  {
+    title: 'Components/KYC/OnfidoWidgetComponent',
+    component: OnfidoWidgetComponent,
+  },
+  {
+    controls: {
+      hidden: ['onfidoHandle', 'getToken'],
+      outputs: ['completed'],
+    },
+  }
+);
 
 const Template: Story<OnfidoWidgetComponent> = (
   args: OnfidoWidgetComponent

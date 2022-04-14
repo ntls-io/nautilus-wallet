@@ -152,7 +152,9 @@ export const DEFAULT_EXCLUDE_CONTROLS: Array<DefaultExcludeControls> = [
 const ionAppComponentWrapper = (story: string): string =>
   ionAppPageWrapper(`
     <ion-content>
-      ${story}
+      <ion-grid fixed style="height: 100%">
+        ${story}
+      </ion-grid>
     </ion-content>
   `);
 
@@ -160,7 +162,9 @@ const ionAppComponentWrapper = (story: string): string =>
 const ionAppPageWrapper = (story: string): string =>
   `
     <ion-app>
-      ${story}
+      <ion-router-outlet>
+        ${story}
+      </ion-router-outlet>
     </ion-app>
   `;
 
