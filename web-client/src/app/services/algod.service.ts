@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import algosdk, { IntDecoding } from 'algosdk';
+import algosdk, { IntDecoding, Transaction } from 'algosdk';
 import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
 import {
   AccountData,
+  Asset,
   TransactionConfirmation,
   waitForConfirmation,
 } from 'src/app/services/algosdk.utils';
 import { defined } from 'src/app/utils/errors/panic';
 import { environment } from 'src/environments/environment';
 import {
+  AssetTransferRequiredParameters,
+  makeAssetTransferTxnHelper,
   makePaymentTxnHelper,
   OptionalParameters,
   RequiredParameters,
@@ -40,10 +43,19 @@ export class AlgodService {
     return accountData as AccountData;
   }
 
+  /**
+   * @see https://developer.algorand.org/docs/rest-apis/algod/v2/#get-v2assetsasset-id
+   */
+  async getAsset(assetId: number): Promise<Asset> {
+    const asset = await this.algodClient.getAssetByID(assetId).do();
+    // FIXME(Pi): Unchecked cast; should be validated.
+    return asset as Asset;
+  }
+
   async createUnsignedTransaction(
     required: RequiredParameters,
     optional?: OptionalParameters
-  ) {
+  ): Promise<Transaction> {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
     console.log('createUnsignedTransaction', 'got:', { suggestedParams });
     const transaction = makePaymentTxnHelper(
@@ -53,6 +65,26 @@ export class AlgodService {
     );
     console.log('createUnsignedTransaction', 'created:', { transaction });
     return transaction;
+  }
+
+  async createUnsignedAssetTransferTxn(
+    required: AssetTransferRequiredParameters,
+    optional?: OptionalParameters
+  ): Promise<Transaction> {
+    const suggestedParams = await this.algodClient.getTransactionParams().do();
+    return makeAssetTransferTxnHelper(suggestedParams, required, optional);
+  }
+
+  async createUnsignedAssetOptInTxn(
+    address: string,
+    assetIndex: number
+  ): Promise<Transaction> {
+    return await this.createUnsignedAssetTransferTxn({
+      from: address,
+      to: address,
+      amount: 0,
+      assetIndex,
+    });
   }
 
   async submitSignedTransaction(
