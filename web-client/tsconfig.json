@@ -14,6 +14,7 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "strict": true,
+    "noImplicitAny": true,
     // XXX(Pi): Webpack 5 no longer includes a crypto polyfill by default.
     //          This seems to be the most straightforward way to get it to work, for now.
     "paths": {
