@@ -45,12 +45,35 @@ export class SessionAlgorandService {
     amountInAlgos: Algos
   ): Promise<TransactionConfirmation> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
-
     const amountInMicroAlgos = convertToMicroAlgos(amountInAlgos);
     const transaction = await this.algodService.createUnsignedTransaction({
       amount: amountInMicroAlgos,
       from: wallet.algorand_address_base32,
       to: receiverId,
+    });
+    return await this.sendTransaction(transaction);
+  }
+
+  async sendAssetOptIn(assetId: number): Promise<TransactionConfirmation> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+    const transaction = await this.algodService.createUnsignedAssetOptInTxn(
+      wallet.algorand_address_base32,
+      assetId
+    );
+    return await this.sendTransaction(transaction);
+  }
+
+  async sendAssetFunds(
+    assetId: number,
+    receiverId: string,
+    amount: number
+  ): Promise<TransactionConfirmation> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+    const transaction = await this.algodService.createUnsignedAssetTransferTxn({
+      from: wallet.algorand_address_base32,
+      to: receiverId,
+      amount,
+      assetIndex: assetId,
     });
     return await this.sendTransaction(transaction);
   }
