@@ -1,17 +1,18 @@
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { ActionItemComponent } from './action-item.component';
 
-export default {
-  title: 'Components/ActionItemComponent',
-  component: ActionItemComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [FontAwesomeModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<ActionItemComponent>(
+  {
+    title: 'Components/ActionItemComponent',
+    component: ActionItemComponent,
+  },
+  {
+    imports: [FontAwesomeModule],
+  }
+);
 
 const Template: Story<ActionItemComponent> = (args: ActionItemComponent) => ({
   props: args,

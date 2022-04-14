@@ -1,18 +1,23 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletDisplay } from 'src/schema/entities';
-import { provideSessionStore } from 'src/stories/storybook.helpers';
+import {
+  ionicStoryMeta,
+  provideSessionStore,
+} from 'src/stories/storybook.helpers';
 import { PrintWalletPage } from './print-wallet.page';
 
-export default {
-  title: 'Views/PrintWalletPage',
-  component: PrintWalletPage,
-  decorators: [
-    moduleMetadata({
-      imports: [SharedModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<WalletDisplay>(
+  {
+    title: 'Views/PrintWalletPage',
+    component: PrintWalletPage,
+  },
+  {
+    imports: [SharedModule],
+    controls: { shown: ['wallet_id'] },
+    layoutType: 'page',
+  }
+);
 
 const Template: Story<WalletDisplay> = (wallet: WalletDisplay) => ({
   moduleMetadata: {

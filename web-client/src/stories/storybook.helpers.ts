@@ -152,16 +152,20 @@ export const DEFAULT_EXCLUDE_CONTROLS: Array<DefaultExcludeControls> = [
 const ionAppComponentWrapper = (story: string): string =>
   ionAppPageWrapper(`
     <ion-content>
-      ${story}
+        <ion-grid fixed style="height: 100%">
+          ${story}
+        </ion-grid>
     </ion-content>
   `);
 
 /** @see MetaExtra.layoutType */
 const ionAppPageWrapper = (story: string): string =>
   `
-    <ion-app>
+      <ion-app>
+        <ion-router-outlet>
       ${story}
-    </ion-app>
+        </ion-router-outlet>
+      </ion-app>
   `;
 
 // Docs: https://ionicframework.com/docs/layout/grid#grid-size

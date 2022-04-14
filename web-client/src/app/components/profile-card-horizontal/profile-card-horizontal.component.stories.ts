@@ -1,10 +1,11 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { ProfileCardHorizontalComponent } from './profile-card-horizontal.component';
 
-export default {
+export default ionicStoryMeta<ProfileCardHorizontalComponent>({
   title: 'Components/ProfileCardHorizontalComponent',
   component: ProfileCardHorizontalComponent,
-} as Meta;
+});
 
 const Template: Story<ProfileCardHorizontalComponent> = (
   args: ProfileCardHorizontalComponent

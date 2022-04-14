@@ -1,16 +1,19 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { HomePage } from './home.page';
 
-export default {
-  title: 'Views/HomePage',
-  component: HomePage,
-  decorators: [
-    moduleMetadata({
-      imports: [SharedModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<HomePage>(
+  {
+    title: 'Views/HomePage',
+    component: HomePage,
+  },
+  {
+    imports: [SharedModule],
+    controls: { hidden: ['actionItems'] },
+    layoutType: 'page',
+  }
+);
 
 const Template: Story<HomePage> = (args: HomePage) => ({
   props: args,
