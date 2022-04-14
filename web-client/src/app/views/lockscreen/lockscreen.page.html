@@ -1,15 +1,17 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="dismiss(false)">
-        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-grid fixed>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="dismiss(false)">
+          <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-grid>
 </ion-header>
 
 <ion-content class="lockscreen-page ion-text-center">
-  <ion-grid class="h-full">
+  <ion-grid fixed class="h-full">
     <ion-row class="h-full ion-justify-content-center">
       <ion-col class="ion-align-self-center" size="auto">
         <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>

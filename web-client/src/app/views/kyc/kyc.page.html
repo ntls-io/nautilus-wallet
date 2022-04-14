@@ -3,41 +3,43 @@
 </ion-header>
 
 <ion-content>
-  <app-onfido-form
-    *ngIf="viewState === 'step1_form'"
-    (submitted)="onSubmit($event)"
-  ></app-onfido-form>
+  <ion-grid fixed class="h-full">
+    <app-onfido-form
+      *ngIf="viewState === 'step1_form'"
+      (submitted)="onSubmit($event)"
+    ></app-onfido-form>
 
-  <app-onfido-widget
-    *ngIf="viewState === 'step2_widget'"
-    [token]="token"
-    (completed)="onSdkComplete($event)"
-  ></app-onfido-widget>
+    <app-onfido-widget
+      *ngIf="viewState === 'step2_widget'"
+      [token]="token"
+      (completed)="onSdkComplete($event)"
+    ></app-onfido-widget>
 
-  <div *ngIf="viewState === 'step3_result'">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Check result</ion-card-title>
-      </ion-card-header>
+    <div *ngIf="viewState === 'step3_result'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Check result</ion-card-title>
+        </ion-card-header>
 
-      <ion-card-content>
-        <table class="check-result">
-          <tr>
-            <th>Created at:</th>
-            <td [innerText]="check?.created_at"></td>
-          </tr>
-          <tr>
-            <th>Status:</th>
-            <td [innerText]="check?.status"></td>
-          </tr>
-          <tr>
-            <th>Result:</th>
-            <td [innerText]="check?.result"></td>
-          </tr>
-        </table>
+        <ion-card-content>
+          <table class="check-result">
+            <tr>
+              <th>Created at:</th>
+              <td [innerText]="check?.created_at"></td>
+            </tr>
+            <tr>
+              <th>Status:</th>
+              <td [innerText]="check?.status"></td>
+            </tr>
+            <tr>
+              <th>Result:</th>
+              <td [innerText]="check?.result"></td>
+            </tr>
+          </table>
 
-        <ion-button (click)="refreshCheck()">Refresh</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+          <ion-button (click)="refreshCheck()">Refresh</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-grid>
 </ion-content>
