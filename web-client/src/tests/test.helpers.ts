@@ -11,21 +11,8 @@ import {
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { checkClass } from 'src/helpers/helpers';
 import Spy = jasmine.Spy;
-
-export type Constructor<T> = new (...args: any[]) => T;
-
-/**
- * Helper: Check that o is an instance of the given class.
- */
-export const checkClass = <T>(o: unknown, cls: Constructor<T>): T => {
-  if (o instanceof cls) {
-    return o;
-  } else {
-    const oClsName = (o as any)?.constructor?.name;
-    throw new TypeError(`expected ${cls.name}, got ${oClsName}: ${o}`);
-  }
-};
 
 /**
  * Collect and return the events emitted while executing `f`.
