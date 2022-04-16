@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { routes } from 'src/app/app-routing.module';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ScannerPage, ScanResult } from './scanner.page';
 
 describe('ScannerPage', () => {
@@ -18,7 +18,7 @@ describe('ScannerPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
-          SharedModule,
+          ZXingScannerModule,
         ],
       }).compileComponents();
 

@@ -1,5 +1,5 @@
 import { Story } from '@storybook/angular';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { ScannerPage } from './scanner.page';
 
@@ -9,7 +9,7 @@ export default ionicStoryMeta<ScannerPage>(
     component: ScannerPage,
   },
   {
-    imports: [SharedModule],
+    imports: [ZXingScannerModule],
     controls: { shown: [] },
     layoutType: 'page',
   }
