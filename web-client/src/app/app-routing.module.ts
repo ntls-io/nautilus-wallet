@@ -47,13 +47,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'lockscreen',
-    loadChildren: () =>
-      import('./views/lockscreen/lockscreen.module').then(
-        m => m.LockscreenPageModule // prettier-ignore
-      ),
-  },
-  {
     path: 'scanner',
     loadChildren: () =>
       import('./views/scanner/scanner.module').then(
