@@ -17,14 +17,26 @@
           [(ngModel)]="address"
         ></ion-textarea>
         <ion-button
-          [disabled]="!address"
+          [disabled]="!validatedAddress"
           expand="block"
           shape="round"
           class="mt-4"
-          (click)="confirm(address)"
+          (click)="confirmAddress()"
           >Confirm</ion-button
         >
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<!-- Show PIN entry modal on `isPinEntryOpen`. -->
+<!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <div class="ion-page ion-justify-content-center ion-align-items-center">
+      <app-pin-entry
+        (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+      ></app-pin-entry>
+    </div>
+  </ng-template>
+</ion-modal>
