@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { algoAmount } from 'src/app/utils/asset.display';
 import { PayAmountConfirmComponent } from './pay-amount-confirm.component';
 
 describe('PayAmountConfirmComponent', () => {
@@ -15,6 +16,7 @@ describe('PayAmountConfirmComponent', () => {
 
       fixture = TestBed.createComponent(PayAmountConfirmComponent);
       component = fixture.componentInstance;
+      component.balance = algoAmount(5);
       fixture.detectChanges();
     })
   );
