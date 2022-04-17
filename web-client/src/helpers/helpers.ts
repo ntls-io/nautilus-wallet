@@ -15,10 +15,10 @@ export const never = (value: never): never => {
  *
  * This works like nullish coalescing and optional chaining, but for a function argument.
  */
-export const ifDefined = <T>(
+export const ifDefined = <T, R>(
   value: T | null | undefined,
-  f: (v: T) => T
-): T | undefined =>
+  f: (v: T) => R
+): R | undefined =>
   value === null || value === undefined ? undefined : f(value);
 
 export type Constructor<T> = new (...args: any[]) => T;

@@ -30,6 +30,11 @@ describe('ifDefined', () => {
     const value = 5;
     expect(ifDefined(value, (n) => n * 2)).toBe(10);
   });
+
+  it('allows changing type', () => {
+    const value = 5;
+    expect(ifDefined(value, (n) => [n])).toEqual([value]);
+  });
 });
 
 describe('checkClass', () => {
