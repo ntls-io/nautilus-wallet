@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AssetAmount } from 'src/app/utils/asset.display';
 
 @Component({
   selector: 'app-pay-from-to',
@@ -8,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PayFromToComponent implements OnInit {
   // XXX(Pi): Add null to type for async pipe. See: <https://github.com/angular/angular/issues/43727>
 
-  @Input() balance?: number | null;
+  @Input() balance?: AssetAmount | null;
   @Input() receiverAddress?: string | null;
   @Input() name?: string | null;
 
