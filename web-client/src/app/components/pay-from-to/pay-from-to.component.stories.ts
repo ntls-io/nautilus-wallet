@@ -6,7 +6,7 @@ import { PayFromToComponent } from './pay-from-to.component';
 
 export default ionicStoryMeta<PayFromToComponent>(
   {
-    title: 'Components/PayFromTo',
+    title: 'Components/Pay/PayFromTo',
     component: PayFromToComponent,
     excludeStories: /Args$/,
   },

@@ -9,9 +9,9 @@ import { AssetAmount } from 'src/app/utils/asset.display';
 export class PayFromToComponent implements OnInit {
   // XXX(Pi): Add null to type for async pipe. See: <https://github.com/angular/angular/issues/43727>
 
+  @Input() name?: string | null;
   @Input() balance?: AssetAmount | null;
   @Input() receiverAddress?: string | null;
-  @Input() name?: string | null;
 
   constructor() {}
 
