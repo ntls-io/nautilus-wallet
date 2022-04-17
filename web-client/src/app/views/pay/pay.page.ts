@@ -16,7 +16,7 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
-  selector: 'app-pay',
+  selector: 'app-pay-page',
   templateUrl: './pay.page.html',
   styleUrls: ['./pay.page.scss'],
 })
