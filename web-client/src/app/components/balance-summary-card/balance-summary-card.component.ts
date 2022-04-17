@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AssetAmount } from 'src/app/utils/asset.display';
 
 @Component({
   selector: 'app-balance-summary-card',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./balance-summary-card.component.scss'],
 })
 export class BalanceSummaryCardComponent implements OnInit {
+  @Input() balances?: AssetAmount[] | null;
+
   constructor() {}
 
   ngOnInit() {}

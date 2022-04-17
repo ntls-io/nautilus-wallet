@@ -1,1 +1,26 @@
-<p>balance-summary-card works!</p>
+<ion-card class="app-item ion-text-center">
+  <ion-card-header>
+    <ion-card-title class="font-nasalization">Balances</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list lines="none">
+      <ion-grid>
+        <ng-container *ngFor="let balance of balances">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="7" class="ion-text-end">
+              <ion-text color="white" class="text-2xl font-audiowide">
+                {{ balance | assetAmount }}
+              </ion-text>
+            </ion-col>
+            <ion-col size="5" class="ion-text-start">
+              <ion-text color="secondary" class="font-bold">
+                {{ balance | assetSymbol }}
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+      </ion-grid>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
