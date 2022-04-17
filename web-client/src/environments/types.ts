@@ -13,6 +13,13 @@ export type Environment = {
   production: boolean;
 
   /**
+   * Whether to persist Akita state.
+   *
+   * @see https://datorama.github.io/akita/docs/enhancers/persist-state
+   */
+  persistAkitaState?: boolean;
+
+  /**
    * Base URL for the Nautilus Wallet Enclave.
    * (Must end in "/"!)
    */

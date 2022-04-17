@@ -6,6 +6,10 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: false,
+
+  // Enable persistence for easier development.
+  persistAkitaState: true,
+
   nautilusWalletServer: 'http://localhost:4200/api/nautilus/',
   nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
