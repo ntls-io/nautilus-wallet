@@ -3,31 +3,48 @@
     <ion-item color="white">
       <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
 
-      <ion-label class="ion-text-wrap">
-        <h2 class="!font-black">From:</h2>
-        <p>{{ name }}</p>
-        <small>Available Balance</small>
-      </ion-label>
+      <div
+        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
+      >
+        <div>
+          <ion-label class="ion-margin-end">
+            <h2 class="!font-black">From:</h2>
+            <p>{{ name }}</p>
+            <small>Available Balance</small>
+          </ion-label>
+        </div>
 
-      <ion-text slot="end">
-        <ion-text color="primary" class="text-3xl font-audiowide">
-          {{ balance | assetAmount }}
-        </ion-text>
+        <div>
+          <ion-text
+            color="primary"
+            class="text-3xl font-audiowide overflow-wrap-anywhere"
+          >
+            {{ balance | assetAmount }}
+          </ion-text>
 
-        <ion-text class="text-xl font-bold">
-          {{ balance | assetSymbol }}
-        </ion-text>
-      </ion-text>
+          <ion-text class="text-xl font-bold">
+            {{ balance | assetSymbol }}
+          </ion-text>
+        </div>
+      </div>
     </ion-item>
 
     <ion-item color="white">
       <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
 
-      <ion-label class="ion-text-wrap">
-        <h2 class="!font-black">To:</h2>
-        <!-- This field value can be a long string of characters: line-break anywhere to avoid overflow. -->
-        <p style="overflow-wrap: anywhere">{{ receiverAddress }}</p>
-      </ion-label>
+      <div
+        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
+      >
+        <div>
+          <ion-label>
+            <h2 class="!font-black">To:</h2>
+          </ion-label>
+        </div>
+
+        <div class="font-mono overflow-wrap-anywhere">
+          {{ receiverAddress }}
+        </div>
+      </div>
     </ion-item>
   </ion-list>
 </ion-card>
