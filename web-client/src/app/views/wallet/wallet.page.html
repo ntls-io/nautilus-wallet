@@ -11,6 +11,10 @@
       </h1>
       <p>Send or receive money quickly and easily, select an option below</p>
     </div>
+
+    <app-balance-summary-card [balances]="balances | async">
+    </app-balance-summary-card>
+
     <ion-list>
       <app-action-item
         *ngFor="let item of actionItems"
