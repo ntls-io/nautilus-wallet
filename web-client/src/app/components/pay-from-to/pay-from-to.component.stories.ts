@@ -41,3 +41,12 @@ export const PayFromToXRPArgs = {
 };
 export const WithXRP = Template.bind({});
 WithXRP.args = { ...PayFromToXRPArgs };
+
+export const WithWideBalance = Template.bind({});
+WithWideBalance.args = {
+  ...PayFromToAlgoArgs,
+  balance: {
+    ...PayFromToAlgoArgs.balance,
+    amount: 1_234_567_890e9,
+  },
+};
