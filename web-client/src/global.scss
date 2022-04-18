@@ -122,3 +122,13 @@ ion-textarea {
   --ion-toolbar-background: var(--ion-color-primary-background);
   --ion-toolbar-color: var(--ion-color-white);
 }
+
+// Use this to wrap text values such as wallet addresses that are too wide to break on words,
+// but should still break on characters rather than clip on overflow.
+//
+// See this Tailwind discussion:
+//    `break-words` class is great but not enough #2213
+//    https://github.com/tailwindlabs/tailwindcss/discussions/2213
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
