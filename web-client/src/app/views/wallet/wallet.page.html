@@ -1,5 +1,9 @@
 <ion-header class="ion-no-border">
-  <app-header></app-header>
+  <app-header>
+    <ion-buttons slot="end">
+      <ion-button (click)="onRefresh()">Refresh</ion-button>
+    </ion-buttons>
+  </app-header>
 </ion-header>
 
 <ion-content>
