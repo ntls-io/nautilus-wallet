@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { filterNilValue } from '@datorama/akita';
 import {
   faCreditCard,
   faDonate,
@@ -8,7 +9,10 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SessionQuery } from 'src/app/state/session.query';
+import { algoAmount, AssetAmount } from 'src/app/utils/asset.display';
 
 @Component({
   selector: 'app-wallet',
@@ -51,6 +55,12 @@ export class WalletPage implements OnInit {
       disabled: true,
     },
   ]; // Placeholder icons until we get definite ones.
+
+  balances: Observable<Array<AssetAmount>> =
+    this.sessionQuery.algorandBalanceInAlgos.pipe(
+      filterNilValue(),
+      map((amount: number): AssetAmount[] => [algoAmount(amount)])
+    );
 
   constructor(public sessionQuery: SessionQuery) {}
 
