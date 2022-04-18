@@ -9,10 +9,13 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { algoAmount, AssetAmount } from 'src/app/utils/asset.display';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 
 @Component({
   selector: 'app-wallet',
@@ -62,7 +65,21 @@ export class WalletPage implements OnInit {
       map((amount: number): AssetAmount[] => [algoAmount(amount)])
     );
 
-  constructor(public sessionQuery: SessionQuery) {}
+  constructor(
+    private loadingController: LoadingController,
+    public sessionQuery: SessionQuery,
+    public sessionAlgorandService: SessionAlgorandService
+  ) {}
 
   ngOnInit() {}
+
+  async onRefresh(): Promise<void> {
+    await withLoadingOverlayOpts(
+      this.loadingController,
+      { message: 'Refreshing…' },
+      async () => {
+        await this.sessionAlgorandService.loadAccountData();
+      }
+    );
+  }
 }
