@@ -32,7 +32,7 @@ export const PayFromToAlgoArgs = {
   receiverAddress: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
 };
 export const WithAlgo = Template.bind({});
-WithAlgo.args = PayFromToAlgoArgs;
+WithAlgo.args = { ...PayFromToAlgoArgs };
 
 export const PayFromToXRPArgs = {
   ...PayFromToBaseArgs,
@@ -40,4 +40,4 @@ export const PayFromToXRPArgs = {
   receiverAddress: 'rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn',
 };
 export const WithXRP = Template.bind({});
-WithXRP.args = PayFromToXRPArgs;
+WithXRP.args = { ...PayFromToXRPArgs };
