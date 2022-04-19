@@ -1,17 +1,23 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { KycPageModule } from './kyc.module';
 import { KycPage } from './kyc.page';
 import * as OnfidoWidgetComponentStories from './onfido-widget/onfido-widget.component.stories';
 
-export default {
-  title: 'Views/KycPage',
-  component: KycPage,
-  decorators: [
-    moduleMetadata({
-      imports: [KycPageModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<KycPage>(
+  {
+    title: 'Views/KycPage',
+    component: KycPage,
+  },
+  {
+    imports: [HttpClientTestingModule, KycPageModule],
+    controls: {
+      shown: ['viewState', 'token', 'onfidoStarted', 'sdkResponse', 'check'],
+    },
+    layoutType: 'page',
+  }
+);
 
 const Template: Story<KycPage> = (args: KycPage) => ({
   props: args,

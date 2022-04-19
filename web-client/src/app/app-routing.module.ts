@@ -19,13 +19,6 @@ export const routes: Routes = [
     canActivate: [OpenWalletGuard],
   },
   {
-    path: 'login',
-    loadChildren: () =>
-      import('./views/login/login.module').then(
-        m => m.LoginPageModule // prettier-ignore
-      ),
-  },
-  {
     path: 'register',
     loadChildren: () =>
       import('./views/register/register.module').then(

@@ -1,4 +1,8 @@
 #onfido-mount {
+  // Create a stacking context for the Onfido widget to attach to.
+  position: relative;
+  height: 100%;
+
   // Replace var(--ion-color-step-900)
   --ods-color-neutral-900: 230, 235, 238;
   --ods-color-neutral-800: 204, 214, 220;

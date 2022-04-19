@@ -1,11 +1,12 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { PayFromToComponent } from './pay-from-to.component';
 
-export default {
+export default ionicStoryMeta<PayFromToComponent>({
   title: 'Components/PayFromTo',
   component: PayFromToComponent,
   excludeStories: ['PayFromToDefaultArgs'],
-} as Meta;
+});
 
 // Export this separately for args reuse, to avoid undesired type widening.
 //

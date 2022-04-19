@@ -7,12 +7,12 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
   styleUrls: ['./action-item.component.scss'],
 })
 export class ActionItemComponent implements OnInit {
-  @Input() preTitle: string | undefined;
-  @Input() title: string | undefined;
-  @Input() icon: IconProp | undefined;
-  @Input() path: string | undefined;
-  @Input() disabled: boolean | undefined;
-  @Input() url: string | undefined;
+  @Input() preTitle?: string;
+  @Input() title?: string;
+  @Input() icon?: IconProp;
+  @Input() path?: string;
+  @Input() disabled?: boolean;
+  @Input() url?: string;
 
   constructor() {}
 

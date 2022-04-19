@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
@@ -32,7 +31,6 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     QRCodeModule,
     NgxPrinterModule,
     ReactiveFormsModule,
-    ZXingScannerModule,
     HeaderComponent,
     ProfileCardHorizontalComponent,
     ActionItemComponent,
