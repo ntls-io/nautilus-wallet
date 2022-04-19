@@ -1,15 +1,16 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { routes } from 'src/app/app-routing.module';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SessionStore } from 'src/app/state/session.store';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import {
   componentElement,
   verifyNavigationTrigger,
 } from 'src/tests/test.helpers';
+import { WalletPageModule } from './wallet.module';
 import { WalletPage } from './wallet.page';
 
 describe('WalletPage', () => {
@@ -23,7 +24,8 @@ describe('WalletPage', () => {
         imports: [
           IonicModule.forRoot(),
           RouterTestingModule.withRoutes(routes),
-          SharedModule,
+          HttpClientTestingModule,
+          WalletPageModule,
         ],
       }).compileComponents();
       router = TestBed.inject(Router);
