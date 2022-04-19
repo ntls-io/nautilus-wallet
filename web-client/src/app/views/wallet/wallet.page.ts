@@ -9,11 +9,7 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  LoadingController,
-  ToastController,
-  ToastOptions,
-} from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
@@ -23,6 +19,7 @@ import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { showToast } from 'src/app/utils/toast.helpers';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -125,17 +122,10 @@ export class WalletPage implements OnInit {
     }
   }
 
-  protected async toast(
-    message: string,
-    opts?: ToastOptions
-  ): Promise<HTMLIonToastElement> {
-    const toast = await this.toastCtrl.create({
-      message,
+  protected async toast(message: string): Promise<HTMLIonToastElement> {
+    return showToast(this.toastCtrl, message, {
       duration: 5000,
-      ...opts,
     });
-    await toast.present();
-    return toast;
   }
 
   protected async errorNotification(

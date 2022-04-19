@@ -10,7 +10,7 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ToastOptions } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 import Spy = jasmine.Spy;
 
@@ -96,7 +96,7 @@ const getElementWithLink = (
  */
 export const assertShowsToast = async (
   toastController: ToastController,
-  toastOptions: Parameters<typeof ToastController.prototype.create>[0],
+  toastOptions: ToastOptions,
   f: () => Promise<void>
 ): Promise<void> => {
   const toastSpy = jasmine.createSpyObj<HTMLIonToastElement>(
