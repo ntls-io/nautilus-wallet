@@ -17,5 +17,6 @@ import { WalletPage } from './wallet.page';
     BalanceSummaryCardComponentModule,
   ],
   declarations: [WalletPage],
+  exports: [WalletPage],
 })
 export class WalletPageModule {}
