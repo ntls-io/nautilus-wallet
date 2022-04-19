@@ -1,15 +1,14 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { InputMaskModule } from '@ngneat/input-mask';
 import { Story } from '@storybook/angular';
 import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
 import { PayFromToAlgoArgs } from 'src/app/components/pay-from-to/pay-from-to.component.stories';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { convertToMicroAlgos } from 'src/app/services/algosdk.utils';
 import {
   ionicStoryMeta,
   provideActivatedRouteQueryParams,
   provideSessionStore,
 } from 'src/stories/storybook.helpers';
+import { PayPageModule } from './pay.module';
 import { PayPage } from './pay.page';
 
 type Args = typeof PayFromToAlgoArgs;
@@ -21,11 +20,7 @@ export default ionicStoryMeta<Args>(
     subcomponents: { PayFromToComponent },
   },
   {
-    imports: [
-      HttpClientTestingModule,
-      SharedModule,
-      InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
-    ],
+    imports: [HttpClientTestingModule, PayPageModule],
     controls: {
       shown: ['name', 'balance', 'receiverAddress'],
     },
