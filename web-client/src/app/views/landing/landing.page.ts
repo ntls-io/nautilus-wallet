@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { resetStores } from '@datorama/akita';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ViewDidEnter } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.scss'],
 })
-export class LandingPage implements OnInit {
+export class LandingPage implements OnInit, ViewDidEnter {
   constructor(private modalCtrl: ModalController) {
-    resetStores();
+    checkResetStores();
   }
 
   async ngOnInit() {
@@ -23,10 +24,17 @@ export class LandingPage implements OnInit {
       await this.modalCtrl.dismiss();
     }
 
-    resetStores();
+    checkResetStores();
   }
 
   ionViewDidEnter() {
-    resetStores();
+    checkResetStores();
   }
 }
+
+/**
+ * Reset Akita state with {@link resetStores}, unless configured with {@link environment.persistAkitaState}.
+ */
+const checkResetStores: () => void = environment.persistAkitaState
+  ? () => {}
+  : () => resetStores();
