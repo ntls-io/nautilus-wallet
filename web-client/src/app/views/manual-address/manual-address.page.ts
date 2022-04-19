@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { isValidAddress } from 'algosdk';
+import { checkClass } from 'src/helpers/helpers';
 
 @Component({
   selector: 'app-manual-address',
@@ -11,25 +12,13 @@ import { isValidAddress } from 'algosdk';
 export class ManualAddressPage implements OnInit {
   addressForm: FormGroup;
 
-  constructor(
-    private modalCtrl: ModalController,
-    public formBuilder: FormBuilder
-  ) {
-    this.addressForm = this.formBuilder.group(
-      {
-        address: ['', Validators.compose([Validators.required])],
-      },
-      { validator: this.addressValidator }
-    );
+  constructor(private modalCtrl: ModalController) {
+    this.addressForm = new FormGroup({
+      address: new FormControl('', [Validators.required, addressValidator]),
+    });
   }
 
   ngOnInit() {}
-
-  addressValidator(fg: FormGroup) {
-    const address = fg.get('address')?.value;
-
-    return isValidAddress(address) ? null : { invalidAddress: true };
-  }
 
   dismiss(success: boolean, address?: string) {
     this.modalCtrl.dismiss({
@@ -40,12 +29,27 @@ export class ManualAddressPage implements OnInit {
 
   onSubmit() {
     this.addressForm.markAllAsTouched();
-
-    console.log(this.addressForm);
-
     if (this.addressForm.valid) {
-      const address = this.addressForm.get('address')?.value;
+      const formControl = checkClass(
+        this.addressForm.controls.address,
+        FormControl
+      );
+      const address = trimmedValue(formControl);
       this.dismiss(true, address);
     }
   }
 }
+
+const addressValidator = (formGroup: FormControl) => {
+  const address = trimmedValue(formGroup);
+  return isValidAddress(address) ? null : { invalidAddress: true };
+};
+
+const trimmedValue = (formControl: FormControl) => {
+  const value = formControl.value;
+  if (typeof value === 'string') {
+    return value.trim();
+  } else {
+    throw TypeError(`ManualAddressPage: expected string, got ${typeof value}`);
+  }
+};
