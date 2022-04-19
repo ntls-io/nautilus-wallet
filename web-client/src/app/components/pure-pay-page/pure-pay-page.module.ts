@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { PayComponentModule } from 'src/app/components/pay/pay.module';
 import { PurePayPageComponent } from './pure-pay-page.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, IonicModule, PayComponentModule],
   declarations: [PurePayPageComponent],
   exports: [PurePayPageComponent],
 })
