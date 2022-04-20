@@ -37,7 +37,7 @@ export const handleScan = async (
         await swal.fire({
           icon: 'error',
           title: 'Permission required',
-          text: `In order to scan a QR Code, you need to grant camera's permission`,
+          text: "In order to scan a QR Code, you need to grant camera's permission",
         });
         break;
       case 'dismissed':

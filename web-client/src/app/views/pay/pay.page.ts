@@ -123,7 +123,7 @@ export class PayPage implements OnInit {
       .fire({
         icon: 'success',
         titleText: 'Money sent!',
-        text: `Your money was sent successfully.`,
+        text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
               <p class="text-xs">${address}</p>
