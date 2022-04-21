@@ -1,0 +1,40 @@
+<div class="text-center">
+  <div class="inline-block w-auto m-auto">
+    <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
+
+    <h1 class="font-semibold font-nasalization">Enter Pin</h1>
+
+    <form [formGroup]="pinForm" (ngSubmit)="onSubmit()">
+      <div>
+        <ion-input
+          type="password"
+          formControlName="pin"
+          inputmode="numeric"
+          [autofocus]="autofocus"
+          [minlength]="minLength"
+          [maxlength]="maxLength"
+          [ngClass]="{ invalid: pinErrors }"
+        ></ion-input>
+
+        <ion-text color="danger" *ngIf="pinErrors">
+          <div *ngIf="pinErrors.required">Required</div>
+          <div *ngIf="pinErrors.pattern">Please enter digits only (0-9)</div>
+          <div *ngIf="pinErrors.minlength">
+            Too short (minimum {{ pinErrors.minlength.requiredLength }})
+          </div>
+          <div *ngIf="pinErrors.maxlength">
+            Too long (maximum {{ pinErrors.maxlength.requiredLength }})
+          </div>
+        </ion-text>
+      </div>
+
+      <ion-button
+        expand="block"
+        shape="round"
+        type="submit"
+        [disabled]="!pinForm.valid"
+        >Confirm</ion-button
+      >
+    </form>
+  </div>
+</div>

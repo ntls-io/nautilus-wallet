@@ -1,14 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { isValidAddress } from 'algosdk';
 import { SessionService } from 'src/app/state/session.service';
+import { defined } from 'src/app/utils/errors/panic';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import {
-  LockscreenPage,
-  LockscreenResult,
-} from 'src/app/views/lockscreen/lockscreen.page';
 import { handleScan } from '../scanner.helpers';
 
 @Component({
@@ -17,7 +14,12 @@ import { handleScan } from '../scanner.helpers';
   styleUrls: ['./wallet-access.page.scss'],
 })
 export class WalletAccessPage implements OnInit {
+  /** @see showPinEntryModal */
+  @Input() isPinEntryOpen = false;
+
   hasCamera?: boolean;
+
+  /** @see validatedAddress */
   address?: string;
 
   constructor(
@@ -29,39 +31,29 @@ export class WalletAccessPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {}
 
-  ngOnInit() {
+  /** Validated {@link address}, or `undefined`. */
+  get validatedAddress(): string | undefined {
+    const trimmed = this.address?.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }
+
+  ngOnInit(): void {
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
   }
 
-  async openScanner() {
-    await handleScan(this.modalCtrl, this.notification.swal, this.confirm);
+  async openScanner(): Promise<void> {
+    await handleScan(
+      this.modalCtrl,
+      this.notification.swal,
+      this.confirmAddress
+    );
   }
 
-  async confirm(value: string | undefined) {
-    const address = value?.trim();
-
-    if (address && isValidAddress(address)) {
-      const pinPromise = await this.presentLock();
-      const loading = await this.loadingCtrl.create();
-      const { success, pin } = pinPromise;
-      if (success && pin) {
-        await loading.present();
-        try {
-          const error = await this.sessionService.openWallet(address, pin);
-          if (error) {
-            await this.notification.swal.fire({
-              icon: 'error',
-              title: 'Open Wallet Failed',
-              text: error,
-            });
-          } else {
-            this.router.navigate(['/wallet']);
-          }
-        } finally {
-          await loading.dismiss();
-        }
-      }
+  /** User clicked to confirm address: show PIN entry. */
+  async confirmAddress(): Promise<void> {
+    if (this.validatedAddress !== undefined) {
+      this.showPinEntryModal();
     } else {
       await this.notification.swal.fire({
         icon: 'warning',
@@ -71,15 +63,30 @@ export class WalletAccessPage implements OnInit {
     }
   }
 
-  async presentLock(): Promise<LockscreenResult> {
-    const lock = await this.modalCtrl.create({ component: LockscreenPage });
+  /** Show the PIN entry modal. */
+  showPinEntryModal(): void {
+    this.isPinEntryOpen = true;
+  }
 
-    const dismiss = lock.onDidDismiss();
-    await lock.present();
-
-    const result = await dismiss;
-
-    return result.data ?? { success: false, pin: null };
-    // failsafe for when modal is dismissed without data (via back button, backdrop click, escape key, etc.)
+  /** User confirmed PIN: attempt to open wallet. */
+  async onPinConfirmed(pin: string): Promise<void> {
+    const address = defined(
+      this.validatedAddress,
+      'WalletAccessPage.onPinConfirmed: unexpected invalid address'
+    );
+    const openWalletErrorMessage = await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Opening wallet…' },
+      async () => await this.sessionService.openWallet(address, pin)
+    );
+    if (openWalletErrorMessage !== undefined) {
+      await this.notification.swal.fire({
+        icon: 'error',
+        title: 'Open Wallet Failed',
+        text: openWalletErrorMessage,
+      });
+    } else {
+      await this.router.navigate(['/wallet']);
+    }
   }
 }

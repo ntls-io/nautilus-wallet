@@ -20,3 +20,17 @@ export const ifDefined = <T>(
   f: (v: T) => T
 ): T | undefined =>
   value === null || value === undefined ? undefined : f(value);
+
+export type Constructor<T> = new (...args: any[]) => T;
+
+/**
+ * Helper: Check that o is an instance of the given class.
+ */
+export const checkClass = <T>(o: unknown, cls: Constructor<T>): T => {
+  if (o instanceof cls) {
+    return o;
+  } else {
+    const oClsName = (o as any)?.constructor?.name;
+    throw new TypeError(`expected ${cls.name}, got ${oClsName}: ${o}`);
+  }
+};
