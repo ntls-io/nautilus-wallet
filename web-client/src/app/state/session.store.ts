@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
-import { AccountData } from 'src/app/services/algosdk.utils';
+import { AccountData, AssetParams } from 'src/app/services/algosdk.utils';
 import { WalletDisplay } from 'src/schema/entities';
 
 /**
@@ -28,6 +28,13 @@ export interface SessionState {
    * @see import('./session-algorand.service').SessionAlgorandService
    */
   algorandAccountData?: AccountData;
+
+  /**
+   * Asset parameters of interest to the current session.
+   *
+   * @see import('./session-algorand.service').SessionAlgorandService.loadAssetParams
+   */
+  algorandAssetParams?: Record<number, AssetParams>;
 }
 
 export const createInitialState = (): SessionState => ({});
