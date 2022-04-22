@@ -8,6 +8,9 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { Polly } from '@pollyjs/core';
+import XHRAdapter from '@pollyjs/adapter-xhr';
+import RESTPersister from '@pollyjs/persister-rest';
 
 declare const require: {
   context(
@@ -45,3 +48,10 @@ const context = require.context(
 );
 // And load the modules.
 context.keys().map(context);
+
+// Docs:
+// - https://netflix.github.io/pollyjs/#/quick-start?id=using-polly-in-the-browser
+// - https://netflix.github.io/pollyjs/#/adapters/xhr
+// - https://netflix.github.io/pollyjs/#/persisters/rest
+Polly.register(XHRAdapter);
+Polly.register(RESTPersister);
