@@ -166,7 +166,7 @@ export type AssetHolding = {
   // Asset ID of the holding
   'asset-id': number;
 
-  creator: string;
+  creator?: string;
 
   // whether or not the holding is frozen
   'is-frozen': boolean;
