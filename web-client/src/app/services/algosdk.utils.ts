@@ -172,6 +172,55 @@ export type AssetHolding = {
   'is-frozen': boolean;
 };
 
+/**
+ * Specifies the parameters for an asset.
+ *
+ * @see https://developer.algorand.org/docs/rest-apis/algod/v2/#assetparams
+ */
+export type AssetParams = {
+  // The address that created this asset
+  creator: string;
+
+  // The number of digits to use after the decimal point when displaying this asset.
+  decimals: number;
+
+  // Name of this asset, as supplied by the creator.
+  name?: string;
+
+  // Base64 encoded name of this asset, as supplied by the creator.
+  'name-b64'?: string;
+
+  // Name of a unit of this asset, as supplied by the creator.
+  'unit-name'?: string;
+
+  // Base64 encoded name of a unit of this asset, as supplied by the creator.
+  'unit-name-b64'?: string;
+
+  // The total number of units of this asset.
+  total: number;
+
+  // URL where more information about the asset can be retrieved.
+  url?: string;
+
+  // Base64 encoded URL where more information about the asset can be retrieved.
+  'url-base64'?: string;
+
+  // A commitment to some unspecified asset metadata.
+  'metadata-hash'?: string;
+};
+
+/**
+ * Specifies both the unique identifier and the parameters for an asset.
+ *
+ * @see https://developer.algorand.org/docs/rest-apis/algod/v2/#asset
+ */
+export type Asset = {
+  // unique asset identifier
+  index: number;
+
+  params: AssetParams;
+};
+
 /** Type alias for Algos. */
 export type Algos = number;
 
