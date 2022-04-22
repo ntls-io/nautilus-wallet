@@ -3,6 +3,8 @@ import { Transaction } from 'algosdk';
 import { AlgodService } from 'src/app/services/algod.service';
 import {
   Algos,
+  Asset,
+  AssetParams,
   convertToMicroAlgos,
   TransactionConfirmation,
 } from 'src/app/services/algosdk.utils';
@@ -36,6 +38,26 @@ export class SessionAlgorandService {
       wallet.algorand_address_base32
     );
     this.sessionStore.update({ algorandAccountData });
+  }
+
+  /**
+   * Load the current wallet's asset holdings' parameters.
+   *
+   * This updates {@link SessionState.algorandAssetParams}.
+   */
+  async loadAssetParams(): Promise<void> {
+    const assetHoldings = this.sessionQuery.getAlgorandAssetHoldings();
+    if (assetHoldings) {
+      const assets: Asset[] = await Promise.all(
+        assetHoldings.map(
+          (assetHolding): Promise<Asset> =>
+            this.algodService.getAsset(assetHolding['asset-id'])
+        )
+      );
+      const algorandAssetParams: Record<number, AssetParams> =
+        Object.fromEntries(assets.map(({ index, params }) => [index, params]));
+      this.sessionStore.update({ algorandAssetParams });
+    }
   }
 
   /**
