@@ -63,4 +63,16 @@ module.exports = function (config) {
       },
     });
   }
+
+  if (process.env["TEST_PROXY_CONF"]) {
+    const fs = require("fs");
+    const proxyConfig = JSON.parse(
+      fs.readFileSync(process.env["TEST_PROXY_CONF"])
+    );
+
+    // Docs: http://karma-runner.github.io/6.3/config/configuration-file.html#proxies
+    config.set({
+      proxies: proxyConfig,
+    });
+  }
 };
