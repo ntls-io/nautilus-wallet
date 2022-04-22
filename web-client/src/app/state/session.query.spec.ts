@@ -38,6 +38,16 @@ describe('SessionQuery', () => {
       algorandAccountData: {
         address: 'address',
         amount: convertToMicroAlgos(1),
+        assets: [{ amount: 100, 'asset-id': 5, 'is-frozen': false }],
+      },
+      algorandAssetParams: {
+        5: {
+          creator: 'asset creator',
+          decimals: 2,
+          name: 'Percent',
+          'unit-name': 'PCT',
+          total: 10_000,
+        },
       },
     };
     store.update(state);
