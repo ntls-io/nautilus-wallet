@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { defined } from 'src/app/utils/errors/panic';
 import {
@@ -21,7 +29,7 @@ import { checkClass } from 'src/helpers/helpers';
   templateUrl: './pay-amount-form.component.html',
   styleUrls: ['./pay-amount-form.component.scss'],
 })
-export class PayAmountFormComponent implements OnInit {
+export class PayAmountFormComponent implements OnInit, OnChanges {
   /** Emit the amount submitted by the user. */
   @Output() amountSubmitted = new EventEmitter<number>();
 
@@ -66,6 +74,13 @@ export class PayAmountFormComponent implements OnInit {
     this.setInitialValues();
   }
 
+  /** Recalculate form validity on input min/max amount change. */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.#paymentForm && (changes?.minAmount || changes?.maxAmount)) {
+      this.amountControl.updateValueAndValidity();
+    }
+  }
+
   /** Check and emit submission. */
   async onSubmit(): Promise<void> {
     this.paymentForm.markAllAsTouched();
@@ -80,12 +95,16 @@ export class PayAmountFormComponent implements OnInit {
       amount: new FormControl('', [
         Validators.required,
         numericValidator,
-        ...(this.minAmount !== undefined
-          ? [Validators.min(this.minAmount)]
-          : []),
-        ...(this.maxAmount !== undefined
-          ? [Validators.max(this.maxAmount)]
-          : []),
+        // XXX: Delay evaluation of this.minAmount and this.maxAmount,
+        //      to respond to value changes
+        (control) =>
+          this.minAmount !== undefined
+            ? Validators.min(this.minAmount)(control)
+            : null,
+        (control) =>
+          this.maxAmount !== undefined
+            ? Validators.max(this.maxAmount)(control)
+            : null,
       ]),
     });
   }
