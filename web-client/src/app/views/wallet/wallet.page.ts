@@ -105,7 +105,11 @@ export class WalletPage implements OnInit {
    * - If the account has an Algo balance but no asset balance, attempt to send an asset opt-in.
    */
   protected async checkAlgorandAssetOptIn(): Promise<void> {
-    if (this.sessionQuery.hasAlgorandBalance()) {
+    if (
+      this.sessionQuery.hasAlgorandBalance() &&
+      // FIXME: Remove
+      environment.defaultAlgorandAssetId
+    ) {
       const assetId = defined(environment.defaultAlgorandAssetId);
       if (!this.sessionQuery.hasAlgorandAssetBalance(assetId)) {
         const sending = await this.toast('Sending asset opt-in…');

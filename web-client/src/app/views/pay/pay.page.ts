@@ -4,17 +4,16 @@ import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
-import { AccountData } from 'src/app/services/algosdk.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import {
+  AssetAmount,
   formatAssetAmount,
   formatAssetSymbol,
 } from 'src/app/utils/assets/assets.common';
 import { panic } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { WalletDisplay } from 'src/schema/entities';
 
 @Component({
   selector: 'app-pay-page',
@@ -22,16 +21,17 @@ import { WalletDisplay } from 'src/schema/entities';
   styleUrls: ['./pay.page.scss'],
 })
 export class PayPage implements OnInit {
-  wallet: Observable<WalletDisplay> = this.sessionQuery.wallet.pipe(
-    filterNilValue()
+  senderName: Observable<string> = this.sessionQuery.wallet.pipe(
+    filterNilValue(),
+    pluck('owner_name')
   );
 
   receiverAddress: Observable<string> = this.route.queryParams.pipe(
     pluck('receiverAddress')
   );
 
-  algorandAccountData: Observable<AccountData> =
-    this.sessionQuery.algorandAccountData.pipe(filterNilValue());
+  algorandBalances: Observable<AssetAmount[]> =
+    this.sessionQuery.algorandBalances;
 
   constructor(
     private route: ActivatedRoute,

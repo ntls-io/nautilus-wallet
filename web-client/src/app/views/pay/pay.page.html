@@ -5,9 +5,9 @@
 <ion-content>
   <ion-grid fixed>
     <app-pure-pay-page
-      [wallet]="wallet | async"
+      [senderName]="senderName | async"
       [receiverAddress]="receiverAddress | async"
-      [algorandAccountData]="algorandAccountData | async"
+      [algorandBalances]="algorandBalances | async"
       (paymentSubmitted)="onPaymentSubmitted($event)"
     ></app-pure-pay-page>
   </ion-grid>
