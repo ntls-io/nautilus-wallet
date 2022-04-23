@@ -93,6 +93,7 @@ export class WalletPage implements OnInit {
       { message: 'Refreshing…' },
       async () => {
         await this.sessionAlgorandService.loadAccountData();
+        await this.sessionAlgorandService.loadAssetParams();
       }
     );
   }
