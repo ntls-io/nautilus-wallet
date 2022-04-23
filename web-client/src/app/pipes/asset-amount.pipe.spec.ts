@@ -1,4 +1,5 @@
-import { algoAmount, xrpAmount } from 'src/app/utils/asset.display';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { AssetAmountPipe } from './asset-amount.pipe';
 
 describe('AssetAmountPipe', () => {
@@ -13,8 +14,8 @@ describe('AssetAmountPipe', () => {
   });
 
   it('formats', () => {
-    expect(pipe.transform(algoAmount(123.456))).toBe('123.456');
-    expect(pipe.transform(xrpAmount(123.456789))).toBe('123.456789');
+    expect(pipe.transform(assetAmountAlgo(123.456))).toBe('123.456');
+    expect(pipe.transform(assetAmountXrp(123.456789))).toBe('123.456789');
   });
 
   it('skips null', () => {

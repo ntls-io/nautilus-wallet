@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AssetAmount } from 'src/app/utils/asset.display';
+import {
+  AssetAmount,
+  assetAmountFromBase,
+} from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 
 /**
@@ -35,11 +38,11 @@ export class PayAmountConfirmComponent implements OnInit {
 
   /** Associate the submitted amount with the balance's asset info, and emit. */
   onAmountSubmitted(amount: number): void {
-    const assetInfo = defined(
-      this.balance?.assetInfo,
-      'PayAmountConfirmComponent.onAmountSubmitted: unexpected undefined: this.balance.assetInfo'
+    const balance = defined(
+      this.balance ?? undefined,
+      'PayAmountConfirmComponent.onAmountSubmitted: unexpected undefined: this.balance'
     );
-    const assetAmount = { amount, assetInfo };
+    const assetAmount: AssetAmount = assetAmountFromBase(amount, balance);
     // TODO: Confirmation dialog?
     this.amountConfirmed.emit(assetAmount);
   }

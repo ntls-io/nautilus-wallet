@@ -10,7 +10,7 @@ import { SessionQuery } from 'src/app/state/session.query';
 import {
   formatAssetAmount,
   formatAssetSymbol,
-} from 'src/app/utils/asset.display';
+} from 'src/app/utils/assets/assets.common';
 import { panic } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -48,7 +48,7 @@ export class PayPage implements OnInit {
     amount,
     option: { receiverAddress },
   }: Payment): Promise<void> {
-    if (amount.assetInfo.assetSymbol !== 'ALGO') {
+    if (amount.assetDisplay.assetSymbol !== 'ALGO') {
       panic('PayPage.onPaymentSubmitted: expected ALGO, got:', amount);
     }
 

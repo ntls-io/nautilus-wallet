@@ -14,7 +14,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { algoAmount, AssetAmount } from 'src/app/utils/asset.display';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 
 @Component({
@@ -62,7 +63,7 @@ export class WalletPage implements OnInit {
   balances: Observable<Array<AssetAmount>> =
     this.sessionQuery.algorandBalanceInAlgos.pipe(
       filterNilValue(),
-      map((amount: number): AssetAmount[] => [algoAmount(amount)])
+      map((amount: number): AssetAmount[] => [assetAmountAlgo(amount)])
     );
 
   constructor(

@@ -10,7 +10,7 @@ import {
 import algosdk from 'algosdk';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
 import { AccountData, convertToAlgos } from 'src/app/services/algosdk.utils';
-import { algoAmount } from 'src/app/utils/asset.display';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import { WalletDisplay } from 'src/schema/entities';
 
 /**
@@ -55,7 +55,7 @@ export class PurePayPageComponent implements OnInit, OnChanges {
         return [
           {
             senderName: this.wallet.owner_name,
-            senderBalance: algoAmount(balanceInAlgo),
+            senderBalance: assetAmountAlgo(balanceInAlgo),
             receiverAddress: this.receiverAddress,
           },
           // TODO: this.algorandAccountData.assets

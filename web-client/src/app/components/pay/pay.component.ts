@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AssetAmount } from 'src/app/utils/asset.display';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 
 /**
