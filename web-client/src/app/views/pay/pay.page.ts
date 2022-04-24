@@ -14,6 +14,7 @@ import {
 import { panic } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pay-page',
@@ -71,9 +72,12 @@ export class PayPage implements OnInit {
   notifySuccess(
     amount: string,
     address: string,
-    txid: string,
+    txId: string,
     timestamp: Date
   ) {
+    const txIdHtml = environment.algorandTransactionUrlPrefix
+      ? `<a href="${environment.algorandTransactionUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
     this.notification.swal
       .fire({
         icon: 'success',
@@ -81,11 +85,11 @@ export class PayPage implements OnInit {
         text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
-              <p class="text-xs">${address}</p>
-              <small>Completed on ${timestamp.toLocaleString()}</small>
+              <p class="text-xs"><b>Receiver:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
         confirmButtonText: 'DONE',
-        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
       })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
