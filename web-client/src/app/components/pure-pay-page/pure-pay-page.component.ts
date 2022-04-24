@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import algosdk from 'algosdk';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
 import { AccountData, convertToAlgos } from 'src/app/services/algosdk.utils';
@@ -13,7 +21,7 @@ import { WalletDisplay } from 'src/schema/entities';
   templateUrl: './pure-pay-page.component.html',
   styleUrls: ['./pure-pay-page.component.scss'],
 })
-export class PurePayPageComponent implements OnInit {
+export class PurePayPageComponent implements OnInit, OnChanges {
   @Input() wallet?: WalletDisplay | null;
 
   @Input() receiverAddress?: string | null;
@@ -22,13 +30,24 @@ export class PurePayPageComponent implements OnInit {
 
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
+  paymentOptions?: PaymentOption[];
+
   constructor() {}
 
   get receiverAddressType(): AddressType | undefined {
     return this.receiverAddress ? addressType(this.receiverAddress) : undefined;
   }
 
-  get paymentOptions(): PaymentOption[] | undefined {
+  ngOnInit() {}
+
+  /**
+   * Recalculate {@link paymentOptions} on change.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    this.paymentOptions = this.getPaymentOptions();
+  }
+
+  private getPaymentOptions(): PaymentOption[] | undefined {
     if (this.wallet && this.receiverAddress) {
       if (this.receiverAddressType === 'Algorand' && this.algorandAccountData) {
         const balanceInMicroAlgos = this.algorandAccountData.amount;
@@ -44,8 +63,6 @@ export class PurePayPageComponent implements OnInit {
       }
     }
   }
-
-  ngOnInit() {}
 }
 
 type AddressType = 'Algorand';
