@@ -1,9 +1,9 @@
 //! Structures representing various entities.
 
-use std::prelude::v1::{String, ToString};
+use std::prelude::v1::{String, ToOwned, ToString};
 
 use algonaut::transaction::account::Account as AlgonautAccount;
-use ripple_keypairs::Seed;
+use ripple_keypairs::{Entropy, EntropyArray, PrivateKey, PublicKey, Seed};
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
@@ -13,8 +13,9 @@ use crate::schema::types::{
     AlgorandAddressBytes,
     WalletId,
     WalletPin,
-    XrpAccountSeedBytes,
-    XrpAddressClassic,
+    XrplAddressBase58,
+    XrplKeyType,
+    XrplPublicKeyHex,
 };
 
 /// A Nautilus wallet's basic displayable details.
@@ -25,8 +26,11 @@ use crate::schema::types::{
 pub struct WalletDisplay {
     pub wallet_id: WalletId,
     pub owner_name: String,
+
+    // TODO(Pi): Decouple for multiple accounts per wallet.
     pub algorand_address_base32: AlgorandAddressBase32,
-    pub xrp_address_classic: XrpAddressClassic,
+
+    pub xrpl_account: XrplAccountDisplay,
 }
 
 impl From<WalletStorable> for WalletDisplay {
@@ -35,7 +39,7 @@ impl From<WalletStorable> for WalletDisplay {
             wallet_id: storable.wallet_id.clone(),
             owner_name: storable.owner_name.clone(),
             algorand_address_base32: storable.algorand_account.address_base32(),
-            xrp_address_classic: storable.xrpl_account.address_classic(),
+            xrpl_account: storable.xrpl_account.clone().into(),
         }
     }
 }
@@ -54,20 +58,14 @@ pub struct WalletStorable {
     pub xrpl_account: XrplAccount,
 }
 
+// Algorand entities:
+
 /// An Algorand account.
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 #[derive(Zeroize, ZeroizeOnDrop)] // zeroize
 pub struct AlgorandAccount {
     pub seed_bytes: AlgorandAccountSeedBytes,
-}
-
-/// An XRPL account.
-#[derive(Clone, Eq, PartialEq, Debug)] // core
-#[derive(Deserialize, Serialize)] // serde
-#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
-pub struct XrplAccount {
-    pub seed_bytes: XrpAccountSeedBytes,
 }
 
 impl AlgorandAccount {
@@ -98,15 +96,101 @@ impl From<AlgorandAccount> for AlgonautAccount {
     }
 }
 
-impl XrplAccount {
-    pub(crate) fn generate() -> Self {
+// XRPL entities:
+
+/// An XRPL account's displayable details.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub struct XrplAccountDisplay {
+    pub key_type: XrplKeyType,
+    pub public_key_hex: XrplPublicKeyHex,
+    pub address_base58: XrplAddressBase58,
+}
+
+impl From<XrplAccount> for XrplAccountDisplay {
+    fn from(xrpl_account: XrplAccount) -> Self {
         Self {
-            seed_bytes: Seed::random(),
+            key_type: xrpl_account.key_type,
+            public_key_hex: xrpl_account.to_public_key_hex(),
+            address_base58: xrpl_account.to_address_base58(),
+        }
+    }
+}
+
+/// An XRPL account.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct XrplAccount {
+    #[zeroize(skip)]
+    pub key_type: XrplKeyType,
+
+    pub seed_bytes: EntropyArray,
+}
+
+impl From<Seed> for XrplAccount {
+    fn from(seed: Seed) -> Self {
+        let key_type = seed.as_kind().into();
+        let seed_bytes = seed.as_entropy().to_owned();
+        Self::new(key_type, seed_bytes)
+    }
+}
+
+impl From<XrplAccount> for Seed {
+    fn from(xrpl_account: XrplAccount) -> Self {
+        let entropy = Entropy::Array(xrpl_account.seed_bytes);
+        let kind = xrpl_account.key_type.into();
+        Seed::new(entropy, kind)
+    }
+}
+
+impl XrplAccount {
+    pub(crate) fn new(key_type: XrplKeyType, seed_bytes: EntropyArray) -> Self {
+        Self {
+            key_type,
+            seed_bytes,
         }
     }
 
-    pub fn address_classic(&self) -> XrpAddressClassic {
-        let (_, public_key) = self.seed_bytes.derive_keypair().unwrap();
-        public_key.derive_address()
+    /// Generate a new keypair of the given type.
+    pub(crate) fn generate_default() -> Self {
+        Self::generate(XrplKeyType::default())
+    }
+
+    /// Generate a new keypair of the given type.
+    pub(crate) fn generate(key_type: XrplKeyType) -> Self {
+        Seed::new(Entropy::Random, key_type.into()).into()
+    }
+
+    pub(crate) fn to_seed(&self) -> Seed {
+        self.clone().into()
+    }
+
+    pub(crate) fn to_keypair(&self) -> (PrivateKey, PublicKey) {
+        // XXX(Pi): Performance: Repeated key derivation?
+        self.to_seed()
+            .derive_keypair()
+            // Safety: This should not fail unless something is seriously wrong: treat as unrecoverable.
+            .expect("XrpAccount: derive_keypair failed!")
+    }
+
+    pub(crate) fn to_private_key(&self) -> PrivateKey {
+        let (private_key, _) = self.to_keypair();
+        private_key
+    }
+
+    pub(crate) fn to_public_key(&self) -> PublicKey {
+        let (_, public_key) = self.to_keypair();
+        public_key
+    }
+
+    pub fn to_address_base58(&self) -> XrplAddressBase58 {
+        self.to_public_key().derive_address()
+    }
+
+    // TODO: Support X-Address format? Docs: <https://xrpaddress.info/>
+
+    pub fn to_public_key_hex(&self) -> XrplPublicKeyHex {
+        self.to_public_key().to_string()
     }
 }

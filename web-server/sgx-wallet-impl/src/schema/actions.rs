@@ -63,6 +63,12 @@ pub enum TransactionToSign {
         #[serde(with = "serde_bytes")]
         transaction_bytes: Bytes,
     },
+
+    /// An unsigned XRPL transaction.
+    XrplTransaction {
+        #[serde(with = "serde_bytes")]
+        transaction_bytes: Bytes,
+    },
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -95,6 +101,15 @@ pub enum TransactionSigned {
         #[serde(with = "serde_bytes")]
         signed_transaction_bytes: Bytes,
     },
+
+    /// A signed XRPL transaction.
+    XrplTransactionSigned {
+        #[serde(with = "serde_bytes")]
+        signed_transaction_bytes: Bytes,
+
+        #[serde(with = "serde_bytes")]
+        signature_bytes: Bytes,
+    },
 }
 
 impl TransactionSigned {
@@ -111,6 +126,10 @@ impl TransactionSigned {
             TransactionSigned::AlgorandTransactionSigned {
                 signed_transaction_bytes,
             } => signed_transaction_bytes,
+            otherwise => panic!(
+                "called `TransactionSigned::unwrap_algorand_bytes` on: {:?}",
+                otherwise
+            ),
         }
     }
 }
