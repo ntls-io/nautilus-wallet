@@ -3,7 +3,7 @@ use std::boxed::Box;
 use proptest::prelude::*;
 use secrecy::{ExposeSecret, Secret};
 use sgx_wallet_impl::ported::crypto::{SecretBytes, SodaBoxCrypto};
-use sgx_wallet_impl::schema::sealing::{seal, seal_msgpack, unseal, unseal_msgpack};
+use sgx_wallet_impl::schema::sealing::{seal, seal_msgpack, unseal, unseal_secret_msgpack};
 
 /// Roundtrip with [`seal`] and then [`unseal`].
 pub(crate) fn prop_seal_unseal_roundtrips() {
@@ -50,7 +50,7 @@ fn prop_seal_unseal_msgpack_roundtrips_impl(
     assert_ne!(sender.get_pubkey(), receiver.get_pubkey());
 
     let sealed = &seal_msgpack(message.expose_secret(), &receiver.get_pubkey(), sender).unwrap();
-    let unsealed = &unseal_msgpack::<TestMessage>(sealed, receiver).unwrap();
+    let unsealed = &unseal_secret_msgpack::<TestMessage>(sealed, receiver).unwrap();
 
     assert_eq!(unsealed.expose_secret(), message.expose_secret());
 }
