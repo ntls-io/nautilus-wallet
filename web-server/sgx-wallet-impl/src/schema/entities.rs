@@ -10,7 +10,6 @@ use crate::schema::types::{
     AlgorandAccountSeedBytes,
     AlgorandAddressBase32,
     AlgorandAddressBytes,
-    Bytes,
     WalletId,
     WalletPin,
 };
@@ -83,20 +82,4 @@ impl From<AlgorandAccount> for AlgonautAccount {
     fn from(account: AlgorandAccount) -> Self {
         account.as_algonaut_account()
     }
-}
-
-/// An unsigned Algorand transaction.
-#[derive(Clone, Eq, PartialEq, Debug)] // core
-#[derive(Deserialize, Serialize)] // serde
-pub struct AlgorandTransaction {
-    #[serde(with = "serde_bytes")]
-    pub transaction_bytes: Bytes,
-}
-
-/// An signed Algorand transaction.
-#[derive(Clone, Eq, PartialEq, Debug)] // core
-#[derive(Deserialize, Serialize)] // serde
-pub struct AlgorandTransactionSigned {
-    #[serde(with = "serde_bytes")]
-    pub signed_transaction_bytes: Bytes,
 }
