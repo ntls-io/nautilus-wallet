@@ -13,7 +13,7 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
     let new_xrpl_account = XrplAccount::generate_default();
 
     let storable = WalletStorable {
-        wallet_id: new_algorand_account.address_base32(),
+        wallet_id: new_xrpl_account.to_address_base58(),
         owner_name: request.owner_name.clone(),
         auth_pin: request.auth_pin.clone(),
         algorand_account: new_algorand_account,
