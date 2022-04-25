@@ -8,7 +8,6 @@
 
 pub mod actions;
 pub mod entities;
-mod macros;
 pub mod msgpack;
 pub mod sealing;
 pub(crate) mod serde_bytes_array;
