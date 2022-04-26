@@ -32,6 +32,11 @@ const BaseArgs: Partial<PurePayPageComponent> = {
     owner_name: 'Wallet Owner',
     algorand_address_base32:
       'GCIMBKDKNABEI3JZIECTLKJLRN7MQ2KQ4HK36Q6TTI5ZXBBW2ZCFGIBNYY',
+    xrpl_account: {
+      key_type: 'secp256k1',
+      public_key_hex: 'public key',
+      address_base58: 'address',
+    },
   },
   algorandAccountData: {
     address: 'GCIMBKDKNABEI3JZIECTLKJLRN7MQ2KQ4HK36Q6TTI5ZXBBW2ZCFGIBNYY',
