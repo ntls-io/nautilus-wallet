@@ -1,6 +1,7 @@
 import { Story } from '@storybook/angular';
 import { PayFromToModule } from 'src/app/components/pay-from-to/pay-from-to.module';
-import { algoAmount, xrpAmount } from 'src/app/utils/asset.display';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { PayFromToComponent } from './pay-from-to.component';
 
@@ -28,7 +29,7 @@ const Template: Story<PayFromToComponent> = (args: PayFromToComponent) => ({
 
 export const PayFromToAlgoArgs = {
   ...PayFromToBaseArgs,
-  balance: algoAmount(1234),
+  balance: assetAmountAlgo(1234),
   receiverAddress: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
 };
 export const WithAlgo = Template.bind({});
@@ -36,7 +37,7 @@ WithAlgo.args = { ...PayFromToAlgoArgs };
 
 export const PayFromToXRPArgs = {
   ...PayFromToBaseArgs,
-  balance: xrpAmount(1234),
+  balance: assetAmountXrp(1234),
   receiverAddress: 'rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn',
 };
 export const WithXRP = Template.bind({});

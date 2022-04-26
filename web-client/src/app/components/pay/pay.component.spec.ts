@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { algoAmount, xrpAmount } from 'src/app/utils/asset.display';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { eventsEmitted } from 'src/tests/test.helpers';
 import { PayComponent, Payment, PaymentOption } from './pay.component';
 
@@ -32,13 +33,13 @@ describe('PayComponent', () => {
 
   const algoOption: PaymentOption = {
     senderName: 'Algo Sender',
-    senderBalance: algoAmount(5),
+    senderBalance: assetAmountAlgo(5),
     receiverAddress: 'Algo Receiver',
   };
 
   const xrpOption: PaymentOption = {
     senderName: 'XRP sender',
-    senderBalance: xrpAmount(5),
+    senderBalance: assetAmountXrp(5),
     receiverAddress: 'XRP receiver',
   };
 
@@ -76,14 +77,16 @@ describe('PayComponent', () => {
 
   describe('paymentSubmitted', () => {
     it('fails when no selectedOption', async () => {
-      expect(() => component.onAmountConfirmed(algoAmount(5))).toThrowError(
+      expect(() =>
+        component.onAmountConfirmed(assetAmountAlgo(5))
+      ).toThrowError(
         'PayComponent.onAmountConfirmed: unexpected undefined: selectedOption'
       );
     });
 
     it('emits amount with selectedOption', () => {
       const expectedPayment: Payment = {
-        amount: algoAmount(5),
+        amount: assetAmountAlgo(5),
         option: algoOption,
       };
       component.selectedOption = expectedPayment.option;

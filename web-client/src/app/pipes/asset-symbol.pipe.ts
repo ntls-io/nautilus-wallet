@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AssetAmount, formatAssetSymbol } from 'src/app/utils/asset.display';
+import {
+  AssetAmount,
+  formatAssetSymbol,
+} from 'src/app/utils/assets/assets.common';
 
 /** @see formatAssetSymbol */
 @Pipe({
