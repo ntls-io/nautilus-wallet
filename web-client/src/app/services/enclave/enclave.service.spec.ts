@@ -166,17 +166,23 @@ describe('EnclaveService', () => {
     const requestSign: SignTransaction = {
       wallet_id: 'dummy wallet id',
       auth_pin: '1234',
-      algorand_transaction_bytes: new TextEncoder().encode(
-        'dummy unsigned transaction'
-      ),
+      transaction_to_sign: {
+        AlgorandTransaction: {
+          transaction_bytes: new TextEncoder().encode(
+            'dummy unsigned transaction'
+          ),
+        },
+      },
     };
 
     it('Signed', async () => {
       const stubResultSigned: SignTransactionResult = {
         Signed: {
-          signed_transaction_bytes: new TextEncoder().encode(
-            'dummy signed transaction'
-          ),
+          AlgorandTransactionSigned: {
+            signed_transaction_bytes: new TextEncoder().encode(
+              'dummy signed transaction'
+            ),
+          },
         },
       };
       const result = await simulateWalletOperation(

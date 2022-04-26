@@ -7,8 +7,9 @@ import {
   TransactionConfirmation,
 } from 'src/app/services/algosdk.utils';
 import { EnclaveService } from 'src/app/services/enclave/index';
-import { panic } from 'src/app/utils/errors/panic';
+import { defined, panic } from 'src/app/utils/errors/panic';
 import { never } from 'src/helpers/helpers';
+import { SignTransactionResult, TransactionSigned } from 'src/schema/actions';
 import { SessionQuery } from './session.query';
 import { SessionStore } from './session.store';
 
@@ -63,15 +64,25 @@ export class SessionAlgorandService {
   ): Promise<TransactionConfirmation> {
     const { wallet, pin } = this.sessionQuery.assumeActiveSession();
 
-    const signResult = await this.enclaveService.signTransaction({
-      auth_pin: pin,
-      wallet_id: wallet.wallet_id,
-      algorand_transaction_bytes: transaction.bytesToSign(),
-    });
+    const signResult: SignTransactionResult =
+      await this.enclaveService.signTransaction({
+        auth_pin: pin,
+        wallet_id: wallet.wallet_id,
+        transaction_to_sign: {
+          AlgorandTransaction: { transaction_bytes: transaction.bytesToSign() },
+        },
+      });
     if ('Signed' in signResult) {
+      const signed: TransactionSigned = signResult.Signed;
+      const { signed_transaction_bytes } = defined(
+        signed.AlgorandTransactionSigned,
+        `SessionAlgorandService.sendTransaction: expected AlgorandTransactionSigned, got: ${JSON.stringify(
+          signed
+        )}`
+      );
       console.log('sendTransaction: submitting and confirming');
       const confirmation = await this.algodService.submitAndConfirmTransaction(
-        signResult.Signed.signed_transaction_bytes
+        signed_transaction_bytes
       );
       console.log('sendTransaction: confirmed', { confirmation });
       await this.loadAccountData(); // FIXME(Pi): Move to caller?

@@ -3,7 +3,6 @@
 import {
   AlgorandAccountSeedBytes,
   AlgorandAddressBase32,
-  Bytes,
   WalletId,
 } from './types';
 
@@ -17,14 +16,4 @@ export type WalletDisplay = {
 /** An Algorand account. */
 export type AlgorandAccount = {
   seed_bytes: AlgorandAccountSeedBytes;
-};
-
-/** An unsigned Algorand transaction.*/
-export type AlgorandTransaction = {
-  transaction_bytes: Bytes;
-};
-
-/** An signed Algorand transaction.*/
-export type AlgorandTransactionSigned = {
-  signed_transaction_bytes: Bytes;
 };
