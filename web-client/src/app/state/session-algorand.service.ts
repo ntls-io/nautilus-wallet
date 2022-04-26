@@ -7,7 +7,7 @@ import {
   TransactionConfirmation,
 } from 'src/app/services/algosdk.utils';
 import { EnclaveService } from 'src/app/services/enclave/index';
-import { defined, panic } from 'src/app/utils/errors/panic';
+import { panic } from 'src/app/utils/errors/panic';
 import { never } from 'src/helpers/helpers';
 import { SignTransactionResult, TransactionSigned } from 'src/schema/actions';
 import { SessionQuery } from './session.query';
@@ -74,19 +74,22 @@ export class SessionAlgorandService {
       });
     if ('Signed' in signResult) {
       const signed: TransactionSigned = signResult.Signed;
-      const { signed_transaction_bytes } = defined(
-        signed.AlgorandTransactionSigned,
-        `SessionAlgorandService.sendTransaction: expected AlgorandTransactionSigned, got: ${JSON.stringify(
+      if ('AlgorandTransactionSigned' in signed) {
+        console.log('sendTransaction: submitting and confirming:', { signed });
+        const { signed_transaction_bytes } = signed.AlgorandTransactionSigned;
+        const confirmation =
+          await this.algodService.submitAndConfirmTransaction(
+            signed_transaction_bytes
+          );
+        console.log('sendTransaction: confirmed', { confirmation });
+        await this.loadAccountData(); // FIXME(Pi): Move to caller?
+        return confirmation;
+      } else {
+        throw panic(
+          'SessionAlgorandService.sendTransaction: expected AlgorandTransactionSigned, got:',
           signed
-        )}`
-      );
-      console.log('sendTransaction: submitting and confirming');
-      const confirmation = await this.algodService.submitAndConfirmTransaction(
-        signed_transaction_bytes
-      );
-      console.log('sendTransaction: confirmed', { confirmation });
-      await this.loadAccountData(); // FIXME(Pi): Move to caller?
-      return confirmation;
+        );
+      }
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(

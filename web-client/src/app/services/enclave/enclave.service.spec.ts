@@ -16,6 +16,7 @@ import {
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { TweetNaClCrypto } from 'src/schema/crypto';
+import { WalletDisplay } from 'src/schema/entities';
 import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
@@ -83,11 +84,7 @@ describe('EnclaveService', () => {
 
     it('Created', async () => {
       const stubResultCreated: CreateWalletResult = {
-        Created: {
-          wallet_id: 'dummy wallet id',
-          owner_name: requestCreate.owner_name,
-          algorand_address_base32: 'dummy algorand address',
-        },
+        Created: placeholderWalletDisplay(requestCreate.owner_name),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -114,17 +111,13 @@ describe('EnclaveService', () => {
 
   describe('openWallet', () => {
     const requestOpen: OpenWallet = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
     };
 
     it('Opened', async () => {
       const stubResultOpened: OpenWalletResult = {
-        Opened: {
-          wallet_id: 'dummy wallet id',
-          owner_name: 'dummy owner name',
-          algorand_address_base32: 'dummy algorand address',
-        },
+        Opened: placeholderWalletDisplay('placeholder owner name'),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -164,12 +157,12 @@ describe('EnclaveService', () => {
 
   describe('signTransaction', () => {
     const requestSign: SignTransaction = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
       transaction_to_sign: {
         AlgorandTransaction: {
           transaction_bytes: new TextEncoder().encode(
-            'dummy unsigned transaction'
+            'placeholder unsigned transaction'
           ),
         },
       },
@@ -180,7 +173,7 @@ describe('EnclaveService', () => {
         Signed: {
           AlgorandTransactionSigned: {
             signed_transaction_bytes: new TextEncoder().encode(
-              'dummy signed transaction'
+              'placeholder signed transaction'
             ),
           },
         },
@@ -220,6 +213,17 @@ describe('EnclaveService', () => {
       await expect(result).toEqual(stubResultFailed);
     });
   });
+});
+
+const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
+  wallet_id: 'placeholder wallet id',
+  owner_name,
+  algorand_address_base32: 'placeholder algorand address',
+  xrpl_account: {
+    key_type: 'secp256k1',
+    public_key_hex: 'placeholder public key hex',
+    address_base58: 'placeholder xrp address',
+  },
 });
 
 /**

@@ -49,6 +49,11 @@ describe('PrintWalletPage', () => {
           wallet_id: walletId,
           owner_name: wallet?.owner_name ?? 'fake',
           algorand_address_base32: wallet?.algorand_address_base32 ?? 'fake',
+          xrpl_account: {
+            key_type: wallet?.xrpl_account?.key_type ?? 'secp256k1',
+            public_key_hex: wallet?.xrpl_account?.public_key_hex ?? 'fake',
+            address_base58: wallet?.xrpl_account?.address_base58 ?? 'fake',
+          },
         },
       })
     );

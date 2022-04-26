@@ -42,6 +42,11 @@ const Template: Story<Args> = ({ name, balance, receiverAddress }) => ({
           wallet_id: 'id',
           owner_name: name,
           algorand_address_base32: 'address',
+          xrpl_account: {
+            key_type: 'secp256k1',
+            public_key_hex: 'public key',
+            address_base58: 'address',
+          },
         },
         algorandAccountData: {
           address: 'address',

@@ -1,18 +1,23 @@
 use std::prelude::v1::ToString;
 
 use crate::schema::actions::{CreateWallet, CreateWalletResult};
-use crate::schema::entities::{AlgorandAccount, WalletDisplay, WalletStorable};
+use crate::schema::entities::{AlgorandAccount, WalletDisplay, WalletStorable, XrplAccount};
 use crate::wallet_operations::store::save_new_wallet;
 
 type Result = CreateWalletResult;
 
 pub fn create_wallet(request: &CreateWallet) -> Result {
-    let new_account = AlgorandAccount::generate();
+    // TODO(Pi): Pull account / keypair creation into a separate operation.
+    //           For now, just generate both Algorand and XRP keypairs.
+    let new_algorand_account = AlgorandAccount::generate();
+    let new_xrpl_account = XrplAccount::generate_default();
+
     let storable = WalletStorable {
-        wallet_id: new_account.address_base32(),
+        wallet_id: new_xrpl_account.to_address_base58(),
         owner_name: request.owner_name.clone(),
         auth_pin: request.auth_pin.clone(),
-        algorand_account: new_account,
+        algorand_account: new_algorand_account,
+        xrpl_account: new_xrpl_account,
     };
     match save_new_wallet(&storable) {
         Ok(()) => Result::Created(WalletDisplay::from(storable)),

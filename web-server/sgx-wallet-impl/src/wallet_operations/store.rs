@@ -1,8 +1,5 @@
 use std::io;
 use std::prelude::v1::Box;
-use std::str::FromStr;
-
-use algonaut::core::Address as AlgonautAddress;
 
 use crate::ported::kv_store::fs::{FsStore, SgxFiler};
 use crate::ported::kv_store::{Key, KvStore};
@@ -36,8 +33,8 @@ pub fn load_wallet(wallet_id: &str) -> Result<Option<WalletStorable>, io::Error>
 }
 
 pub fn key_from_id(wallet_id: &str) -> Result<Box<Key>, io::Error> {
-    // XXX: Assume Algorand address, for now.
-    let address = AlgonautAddress::from_str(wallet_id).map_err(|err| {
+    // XXX: Assume XRP address, for now.
+    let address = ripple_address_codec::decode_account_id(wallet_id).map_err(|err| {
         io::Error::new(
             io::ErrorKind::InvalidInput,
             format!(
@@ -46,5 +43,5 @@ pub fn key_from_id(wallet_id: &str) -> Result<Box<Key>, io::Error> {
             ),
         )
     })?;
-    Ok(address.0.into())
+    Ok(address.into())
 }
