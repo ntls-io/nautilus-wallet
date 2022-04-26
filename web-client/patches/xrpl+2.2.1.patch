@@ -1,0 +1,21 @@
+diff --git a/node_modules/xrpl/dist/npm/client/connection.js b/node_modules/xrpl/dist/npm/client/connection.js
+index 820406f..f4656a5 100644
+--- a/node_modules/xrpl/dist/npm/client/connection.js
++++ b/node_modules/xrpl/dist/npm/client/connection.js
+@@ -51,12 +51,10 @@ function getAgent(url, config) {
+         hash: parsedProxyURL.hash,
+     }, (value) => value == null);
+     let HttpsProxyAgent;
+-    try {
+-        HttpsProxyAgent = require('https-proxy-agent');
+-    }
+-    catch (_error) {
+-        throw new Error('"proxy" option is not supported in the browser');
+-    }
++
++    // XXX(Pi): Bail out to avoid pulling https-proxy-agent into the browser / webpack build.
++    throw new Error('"proxy" option is not supported in the browser');
++
+     return new HttpsProxyAgent(proxyOptions);
+ }
+ function createWebSocket(url, config) {
