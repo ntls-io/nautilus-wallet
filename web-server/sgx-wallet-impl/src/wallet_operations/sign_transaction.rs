@@ -9,6 +9,7 @@ use crate::schema::actions::{
     TransactionToSign,
 };
 use crate::wallet_operations::sign_transaction_algorand::sign_algorand;
+use crate::wallet_operations::sign_transaction_xrpl::sign_xrpl;
 use crate::wallet_operations::store::load_wallet;
 
 pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
@@ -33,6 +34,14 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
         TransactionToSign::AlgorandTransaction { transaction_bytes } => {
             sign_algorand(&stored.algorand_account, transaction_bytes)
                 .map(TransactionSigned::from_algorand_bytes)
+        }
+
+        TransactionToSign::XrplTransaction { transaction_bytes } => {
+            let signature_bytes = sign_xrpl(&stored.xrpl_account, transaction_bytes);
+            Ok(TransactionSigned::XrplTransactionSigned {
+                signed_transaction_bytes: transaction_bytes.clone(),
+                signature_bytes,
+            })
         }
     };
 
