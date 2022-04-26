@@ -16,7 +16,7 @@ base64 = { version = "0.13.0", default-features = false, features = ["alloc"] }
 hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
-zeroize = { version = "1.4.1", features = ["alloc", "zeroize_derive"] }
+zeroize = { version = "1.5.3", features = ["alloc", "zeroize_derive"] }
 
 # SGX SDK
 sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }

@@ -81,8 +81,10 @@ where
     Ok(sealed_message_bytes)
 }
 
-/// [`unseal`] as MessagePack.
-pub fn unseal_msgpack<T>(
+/// [`unseal`] as MessagePack, for [`Secret`] values.
+///
+/// See also: [`unseal_non_secret_msgpack`]
+pub fn unseal_secret_msgpack<T>(
     sealed_message_bytes: &[u8],
     receiver_crypto: &SodaBoxCrypto,
 ) -> Result<Secret<T>, Box<dyn Error>>
@@ -93,5 +95,21 @@ where
     let sealed_message = &SealedMessage::from_msgpack(sealed_message_bytes)?;
     let message_bytes = unseal(sealed_message, receiver_crypto)?;
     let message = Secret::new(T::from_msgpack_owned(message_bytes.expose_secret())?);
+    Ok(message)
+}
+
+/// [`unseal`] as MessagePack, for non-[`Secret`] values.
+///
+/// See also: [`unseal_secret_msgpack`]
+pub fn unseal_non_secret_msgpack<T>(
+    sealed_message_bytes: &[u8],
+    receiver_crypto: &SodaBoxCrypto,
+) -> Result<T, Box<dyn Error>>
+where
+    T: FromMessagePackOwned,
+{
+    let sealed_message = &SealedMessage::from_msgpack(sealed_message_bytes)?;
+    let message_bytes = unseal(sealed_message, receiver_crypto)?;
+    let message = T::from_msgpack_owned(message_bytes.expose_secret())?;
     Ok(message)
 }

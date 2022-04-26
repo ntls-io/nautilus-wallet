@@ -3,7 +3,7 @@ use std::prelude::v1::ToString;
 use algonaut::core::ToMsgPack;
 use algonaut::transaction::SignedTransaction as AlgonautSignedTransaction;
 use sgx_wallet_impl::schema::actions;
-use sgx_wallet_impl::schema::actions::SignTransactionResult;
+use sgx_wallet_impl::schema::actions::{SignTransactionResult, TransactionToSign};
 use sgx_wallet_impl::schema::msgpack::FromMessagePack;
 use sgx_wallet_impl::wallet_operations::sign_transaction::sign_transaction;
 
@@ -16,23 +16,21 @@ pub(crate) fn sign_transaction_works() {
     let existing = &create_test_wallet();
 
     let algonaut_transaction = create_test_transaction();
-    let algorand_transaction_bytes = algonaut_transaction
+    let transaction_bytes = algonaut_transaction
         .bytes_to_sign()
         .unwrap()
         .into_boxed_slice();
+    let transaction_to_sign = TransactionToSign::AlgorandTransaction { transaction_bytes };
 
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        transaction_to_sign,
     };
-    let signed = &match sign_transaction(request) {
-        Result::Signed(signed) => signed,
-        otherwise => panic!("{:?}", otherwise),
-    };
+    let signed = sign_transaction(request).unwrap_signed();
 
     let algonaut_signed_transaction =
-        AlgonautSignedTransaction::from_msgpack(&signed.signed_transaction_bytes).unwrap();
+        AlgonautSignedTransaction::from_msgpack(&signed.unwrap_algorand_bytes()).unwrap();
     assert_eq!(
         algonaut_signed_transaction.transaction,
         algonaut_transaction
@@ -43,15 +41,16 @@ pub(crate) fn sign_transaction_without_tag() {
     let existing = &create_test_wallet();
 
     let algonaut_transaction = create_test_transaction();
-    let algorand_transaction_bytes = algonaut_transaction
+    let transaction_bytes = algonaut_transaction
         .to_msg_pack()
         .unwrap()
         .into_boxed_slice();
+    let transaction_to_sign = TransactionToSign::AlgorandTransaction { transaction_bytes };
 
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        transaction_to_sign,
     };
     match sign_transaction(request) {
         Result::Failed(err) => assert!(
@@ -71,12 +70,13 @@ pub(crate) fn sign_transaction_without_tag() {
 pub(crate) fn sign_transaction_empty() {
     let existing = &create_test_wallet();
 
-    let algorand_transaction_bytes = Default::default();
+    let transaction_bytes = Default::default();
+    let transaction_to_sign = TransactionToSign::AlgorandTransaction { transaction_bytes };
 
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes,
+        transaction_to_sign,
     };
     match sign_transaction(request) {
         Result::Failed(err) => {
@@ -94,12 +94,13 @@ pub(crate) fn sign_transaction_empty() {
 pub(crate) fn sign_transaction_malformed_transaction() {
     let existing = &create_test_wallet();
 
-    let malformed = "malformed".as_bytes().into();
+    let transaction_bytes = "malformed".as_bytes().into();
+    let transaction_to_sign = TransactionToSign::AlgorandTransaction { transaction_bytes };
 
     let request = &actions::SignTransaction {
         wallet_id: existing.wallet_id.clone(),
         auth_pin: "123456".to_string(),
-        algorand_transaction_bytes: malformed,
+        transaction_to_sign,
     };
     match sign_transaction(request) {
         Result::Failed(err) => {

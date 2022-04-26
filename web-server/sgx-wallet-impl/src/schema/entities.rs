@@ -3,29 +3,27 @@
 use std::prelude::v1::{String, ToString};
 
 use algonaut::transaction::account::Account as AlgonautAccount;
-use secrecy::zeroize::Zeroize;
 use serde::{Deserialize, Serialize};
+use zeroize::{Zeroize, ZeroizeOnDrop};
 
-use crate::schema::macros::derive_schema_traits;
 use crate::schema::types::{
     AlgorandAccountSeedBytes,
     AlgorandAddressBase32,
     AlgorandAddressBytes,
-    Bytes,
     WalletId,
     WalletPin,
 };
 
-derive_schema_traits!(
-    /// A Nautilus wallet's basic displayable details.
-    ///
-    /// This is what gets sent to clients.
-    pub struct WalletDisplay {
-        pub wallet_id: WalletId,
-        pub owner_name: String,
-        pub algorand_address_base32: AlgorandAddressBase32,
-    }
-);
+/// A Nautilus wallet's basic displayable details.
+///
+/// This is what gets sent to clients.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub struct WalletDisplay {
+    pub wallet_id: WalletId,
+    pub owner_name: String,
+    pub algorand_address_base32: AlgorandAddressBase32,
+}
 
 impl From<WalletStorable> for WalletDisplay {
     fn from(storable: WalletStorable) -> Self {
@@ -37,24 +35,26 @@ impl From<WalletStorable> for WalletDisplay {
     }
 }
 
-derive_schema_traits!(
-    /// A Nautilus wallet's full details.
-    ///
-    /// This is everything that gets persisted in the wallet store.
-    pub struct WalletStorable {
-        pub wallet_id: WalletId,
-        pub auth_pin: WalletPin,
-        pub owner_name: String,
-        pub algorand_account: AlgorandAccount,
-    }
-);
+/// A Nautilus wallet's full details.
+///
+/// This is everything that gets persisted in the wallet store.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct WalletStorable {
+    pub wallet_id: WalletId,
+    pub auth_pin: WalletPin,
+    pub owner_name: String,
+    pub algorand_account: AlgorandAccount,
+}
 
-derive_schema_traits!(
-    /// An Algorand account.
-    pub struct AlgorandAccount {
-        pub seed_bytes: AlgorandAccountSeedBytes,
-    }
-);
+/// An Algorand account.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct AlgorandAccount {
+    pub seed_bytes: AlgorandAccountSeedBytes,
+}
 
 impl AlgorandAccount {
     pub(crate) fn generate() -> Self {
@@ -83,19 +83,3 @@ impl From<AlgorandAccount> for AlgonautAccount {
         account.as_algonaut_account()
     }
 }
-
-derive_schema_traits!(
-    /// An unsigned Algorand transaction.
-    pub struct AlgorandTransaction {
-        #[serde(with = "serde_bytes")]
-        pub transaction_bytes: Bytes,
-    }
-);
-
-derive_schema_traits!(
-    /// An signed Algorand transaction.
-    pub struct AlgorandTransactionSigned {
-        #[serde(with = "serde_bytes")]
-        pub signed_transaction_bytes: Bytes,
-    }
-);
