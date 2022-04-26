@@ -3,6 +3,14 @@ import {
   convertToAlgos,
   convertToMicroAlgos,
 } from 'src/app/services/algosdk.utils';
+import {
+  assetAmountAlgo,
+  AssetAmountAlgo,
+} from 'src/app/utils/assets/assets.algo';
+import {
+  assetAmountAsa,
+  AssetAmountAsa,
+} from 'src/app/utils/assets/assets.algo.asa';
 import { WalletDisplay } from 'src/schema/entities';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import { SessionQuery } from './session.query';
@@ -116,6 +124,35 @@ describe('SessionQuery', () => {
       expect(await get(query.algorandBalanceInAlgos)).toBe(
         convertToAlgos(stub.algorandAccountData.amount)
       );
+    });
+
+    const expectedAlgoBalance: AssetAmountAlgo = assetAmountAlgo(1);
+
+    const expectedAssetBalances: AssetAmountAsa[] = [
+      assetAmountAsa(1, { assetSymbol: 'PCT', assetId: 5, decimals: 2 }),
+    ];
+
+    it('algorandAlgoBalance', async () => {
+      expect(await get(query.algorandAlgoBalance)).toBeUndefined();
+      stubState();
+      expect(await get(query.algorandAlgoBalance)).toEqual(assetAmountAlgo(1));
+    });
+
+    it('algorandAssetBalances', async () => {
+      expect(await get(query.algorandAssetBalances)).toBeUndefined();
+      stubState();
+      expect(await get(query.algorandAssetBalances)).toEqual([
+        ...expectedAssetBalances,
+      ]);
+    });
+
+    it('algorandBalances', async () => {
+      expect(await get(query.algorandBalances)).toEqual([]);
+      stubState();
+      expect(await get(query.algorandBalances)).toEqual([
+        expectedAlgoBalance,
+        ...expectedAssetBalances,
+      ]);
     });
   });
 
