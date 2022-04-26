@@ -16,7 +16,8 @@
     "format-check": "prettier --check .",
     "docs": "compodoc src -p ./tsconfig.json",
     "storybook": "ng run app:storybook --port 6006",
-    "build-storybook": "ng run app:build-storybook"
+    "build-storybook": "ng run app:build-storybook",
+    "postinstall": "patch-package"
   },
   "akitaCli": {
     "template": "angular",
@@ -124,6 +125,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-mocha-reporter": "^2.2.5",
+    "patch-package": "^6.4.7",
     "postcss": "^8.3.11",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-imports": "^2.3.4",
