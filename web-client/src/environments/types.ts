@@ -2,6 +2,7 @@ import {
   AlgodTokenHeader,
   CustomTokenHeader,
 } from 'algosdk/dist/types/src/client/client';
+import * as xrpl from 'xrpl';
 
 /**
  * Common type declaration for environment files.
@@ -51,6 +52,18 @@ export type Environment = {
    * @see import('src/app/views/wallet/wallet.page').WalletPage.checkAlgorandAssetOptIn
    */
   defaultAlgorandAssetId?: number;
+
+  /**
+   * XRPL.js client configuration.
+   *
+   * @see https://js.xrpl.org/classes/Client.html#constructor
+   */
+  xrplClient?: {
+    server: string;
+
+    /** @see https://js.xrpl.org/interfaces/ClientOptions.html */
+    options?: xrpl.ClientOptions;
+  };
 };
 
 /**
