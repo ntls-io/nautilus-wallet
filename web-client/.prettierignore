@@ -3,5 +3,6 @@
 /.angular/cache
 /coverage
 /documentation
+/documentation.json
 /storybook-static
 /www

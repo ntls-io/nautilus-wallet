@@ -1,0 +1,29 @@
+<div class="ion-text-center p-2">
+  <h1 class="font-semibold font-nasalization">Pay</h1>
+</div>
+
+<ng-container *ngIf="paymentOptions; else noPaymentOptions">
+  <app-pay
+    [paymentOptions]="paymentOptions"
+    (paymentSubmitted)="paymentSubmitted.emit($event)"
+  ></app-pay>
+</ng-container>
+
+<ng-template #noPaymentOptions>
+  <div class="ion-text-center p-2">
+    <ng-container *ngIf="!receiverAddressType">
+      <h2 class="font-semibold font-nasalization">Unsupported address</h2>
+      <p>Address not recognised:</p>
+      <pre class="whitespace-pre-wrap overflow-wrap-anywhere">{{
+        receiverAddress | json
+      }}</pre>
+    </ng-container>
+
+    <ng-container
+      *ngIf="receiverAddressType === 'Algorand' && !algorandAccountData"
+    >
+      <h2 class="font-semibold font-nasalization">No Algorand account</h2>
+      <p>You do not have an Algorand account</p>
+    </ng-container>
+  </div>
+</ng-template>

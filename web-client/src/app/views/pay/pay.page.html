@@ -4,41 +4,11 @@
 
 <ion-content>
   <ion-grid fixed>
-    <div class="ion-text-center p-2">
-      <h1 class="font-semibold font-nasalization">Pay</h1>
-    </div>
-    <ion-row>
-      <ion-col>
-        <app-pay-from-to
-          [name]="sessionQuery.name | async"
-          [balance]="sessionQuery.algorandBalanceInAlgos | async"
-          [receiverAddress]="wallet"
-        ></app-pay-from-to>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
-          <ion-item lines="none">
-            <ion-input
-              inputmode="tel"
-              placeholder="Amount"
-              type="text"
-              formControlName="amount"
-              [inputMask]="currencyInputMask"
-            ></ion-input>
-          </ion-item>
-          <div class="m-5">
-            <ion-button expand="block" shape="round" type="submit"
-              >PAY
-            </ion-button>
-            <p class="text-sm text-center">
-              Please check payment amount carefully. Transaction fees up to
-              R0.01 apply.
-            </p>
-          </div>
-        </form>
-      </ion-col>
-    </ion-row>
+    <app-pure-pay-page
+      [wallet]="wallet | async"
+      [receiverAddress]="receiverAddress | async"
+      [algorandAccountData]="algorandAccountData | async"
+      (paymentSubmitted)="onPaymentSubmitted($event)"
+    ></app-pure-pay-page>
   </ion-grid>
 </ion-content>

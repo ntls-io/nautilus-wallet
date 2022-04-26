@@ -55,6 +55,13 @@
             "selector": "property",
             "format": ["camelCase", "snake_case", "PascalCase"]
           }
+        ],
+        "@typescript-eslint/quotes": [
+          "error",
+          "single",
+          {
+            "avoidEscape": true
+          }
         ]
       }
     },

@@ -88,7 +88,7 @@ describe('WalletAccessPage', () => {
     expect(swalSpy).toHaveBeenCalledOnceWith({
       icon: 'error',
       title: 'Permission required',
-      text: `In order to scan a QR Code, you need to grant camera's permission`,
+      text: "In order to scan a QR Code, you need to grant camera's permission",
     });
     swalSpy.calls.reset();
   });

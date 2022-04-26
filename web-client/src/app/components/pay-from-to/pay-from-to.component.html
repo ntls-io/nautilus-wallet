@@ -1,22 +1,50 @@
-<ion-card class="mx-0">
+<ion-card>
   <ion-list lines="full" class="!p-0">
     <ion-item color="white">
       <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2 class="!font-black">From:</h2>
-        <p>{{ name }}</p>
-        <small>Available Balance</small>
-      </ion-label>
-      <ion-text slot="end" color="primary">
-        <h1 class="font-semibold m-0">R{{ balance }}</h1>
-      </ion-text>
+
+      <div
+        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
+      >
+        <div>
+          <ion-label class="ion-margin-end">
+            <h2 class="!font-black">From:</h2>
+            <p>{{ name }}</p>
+            <small>Available Balance</small>
+          </ion-label>
+        </div>
+
+        <div>
+          <ion-text
+            color="primary"
+            class="text-3xl font-audiowide overflow-wrap-anywhere"
+          >
+            {{ balance | assetAmount }}
+          </ion-text>
+
+          <ion-text class="text-xl font-bold">
+            {{ balance | assetSymbol }}
+          </ion-text>
+        </div>
+      </div>
     </ion-item>
+
     <ion-item color="white">
       <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2 class="!font-black">To:</h2>
-        <p>{{ receiverAddress }}</p>
-      </ion-label>
+
+      <div
+        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
+      >
+        <div>
+          <ion-label>
+            <h2 class="!font-black">To:</h2>
+          </ion-label>
+        </div>
+
+        <div class="font-mono overflow-wrap-anywhere">
+          {{ receiverAddress }}
+        </div>
+      </div>
     </ion-item>
   </ion-list>
 </ion-card>

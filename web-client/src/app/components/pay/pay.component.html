@@ -1,0 +1,46 @@
+<ng-container *ngIf="shouldShowChangeButton">
+  <div class="ion-text-center">
+    <ion-button id="trigger-change-account" color="secondary" shape="round">
+      Change account
+    </ion-button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="selectedOption">
+  <app-pay-amount-confirm
+    [name]="selectedOption.senderName"
+    [balance]="selectedOption.senderBalance"
+    [receiverAddress]="selectedOption.receiverAddress"
+    (amountConfirmed)="onAmountConfirmed($event)"
+  ></app-pay-amount-confirm>
+</ng-container>
+
+<ion-popover
+  trigger="trigger-change-account"
+  dismiss-on-select="true"
+  alignment="center"
+>
+  <ng-template>
+    <ion-list lines="full">
+      <ng-container *ngFor="let option of paymentOptions">
+        <ion-item button (click)="selectedOption = option" class="">
+          <div class="w-full text-right">
+            <ion-text
+              color="primary"
+              class="text-3xl font-audiowide overflow-wrap-anywhere"
+            >
+              {{ option.senderBalance | assetAmount }}
+            </ion-text>
+
+            <ion-text
+              class="inline-block text-left text-xl font-bold"
+              style="width: 6ch"
+            >
+              {{ option.senderBalance | assetSymbol }}
+            </ion-text>
+          </div>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </ng-template>
+</ion-popover>
