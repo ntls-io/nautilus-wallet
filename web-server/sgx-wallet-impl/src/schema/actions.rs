@@ -60,11 +60,21 @@ derive_schema_traits!(
 );
 
 derive_schema_traits!(
+    pub struct SignAcceptAssetTransaction {
+        // TODO: We probably want to do this without requiring the use of the walletId
+        pub wallet_id: WalletId,
+        pub algorand_transaction_bytes: Bytes,
+        // TODO: Access Control
+    }
+);
+
+derive_schema_traits!(
     /// Dispatching enum for action requests.
     pub enum WalletRequest {
         CreateWallet(CreateWallet),
         OpenWallet(OpenWallet),
         SignTransaction(SignTransaction),
+        SignAcceptAssetTransaction(SignAcceptAssetTransaction),
     }
 );
 
@@ -74,6 +84,7 @@ derive_schema_traits!(
         CreateWallet(CreateWalletResult),
         OpenWallet(OpenWalletResult),
         SignTransaction(SignTransactionResult),
+        SignAcceptAssetTransaction(SignTransactionResult),
     }
 );
 
