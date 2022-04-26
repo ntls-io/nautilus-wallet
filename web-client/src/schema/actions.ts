@@ -30,10 +30,12 @@ export type SignTransaction = {
 };
 
 /** For {@link SignTransaction}: A choice of type of transaction to sign. */
-export type TransactionToSign = {
+export type TransactionToSign =
   /** An unsigned Algorand transaction. */
-  AlgorandTransaction: { transaction_bytes: Bytes };
-};
+  | { AlgorandTransaction: { transaction_bytes: Bytes } }
+
+  /** An unsigned XRPL transaction. */
+  | { XrplTransaction: { transaction_bytes: Bytes } };
 
 export type SignTransactionResult =
   | { Signed: TransactionSigned }
@@ -41,10 +43,17 @@ export type SignTransactionResult =
   | { Failed: string };
 
 /** For {@link SignTransactionResult}: The possible types of signed transactions. */
-export type TransactionSigned = {
+export type TransactionSigned =
   /** A signed Algorand transaction. */
-  AlgorandTransactionSigned: { signed_transaction_bytes: Bytes };
-};
+  | { AlgorandTransactionSigned: { signed_transaction_bytes: Bytes } }
+
+  /** A signed Algorand transaction.*/
+  | {
+      XrplTransactionSigned: {
+        signed_transaction_bytes: Bytes;
+        signature_bytes: Bytes;
+      };
+    };
 
 /** Dispatching enum for action requests. */
 export type WalletRequest =

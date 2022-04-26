@@ -24,6 +24,11 @@ describe('stubActiveSession', () => {
         wallet_id: 'stub',
         owner_name: 'stub',
         algorand_address_base32: 'stub',
+        xrpl_account: {
+          key_type: 'secp256k1',
+          public_key_hex: 'stub',
+          address_base58: 'stub',
+        },
       },
       pin: 'stub',
     });
@@ -34,6 +39,11 @@ describe('stubActiveSession', () => {
       wallet_id: 'id',
       owner_name: 'name',
       algorand_address_base32: 'address',
+      xrpl_account: {
+        key_type: 'ed25519',
+        public_key_hex: 'public key',
+        address_base58: 'address',
+      },
     };
     const pin = 'secret';
     stubActiveSession(store, { wallet, pin });

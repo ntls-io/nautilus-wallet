@@ -3,6 +3,7 @@ import {
   convertToAlgos,
   convertToMicroAlgos,
 } from 'src/app/services/algosdk.utils';
+import { WalletDisplay } from 'src/schema/entities';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import { SessionQuery } from './session.query';
 import { SessionState, SessionStore } from './session.store';
@@ -21,10 +22,15 @@ describe('SessionQuery', () => {
   });
 
   const stubState = (): Required<SessionState> => {
-    const wallet = {
+    const wallet: WalletDisplay = {
       wallet_id: 'id',
       owner_name: 'name',
       algorand_address_base32: 'address',
+      xrpl_account: {
+        key_type: 'secp256k1',
+        public_key_hex: 'public key',
+        address_base58: 'address',
+      },
     };
     const state: Required<SessionState> = {
       wallet,
@@ -180,6 +186,11 @@ describe('SessionQuery', () => {
           wallet_id: 'stub',
           owner_name: 'stub',
           algorand_address_base32: 'stub',
+          xrpl_account: {
+            key_type: 'secp256k1',
+            public_key_hex: 'stub',
+            address_base58: 'stub',
+          },
         },
         pin: 'stub',
       });
