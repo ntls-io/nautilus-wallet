@@ -11,6 +11,7 @@ import {
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
@@ -69,6 +70,7 @@ export class WalletPage implements OnInit {
     private loadingController: LoadingController,
     public sessionQuery: SessionQuery,
     public sessionAlgorandService: SessionAlgorandService,
+    public sessionXrplService: SessionXrplService,
     private toastCtrl: ToastController,
     private notification: SwalHelper
   ) {}
@@ -85,8 +87,13 @@ export class WalletPage implements OnInit {
       this.loadingController,
       { message: 'Refreshing…' },
       async () => {
-        await this.sessionAlgorandService.loadAccountData();
-        await this.sessionAlgorandService.loadAssetParams();
+        await Promise.all([
+          (async () => {
+            await this.sessionAlgorandService.loadAccountData();
+            await this.sessionAlgorandService.loadAssetParams();
+          })(),
+          this.sessionXrplService.loadAccountData(),
+        ]);
       }
     );
   }
