@@ -29,7 +29,11 @@ describe('SessionQuery', () => {
     expect(query).toBeTruthy();
   });
 
-  const stubState = (): Required<SessionState> => {
+  /** `SessionState` with some required fields, for convenience. */
+  type StubSessionState = SessionState &
+    Pick<Required<SessionState>, 'wallet' | 'pin' | 'algorandAccountData'>;
+
+  const stubState = (): StubSessionState => {
     const wallet: WalletDisplay = {
       wallet_id: 'id',
       owner_name: 'name',
@@ -40,7 +44,7 @@ describe('SessionQuery', () => {
         address_base58: 'address',
       },
     };
-    const state: Required<SessionState> = {
+    const state: StubSessionState = {
       wallet,
       pin: 'secret',
       algorandAccountData: {
