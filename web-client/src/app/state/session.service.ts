@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { SessionQuery } from 'src/app/state/session.query';
+import { panic } from 'src/app/utils/errors/panic';
 import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
@@ -41,6 +42,7 @@ export class SessionService {
         this.sessionStore.update({ wallet, pin });
       } else if ('Failed' in result) {
         this.sessionStore.setError(result);
+        throw panic('SessionService: createWallet failed', result);
       } else {
         never(result);
       }
