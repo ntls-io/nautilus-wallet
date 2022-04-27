@@ -9,9 +9,7 @@ import {
 } from '@angular/core';
 import algosdk from 'algosdk';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
-import { AccountData, convertToAlgos } from 'src/app/services/algosdk.utils';
-import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
-import { WalletDisplay } from 'src/schema/entities';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 
 /**
  * @see PayPage
@@ -22,11 +20,11 @@ import { WalletDisplay } from 'src/schema/entities';
   styleUrls: ['./pure-pay-page.component.scss'],
 })
 export class PurePayPageComponent implements OnInit, OnChanges {
-  @Input() wallet?: WalletDisplay | null;
+  @Input() senderName?: string | null;
 
   @Input() receiverAddress?: string | null;
 
-  @Input() algorandAccountData?: AccountData | null;
+  @Input() algorandBalances?: AssetAmount[] | null;
 
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
@@ -36,6 +34,14 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   get receiverAddressType(): AddressType | undefined {
     return this.receiverAddress ? addressType(this.receiverAddress) : undefined;
+  }
+
+  get hasAlgorandBalances(): boolean {
+    return 0 < (this.algorandBalances ?? []).length;
+  }
+
+  get hasPaymentOptions(): boolean {
+    return 0 < (this.paymentOptions ?? []).length;
   }
 
   ngOnInit() {}
@@ -48,18 +54,15 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   }
 
   private getPaymentOptions(): PaymentOption[] | undefined {
-    if (this.wallet && this.receiverAddress) {
-      if (this.receiverAddressType === 'Algorand' && this.algorandAccountData) {
-        const balanceInMicroAlgos = this.algorandAccountData.amount;
-        const balanceInAlgo = convertToAlgos(balanceInMicroAlgos);
-        return [
-          {
-            senderName: this.wallet.owner_name,
-            senderBalance: assetAmountAlgo(balanceInAlgo),
-            receiverAddress: this.receiverAddress,
-          },
-          // TODO: this.algorandAccountData.assets
-        ];
+    const senderName = this.senderName;
+    const receiverAddress = this.receiverAddress;
+    if (senderName && receiverAddress) {
+      if (this.receiverAddressType === 'Algorand' && this.algorandBalances) {
+        return this.algorandBalances.map((senderBalance) => ({
+          senderName,
+          senderBalance,
+          receiverAddress,
+        }));
       }
     }
   }

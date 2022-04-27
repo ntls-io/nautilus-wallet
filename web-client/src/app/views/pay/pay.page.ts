@@ -4,17 +4,22 @@ import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
-import { AccountData } from 'src/app/services/algosdk.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import {
+  convertFromAssetAmountAsaToLedger,
+  isAssetAmountAsa,
+} from 'src/app/utils/assets/assets.algo.asa';
+import {
+  AssetAmount,
   formatAssetAmount,
   formatAssetSymbol,
 } from 'src/app/utils/assets/assets.common';
 import { panic } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { WalletDisplay } from 'src/schema/entities';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pay-page',
@@ -22,16 +27,17 @@ import { WalletDisplay } from 'src/schema/entities';
   styleUrls: ['./pay.page.scss'],
 })
 export class PayPage implements OnInit {
-  wallet: Observable<WalletDisplay> = this.sessionQuery.wallet.pipe(
-    filterNilValue()
+  senderName: Observable<string> = this.sessionQuery.wallet.pipe(
+    filterNilValue(),
+    pluck('owner_name')
   );
 
   receiverAddress: Observable<string> = this.route.queryParams.pipe(
     pluck('receiverAddress')
   );
 
-  algorandAccountData: Observable<AccountData> =
-    this.sessionQuery.algorandAccountData.pipe(filterNilValue());
+  algorandBalances: Observable<AssetAmount[]> =
+    this.sessionQuery.algorandBalances;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,18 +54,30 @@ export class PayPage implements OnInit {
     amount,
     option: { receiverAddress },
   }: Payment): Promise<void> {
-    if (amount.assetDisplay.assetSymbol !== 'ALGO') {
-      panic('PayPage.onPaymentSubmitted: expected ALGO, got:', amount);
-    }
-
-    const amountInAlgos = amount.amount;
     const confirmation = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Confirming Transaction' },
-      () =>
-        this.sessionAlgorandService.sendAlgos(receiverAddress, amountInAlgos)
+      () => {
+        if (isAssetAmountAlgo(amount)) {
+          return this.sessionAlgorandService.sendAlgos(
+            receiverAddress,
+            amount.amount
+          );
+        } else if (isAssetAmountAsa(amount)) {
+          const { amount: amountInLedgerUnits, assetId } =
+            convertFromAssetAmountAsaToLedger(amount);
+          return this.sessionAlgorandService.sendAssetFunds(
+            assetId,
+            receiverAddress,
+            amountInLedgerUnits
+          );
+        } else {
+          throw panic('PayPage.onPaymentSubmitted: unexpected amount', {
+            amount,
+          });
+        }
+      }
     );
-
     this.notifySuccess(
       `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
       receiverAddress,
@@ -71,9 +89,12 @@ export class PayPage implements OnInit {
   notifySuccess(
     amount: string,
     address: string,
-    txid: string,
+    txId: string,
     timestamp: Date
   ) {
+    const txIdHtml = environment.algorandTransactionUrlPrefix
+      ? `<a href="${environment.algorandTransactionUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
     this.notification.swal
       .fire({
         icon: 'success',
@@ -81,11 +102,11 @@ export class PayPage implements OnInit {
         text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
-              <p class="text-xs">${address}</p>
-              <small>Completed on ${timestamp.toLocaleString()}</small>
+              <p class="text-xs"><b>Receiver:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
         confirmButtonText: 'DONE',
-        footer: `<a href="https://testnet.algoexplorer.io/tx/${txid}" target="_blank" >TxID</a>`,
       })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {

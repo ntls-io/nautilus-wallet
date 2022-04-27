@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Query } from '@datorama/akita';
-import { Observable } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
 import {
   Algos,
+  AssetHolding,
   convertToAlgos,
+  extractAlgorandAssetBalance,
   MicroAlgos,
 } from 'src/app/services/algosdk.utils';
+import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { convertFromLedgerToAssetAmountAsa } from 'src/app/utils/assets/assets.algo.asa';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
-import { ifDefined } from 'src/helpers/helpers';
+import { allDefinedOrNone, ifDefined } from 'src/helpers/helpers';
 import { WalletDisplay } from 'src/schema/entities';
 import { SessionState, SessionStore } from './session.store';
 
@@ -35,13 +40,59 @@ export class SessionQuery extends Query<SessionState> {
 
   // Algorand account field queries:
 
-  algorandBalanceInMicroAlgos = this.select(
+  algorandBalanceInMicroAlgos: Observable<MicroAlgos | undefined> = this.select(
     ({ algorandAccountData }) => algorandAccountData?.amount
   );
 
   algorandBalanceInAlgos: Observable<Algos | undefined> = this.select(
     ({ algorandAccountData }) =>
       ifDefined(algorandAccountData?.amount, convertToAlgos)
+  );
+
+  algorandAlgoBalance: Observable<AssetAmount | undefined> = this.select(
+    ({ algorandAccountData }) =>
+      ifDefined(algorandAccountData?.amount, (amount: MicroAlgos) =>
+        assetAmountAlgo(convertToAlgos(amount))
+      )
+  );
+
+  algorandAssetBalances: Observable<AssetAmount[] | undefined> = this.select(
+    ({ algorandAccountData, algorandAssetParams }) =>
+      ifDefined(algorandAccountData?.assets, (assetHoldings) =>
+        allDefinedOrNone(
+          // Look up each asset holding's info in algorandAssetParams.
+          assetHoldings.map(({ amount, 'asset-id': assetId }: AssetHolding) =>
+            ifDefined(algorandAssetParams?.[assetId], (assetParams) =>
+              ifDefined(
+                assetParams?.['unit-name'],
+                (unitName): AssetAmount =>
+                  convertFromLedgerToAssetAmountAsa({
+                    amount,
+                    assetId,
+                    unitName,
+                    decimals: assetParams.decimals,
+                  })
+              )
+            )
+          )
+        )
+      )
+  );
+
+  algorandBalances: Observable<AssetAmount[]> = combineLatest([
+    this.algorandAlgoBalance,
+    this.algorandAssetBalances,
+  ]).pipe(
+    map(
+      ([algoBalance, assetBalances]: [
+        AssetAmount | undefined,
+        AssetAmount[] | undefined
+      ]) => [
+        ...(algoBalance !== undefined ? [algoBalance] : []),
+        ...(assetBalances ?? []),
+      ]
+    ),
+    distinctUntilChanged()
   );
 
   constructor(protected store: SessionStore) {
@@ -61,8 +112,31 @@ export class SessionQuery extends Query<SessionState> {
     );
   }
 
+  getAlgorandAssetHoldings(): AssetHolding[] | undefined {
+    return this.getValue().algorandAccountData?.assets;
+  }
+
   hasAlgorandBalance() {
     return 0 < (this.getAlgorandBalanceInMicroAlgos() ?? 0);
+  }
+
+  /**
+   * Get the current Algorand account's balance for the given ASA.
+   *
+   * @return 0 if a zero-balance asset holding exists (account is opted-in to the ASA)
+   * @return null if no asset holding exists (account is not opted-in to the ASA)
+   *
+   * @throws Error if `sessionStore.algorandAccountData` is not defined
+   */
+  getAlgorandAssetBalance(assetId: number): null | number {
+    return extractAlgorandAssetBalance(
+      defined(this.getValue().algorandAccountData),
+      assetId
+    );
+  }
+
+  hasAlgorandAssetBalance(assetId: number): boolean {
+    return this.getAlgorandAssetBalance(assetId) !== null;
   }
 
   /**

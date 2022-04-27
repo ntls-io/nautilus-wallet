@@ -21,6 +21,14 @@ export const ifDefined = <T, R>(
 ): R | undefined =>
   value === null || value === undefined ? undefined : f(value);
 
+/**
+ * Verify that all items in a list are defined, or return `undefined`.
+ */
+export const allDefinedOrNone = <T>(
+  values: (T | undefined)[]
+): T[] | undefined =>
+  values.every((v) => v !== undefined) ? (values as T[]) : undefined;
+
 export type Constructor<T> = new (...args: any[]) => T;
 
 /**

@@ -3,6 +3,8 @@ import { Transaction } from 'algosdk';
 import { AlgodService } from 'src/app/services/algod.service';
 import {
   Algos,
+  Asset,
+  AssetParams,
   convertToMicroAlgos,
   TransactionConfirmation,
 } from 'src/app/services/algosdk.utils';
@@ -39,6 +41,26 @@ export class SessionAlgorandService {
   }
 
   /**
+   * Load the current wallet's asset holdings' parameters.
+   *
+   * This updates {@link SessionState.algorandAssetParams}.
+   */
+  async loadAssetParams(): Promise<void> {
+    const assetHoldings = this.sessionQuery.getAlgorandAssetHoldings();
+    if (assetHoldings) {
+      const assets: Asset[] = await Promise.all(
+        assetHoldings.map(
+          (assetHolding): Promise<Asset> =>
+            this.algodService.getAsset(assetHolding['asset-id'])
+        )
+      );
+      const algorandAssetParams: Record<number, AssetParams> =
+        Object.fromEntries(assets.map(({ index, params }) => [index, params]));
+      this.sessionStore.update({ algorandAssetParams });
+    }
+  }
+
+  /**
    * Send Algos to another account.
    */
   async sendAlgos(
@@ -52,6 +74,30 @@ export class SessionAlgorandService {
       amount: amountInMicroAlgos,
       from: wallet.algorand_address_base32,
       to: receiverId,
+    });
+    return await this.sendTransaction(transaction);
+  }
+
+  async sendAssetOptIn(assetId: number): Promise<TransactionConfirmation> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+    const transaction = await this.algodService.createUnsignedAssetOptInTxn(
+      wallet.algorand_address_base32,
+      assetId
+    );
+    return await this.sendTransaction(transaction);
+  }
+
+  async sendAssetFunds(
+    assetId: number,
+    receiverId: string,
+    amount: number
+  ): Promise<TransactionConfirmation> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+    const transaction = await this.algodService.createUnsignedAssetTransferTxn({
+      from: wallet.algorand_address_base32,
+      to: receiverId,
+      amount,
+      assetIndex: assetId,
     });
     return await this.sendTransaction(transaction);
   }
