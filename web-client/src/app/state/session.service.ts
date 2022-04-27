@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionQuery } from 'src/app/state/session.query';
 import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
   OpenWallet,
   OpenWalletResult,
+  SignTransaction,
+  SignTransactionResult,
+  TransactionSigned,
+  TransactionToSign,
 } from 'src/schema/actions';
 import { SessionStore } from './session.store';
 
@@ -17,6 +22,7 @@ import { SessionStore } from './session.store';
 export class SessionService {
   constructor(
     private sessionStore: SessionStore,
+    private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
     private sessionAlgorandService: SessionAlgorandService
   ) {}
@@ -74,6 +80,43 @@ export class SessionService {
       throw new Error(result.Failed);
     } else {
       never(result);
+    }
+  }
+
+  /**
+   * Sign a transaction using the active session's wallet.
+   *
+   * This takes care of wrapping {@link SignTransaction}
+   * and unwrapping {@link SignTransactionResult}.
+   *
+   * @see EnclaveService#signTransaction
+   */
+  async signTransaction(
+    transaction_to_sign: TransactionToSign
+  ): Promise<TransactionSigned> {
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+
+    const signRequest: SignTransaction = {
+      auth_pin: pin,
+      wallet_id: wallet.wallet_id,
+      transaction_to_sign,
+    };
+    const signResult: SignTransactionResult =
+      await this.enclaveService.signTransaction(signRequest);
+
+    if ('Signed' in signResult) {
+      return signResult.Signed;
+    } else if ('InvalidAuth' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic('SessionService.signTransaction: invalid auth', signResult);
+    } else if ('Failed' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic(
+        `SessionService.signTransaction failed: ${signResult.Failed}`,
+        signResult
+      );
+    } else {
+      throw never(signResult);
     }
   }
 }
