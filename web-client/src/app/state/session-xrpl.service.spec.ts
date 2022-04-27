@@ -1,20 +1,20 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { SessionXrplService } from './session-xrpl.service';
-import { SessionXrplStore } from './session-xrpl.store';
+import { SessionStore } from './session.store';
 
 describe('SessionXrplService', () => {
   let sessionXrplService: SessionXrplService;
-  let sessionXrplStore: SessionXrplStore;
+  let sessionStore: SessionStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SessionXrplService, SessionXrplStore],
       imports: [HttpClientTestingModule],
+      providers: [SessionXrplService, SessionStore],
     });
 
     sessionXrplService = TestBed.inject(SessionXrplService);
-    sessionXrplStore = TestBed.inject(SessionXrplStore);
+    sessionStore = TestBed.inject(SessionStore);
   });
 
   it('should be created', () => {
