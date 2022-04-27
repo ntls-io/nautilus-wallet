@@ -36,6 +36,10 @@ const xrpOption: PaymentOption = {
   receiverAddress: PayFromToXRPArgs.receiverAddress,
 };
 
+/** This component needs more than the default 1 second to load. */
+const LOAD_TIMEOUT: milliseconds = 4_000;
+type milliseconds = number;
+
 const Template: Story<PayComponent> = (args: PayComponent) => ({
   props: {
     ...args,
@@ -57,7 +61,7 @@ PayAmount.play = async ({ canvasElement }) => {
   const payButton = await canvas.findByText(
     /Pay/i,
     { selector: 'ion-button.hydrated' },
-    { timeout: 2000 }
+    { timeout: LOAD_TIMEOUT }
   );
 
   // canvas.type() doesn't seem to work with ion-input, so enter the value directly here.
@@ -87,7 +91,7 @@ ChangeAccount.play = async ({ canvasElement }): Promise<void> => {
     await canvas.findByText(
       'Change account',
       { selector: 'ion-button.hydrated' },
-      { timeout: 2000 }
+      { timeout: LOAD_TIMEOUT }
     )
   );
 };
