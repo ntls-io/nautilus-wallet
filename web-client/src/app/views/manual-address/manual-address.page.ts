@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { isValidAddress } from 'algosdk';
 import { checkClass } from 'src/helpers/helpers';
 
 @Component({
@@ -42,7 +41,7 @@ export class ManualAddressPage implements OnInit {
 
 const addressValidator = (formGroup: FormControl) => {
   const address = trimmedValue(formGroup);
-  return isValidAddress(address) ? null : { invalidAddress: true };
+  return address ? null : { invalidAddress: true };
 };
 
 const trimmedValue = (formControl: FormControl) => {
