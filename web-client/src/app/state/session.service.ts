@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
-import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { never } from 'src/helpers/helpers';
 import {
@@ -23,8 +22,7 @@ export class SessionService {
   constructor(
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
-    private enclaveService: EnclaveService,
-    private sessionAlgorandService: SessionAlgorandService
+    private enclaveService: EnclaveService
   ) {}
 
   /**
@@ -68,9 +66,6 @@ export class SessionService {
     if ('Opened' in result) {
       const wallet = result.Opened;
       this.sessionStore.update({ wallet, pin });
-
-      // FIXME(Pi): This update should not be happening here.
-      await this.sessionAlgorandService.loadAccountData();
 
       return undefined; // Success
     } else if ('InvalidAuth' in result) {
