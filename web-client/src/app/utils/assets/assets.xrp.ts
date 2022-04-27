@@ -51,3 +51,11 @@ export const assetAmountXrp = (amount: number): AssetAmountXrp => ({
   assetDisplay: ASSET_DISPLAY_XRP,
   ledgerInfo: LEDGER_INFO_XRPL,
 });
+
+// Type checks:
+
+export const isAssetAmountXrp = (
+  amount: AssetAmount | AssetAmountXrp
+): amount is AssetAmountXrp =>
+  amount.ledgerInfo.type === LEDGER_TYPE_XRPL &&
+  amount.assetDisplay.assetSymbol === ASSET_SYMBOL_XRP;
