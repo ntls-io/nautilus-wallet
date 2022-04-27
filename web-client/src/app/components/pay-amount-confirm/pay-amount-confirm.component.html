@@ -22,6 +22,7 @@
         <app-pay-amount-form
           [maxAmount]="balance?.amount"
           (amountSubmitted)="onAmountSubmitted($event)"
+          [autofocus]="autofocus"
         ></app-pay-amount-form>
 
         <p class="text-sm text-center">

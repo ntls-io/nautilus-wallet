@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
@@ -27,6 +27,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./pay.page.scss'],
 })
 export class PayPage implements OnInit {
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
   senderName: Observable<string> = this.sessionQuery.wallet.pipe(
     filterNilValue(),
     pluck('owner_name')

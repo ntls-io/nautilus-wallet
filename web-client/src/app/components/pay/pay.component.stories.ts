@@ -37,7 +37,10 @@ const xrpOption: PaymentOption = {
 };
 
 const Template: Story<PayComponent> = (args: PayComponent) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const OneOption = Template.bind({});

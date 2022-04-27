@@ -24,7 +24,10 @@ export default ionicStoryMeta<PayAmountConfirmComponent>(
 const Template: Story<PayAmountConfirmComponent> = (
   args: PayAmountConfirmComponent
 ) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const WithAlgo = Template.bind({});
