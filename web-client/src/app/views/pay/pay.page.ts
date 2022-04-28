@@ -5,6 +5,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -31,6 +32,7 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
+import * as xrpl from 'xrpl';
 import { TxResponse } from 'xrpl';
 
 @Component({
@@ -78,7 +80,7 @@ export class PayPage implements OnInit {
       { message: 'Confirming Transaction' },
       () => this.sendByLedgerType(amount, receiverAddress)
     );
-    this.notifyResult(result, amount, receiverAddress);
+    await this.notifyResult(result, amount, receiverAddress);
   }
 
   /**
@@ -133,13 +135,13 @@ export class PayPage implements OnInit {
     }
   }
 
-  protected notifyResult(
+  protected async notifyResult(
     result:
       | { algorandResult: TransactionConfirmation }
       | { xrplResult: TxResponse },
     amount: AssetAmount,
     receiverAddress: string
-  ): void {
+  ): Promise<void> {
     if ('algorandResult' in result) {
       const { algorandResult: confirmation } = result;
       this.notifySuccess({
@@ -151,12 +153,19 @@ export class PayPage implements OnInit {
       });
     } else if ('xrplResult' in result) {
       const { xrplResult: txResponse } = result;
-      this.notifySuccess({
-        amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
-        address: receiverAddress,
-        txId: txResponse.id.toString(),
-        timestamp: new Date(),
-      });
+
+      const { succeeded, resultCode } = checkTxResponseSucceeded(txResponse);
+
+      if (succeeded) {
+        this.notifySuccess({
+          amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
+          address: receiverAddress,
+          txId: txResponse.id.toString(),
+          timestamp: new Date(),
+        });
+      } else {
+        await this.notifyXrplFailure({ resultCode });
+      }
     } else {
       throw never(result);
     }
@@ -196,5 +205,26 @@ export class PayPage implements OnInit {
           this.navCtrl.navigateRoot('wallet');
         }
       });
+  }
+
+  protected async notifyXrplFailure({
+    resultCode,
+  }: {
+    resultCode: xrpl.TransactionMetadata['TransactionResult'];
+  }): Promise<void> {
+    const categoryLocalError = resultCode.startsWith('tel');
+    const categoryRetry = resultCode.startsWith('ter');
+    const retryable = categoryLocalError || categoryRetry;
+
+    await this.notification.swal.fire({
+      icon: retryable ? 'warning' : 'error',
+      titleText: 'Transaction failed',
+      html: [
+        ...(categoryLocalError ? ['<p>(Local error)</p>'] : []),
+        ...(categoryRetry ? ['<p>(Retry possible)</p>'] : []),
+        `<p>Result code: ${resultCode}</p>`,
+        '<p>See <a href="https://xrpl.org/transaction-results.html" target="_blank">Transaction Results</a> for more details.</p>',
+      ].join('\n'),
+    });
   }
 }
