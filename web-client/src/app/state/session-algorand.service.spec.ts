@@ -5,16 +5,16 @@ import { SessionStore } from './session.store';
 
 describe('SessionAlgorandService', () => {
   let sessionAlgorandService: SessionAlgorandService;
-  let sessionAlgorandStore: SessionStore;
+  let sessionStore: SessionStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SessionAlgorandService, SessionStore],
       imports: [HttpClientTestingModule],
+      providers: [SessionAlgorandService, SessionStore],
     });
 
     sessionAlgorandService = TestBed.inject(SessionAlgorandService);
-    sessionAlgorandStore = TestBed.inject(SessionStore);
+    sessionStore = TestBed.inject(SessionStore);
   });
 
   it('should be created', () => {
