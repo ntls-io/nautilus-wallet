@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { SessionQuery } from 'src/app/state/session.query';
+import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { never } from 'src/helpers/helpers';
 import {
@@ -98,8 +99,11 @@ export class SessionService {
       wallet_id: wallet.wallet_id,
       transaction_to_sign,
     };
-    const signResult: SignTransactionResult =
-      await this.enclaveService.signTransaction(signRequest);
+    const signResult: SignTransactionResult = await withLoggedExchange(
+      'SessionService: EnclaveService.signTransaction:',
+      async () => await this.enclaveService.signTransaction(signRequest),
+      signRequest
+    );
 
     if ('Signed' in signResult) {
       return signResult.Signed;
