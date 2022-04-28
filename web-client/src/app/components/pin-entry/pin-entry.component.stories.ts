@@ -24,13 +24,14 @@ export default ionicStoryMeta<PinEntryComponent>(
 );
 
 const Template: Story<PinEntryComponent> = (args: PinEntryComponent) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const Default = Template.bind({});
 Default.args = {
-  // Disable autofocus by default, for consistent Chromatic snapshots
-  autofocus: false,
   setInitialPinValue: undefined,
 };
 

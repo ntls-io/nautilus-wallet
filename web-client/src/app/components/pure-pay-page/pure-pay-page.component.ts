@@ -28,6 +28,9 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
   paymentOptions?: PaymentOption[];
 
   constructor() {}

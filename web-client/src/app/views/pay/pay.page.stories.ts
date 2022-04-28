@@ -50,6 +50,9 @@ const Template: Story<Args> = ({ name, balance, receiverAddress }) => ({
       }),
     ],
   },
+  props: {
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const Default = Template.bind({});

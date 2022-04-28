@@ -32,6 +32,9 @@ export class PayAmountConfirmComponent implements OnInit {
    */
   @Output() amountConfirmed = new EventEmitter<AssetAmount>();
 
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
   constructor() {}
 
   ngOnInit() {}

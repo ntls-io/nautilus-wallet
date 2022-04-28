@@ -20,6 +20,9 @@ export class PayComponent implements OnInit {
   /** Emit the payment submitted by the user. */
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
   selectedOption?: PaymentOption;
 
   constructor() {}
