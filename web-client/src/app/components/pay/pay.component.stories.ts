@@ -37,7 +37,7 @@ const xrpOption: PaymentOption = {
 };
 
 /** This component needs more than the default 1 second to load. */
-const LOAD_TIMEOUT: milliseconds = 4_000;
+const LOAD_TIMEOUT: milliseconds = 8_000;
 type milliseconds = number;
 
 const Template: Story<PayComponent> = (args: PayComponent) => ({
