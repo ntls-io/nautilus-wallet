@@ -79,6 +79,8 @@ export class SessionXrplService {
 
   /**
    * Helper: Sign, submit, and confirm the given transaction.
+   *
+   * NOTE: This does not check for success: the caller is responsible for that.
    */
   protected async sendTransaction(
     txnUnsigned: xrpl.Transaction
