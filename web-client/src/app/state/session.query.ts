@@ -16,6 +16,7 @@ import { assetAmountXrplToken } from 'src/app/utils/assets/assets.xrp.token';
 import { defined } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
 import { allDefinedOrNone, ifDefined } from 'src/helpers/helpers';
+import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
 import { SessionState, SessionStore } from './session.store';
 
@@ -140,6 +141,10 @@ export class SessionQuery extends Query<SessionState> {
 
   onfidoCheck: Observable<SessionState['onfidoCheck']> =
     this.select('onfidoCheck');
+
+  onfidoCheckIsClear: Observable<boolean> = this.onfidoCheck.pipe(
+    map((onfidoCheck?: OnfidoCheckResult) => onfidoCheck?.result === 'clear')
+  );
 
   constructor(protected store: SessionStore) {
     super(store);
