@@ -5,8 +5,12 @@ import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  LoadOnfidoCheck,
+  LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  SaveOnfidoCheck,
+  SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
 } from 'src/schema/actions';
@@ -64,6 +68,30 @@ export class EnclaveService {
       { SignTransaction: SignTransactionResult }
     >(walletRequest);
     const { SignTransaction: result } = response;
+    return result;
+  }
+
+  async saveOnfidoCheck(
+    request: SaveOnfidoCheck
+  ): Promise<SaveOnfidoCheckResult> {
+    const walletRequest = { SaveOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { SaveOnfidoCheck: SaveOnfidoCheck },
+      { SaveOnfidoCheck: SaveOnfidoCheckResult }
+    >(walletRequest);
+    const { SaveOnfidoCheck: result } = response;
+    return result;
+  }
+
+  async loadOnfidoCheck(
+    request: LoadOnfidoCheck
+  ): Promise<LoadOnfidoCheckResult> {
+    const walletRequest = { LoadOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { LoadOnfidoCheck: LoadOnfidoCheck },
+      { LoadOnfidoCheck: LoadOnfidoCheckResult }
+    >(walletRequest);
+    const { LoadOnfidoCheck: result } = response;
     return result;
   }
 
