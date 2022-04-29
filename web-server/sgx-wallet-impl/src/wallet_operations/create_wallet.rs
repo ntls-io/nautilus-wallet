@@ -18,6 +18,8 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
         auth_pin: request.auth_pin.clone(),
         algorand_account: new_algorand_account,
         xrpl_account: new_xrpl_account,
+
+        onfido_check_result: None,
     };
     match save_new_wallet(&storable) {
         Ok(()) => Result::Created(WalletDisplay::from(storable)),
