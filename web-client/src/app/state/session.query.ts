@@ -138,6 +138,9 @@ export class SessionQuery extends Query<SessionState> {
     distinctUntilChanged()
   );
 
+  onfidoCheck: Observable<SessionState['onfidoCheck']> =
+    this.select('onfidoCheck');
+
   constructor(protected store: SessionStore) {
     super(store);
   }

@@ -76,6 +76,11 @@ describe('SessionQuery', () => {
         { value: '1', currency: 'XRP' },
         { value: '1', currency: 'PCT', issuer: 'PCT issuer' },
       ],
+      onfidoCheck: {
+        id: 'uuid',
+        href: 'https://dashboard.onfido.com/checks/uuid',
+        result: 'clear',
+      },
     };
     store.update(state);
     return state;
@@ -103,6 +108,11 @@ describe('SessionQuery', () => {
       expect(await get(query.algorandAccountData)).toEqual(
         stub.algorandAccountData
       );
+    });
+    it('onfidoCheck', async () => {
+      expect(await get(query.onfidoCheck)).toBeUndefined();
+      const stub = stubState();
+      expect(await get(query.onfidoCheck)).toEqual(stub.onfidoCheck);
     });
   });
 
