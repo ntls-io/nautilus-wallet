@@ -1,25 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  faKeyboard,
-  faQrcode,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {
   AlertController,
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
-
-type ActionItem = {
-  label: string;
-  title: string;
-  icon: IconDefinition;
-  action: string;
-  disabled?: boolean;
-};
 
 @Component({
   selector: 'app-send-funds',
@@ -27,21 +16,18 @@ type ActionItem = {
   styleUrls: ['./send-funds.page.scss'],
 })
 export class SendFundsPage implements OnInit {
-  actionItems: Array<ActionItem> = [
+  actionItems: Array<SendFundsActionItem> = [
     {
-      label: 'Quick pay',
       title: 'Scan a QR code',
       icon: faQrcode,
       action: 'presentScanner',
     },
     {
-      label: 'Quick pay',
       title: 'Enter address manually',
       icon: faKeyboard,
       action: 'presentAddressModal',
     },
     // {
-    //   label: 'Add New Friend',
     //   title: 'Share my wallet address',
     //   icon: faLink,
     //   disabled: true,
@@ -79,16 +65,21 @@ export class SendFundsPage implements OnInit {
     }
   }
 
-  execItemAction(action: string | undefined) {
+  async execItemAction(action: ItemAction): Promise<void> {
     switch (action) {
       case 'presentScanner':
-        this.presentScanner();
+        await this.presentScanner();
         break;
       case 'presentAddressModal':
-        this.presentAddressModal();
+        await this.presentAddressModal();
         break;
       default:
         break;
     }
   }
 }
+
+// Customise ActionItem for this page with an 'action' field:
+
+type SendFundsActionItem = ActionItem & { action: ItemAction };
+type ItemAction = 'presentScanner' | 'presentAddressModal';

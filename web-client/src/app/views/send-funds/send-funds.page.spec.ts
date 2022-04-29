@@ -56,7 +56,7 @@ describe('SendFundsPage', () => {
   it('#execItemAction should not call anything if the action string does not match', () => {
     const presentScannerSpy = spyOn(component, 'presentScanner');
 
-    component.execItemAction('');
+    component.execItemAction('' as any);
 
     expect(presentScannerSpy.calls.count()).toBe(0);
   });
