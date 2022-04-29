@@ -4,13 +4,14 @@
 //!
 //! * <https://developer.algorand.org/docs/reference/rest-apis/kmd/>
 
-use std::prelude::v1::String;
+use std::prelude::v1::{String, ToString};
 
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 use crate::schema::entities::WalletDisplay;
 use crate::schema::types::{Bytes, WalletId, WalletPin};
+use crate::wallet_operations::store::UnlockWalletError;
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -43,6 +44,17 @@ pub enum OpenWalletResult {
     Failed(String),
 }
 
+impl From<UnlockWalletError> for OpenWalletResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
+}
+
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 #[derive(Zeroize, ZeroizeOnDrop)] // zeroize
@@ -52,6 +64,17 @@ pub struct SignTransaction {
 
     #[zeroize(skip)]
     pub transaction_to_sign: TransactionToSign,
+}
+
+impl From<UnlockWalletError> for SignTransactionResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
 }
 
 /// For [`SignTransaction`]: A choice of type of transaction to sign.
