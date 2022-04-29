@@ -13,6 +13,7 @@
  */
 
 import { bytesToHex, hexToBytes } from 'ripple-keypairs/dist/utils';
+import { panic } from 'src/app/utils/errors/panic';
 import * as xrpl from 'xrpl';
 
 /**
@@ -79,3 +80,42 @@ export const hexToUint8Array = (hex: HexString): Uint8Array =>
  */
 export const uint8ArrayToHex = (array: Uint8Array): HexString =>
   bytesToHex(Array.from(array));
+
+// Background: https://xrpl.org/reliable-transaction-submission.html#verification
+
+export type TxSuccessReport = {
+  succeeded: boolean;
+  resultCode: xrpl.TransactionMetadata['TransactionResult'];
+};
+
+/** Check whether a transaction succeeded, by response. */
+export const checkTxResponseSucceeded = (
+  txResponse: xrpl.TxResponse
+): TxSuccessReport =>
+  checkTransactionMetadataSucceeded(getTxResponseMetadata(txResponse));
+
+/** Check whether a transaction succeeded, by metadata. */
+export const checkTransactionMetadataSucceeded = (
+  meta: xrpl.TransactionMetadata
+): TxSuccessReport => ({
+  succeeded: meta.TransactionResult === 'tesSUCCESS',
+  resultCode: meta.TransactionResult,
+});
+
+/** Get transaction metadata from response, or panic. */
+export const getTxResponseMetadata = (
+  txResponse: xrpl.TxResponse
+): xrpl.TransactionMetadata => {
+  const meta = txResponse.result.meta;
+  if (typeof meta === 'string') {
+    throw panic('getTxResponseMetadata: unexpected string meta:', {
+      txResponse,
+    });
+  } else if (meta === undefined) {
+    throw panic('getTxResponseMetadata: unexpected undefined meta:', {
+      txResponse,
+    });
+  } else {
+    return meta;
+  }
+};

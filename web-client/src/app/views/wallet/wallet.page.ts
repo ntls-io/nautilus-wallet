@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { filterNilValue } from '@datorama/akita';
 import {
   faCreditCard,
   faDonate,
@@ -11,10 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -66,16 +64,13 @@ export class WalletPage implements OnInit {
     },
   ]; // Placeholder icons until we get definite ones.
 
-  balances: Observable<Array<AssetAmount>> =
-    this.sessionQuery.algorandBalanceInAlgos.pipe(
-      filterNilValue(),
-      map((amount: number): AssetAmount[] => [assetAmountAlgo(amount)])
-    );
+  balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
   constructor(
     private loadingController: LoadingController,
     public sessionQuery: SessionQuery,
     public sessionAlgorandService: SessionAlgorandService,
+    public sessionXrplService: SessionXrplService,
     private toastCtrl: ToastController,
     private notification: SwalHelper
   ) {}
@@ -92,8 +87,13 @@ export class WalletPage implements OnInit {
       this.loadingController,
       { message: 'Refreshing…' },
       async () => {
-        await this.sessionAlgorandService.loadAccountData();
-        await this.sessionAlgorandService.loadAssetParams();
+        await Promise.all([
+          (async () => {
+            await this.sessionAlgorandService.loadAccountData();
+            await this.sessionAlgorandService.loadAssetParams();
+          })(),
+          this.sessionXrplService.loadAccountData(),
+        ]);
       }
     );
   }

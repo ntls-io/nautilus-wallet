@@ -10,6 +10,7 @@ import {
 import algosdk from 'algosdk';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import * as xrpl from 'xrpl';
 
 /**
  * @see PayPage
@@ -25,6 +26,8 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   @Input() receiverAddress?: string | null;
 
   @Input() algorandBalances?: AssetAmount[] | null;
+
+  @Input() xrplBalances?: AssetAmount[] | null;
 
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
@@ -66,16 +69,25 @@ export class PurePayPageComponent implements OnInit, OnChanges {
           senderBalance,
           receiverAddress,
         }));
+      } else if (this.receiverAddressType === 'XRPL' && this.xrplBalances) {
+        return this.xrplBalances.map((senderBalance) => ({
+          senderName,
+          senderBalance,
+          receiverAddress,
+        }));
       }
     }
   }
 }
 
-type AddressType = 'Algorand';
+type AddressType = 'Algorand' | 'XRPL';
 
 const addressTypes = (address: string): AddressType[] => {
   const coerce = (t: AddressType[]) => t;
-  return [...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : [])];
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
 };
 
 const addressType = (address: string): AddressType | undefined => {

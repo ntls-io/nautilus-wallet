@@ -8,6 +8,7 @@ import {
   uint8ArrayToHex,
 } from 'src/app/services/xrpl.utils';
 import { SessionService } from 'src/app/state/session.service';
+import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
@@ -62,18 +63,24 @@ export class SessionXrplService {
   ): Promise<xrpl.TxResponse> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
-    const preparedTx: xrpl.Payment =
-      await this.xrplService.createUnsignedTransaction(
-        wallet.xrpl_account.address_base58,
-        receiverId,
-        amount
-      );
+    const preparedTx: xrpl.Payment = await withLoggedExchange(
+      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedTransaction(
+          wallet.xrpl_account.address_base58,
+          receiverId,
+          amount
+        ),
+      { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    );
 
     return await this.sendTransaction(preparedTx);
   }
 
   /**
    * Helper: Sign, submit, and confirm the given transaction.
+   *
+   * NOTE: This does not check for success: the caller is responsible for that.
    */
   protected async sendTransaction(
     txnUnsigned: xrpl.Transaction
@@ -95,21 +102,19 @@ export class SessionXrplService {
     );
 
     if ('XrplTransactionSigned' in signed) {
-      console.log('SessionXrplService.sendTransaction:', { signed });
       const { signature_bytes } = signed.XrplTransactionSigned;
 
       const { txnSigned, txnSignedEncoded } = txnAfterSign(
         txnBeingSigned,
         uint8ArrayToHex(signature_bytes)
       );
-      console.log('SessionXrplService.sendTransaction: after sign:', {
-        txnSigned,
-        txnSignedEncoded,
-      });
 
-      const txResponse: xrpl.TxResponse =
-        await this.xrplService.submitAndWaitForSigned(txnSignedEncoded);
-      console.log('SessionXrplService.sendTransaction', { txResponse });
+      const txResponse: xrpl.TxResponse = await withLoggedExchange(
+        'SessionXrplService.sendTransaction: signed, submitting:',
+        async () =>
+          await this.xrplService.submitAndWaitForSigned(txnSignedEncoded),
+        txnSignedEncoded
+      );
 
       await this.loadAccountData(); // FIXME(Pi): Move to caller?
 
