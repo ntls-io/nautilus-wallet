@@ -690,6 +690,7 @@ dependencies = [
  "serde_bytes",
  "serde_json",
  "sgx_tcrypto",
+ "sgx_trts",
  "sgx_tse",
  "sgx_tstd",
  "sgx_types",

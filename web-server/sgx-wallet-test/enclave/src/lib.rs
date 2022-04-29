@@ -40,7 +40,11 @@ pub extern "C" fn run_tests_ecall() -> usize {
         wallet_operations::test_sign_transaction::sign_transaction_malformed_transaction,
         wallet_operations::test_sign_transaction::sign_transaction_without_tag,
         wallet_operations::test_sign_transaction::sign_transaction_works,
-        wallet_operations::test_sign_transaction_xrpl::sign_transaction_empty,
         wallet_operations::test_sign_transaction_msgpack::prop_transaction_msgpack_roundtrips,
+        wallet_operations::test_sign_transaction_xrpl::sign_transaction_empty,
+        wallet_operations::test_store::unlock_wallet_bad_auth_pin,
+        wallet_operations::test_store::unlock_wallet_malformed_wallet_id,
+        wallet_operations::test_store::unlock_wallet_not_found,
+        wallet_operations::test_store::unlock_wallet_works,
     )
 }
