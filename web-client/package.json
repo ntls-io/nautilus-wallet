@@ -16,6 +16,7 @@
     "format-check": "prettier --check .",
     "docs": "compodoc src -p ./tsconfig.json",
     "storybook": "ng run app:storybook --port 6006",
+    "storybook:compodoc": "compodoc src -p ./tsconfig.json -e json --silent",
     "build-storybook": "ng run app:build-storybook",
     "postinstall": "patch-package"
   },
