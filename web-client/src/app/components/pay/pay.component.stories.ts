@@ -10,10 +10,18 @@ import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { PayComponent, PaymentOption } from './pay.component';
 import { PayComponentModule } from './pay.module';
 
+/** This component needs more than the default 1 second to load. */
+const LOAD_TIMEOUT: milliseconds = 8_000;
+type milliseconds = number;
+
 export default ionicStoryMeta<PayComponent>(
   {
     title: 'Components/Pay/Pay',
     component: PayComponent,
+    parameters: {
+      // https://www.chromatic.com/docs/delay
+      chromatic: { delay: LOAD_TIMEOUT },
+    },
   },
   {
     imports: [PayComponentModule],
@@ -35,10 +43,6 @@ const xrpOption: PaymentOption = {
   senderBalance: PayFromToXRPArgs.balance,
   receiverAddress: PayFromToXRPArgs.receiverAddress,
 };
-
-/** This component needs more than the default 1 second to load. */
-const LOAD_TIMEOUT: milliseconds = 4_000;
-type milliseconds = number;
 
 const Template: Story<PayComponent> = (args: PayComponent) => ({
   props: {
