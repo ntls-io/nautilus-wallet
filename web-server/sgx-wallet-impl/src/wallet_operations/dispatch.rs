@@ -9,7 +9,9 @@ use crate::schema::msgpack::{FromMessagePack, ToMessagePack};
 use crate::schema::sealing::{seal_from_enclave, unseal_to_enclave, SealedMessage};
 use crate::wallet_operations::create_wallet::create_wallet;
 use crate::wallet_operations::errors;
+use crate::wallet_operations::load_onfido_check::load_onfido_check;
 use crate::wallet_operations::open_wallet::open_wallet;
+use crate::wallet_operations::save_onfido_check::save_onfido_check;
 use crate::wallet_operations::sign_transaction::sign_transaction;
 
 /// Implementation for [`crate::ecalls::wallet_operation::wallet_operation`].
@@ -107,5 +109,7 @@ fn wallet_operation_impl_dispatch(wallet_request: &WalletRequest) -> WalletRespo
         WalletRequest::CreateWallet(request) => create_wallet(request).into(),
         WalletRequest::OpenWallet(request) => open_wallet(request).into(),
         WalletRequest::SignTransaction(request) => sign_transaction(request).into(),
+        WalletRequest::SaveOnfidoCheck(request) => save_onfido_check(request).into(),
+        WalletRequest::LoadOnfidoCheck(request) => load_onfido_check(request).into(),
     }
 }
