@@ -1,14 +1,20 @@
 import { Component, Input } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
 import {
   Check,
   OnfidoKycStarted,
   OnfidoService,
 } from 'src/app/services/onfido.service';
+import { SessionService } from 'src/app/state/session.service';
+import { withConsoleGroup } from 'src/app/utils/console.helpers';
 import { defined } from 'src/app/utils/errors/panic';
-import { withLoadingOverlay } from 'src/app/utils/loading.helpers';
+import {
+  withLoadingOverlay,
+  withLoadingOverlayOpts,
+} from 'src/app/utils/loading.helpers';
 import { OnfidoFormValue } from 'src/app/views/kyc/onfido-form/onfido-form.component';
+import { OnfidoCheckResult } from 'src/schema/actions';
 
 // This view states:
 // 1. The name-capture form
@@ -30,9 +36,19 @@ export class KycPage {
   @Input() check?: Check;
 
   constructor(
+    private navController: NavController,
     private loadingController: LoadingController,
+    private sessionService: SessionService,
     private onfidoService: OnfidoService
   ) {}
+
+  get checkIsComplete() {
+    return this.check?.status === 'complete';
+  }
+
+  get checkIsClear() {
+    return this.check?.result === 'clear';
+  }
 
   // In Step 1: Start the Onfido KYC process.
   async onSubmit({ firstName, lastName }: OnfidoFormValue): Promise<void> {
@@ -61,6 +77,9 @@ export class KycPage {
       console.log('KycPage: created check:', this.check);
     });
     this.viewState = 'step3_result';
+
+    // Kick off an initial check.
+    await this.refreshCheck();
   }
 
   // In Step 3: Refresh `this.check`.
@@ -72,9 +91,40 @@ export class KycPage {
     });
   }
 
-  // Helper Pretty-printed `this.check`.
-  checkPretty(): string {
-    return JSON.stringify(this.check, null, 2);
+  // In Step 3: Save completed check result.
+  // Navigate back to root on success.
+  async saveCheck(): Promise<void> {
+    if (
+      this.check !== undefined &&
+      this.check.id &&
+      this.check.href &&
+      this.check.result &&
+      this.check.status === 'complete'
+    ) {
+      const onfidoCheckResult: OnfidoCheckResult = {
+        id: this.check.id,
+        href: this.check.href,
+        result: this.check.result,
+        sub_result: this.check?.sub_result,
+      };
+      const saved = await withLoadingOverlayOpts(
+        this.loadingController,
+        { message: 'Saving…' },
+        async () =>
+          await withConsoleGroup(
+            'KycPage.refreshCheck: Persisting check:',
+            async () => {
+              console.log('Check (from API):', this.check);
+              console.log('onfidoCheckResult (to save)', onfidoCheckResult);
+              await this.sessionService.saveOnfidoCheck(onfidoCheckResult);
+              return true;
+            }
+          )
+      );
+      if (saved) {
+        await this.navController.navigateRoot('/wallet');
+      }
+    }
   }
 }
 
