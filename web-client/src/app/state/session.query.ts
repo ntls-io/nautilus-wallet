@@ -11,7 +11,10 @@ import {
 import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import { convertFromLedgerToAssetAmountAsa } from 'src/app/utils/assets/assets.algo.asa';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
+import { assetAmountXrplToken } from 'src/app/utils/assets/assets.xrp.token';
 import { defined } from 'src/app/utils/errors/panic';
+import { parseNumber } from 'src/app/utils/validators';
 import { allDefinedOrNone, ifDefined } from 'src/helpers/helpers';
 import { WalletDisplay } from 'src/schema/entities';
 import { SessionState, SessionStore } from './session.store';
@@ -90,6 +93,46 @@ export class SessionQuery extends Query<SessionState> {
       ]) => [
         ...(algoBalance !== undefined ? [algoBalance] : []),
         ...(assetBalances ?? []),
+      ]
+    ),
+    distinctUntilChanged()
+  );
+
+  xrplBalances: Observable<AssetAmount[] | undefined> = this.select(
+    ({ xrplBalances }) =>
+      ifDefined(xrplBalances, (balances) =>
+        balances.map(({ value, currency, issuer }): AssetAmount => {
+          const amount = defined(
+            parseNumber(value),
+            `SessionQuery.xrplBalances: bad number: ${value}`
+          );
+          return currency === 'XRP'
+            ? assetAmountXrp(amount)
+            : assetAmountXrplToken(amount, {
+                currency,
+                issuer: defined(
+                  issuer,
+                  `SessionQuery.xrplBalances: unexpected undefined issuer for XRPL token currency ${currency}`
+                ),
+              });
+        })
+      )
+  );
+
+  allBalances: Observable<AssetAmount[]> = combineLatest([
+    this.algorandAlgoBalance,
+    this.algorandAssetBalances,
+    this.xrplBalances,
+  ]).pipe(
+    map(
+      ([algorandAlgoBalance, algorandAssetBalances, xrplBalances]: [
+        AssetAmount | undefined,
+        AssetAmount[] | undefined,
+        AssetAmount[] | undefined
+      ]) => [
+        ...(algorandAlgoBalance !== undefined ? [algorandAlgoBalance] : []),
+        ...(algorandAssetBalances ?? []),
+        ...(xrplBalances ?? []),
       ]
     ),
     distinctUntilChanged()

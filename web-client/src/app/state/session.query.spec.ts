@@ -11,6 +11,14 @@ import {
   assetAmountAsa,
   AssetAmountAsa,
 } from 'src/app/utils/assets/assets.algo.asa';
+import {
+  AssetAmountXrp,
+  assetAmountXrp,
+} from 'src/app/utils/assets/assets.xrp';
+import {
+  AssetAmountXrplToken,
+  assetAmountXrplToken,
+} from 'src/app/utils/assets/assets.xrp.token';
 import { WalletDisplay } from 'src/schema/entities';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import { SessionQuery } from './session.query';
@@ -29,7 +37,14 @@ describe('SessionQuery', () => {
     expect(query).toBeTruthy();
   });
 
-  const stubState = (): Required<SessionState> => {
+  /** `SessionState` with some required fields, for convenience. */
+  type StubSessionState = SessionState &
+    Pick<
+      Required<SessionState>,
+      'wallet' | 'pin' | 'algorandAccountData' | 'xrplBalances'
+    >;
+
+  const stubState = (): StubSessionState => {
     const wallet: WalletDisplay = {
       wallet_id: 'id',
       owner_name: 'name',
@@ -40,7 +55,7 @@ describe('SessionQuery', () => {
         address_base58: 'address',
       },
     };
-    const state: Required<SessionState> = {
+    const state: StubSessionState = {
       wallet,
       pin: 'secret',
       algorandAccountData: {
@@ -57,6 +72,10 @@ describe('SessionQuery', () => {
           total: 10_000,
         },
       },
+      xrplBalances: [
+        { value: '1', currency: 'XRP' },
+        { value: '1', currency: 'PCT', issuer: 'PCT issuer' },
+      ],
     };
     store.update(state);
     return state;
@@ -109,50 +128,79 @@ describe('SessionQuery', () => {
     });
   });
 
-  describe('algorandAccountData fields', () => {
-    it('algorandBalanceInMicroAlgos', async () => {
-      expect(await get(query.algorandBalanceInMicroAlgos)).toBeUndefined();
-      const stub = stubState();
-      expect(await get(query.algorandBalanceInMicroAlgos)).toBe(
-        stub.algorandAccountData.amount
-      );
-    });
-
-    it('algorandBalanceInAlgos', async () => {
-      expect(await get(query.algorandBalanceInAlgos)).toBeUndefined();
-      const stub = stubState();
-      expect(await get(query.algorandBalanceInAlgos)).toBe(
-        convertToAlgos(stub.algorandAccountData.amount)
-      );
-    });
-
+  describe('balance fields', () => {
     const expectedAlgoBalance: AssetAmountAlgo = assetAmountAlgo(1);
 
     const expectedAssetBalances: AssetAmountAsa[] = [
       assetAmountAsa(1, { assetSymbol: 'PCT', assetId: 5, decimals: 2 }),
     ];
 
-    it('algorandAlgoBalance', async () => {
-      expect(await get(query.algorandAlgoBalance)).toBeUndefined();
-      stubState();
-      expect(await get(query.algorandAlgoBalance)).toEqual(assetAmountAlgo(1));
+    describe('Algorand balances', () => {
+      it('algorandBalanceInMicroAlgos', async () => {
+        expect(await get(query.algorandBalanceInMicroAlgos)).toBeUndefined();
+        const stub = stubState();
+        expect(await get(query.algorandBalanceInMicroAlgos)).toBe(
+          stub.algorandAccountData.amount
+        );
+      });
+
+      it('algorandBalanceInAlgos', async () => {
+        expect(await get(query.algorandBalanceInAlgos)).toBeUndefined();
+        const stub = stubState();
+        expect(await get(query.algorandBalanceInAlgos)).toBe(
+          convertToAlgos(stub.algorandAccountData.amount)
+        );
+      });
+
+      it('algorandAlgoBalance', async () => {
+        expect(await get(query.algorandAlgoBalance)).toBeUndefined();
+        stubState();
+        expect(await get(query.algorandAlgoBalance)).toEqual(
+          assetAmountAlgo(1)
+        );
+      });
+
+      it('algorandAssetBalances', async () => {
+        expect(await get(query.algorandAssetBalances)).toBeUndefined();
+        stubState();
+        expect(await get(query.algorandAssetBalances)).toEqual([
+          ...expectedAssetBalances,
+        ]);
+      });
+
+      it('algorandBalances', async () => {
+        expect(await get(query.algorandBalances)).toEqual([]);
+        stubState();
+        expect(await get(query.algorandBalances)).toEqual([
+          expectedAlgoBalance,
+          ...expectedAssetBalances,
+        ]);
+      });
     });
 
-    it('algorandAssetBalances', async () => {
-      expect(await get(query.algorandAssetBalances)).toBeUndefined();
-      stubState();
-      expect(await get(query.algorandAssetBalances)).toEqual([
-        ...expectedAssetBalances,
-      ]);
+    const expectedXrplBalances: (AssetAmountXrp | AssetAmountXrplToken)[] = [
+      assetAmountXrp(1),
+      assetAmountXrplToken(1, { currency: 'PCT', issuer: 'PCT issuer' }),
+    ];
+
+    describe('XRPL balances', () => {
+      it('xrplBalances', async () => {
+        expect(await get(query.xrplBalances)).toBe(undefined);
+        stubState();
+        expect(await get(query.xrplBalances)).toEqual(expectedXrplBalances);
+      });
     });
 
-    it('algorandBalances', async () => {
-      expect(await get(query.algorandBalances)).toEqual([]);
-      stubState();
-      expect(await get(query.algorandBalances)).toEqual([
-        expectedAlgoBalance,
-        ...expectedAssetBalances,
-      ]);
+    describe('combined balances', () => {
+      it('allBalances', async () => {
+        expect(await get(query.allBalances)).toEqual([]);
+        stubState();
+        expect(await get(query.allBalances)).toEqual([
+          expectedAlgoBalance,
+          ...expectedAssetBalances,
+          ...expectedXrplBalances,
+        ]);
+      });
     });
   });
 

@@ -5,7 +5,9 @@
  * 2. {@link LedgerInfo} constant: {@link LEDGER_INFO_XRPL}
  * 3. {@link AssetAmount} constructor: {@link assetAmountXrp}
  */
-
+import { defined } from 'src/app/utils/errors/panic';
+import { parseNumber } from 'src/app/utils/validators';
+import * as xrpl from 'xrpl';
 import { AssetAmount, AssetDisplay, LedgerInfo } from './assets.common';
 
 // AssetDisplay:
@@ -51,3 +53,27 @@ export const assetAmountXrp = (amount: number): AssetAmountXrp => ({
   assetDisplay: ASSET_DISPLAY_XRP,
   ledgerInfo: LEDGER_INFO_XRPL,
 });
+
+// Type checks:
+
+export const isAssetAmountXrp = (
+  amount: AssetAmount | AssetAmountXrp
+): amount is AssetAmountXrp =>
+  amount.ledgerInfo.type === LEDGER_TYPE_XRPL &&
+  amount.assetDisplay.assetSymbol === ASSET_SYMBOL_XRP;
+
+// Ledger representation conversion:
+
+export const convertFromLedgerToAssetAmountXrp = (
+  ledgerAmount: string
+): AssetAmountXrp =>
+  assetAmountXrp(
+    defined(
+      parseNumber(xrpl.dropsToXrp(ledgerAmount)),
+      `bad number: ${ledgerAmount}`
+    )
+  );
+
+export const convertFromAssetAmountXrpToLedger = (
+  assetAmount: AssetAmountXrp
+): string => xrpl.xrpToDrops(assetAmount.amount);

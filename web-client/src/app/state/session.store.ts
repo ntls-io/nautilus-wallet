@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 import { AccountData, AssetParams } from 'src/app/services/algosdk.utils';
 import { WalletDisplay } from 'src/schema/entities';
+import * as xrpl from 'xrpl';
 
 /**
  * State stored for a user session.
@@ -35,7 +36,29 @@ export interface SessionState {
    * @see import('./session-algorand.service').SessionAlgorandService.loadAssetParams
    */
   algorandAssetParams?: Record<number, AssetParams>;
+
+  /**
+   * The current session's XRPL account root ledger entry.
+   *
+   * @see import('./session-xrpl.service').SessionXrplService
+   * @see https://js.xrpl.org/interfaces/LedgerEntry.AccountRoot.html
+   */
+  xrplAccountRoot?: xrpl.LedgerEntry.AccountRoot;
+
+  /**
+   * The current session's XRPL balances.
+   *
+   * @see import('./session-xrpl.service').SessionXrplService
+   * @see https://js.xrpl.org/classes/Client.html#getBalances
+   */
+  xrplBalances?: XrplBalance[];
 }
+
+export type XrplBalance = {
+  value: string;
+  currency: string;
+  issuer?: string | undefined;
+};
 
 export const createInitialState = (): SessionState => ({});
 
