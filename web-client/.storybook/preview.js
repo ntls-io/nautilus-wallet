@@ -9,6 +9,10 @@ import compodocJson from "../documentation.json";
 
 setCompodocJson(compodocJson);
 
+// Inject our polyfills into the Storybook preview.
+// (This is required for everything that relies on polyfills, such as XRPL.js.)
+require("src/polyfills");
+
 /** @type {import("@storybook/angular").Parameters} */
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
