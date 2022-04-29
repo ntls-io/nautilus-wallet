@@ -8,7 +8,6 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { ActionItem } from 'src/app/components/action-item/action-item.component';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 
 /**
@@ -26,45 +25,40 @@ export class PureWalletPageComponent implements OnInit {
   /** Wallet's balances. */
   @Input() balances?: AssetAmount[] | null;
 
-  faWallet = faWallet;
+  // Naming convention: Prefix action item parameters with "action".
 
-  actionItems: ActionItem[] = [
-    {
-      title: 'Send Money',
-      icon: faCreditCard,
-      path: '/wallet/send-funds',
-    },
-    {
-      title: 'Top Up Wallet',
-      icon: faDonate,
-      // TODO(Pi): Parameterize this
-      url: 'https://testnet.algoexplorer.io/dispenser',
-      disabled: true,
-    },
-    {
-      title: 'Verify Profile',
-      icon: faFingerprint,
-      path: '/kyc',
-    },
-    {
-      title: 'Withdraw',
-      icon: faHandHoldingUsd,
-      disabled: true,
-    },
-    {
-      title: 'Receive',
-      icon: faQrcode,
-      path: '/wallet/receive',
-      disabled: true,
-    },
-    {
-      title: 'My Transactions',
-      icon: faReceipt,
-      disabled: true,
-    },
-  ]; // Placeholder icons until we get definite ones.
+  /** "Send Money" action: Enabled? */
+  @Input() actionSendMoneyEnabled: boolean | null = true;
+
+  /** "Top Up" action: Optional external URL. */
+  @Input() actionTopUpUrl?: string | null;
+
+  /** "Verify Profile" action: Shown? */
+  @Input() actionVerifyProfileShown?: boolean | null;
+
+  /** "Withdraw" action: Optional external URL. */
+  @Input() actionWithdrawUrl?: string | null;
+
+  /** "Receive" action: Enabled? */
+  @Input() actionReceiveEnabled: boolean | null = false;
+
+  /** "My Transactions" action: Optional external URL. */
+  @Input() actionMyTransactionsUrl?: string | null;
+
+  icons = ICONS;
 
   constructor() {}
 
   ngOnInit() {}
 }
+
+// Placeholder icons until we get definite ones.
+const ICONS = {
+  faCreditCard,
+  faDonate,
+  faFingerprint,
+  faHandHoldingUsd,
+  faQrcode,
+  faReceipt,
+  faWallet,
+};

@@ -13,7 +13,16 @@ export default ionicStoryMeta<PureWalletPageComponent>(
   {
     imports: [PureWalletPageComponentModule],
     controls: {
-      shown: ['name', 'balances'],
+      shown: [
+        'name',
+        'balances',
+        'actionSendMoneyEnabled',
+        'actionTopUpUrl',
+        'actionVerifyProfileShown',
+        'actionWithdrawUrl',
+        'actionReceiveEnabled',
+        'actionMyTransactionsUrl',
+      ],
     },
   }
 );
@@ -27,10 +36,21 @@ const Template: Story<PureWalletPageComponent> = (
 export const Default = Template.bind({});
 Default.args = {
   name: 'Wallet Owner',
+  balances: [assetAmountAlgo(1234.56), assetAmountXrp(123.456789)],
 };
 
-export const WithBalances = Template.bind({});
-WithBalances.args = {
+export const WithOptionalActions = Template.bind({});
+WithOptionalActions.args = {
   ...Default.args,
-  balances: [assetAmountAlgo(1234.56), assetAmountXrp(123.456789)],
+  actionTopUpUrl: 'https://testnet.algoexplorer.io/dispenser',
+  actionWithdrawUrl: 'https://testnet.algodex.com/',
+  actionReceiveEnabled: true,
+  actionMyTransactionsUrl:
+    'https://testnet.algoexplorer.io/address/G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
+};
+
+export const WithoutBalances = Template.bind({});
+WithoutBalances.args = {
+  ...Default.args,
+  balances: [],
 };

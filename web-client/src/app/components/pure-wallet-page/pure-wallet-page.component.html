@@ -1,5 +1,5 @@
 <div class="ion-text-center p-2">
-  <fa-icon [icon]="faWallet" size="5x"></fa-icon>
+  <fa-icon [icon]="icons.faWallet" size="5x"></fa-icon>
   <h1 class="font-semibold font-nasalization">{{ name }}'s Wallet</h1>
   <p>Send or receive money quickly and easily, select an option below</p>
 </div>
@@ -8,11 +8,44 @@
 
 <ion-list>
   <app-action-item
-    *ngFor="let item of actionItems"
-    [title]="item.title"
-    [icon]="item.icon"
-    [path]="item.path"
-    [disabled]="item.disabled"
-    [url]="item.url"
+    title="Send Money"
+    [icon]="icons.faCreditCard"
+    path="/wallet/send-funds"
+    [disabled]="!actionSendMoneyEnabled"
+  ></app-action-item>
+
+  <app-action-item
+    *ngIf="actionTopUpUrl"
+    title="Top Up Wallet"
+    [icon]="icons.faDonate"
+    [url]="actionTopUpUrl"
+  ></app-action-item>
+
+  <app-action-item
+    *ngIf="actionVerifyProfileShown"
+    title="Verify Profile"
+    [icon]="icons.faFingerprint"
+    path="/kyc"
+  ></app-action-item>
+
+  <app-action-item
+    *ngIf="actionWithdrawUrl"
+    title="Withdraw"
+    [icon]="icons.faHandHoldingUsd"
+    [url]="actionWithdrawUrl"
+  ></app-action-item>
+
+  <app-action-item
+    title="Receive"
+    [icon]="icons.faQrcode"
+    path="/wallet/receive"
+    [disabled]="!actionReceiveEnabled"
+  ></app-action-item>
+
+  <app-action-item
+    *ngIf="actionMyTransactionsUrl"
+    title="My Transactions"
+    [icon]="icons.faReceipt"
+    [url]="actionMyTransactionsUrl"
   ></app-action-item>
 </ion-list>
