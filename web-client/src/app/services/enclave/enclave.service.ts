@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
@@ -122,6 +123,16 @@ export class EnclaveService {
   }
 
   protected async postSealedExchange<Request, Response>(
+    request: Request
+  ): Promise<Response> {
+    return withLoggedExchange(
+      'EnclaveService.postSealedExchange:',
+      () => this.postSealedExchangeInner(request),
+      request
+    );
+  }
+
+  protected async postSealedExchangeInner<Request, Response>(
     request: Request
   ): Promise<Response> {
     const clientCrypto = TweetNaClCrypto.new();
