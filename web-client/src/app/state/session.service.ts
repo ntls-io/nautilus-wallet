@@ -50,7 +50,7 @@ export class SessionService {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);
       } else {
-        never(result);
+        throw never(result);
       }
     } catch (err) {
       this.sessionStore.setError(err);
@@ -82,7 +82,7 @@ export class SessionService {
       console.error(result);
       throw new Error(result.Failed);
     } else {
-      never(result);
+      throw never(result);
     }
   }
 
