@@ -64,6 +64,9 @@ export type PaymentOption = {
 
   /** The receiving account's address. */
   receiverAddress: string;
+
+  /** (Optional) A transaction amount limit for this option. */
+  transactionLimit?: number;
 };
 
 /** A payment chosen by the user. */

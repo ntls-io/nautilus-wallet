@@ -124,5 +124,19 @@ ChangedAccount.play = async (context): Promise<void> => {
   );
 };
 
+export const WithTransactionLimits = Template.bind({});
+WithTransactionLimits.args = {
+  paymentOptions: [
+    { ...algoOption, transactionLimit: 100 },
+    { ...xrpOption, transactionLimit: 500 },
+  ],
+};
+WithTransactionLimits.play = async ({ canvasElement }) => {
+  await findIonButton(canvasElement, /Pay/i);
+
+  const amountInput = getAmountInput(canvasElement);
+  amountInput.value = '123';
+};
+
 export const NoOptions = Template.bind({});
 NoOptions.args = {};
