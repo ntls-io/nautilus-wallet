@@ -79,3 +79,12 @@ pub enum UnlockWalletError {
     #[error("I/O error while opening wallet")]
     IoError(#[from] io::Error),
 }
+
+pub fn mutate_wallet(
+    wallet_id: &str,
+    mutate_fn: impl FnOnce(WalletStorable) -> WalletStorable,
+) -> Result<Option<WalletStorable>, io::Error> {
+    let mut store = wallet_store();
+    let key = &key_from_id(wallet_id)?;
+    store.mutate(key, mutate_fn)
+}

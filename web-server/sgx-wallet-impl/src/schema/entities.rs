@@ -7,6 +7,7 @@ use ripple_keypairs::{Entropy, EntropyArray, PrivateKey, PublicKey, Seed};
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
+use crate::schema::actions::OnfidoCheckResult;
 use crate::schema::types::{
     AlgorandAccountSeedBytes,
     AlgorandAddressBase32,
@@ -56,6 +57,9 @@ pub struct WalletStorable {
     pub owner_name: String,
     pub algorand_account: AlgorandAccount,
     pub xrpl_account: XrplAccount,
+
+    #[zeroize(skip)]
+    pub onfido_check_result: Option<OnfidoCheckResult>,
 }
 
 // Algorand entities:
