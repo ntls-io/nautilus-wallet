@@ -56,6 +56,15 @@ OneOption.args = {
   paymentOptions: [{ ...algoOption }],
 };
 
+function getAmountInput(canvasElement: HTMLElement): HTMLIonInputElement {
+  // canvas.type() doesn't seem to work with ion-input, so enter the value directly here.
+  const amountInput = canvasElement.querySelector<HTMLIonInputElement>(
+    'ion-input[placeholder="Amount"]'
+  );
+  if (amountInput === null) throw new Error('missing Amount input');
+  return amountInput;
+}
+
 export const PayAmount = Template.bind({});
 PayAmount.args = { ...OneOption.args };
 PayAmount.play = async ({ canvasElement }) => {
@@ -68,11 +77,7 @@ PayAmount.play = async ({ canvasElement }) => {
     { timeout: LOAD_TIMEOUT }
   );
 
-  // canvas.type() doesn't seem to work with ion-input, so enter the value directly here.
-  const amountInput = canvasElement.querySelector<HTMLIonInputElement>(
-    'ion-input[placeholder="Amount"]'
-  );
-  if (amountInput === null) throw new Error('missing Amount input');
+  const amountInput = getAmountInput(canvasElement);
   amountInput.value = '100';
 
   // Wait for the button to become enabled before clicking it.
