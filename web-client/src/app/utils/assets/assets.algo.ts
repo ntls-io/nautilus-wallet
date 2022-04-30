@@ -33,10 +33,12 @@ export const LEDGER_TYPE_ALGORAND: LedgerTypeAlgorand = 'Algorand';
 
 export type LedgerInfoAlgo = LedgerInfo & {
   type: LedgerTypeAlgorand;
+  isAlgo: true;
 };
 
 export const LEDGER_INFO_ALGO: LedgerInfoAlgo = {
   type: LEDGER_TYPE_ALGORAND,
+  isAlgo: true,
 };
 
 // AssetAmount:
@@ -53,6 +55,13 @@ export const assetAmountAlgo = (amount: number): AssetAmountAlgo => ({
 });
 
 // Type checks:
+
+export const isLedgerInfoAlgo = (
+  ledgerInfo: LedgerInfo | LedgerInfoAlgo
+): ledgerInfo is LedgerInfoAlgo =>
+  ledgerInfo.type === LEDGER_TYPE_ALGORAND &&
+  'isAlgo' in ledgerInfo &&
+  ledgerInfo.isAlgo;
 
 export const isAssetAmountAlgo = (
   amount: AssetAmount | AssetAmountAlgo

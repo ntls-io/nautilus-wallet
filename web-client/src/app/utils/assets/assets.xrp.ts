@@ -35,10 +35,12 @@ export const LEDGER_TYPE_XRPL: LedgerTypeXrpl = 'XRPL';
 
 export type LedgerInfoXrp = LedgerInfo & {
   type: LedgerTypeXrpl;
+  isXrp: true;
 };
 
 export const LEDGER_INFO_XRP: LedgerInfoXrp = {
   type: LEDGER_TYPE_XRPL,
+  isXrp: true,
 };
 
 // AssetAmount:
@@ -55,6 +57,13 @@ export const assetAmountXrp = (amount: number): AssetAmountXrp => ({
 });
 
 // Type checks:
+
+export const isLedgerInfoXrp = (
+  ledgerInfo: LedgerInfo | LedgerInfoXrp
+): ledgerInfo is LedgerInfoXrp =>
+  ledgerInfo.type === LEDGER_TYPE_XRPL &&
+  'isXrp' in ledgerInfo &&
+  ledgerInfo.isXrp;
 
 export const isAssetAmountXrp = (
   amount: AssetAmount | AssetAmountXrp

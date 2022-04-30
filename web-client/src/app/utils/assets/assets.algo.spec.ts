@@ -3,10 +3,15 @@ import {
   assetAmountAlgo,
   ASSET_DISPLAY_ALGO,
   isAssetAmountAlgo,
+  isLedgerInfoAlgo,
   LEDGER_INFO_ALGO,
 } from './assets.algo';
-import { AssetAmountAsa, assetAmountAsa } from './assets.algo.asa';
-import { assetAmountXrp } from './assets.xrp';
+import {
+  AssetAmountAsa,
+  assetAmountAsa,
+  ledgerInfoAsa,
+} from './assets.algo.asa';
+import { assetAmountXrp, LEDGER_INFO_XRP } from './assets.xrp';
 
 describe('assetAmountAlgo', () => {
   it('constructs', () => {
@@ -16,6 +21,20 @@ describe('assetAmountAlgo', () => {
       ledgerInfo: LEDGER_INFO_ALGO,
     };
     expect(assetAmountAlgo(0)).toEqual(expected);
+  });
+});
+
+describe('isLedgerInfoAlgo', () => {
+  it('accepts Algo', () => {
+    expect(isLedgerInfoAlgo(LEDGER_INFO_ALGO)).toBeTrue();
+  });
+
+  it('rejects ASA', () => {
+    expect(isLedgerInfoAlgo(ledgerInfoAsa(5, 2))).toBeFalse();
+  });
+
+  it('rejects XRPL', () => {
+    expect(isLedgerInfoAlgo(LEDGER_INFO_XRP)).toBeFalse();
   });
 });
 
