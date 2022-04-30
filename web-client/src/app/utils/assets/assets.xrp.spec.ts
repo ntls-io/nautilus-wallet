@@ -4,7 +4,7 @@ import {
   ASSET_DISPLAY_XRP,
   convertFromAssetAmountXrpToLedger,
   convertFromLedgerToAssetAmountXrp,
-  LEDGER_INFO_XRPL,
+  LEDGER_INFO_XRP,
 } from './assets.xrp';
 
 describe('assetAmountXrp', () => {
@@ -12,7 +12,7 @@ describe('assetAmountXrp', () => {
     const expected: AssetAmountXrp = {
       amount: 0,
       assetDisplay: ASSET_DISPLAY_XRP,
-      ledgerInfo: LEDGER_INFO_XRPL,
+      ledgerInfo: LEDGER_INFO_XRP,
     };
     expect(assetAmountXrp(0)).toEqual(expected);
   });

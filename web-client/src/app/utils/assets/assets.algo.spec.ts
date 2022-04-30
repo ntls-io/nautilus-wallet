@@ -1,22 +1,19 @@
 import {
-  AssetAmountAsa,
-  assetAmountAsa,
-} from 'src/app/utils/assets/assets.algo.asa';
-import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
-import {
   AssetAmountAlgo,
   assetAmountAlgo,
   ASSET_DISPLAY_ALGO,
   isAssetAmountAlgo,
-  LEDGER_INFO_ALGORAND,
+  LEDGER_INFO_ALGO,
 } from './assets.algo';
+import { AssetAmountAsa, assetAmountAsa } from './assets.algo.asa';
+import { assetAmountXrp } from './assets.xrp';
 
 describe('assetAmountAlgo', () => {
   it('constructs', () => {
     const expected: AssetAmountAlgo = {
       amount: 0,
       assetDisplay: ASSET_DISPLAY_ALGO,
-      ledgerInfo: LEDGER_INFO_ALGORAND,
+      ledgerInfo: LEDGER_INFO_ALGO,
     };
     expect(assetAmountAlgo(0)).toEqual(expected);
   });

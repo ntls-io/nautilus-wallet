@@ -2,7 +2,7 @@
  * Types and code for working with Algo on the Algorand ledger.
  *
  * 1. {@link AssetDisplay} constant: {@link ASSET_DISPLAY_ALGO}
- * 2. {@link LedgerInfo} constant: {@link LEDGER_INFO_ALGORAND}
+ * 2. {@link LedgerInfo} constant: {@link LEDGER_INFO_ALGO}
  * 3. {@link AssetAmount} constructor: {@link assetAmountAlgo}
  */
 
@@ -35,7 +35,7 @@ export type LedgerInfoAlgo = LedgerInfo & {
   type: LedgerTypeAlgorand;
 };
 
-export const LEDGER_INFO_ALGORAND: LedgerInfoAlgo = {
+export const LEDGER_INFO_ALGO: LedgerInfoAlgo = {
   type: LEDGER_TYPE_ALGORAND,
 };
 
@@ -49,7 +49,7 @@ export type AssetAmountAlgo = AssetAmount & {
 export const assetAmountAlgo = (amount: number): AssetAmountAlgo => ({
   amount,
   assetDisplay: ASSET_DISPLAY_ALGO,
-  ledgerInfo: LEDGER_INFO_ALGORAND,
+  ledgerInfo: LEDGER_INFO_ALGO,
 });
 
 // Type checks:

@@ -1,12 +1,8 @@
 import {
   assetAmountAlgo,
-  LEDGER_INFO_ALGORAND,
+  LEDGER_INFO_ALGO,
   LEDGER_TYPE_ALGORAND,
-} from 'src/app/utils/assets/assets.algo';
-import {
-  assetAmountXrp,
-  LEDGER_INFO_XRPL,
-} from 'src/app/utils/assets/assets.xrp';
+} from './assets.algo';
 import {
   AssetAmountAsa,
   assetAmountAsa,
@@ -18,6 +14,7 @@ import {
   ledgerInfoAsa,
   LedgerInfoAsa,
 } from './assets.algo.asa';
+import { assetAmountXrp, LEDGER_INFO_XRP } from './assets.xrp';
 
 const exampleLedgerInfoAsa: LedgerInfoAsa = ledgerInfoAsa(5, 2);
 
@@ -63,11 +60,11 @@ describe('isLedgerInfoAsa', () => {
   });
 
   it('rejects Algo', () => {
-    expect(isLedgerInfoAsa(LEDGER_INFO_ALGORAND)).toBeFalse();
+    expect(isLedgerInfoAsa(LEDGER_INFO_ALGO)).toBeFalse();
   });
 
-  it('rejects XRPL', () => {
-    expect(isLedgerInfoAsa(LEDGER_INFO_XRPL)).toBeFalse();
+  it('rejects XRP', () => {
+    expect(isLedgerInfoAsa(LEDGER_INFO_XRP)).toBeFalse();
   });
 });
 

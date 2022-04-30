@@ -6,14 +6,11 @@
  * 3. {@link AssetAmount} constructor: {@link assetAmountXrplToken}
  */
 
-import {
-  LedgerTypeXrpl,
-  LEDGER_TYPE_XRPL,
-} from 'src/app/utils/assets/assets.xrp';
 import { defined } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
 import { AssetAmount, LedgerInfo } from './assets.common';
+import { LedgerTypeXrpl, LEDGER_TYPE_XRPL } from './assets.xrp';
 
 // LedgerInfo:
 
