@@ -64,6 +64,11 @@ export type Environment = {
     /** @see https://js.xrpl.org/interfaces/ClientOptions.html */
     options?: xrpl.ClientOptions;
   };
+
+  /**
+   * Require a clear Onfido check status before enabling sending payments.
+   */
+  requireOnfidoCheckBeforeSendPayment?: boolean;
 };
 
 /**
