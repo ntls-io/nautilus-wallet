@@ -9,8 +9,10 @@
 <ion-content>
   <ion-grid fixed>
     <app-pure-wallet-page
-      [name]="sessionQuery.name | async"
+      [name]="name | async"
       [balances]="balances | async"
+      [actionSendMoneyEnabled]="actionSendMoneyEnabled | async"
+      [actionVerifyProfileShown]="actionVerifyProfileShown | async"
     ></app-pure-wallet-page>
   </ion-grid>
 </ion-content>
