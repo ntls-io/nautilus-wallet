@@ -65,17 +65,24 @@ function getAmountInput(canvasElement: HTMLElement): HTMLIonInputElement {
   return amountInput;
 }
 
-export const PayAmount = Template.bind({});
-PayAmount.args = { ...OneOption.args };
-PayAmount.play = async ({ canvasElement }) => {
+async function findIonButton(
+  canvasElement: HTMLElement,
+  id: string | RegExp
+): Promise<HTMLIonButtonElement> {
   const canvas = within(canvasElement);
 
-  // First wait for the Pay button to be ready, to give the page time to initialise.
-  const payButton = await canvas.findByText(
-    /Pay/i,
+  // Wait for the button to be ready, to give the page time to initialise.
+  return await canvas.findByText<HTMLIonButtonElement>(
+    id,
     { selector: 'ion-button.hydrated' },
     { timeout: LOAD_TIMEOUT }
   );
+}
+
+export const PayAmount = Template.bind({});
+PayAmount.args = { ...OneOption.args };
+PayAmount.play = async ({ canvasElement }) => {
+  const payButton = await findIonButton(canvasElement, /Pay/i);
 
   const amountInput = getAmountInput(canvasElement);
   amountInput.value = '100';
@@ -95,14 +102,11 @@ TwoOptions.args = {
 export const ChangeAccount = Template.bind({});
 ChangeAccount.args = { ...TwoOptions.args };
 ChangeAccount.play = async ({ canvasElement }): Promise<void> => {
-  const canvas = within(canvasElement);
-  await userEvent.click(
-    await canvas.findByText(
-      'Change account',
-      { selector: 'ion-button.hydrated' },
-      { timeout: LOAD_TIMEOUT }
-    )
+  const changeAccountButton = await findIonButton(
+    canvasElement,
+    'Change account'
   );
+  await userEvent.click(changeAccountButton);
 };
 
 export const ChangedAccount = Template.bind({});
