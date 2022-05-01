@@ -10,6 +10,9 @@ import {
 import algosdk from 'algosdk';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { getAssetConfigForLedgerInfo } from 'src/app/utils/assets/assets.config';
+import { environment } from 'src/environments/environment';
+import { ifDefined } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
 
 /**
@@ -35,6 +38,8 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   @Input() autofocus = true;
 
   paymentOptions?: PaymentOption[];
+
+  assetConfigs = environment.assetConfigs;
 
   constructor() {}
 
@@ -68,15 +73,30 @@ export class PurePayPageComponent implements OnInit, OnChanges {
           senderName,
           senderBalance,
           receiverAddress,
+          ...this.transactionLimitFor(senderBalance),
         }));
       } else if (this.receiverAddressType === 'XRPL' && this.xrplBalances) {
         return this.xrplBalances.map((senderBalance) => ({
           senderName,
           senderBalance,
           receiverAddress,
+          ...this.transactionLimitFor(senderBalance),
         }));
       }
     }
+  }
+
+  /** Determine the transaction limit to use for the given sender balance. */
+  private transactionLimitFor(
+    senderBalance: AssetAmount
+  ): Pick<PaymentOption, 'transactionLimit'> {
+    const transactionLimit = ifDefined(
+      this.assetConfigs,
+      (assetConfigs) =>
+        getAssetConfigForLedgerInfo(assetConfigs, senderBalance.ledgerInfo)
+          ?.transactionLimit
+    );
+    return transactionLimit === undefined ? {} : { transactionLimit };
   }
 }
 
