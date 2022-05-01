@@ -2,6 +2,7 @@ import {
   AlgodTokenHeader,
   CustomTokenHeader,
 } from 'algosdk/dist/types/src/client/client';
+import { AssetConfigs } from 'src/app/utils/assets/assets.config';
 import * as xrpl from 'xrpl';
 
 /**
@@ -31,6 +32,11 @@ export type Environment = {
    * (Must end in "/"!)
    */
   nautilusAssetServices: string;
+
+  /**
+   * Per-asset configuration.
+   */
+  assetConfigs?: AssetConfigs;
 
   /**
    * Algorand Algod client connection details.
