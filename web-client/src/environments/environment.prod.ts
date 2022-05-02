@@ -11,4 +11,7 @@ export const environment: Environment = {
     // FIXME: Development key
     token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
   },
+  xrplClient: {
+    server: 'wss://s.altnet.rippletest.net/',
+  },
 };
