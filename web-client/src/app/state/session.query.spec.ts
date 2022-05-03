@@ -120,6 +120,18 @@ describe('SessionQuery', () => {
       );
     });
 
+    it('xrplAccountRoot', async () => {
+      expect(await get(query.xrplAccountRoot)).toBeUndefined();
+      const stub = stubState();
+      expect(await get(query.xrplAccountRoot)).toEqual(stub.xrplAccountRoot);
+    });
+
+    it('xrplTrustLines', async () => {
+      expect(await get(query.xrplTrustlines)).toBeUndefined();
+      const stub = stubState();
+      expect(await get(query.xrplTrustlines)).toEqual(stub.xrplTrustlines);
+    });
+
     it('onfidoCheck', async () => {
       expect(await get(query.onfidoCheck)).toBeUndefined();
       const stub = stubState();

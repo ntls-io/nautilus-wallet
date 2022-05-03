@@ -27,8 +27,15 @@ import { SessionState, SessionStore } from './session.store';
 export class SessionQuery extends Query<SessionState> {
   wallet: Observable<SessionState['wallet']> = this.select('wallet');
   pin: Observable<SessionState['pin']> = this.select('pin');
+
   algorandAccountData: Observable<SessionState['algorandAccountData']> =
     this.select('algorandAccountData');
+
+  xrplAccountRoot: Observable<SessionState['xrplAccountRoot']> =
+    this.select('xrplAccountRoot');
+
+  xrplTrustlines: Observable<SessionState['xrplTrustlines']> =
+    this.select('xrplTrustlines');
 
   // Wallet field queries:
 
