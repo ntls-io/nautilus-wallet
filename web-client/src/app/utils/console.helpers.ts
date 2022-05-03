@@ -48,7 +48,7 @@ export const withLoggedExchange = async <Request, Response>(
   await withConsoleGroupCollapsed(
     label,
     async () =>
-      await withConsoleTimer('exchange', async () => {
+      await withConsoleTimer(`[${label}] took`, async () => {
         console.log('request:', request);
         const response = await f(request);
         console.log('response:', response);
