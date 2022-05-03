@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { SessionService } from 'src/app/state/session.service';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { showToast } from 'src/app/utils/toast.helpers';
 import { environment } from 'src/environments/environment';
+import { WalletDisplay } from 'src/schema/entities';
 
 /**
  * @see PureWalletPageComponent
@@ -20,11 +22,36 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./wallet.page.scss'],
 })
 export class WalletPage implements OnInit {
+  /** (Optional) Hook to override environment setting, if given. */
+  @Input() requireKycBeforeSendPayment =
+    environment?.requireOnfidoCheckBeforeSendPayment;
+
+  /** Active wallet owner's name. */
+  name: Observable<WalletDisplay['owner_name'] | undefined> =
+    this.sessionQuery.name;
+
+  /** Active wallet's balances. */
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
+
+  /** Enable the "Send Money" action if KYC status is either cleared or not required. */
+  actionSendMoneyEnabled: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear.pipe(
+      map(
+        (onfidoCheckIsClear: boolean) =>
+          onfidoCheckIsClear || !this.requireKycBeforeSendPayment
+      )
+    );
+
+  /** Show the "Verify Profile" if KYC status is not cleared. */
+  actionVerifyProfileShown: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear.pipe(
+      map((onfidoCheckIsClear: boolean) => !onfidoCheckIsClear)
+    );
 
   constructor(
     private loadingController: LoadingController,
     public sessionQuery: SessionQuery,
+    public sessionService: SessionService,
     public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService,
     private toastCtrl: ToastController,
@@ -35,6 +62,7 @@ export class WalletPage implements OnInit {
    * When the wallet first displays, perform opportunistic asset opt-in.
    */
   async ngOnInit(): Promise<void> {
+    // this.actionItems = await this.getActionItems();
     await this.checkAlgorandAssetOptIn();
   }
 
@@ -49,6 +77,7 @@ export class WalletPage implements OnInit {
             await this.sessionAlgorandService.loadAssetParams();
           })(),
           this.sessionXrplService.loadAccountData(),
+          this.sessionService.loadOnfidoCheck(),
         ]);
       }
     );

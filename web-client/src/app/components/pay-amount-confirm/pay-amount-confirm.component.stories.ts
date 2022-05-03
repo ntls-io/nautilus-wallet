@@ -15,7 +15,14 @@ export default ionicStoryMeta<PayAmountConfirmComponent>(
   {
     imports: [PayAmountConfirmComponentModule],
     controls: {
-      shown: ['name', 'balance', 'receiverAddress', 'amountConfirmed'],
+      shown: [
+        'name',
+        'balance',
+        'receiverAddress',
+        'transactionLimit',
+        'setInitialAmountValue',
+        'amountConfirmed',
+      ],
       outputs: ['amountConfirmed'],
     },
   }
@@ -35,3 +42,15 @@ WithAlgo.args = { ...PayFromToAlgoArgs };
 
 export const WithXRP = Template.bind({});
 WithXRP.args = { ...PayFromToXRPArgs };
+
+export const WithAmount = Template.bind({});
+WithAmount.args = {
+  ...WithAlgo.args,
+  setInitialAmountValue: '1000',
+};
+
+export const AmountOverLimit = Template.bind({});
+AmountOverLimit.args = {
+  ...WithAmount.args,
+  transactionLimit: 500,
+};

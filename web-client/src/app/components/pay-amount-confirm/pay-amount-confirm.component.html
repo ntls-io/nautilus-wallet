@@ -20,9 +20,10 @@
       -->
       <div class="ion-margin">
         <app-pay-amount-form
-          [maxAmount]="balance?.amount"
+          [maxAmount]="maxAmount"
           (amountSubmitted)="onAmountSubmitted($event)"
           [autofocus]="autofocus"
+          [setInitialAmountValue]="setInitialAmountValue"
         ></app-pay-amount-form>
 
         <p class="text-sm text-center">

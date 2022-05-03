@@ -59,6 +59,9 @@ export class PayPage implements OnInit {
   xrplBalances: Observable<AssetAmount[] | undefined> =
     this.sessionQuery.xrplBalances;
 
+  onfidoCheckIsClear: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear;
+
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
