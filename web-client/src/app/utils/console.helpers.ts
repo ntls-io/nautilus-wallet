@@ -45,7 +45,7 @@ export const withLoggedExchange = async <Request, Response>(
   f: (request: Request) => Promise<Response>,
   request: Request
 ): Promise<Response> =>
-  await withConsoleGroup(
+  await withConsoleGroupCollapsed(
     label,
     async () =>
       await withConsoleTimer('exchange', async () => {
