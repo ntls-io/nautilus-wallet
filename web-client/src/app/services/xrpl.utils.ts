@@ -119,3 +119,23 @@ export const getTxResponseMetadata = (
     return meta;
   }
 };
+
+/**
+ * Check for `RippledError`, and extract its error response.
+ *
+ * This verifies that {@link xrpl.ErrorResponse.status} is `"error"`, at least.
+ */
+export const checkRippledErrorResponse = (
+  err: xrpl.RippledError | unknown
+): xrpl.ErrorResponse | undefined => {
+  if (err instanceof xrpl.RippledError) {
+    const maybeResponse = err.data as xrpl.ErrorResponse | any;
+    if (
+      typeof maybeResponse === 'object' &&
+      'status' in maybeResponse &&
+      maybeResponse.status === 'error'
+    ) {
+      return maybeResponse as xrpl.ErrorResponse;
+    }
+  }
+};
