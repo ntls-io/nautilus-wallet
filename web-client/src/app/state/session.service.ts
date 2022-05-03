@@ -73,6 +73,10 @@ export class SessionService {
 
     if ('Opened' in result) {
       const wallet = result.Opened;
+
+      // XXX: Maintain invariant: clear store before adding new active wallet state.
+      this.sessionStore.reset();
+
       this.sessionStore.update({ wallet, pin });
 
       return undefined; // Success
