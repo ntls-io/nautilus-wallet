@@ -14,6 +14,18 @@ export const withConsoleGroup = async <R>(
   }
 };
 
+export const withConsoleGroupCollapsed = async <R>(
+  label: string,
+  f: () => Promise<R>
+): Promise<R> => {
+  console.groupCollapsed(label);
+  try {
+    return await f();
+  } finally {
+    console.groupEnd();
+  }
+};
+
 export const withConsoleTimer = async <R>(
   label: string,
   f: () => Promise<R>
@@ -33,10 +45,10 @@ export const withLoggedExchange = async <Request, Response>(
   f: (request: Request) => Promise<Response>,
   request: Request
 ): Promise<Response> =>
-  await withConsoleGroup(
+  await withConsoleGroupCollapsed(
     label,
     async () =>
-      await withConsoleTimer('exchange', async () => {
+      await withConsoleTimer(`[${label}] took`, async () => {
         console.log('request:', request);
         const response = await f(request);
         console.log('response:', response);
