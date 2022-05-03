@@ -106,6 +106,7 @@ dependencies = [
  "strum",
  "thiserror",
  "tokio",
+ "twilio-api",
  "twilio-verify",
  "url",
 ]

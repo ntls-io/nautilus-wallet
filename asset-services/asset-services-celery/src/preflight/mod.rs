@@ -21,6 +21,7 @@ pub async fn run_checks(level: CheckLevel) -> anyhow::Result<()> {
         checks::check_redis_task_records(level),
         checks::check_onfido(level),
         checks::check_twilio_verify(level),
+        checks::check_twilio_messaging(level),
     )?;
     log::info!(target: "preflight", "preflight checks successful");
     Ok(())

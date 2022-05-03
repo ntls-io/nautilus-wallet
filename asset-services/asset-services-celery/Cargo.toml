@@ -27,4 +27,5 @@ tokio = "*"
 
 env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers" }
 onfido = { path = "../onfido" }
+twilio-api = { path = "../twilio-api" }
 twilio-verify = { path = "../twilio-verify" }

@@ -50,3 +50,20 @@ pub async fn check_twilio_verify(level: CheckLevel) -> anyhow::Result<()> {
     }
     Ok(())
 }
+
+pub async fn check_twilio_messaging(level: CheckLevel) -> anyhow::Result<()> {
+    if level.local() {
+        let client = tasks::messaging::init_messaging_client()?;
+        log::info!(target: LOG_LOCAL, "Twilio Verify client configured");
+        if level.remote() {
+            let account = client.fetch_current_account().await?;
+            log::info!(
+                target: LOG_REMOTE,
+                "Twilio Messaging account: friendly_name={:?}",
+                account.friendly_name.unwrap_or_default(),
+            );
+            // TODO: Check service SID, too
+        }
+    }
+    Ok(())
+}
