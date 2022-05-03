@@ -12,6 +12,7 @@ import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
+import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
@@ -79,6 +80,30 @@ export class SessionXrplService {
           amount
         ),
       { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    );
+
+    return await this.sendTransaction(preparedTx);
+  }
+
+  /**
+   * Sign and send a `TrustSet` transaction from the active session's wallet.
+   *
+   * @see https://xrpl.org/trustset.html
+   * @see XrplService.createUnsignedTrustSetTx
+   */
+  async sendTrustSetTx(
+    limitAmount: IssuedCurrencyAmount
+  ): Promise<xrpl.TxResponse> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    const preparedTx: xrpl.TrustSet = await withLoggedExchange(
+      'SessionXrplService.sendTrustSetTx: XrplService.createUnsignedTrustSetTx:',
+      async () =>
+        await this.xrplService.createUnsignedTrustSetTx(
+          wallet.xrpl_account.address_base58,
+          limitAmount
+        ),
+      { from: wallet.xrpl_account.address_base58, limitAmount }
     );
 
     return await this.sendTransaction(preparedTx);
