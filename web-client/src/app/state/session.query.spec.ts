@@ -19,8 +19,10 @@ import {
   AssetAmountXrplToken,
   assetAmountXrplToken,
 } from 'src/app/utils/assets/assets.xrp.token';
+import { parseNumber } from 'src/app/utils/validators';
 import { WalletDisplay } from 'src/schema/entities';
 import { stubActiveSession } from 'src/tests/state.helpers';
+import * as xrpl from 'xrpl';
 import { SessionQuery } from './session.query';
 import { SessionState, SessionStore } from './session.store';
 
@@ -41,7 +43,12 @@ describe('SessionQuery', () => {
   type StubSessionState = SessionState &
     Pick<
       Required<SessionState>,
-      'wallet' | 'pin' | 'algorandAccountData' | 'xrplBalances' | 'onfidoCheck'
+      | 'wallet'
+      | 'pin'
+      | 'algorandAccountData'
+      | 'xrplAccountRoot'
+      | 'xrplBalances'
+      | 'onfidoCheck'
     >;
 
   const stubState = (): StubSessionState => {
@@ -72,6 +79,9 @@ describe('SessionQuery', () => {
           total: 10_000,
         },
       },
+      xrplAccountRoot: {
+        Balance: xrpl.xrpToDrops('1'),
+      } as xrpl.LedgerEntry.AccountRoot, // XXX: Stub a partial record, for now.
       xrplBalances: [
         { value: '1', currency: 'XRP' },
         { value: '1', currency: 'PCT', issuer: 'PCT issuer' },
@@ -263,6 +273,20 @@ describe('SessionQuery', () => {
       expect(query.hasAlgorandBalance()).toBeFalse();
       stubState();
       expect(query.hasAlgorandBalance()).toBeTrue();
+    });
+
+    it('getXrpBalanceInDrops', () => {
+      expect(query.getXrpBalanceInDrops()).toBeUndefined();
+      const stub = stubState();
+      expect(query.getXrpBalanceInDrops()).toBe(
+        parseNumber(stub.xrplAccountRoot.Balance)
+      );
+    });
+
+    it('hasXrpBalance', () => {
+      expect(query.hasXrpBalance()).toBeFalse();
+      stubState();
+      expect(query.hasXrpBalance()).toBeTrue();
     });
   });
 

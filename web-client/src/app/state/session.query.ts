@@ -171,6 +171,14 @@ export class SessionQuery extends Query<SessionState> {
     return 0 < (this.getAlgorandBalanceInMicroAlgos() ?? 0);
   }
 
+  getXrpBalanceInDrops(): number | undefined {
+    return ifDefined(this.getValue().xrplAccountRoot?.Balance, parseNumber);
+  }
+
+  hasXrpBalance() {
+    return 0 < (this.getXrpBalanceInDrops() ?? 0);
+  }
+
   /**
    * Get the current Algorand account's balance for the given ASA.
    *
