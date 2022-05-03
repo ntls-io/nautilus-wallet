@@ -1,8 +1,13 @@
 table.check-result {
   border-collapse: separate;
-  border-spacing: 1em;
+  border-spacing: 1em 0.5em;
 
   th {
     text-align: right;
+    font-weight: normal;
+    opacity: 0.5;
+  }
+  td {
+    text-align: left;
   }
 }

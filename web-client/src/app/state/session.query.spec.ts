@@ -41,7 +41,7 @@ describe('SessionQuery', () => {
   type StubSessionState = SessionState &
     Pick<
       Required<SessionState>,
-      'wallet' | 'pin' | 'algorandAccountData' | 'xrplBalances'
+      'wallet' | 'pin' | 'algorandAccountData' | 'xrplBalances' | 'onfidoCheck'
     >;
 
   const stubState = (): StubSessionState => {
@@ -76,6 +76,11 @@ describe('SessionQuery', () => {
         { value: '1', currency: 'XRP' },
         { value: '1', currency: 'PCT', issuer: 'PCT issuer' },
       ],
+      onfidoCheck: {
+        id: 'uuid',
+        href: 'https://dashboard.onfido.com/checks/uuid',
+        result: 'clear',
+      },
     };
     store.update(state);
     return state;
@@ -103,6 +108,39 @@ describe('SessionQuery', () => {
       expect(await get(query.algorandAccountData)).toEqual(
         stub.algorandAccountData
       );
+    });
+
+    it('onfidoCheck', async () => {
+      expect(await get(query.onfidoCheck)).toBeUndefined();
+      const stub = stubState();
+      expect(await get(query.onfidoCheck)).toEqual(stub.onfidoCheck);
+    });
+
+    describe('onfidoCheckIsClear', () => {
+      it('when clear', async () => {
+        stubState();
+        expect(await get(query.onfidoCheckIsClear)).toBeTrue();
+      });
+
+      it('not when missing', async () => {
+        expect(await get(query.onfidoCheckIsClear)).toBeFalse();
+      });
+
+      it('not when consider', async () => {
+        const stub = stubState();
+        store.update({
+          onfidoCheck: { ...stub.onfidoCheck, result: 'consider' },
+        });
+        expect(await get(query.onfidoCheckIsClear)).toBeFalse();
+      });
+
+      it('not when unidentified', async () => {
+        const stub = stubState();
+        store.update({
+          onfidoCheck: { ...stub.onfidoCheck, result: 'unidentified' },
+        });
+        expect(await get(query.onfidoCheckIsClear)).toBeFalse();
+      });
     });
   });
 

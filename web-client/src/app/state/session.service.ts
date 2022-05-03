@@ -7,8 +7,13 @@ import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
+  LoadOnfidoCheck,
+  LoadOnfidoCheckResult,
+  OnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  SaveOnfidoCheck,
+  SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
   TransactionSigned,
@@ -45,7 +50,7 @@ export class SessionService {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);
       } else {
-        never(result);
+        throw never(result);
       }
     } catch (err) {
       this.sessionStore.setError(err);
@@ -77,7 +82,7 @@ export class SessionService {
       console.error(result);
       throw new Error(result.Failed);
     } else {
-      never(result);
+      throw never(result);
     }
   }
 
@@ -118,6 +123,71 @@ export class SessionService {
       );
     } else {
       throw never(signResult);
+    }
+  }
+
+  /**
+   * Save the given Onfido check result to the active session's wallet.
+   *
+   * @see EnclaveService#saveOnfidoCheck
+   */
+  async saveOnfidoCheck(check: OnfidoCheckResult): Promise<void> {
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+
+    const request: SaveOnfidoCheck = {
+      wallet_id: wallet.wallet_id,
+      auth_pin: pin,
+      check,
+    };
+    const result: SaveOnfidoCheckResult =
+      await this.enclaveService.saveOnfidoCheck(request);
+
+    if ('Saved' in result) {
+      // XXX(Pi): It might be better to explicitly load this back,
+      //          rather than optimistically persisting like this?
+      this.sessionStore.update({ onfidoCheck: check });
+      return;
+    } else if ('InvalidAuth' in result) {
+      throw panic('TODO', result);
+    } else if ('Failed' in result) {
+      console.error(result);
+      throw new Error(result.Failed);
+    } else {
+      throw never(result);
+    }
+  }
+
+  /**
+   * Load the saved Onfido check result for the active session's wallet, if any.
+   *
+   * @see EnclaveService#loadOnfidoCheck
+   */
+  async loadOnfidoCheck(): Promise<OnfidoCheckResult | undefined> {
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+
+    const request: LoadOnfidoCheck = {
+      wallet_id: wallet.wallet_id,
+      auth_pin: pin,
+    };
+    const result: LoadOnfidoCheckResult =
+      await this.enclaveService.loadOnfidoCheck(request);
+
+    if ('Loaded' in result) {
+      const onfidoCheck: OnfidoCheckResult = result.Loaded;
+      this.sessionStore.update({ onfidoCheck });
+      return onfidoCheck;
+    } else if ('NotFound' in result) {
+      return undefined;
+    } else if ('InvalidAuth' in result) {
+      // TODO: Better error representation.
+      throw new Error(
+        'Authentication failed, please ensure that the address and password provided is correct.'
+      );
+    } else if ('Failed' in result) {
+      console.error(result);
+      throw new Error(result.Failed);
+    } else {
+      throw never(result);
     }
   }
 }

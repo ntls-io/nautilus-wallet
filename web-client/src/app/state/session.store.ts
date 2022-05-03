@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 import { AccountData, AssetParams } from 'src/app/services/algosdk.utils';
+import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
 import * as xrpl from 'xrpl';
 
@@ -52,6 +53,8 @@ export interface SessionState {
    * @see https://js.xrpl.org/classes/Client.html#getBalances
    */
   xrplBalances?: XrplBalance[];
+
+  onfidoCheck?: OnfidoCheckResult;
 }
 
 export type XrplBalance = {

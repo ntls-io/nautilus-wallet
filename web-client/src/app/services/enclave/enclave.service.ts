@@ -1,12 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  LoadOnfidoCheck,
+  LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  SaveOnfidoCheck,
+  SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
 } from 'src/schema/actions';
@@ -67,6 +72,30 @@ export class EnclaveService {
     return result;
   }
 
+  async saveOnfidoCheck(
+    request: SaveOnfidoCheck
+  ): Promise<SaveOnfidoCheckResult> {
+    const walletRequest = { SaveOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { SaveOnfidoCheck: SaveOnfidoCheck },
+      { SaveOnfidoCheck: SaveOnfidoCheckResult }
+    >(walletRequest);
+    const { SaveOnfidoCheck: result } = response;
+    return result;
+  }
+
+  async loadOnfidoCheck(
+    request: LoadOnfidoCheck
+  ): Promise<LoadOnfidoCheckResult> {
+    const walletRequest = { LoadOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { LoadOnfidoCheck: LoadOnfidoCheck },
+      { LoadOnfidoCheck: LoadOnfidoCheckResult }
+    >(walletRequest);
+    const { LoadOnfidoCheck: result } = response;
+    return result;
+  }
+
   // HTTP helpers
 
   protected async walletApiGetBytes(path: string): Promise<Uint8Array> {
@@ -94,6 +123,16 @@ export class EnclaveService {
   }
 
   protected async postSealedExchange<Request, Response>(
+    request: Request
+  ): Promise<Response> {
+    return withLoggedExchange(
+      'EnclaveService.postSealedExchange:',
+      () => this.postSealedExchangeInner(request),
+      request
+    );
+  }
+
+  protected async postSealedExchangeInner<Request, Response>(
     request: Request
   ): Promise<Response> {
     const clientCrypto = TweetNaClCrypto.new();
