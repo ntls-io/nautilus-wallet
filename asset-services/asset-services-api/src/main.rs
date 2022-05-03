@@ -8,9 +8,9 @@ use std::sync::Arc;
 use asset_services_celery::run_helpers::{init_celery_from_env, init_logging_from_env};
 use axum::handler::post;
 use axum::{AddExtensionLayer, Router};
+use tower_http::cors::CorsLayer;
 
 use crate::helpers::bind_addr_from_env;
-use tower_http::cors::CorsLayer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
