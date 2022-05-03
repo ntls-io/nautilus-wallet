@@ -94,7 +94,7 @@ export class PurePayPageComponent implements OnInit, OnChanges {
       this.assetConfigs,
       (assetConfigs) =>
         getAssetConfigForLedgerInfo(assetConfigs, senderBalance.ledgerInfo)
-          ?.transactionLimit
+          ?.transactionLimitWithoutOnfidoCheck
     );
     return transactionLimit === undefined ? {} : { transactionLimit };
   }

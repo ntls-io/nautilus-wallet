@@ -39,7 +39,8 @@ export type AssetConfigs = {
  * Configuration for a particular asset.
  */
 export type AssetConfig = {
-  transactionLimit?: number;
+  /** Transaction soft-limit on accounts without clear Onfido checks. */
+  transactionLimitWithoutOnfidoCheck?: number;
 };
 
 /**

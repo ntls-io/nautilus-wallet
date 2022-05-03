@@ -8,15 +8,15 @@ import { ledgerInfoXrplToken } from './assets.xrp.token';
 describe('getConfigForLedgerInfo', () => {
   const exampleConfigs: AssetConfigs = {
     Algorand: {
-      ALGO: { transactionLimit: 100 },
+      ALGO: { transactionLimitWithoutOnfidoCheck: 100 },
       ASA: {
-        5: { transactionLimit: 200 },
+        5: { transactionLimitWithoutOnfidoCheck: 200 },
       },
     },
     XRPL: {
-      XRP: { transactionLimit: 300 },
+      XRP: { transactionLimitWithoutOnfidoCheck: 300 },
       XrplToken: {
-        SPAM: { transactionLimit: 400 },
+        SPAM: { transactionLimitWithoutOnfidoCheck: 400 },
       },
     },
   };
@@ -25,11 +25,14 @@ describe('getConfigForLedgerInfo', () => {
     LedgerInfo,
     ReturnType<typeof getAssetConfigForLedgerInfo>
   ][] = [
-    [LEDGER_INFO_ALGO, { transactionLimit: 100 }],
-    [ledgerInfoAsa(5, 2), { transactionLimit: 200 }],
+    [LEDGER_INFO_ALGO, { transactionLimitWithoutOnfidoCheck: 100 }],
+    [ledgerInfoAsa(5, 2), { transactionLimitWithoutOnfidoCheck: 200 }],
     [ledgerInfoAsa(3, 2), undefined],
-    [LEDGER_INFO_XRP, { transactionLimit: 300 }],
-    [ledgerInfoXrplToken('SPAM', 'spammer'), { transactionLimit: 400 }],
+    [LEDGER_INFO_XRP, { transactionLimitWithoutOnfidoCheck: 300 }],
+    [
+      ledgerInfoXrplToken('SPAM', 'spammer'),
+      { transactionLimitWithoutOnfidoCheck: 400 },
+    ],
     [ledgerInfoXrplToken('UNKNOWN', 'unknown'), undefined],
     [{ type: 'unknown' }, undefined],
   ];

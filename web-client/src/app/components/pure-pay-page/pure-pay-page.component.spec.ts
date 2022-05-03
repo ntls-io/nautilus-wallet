@@ -66,7 +66,9 @@ describe('PurePayPageComponent', () => {
       const [optionAlgo, optionAsa] = provideOptions();
       // Set a limit for mockAssetId.
       component.assetConfigs = {
-        Algorand: { ASA: { [mockAssetId]: { transactionLimit: 1000 } } },
+        Algorand: {
+          ASA: { [mockAssetId]: { transactionLimitWithoutOnfidoCheck: 1000 } },
+        },
       };
       component.ngOnChanges(null as any);
       expect(component.paymentOptions).toEqual([
