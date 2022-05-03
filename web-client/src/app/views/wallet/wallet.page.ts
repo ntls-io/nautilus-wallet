@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { map, Observable } from 'rxjs';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -64,6 +65,7 @@ export class WalletPage implements OnInit {
   async ngOnInit(): Promise<void> {
     // this.actionItems = await this.getActionItems();
     await this.checkAlgorandAssetOptIn();
+    await this.checkXrplTokenOptIns();
   }
 
   async onRefresh(): Promise<void> {
@@ -109,6 +111,32 @@ export class WalletPage implements OnInit {
       }
     } else {
       await this.toast('No account balance. Deposit some Algo to get started.');
+    }
+  }
+
+  /**
+   * Perform opportunistic XRPL token opt-in.
+   */
+  protected async checkXrplTokenOptIns(): Promise<void> {
+    if (this.sessionQuery.hasXrpBalance()) {
+      const txResponses = await this.sessionXrplService.checkTrustlineOptIns();
+      const unsuccessfulResponses = txResponses.filter((txResponse) => {
+        const { succeeded } = checkTxResponseSucceeded(txResponse);
+        return !succeeded;
+      });
+      if (0 < unsuccessfulResponses.length) {
+        console.log(
+          'WalletPage.checkXrplTokenOptIns: unsuccessful responses:',
+          { unsuccessfulResponses }
+        );
+        const errorMessage: string = unsuccessfulResponses
+          .map((txResponse) => {
+            const { resultCode } = checkTxResponseSucceeded(txResponse);
+            return resultCode;
+          })
+          .join('\n');
+        await this.errorNotification('XRPL token opt-in failed', errorMessage);
+      }
     }
   }
 

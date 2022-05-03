@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
@@ -10,8 +11,12 @@ import {
 import { SessionService } from 'src/app/state/session.service';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
+import { parseNumber } from 'src/app/utils/validators';
+import { ifDefined } from 'src/helpers/helpers';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
+import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
+import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
 
@@ -49,12 +54,18 @@ export class SessionXrplService {
     const xrplAccountRoot: xrpl.LedgerEntry.AccountRoot =
       accountInfo.result.account_data;
 
+    // Get account's trust lines:
+    const accountLines = await this.xrplService.getAccountLines({
+      account: xrplAddress,
+    });
+    const xrplTrustlines: Trustline[] = accountLines.result.lines;
+
     // Get balances:
     const xrplBalances: XrplBalance[] = await this.xrplService.getBalances(
       xrplAddress
     );
 
-    this.sessionStore.update({ xrplAccountRoot, xrplBalances });
+    this.sessionStore.update({ xrplAccountRoot, xrplTrustlines, xrplBalances });
   }
 
   async sendFunds(
@@ -75,6 +86,85 @@ export class SessionXrplService {
     );
 
     return await this.sendTransaction(preparedTx);
+  }
+
+  /**
+   * Sign and send a `TrustSet` transaction from the active session's wallet.
+   *
+   * @see https://xrpl.org/trustset.html
+   * @see XrplService.createUnsignedTrustSetTx
+   */
+  async sendTrustSetTx(
+    limitAmount: IssuedCurrencyAmount
+  ): Promise<xrpl.TxResponse> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    const preparedTx: xrpl.TrustSet = await withLoggedExchange(
+      'SessionXrplService.sendTrustSetTx: XrplService.createUnsignedTrustSetTx:',
+      async () =>
+        await this.xrplService.createUnsignedTrustSetTx(
+          wallet.xrpl_account.address_base58,
+          limitAmount
+        ),
+      { from: wallet.xrpl_account.address_base58, limitAmount }
+    );
+
+    return await this.sendTransaction(preparedTx);
+  }
+
+  /**
+   * Check trustline opt-in for each of this account's trust lines.
+   *
+   * @return The responses to `TrustSet` transactions sent out (empty if none sent)
+   * @see checkTrustlineOptIn
+   */
+  async checkTrustlineOptIns(): Promise<xrpl.TxResponse[]> {
+    // TODO(Pi): Check for necessary owner reserves before sending.
+    //           See: https://xrpl.org/reserves.html
+
+    const trustLines =
+      (await firstValueFrom(this.sessionQuery.xrplTrustlines)) ?? [];
+
+    const txResponses: xrpl.TxResponse[] = [];
+    for (const trustLine of trustLines) {
+      ifDefined(await this.checkTrustlineOptIn(trustLine), (txResponse) =>
+        txResponses.push(txResponse)
+      );
+    }
+    return txResponses;
+  }
+
+  /**
+   * Helper: Check trustline opt-in for the given trust-line.
+   *
+   * This sends a `TrustSet` transaction matching the peer's limit
+   * if the active session's wallet's limit is zero.
+   *
+   * @return the `TrustSet` response, or undefined
+   */
+  async checkTrustlineOptIn(
+    trustline: Trustline
+  ): Promise<xrpl.TxResponse | undefined> {
+    const limit_peer = parseNumber(trustline.limit_peer);
+    if (limit_peer === undefined) {
+      throw panic(
+        'SessionXrplService.checkTrustlineOptIn: bad limit_peer:',
+        trustline
+      );
+    }
+
+    if (trustline.limit === '0' && 0 < limit_peer) {
+      const limitAmount = {
+        currency: trustline.currency,
+        issuer: trustline.account,
+        value: trustline.limit_peer, // XXX: For now, just match the peer's limit.
+      };
+      return await withLoggedExchange(
+        'SessionXrplService.checkTrustlineOptIn: sending TrustSet',
+        async () => await this.sendTrustSetTx(limitAmount),
+        limitAmount
+      );
+    }
   }
 
   /**
