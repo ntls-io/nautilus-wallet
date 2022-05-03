@@ -62,7 +62,7 @@ describe('PurePayPageComponent', () => {
       expect(component.paymentOptions).toEqual(expectedPaymentOptions);
     });
 
-    it('includes transaction limit', () => {
+    it('includes transaction soft-limit without Onfido check', () => {
       const [optionAlgo, optionAsa] = provideOptions();
       // Set a limit for mockAssetId.
       component.assetConfigs = {
@@ -75,6 +75,19 @@ describe('PurePayPageComponent', () => {
         optionAlgo,
         { ...optionAsa, transactionLimit: 1000 },
       ]);
+    });
+
+    it('omits transaction soft-limit with Onfido check', () => {
+      const expectedPaymentOptions = provideOptions();
+      // Set a limit for mockAssetId.
+      component.assetConfigs = {
+        Algorand: {
+          ASA: { [mockAssetId]: { transactionLimitWithoutOnfidoCheck: 1000 } },
+        },
+      };
+      component.flagOnfidoCheckIsClear = true;
+      component.ngOnChanges(null as any);
+      expect(component.paymentOptions).toEqual(expectedPaymentOptions);
     });
   });
 });

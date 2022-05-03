@@ -32,6 +32,9 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   @Input() xrplBalances?: AssetAmount[] | null;
 
+  /** XXX: Name prefixed with "flag" because the property name can't start with "on", for security reasons. */
+  @Input() flagOnfidoCheckIsClear?: boolean | null;
+
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
   /** @see PayAmountFormComponent.autofocus */
@@ -86,16 +89,22 @@ export class PurePayPageComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Determine the transaction limit to use for the given sender balance. */
+  /**
+   * Determine the transaction limit to use for the given sender balance.
+   *
+   * This applies `transactionLimitWithoutOnfidoCheck` configurations based on {@link flagOnfidoCheckIsClear}.
+   */
   private transactionLimitFor(
     senderBalance: AssetAmount
   ): Pick<PaymentOption, 'transactionLimit'> {
-    const transactionLimit = ifDefined(
-      this.assetConfigs,
-      (assetConfigs) =>
-        getAssetConfigForLedgerInfo(assetConfigs, senderBalance.ledgerInfo)
-          ?.transactionLimitWithoutOnfidoCheck
-    );
+    const transactionLimit = this.flagOnfidoCheckIsClear
+      ? undefined
+      : ifDefined(
+          this.assetConfigs,
+          (assetConfigs) =>
+            getAssetConfigForLedgerInfo(assetConfigs, senderBalance.ledgerInfo)
+              ?.transactionLimitWithoutOnfidoCheck
+        );
     return transactionLimit === undefined ? {} : { transactionLimit };
   }
 }
