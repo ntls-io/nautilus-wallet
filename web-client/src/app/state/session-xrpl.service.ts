@@ -12,6 +12,7 @@ import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
+import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
 
@@ -49,12 +50,18 @@ export class SessionXrplService {
     const xrplAccountRoot: xrpl.LedgerEntry.AccountRoot =
       accountInfo.result.account_data;
 
+    // Get account's trust lines:
+    const accountLines = await this.xrplService.getAccountLines({
+      account: xrplAddress,
+    });
+    const xrplTrustlines: Trustline[] = accountLines.result.lines;
+
     // Get balances:
     const xrplBalances: XrplBalance[] = await this.xrplService.getBalances(
       xrplAddress
     );
 
-    this.sessionStore.update({ xrplAccountRoot, xrplBalances });
+    this.sessionStore.update({ xrplAccountRoot, xrplTrustlines, xrplBalances });
   }
 
   async sendFunds(
