@@ -14,6 +14,18 @@ export const withConsoleGroup = async <R>(
   }
 };
 
+export const withConsoleGroupCollapsed = async <R>(
+  label: string,
+  f: () => Promise<R>
+): Promise<R> => {
+  console.groupCollapsed(label);
+  try {
+    return await f();
+  } finally {
+    console.groupEnd();
+  }
+};
+
 export const withConsoleTimer = async <R>(
   label: string,
   f: () => Promise<R>
