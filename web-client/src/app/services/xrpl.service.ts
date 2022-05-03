@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { defined } from 'src/app/utils/errors/panic';
 import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
+import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
 
 /**
  * This service wraps an instance of the algosdk {@link xrpl.Client},
@@ -100,6 +101,20 @@ export class XrplService {
       TransactionType: 'Payment',
       Amount: amount,
       Destination: toAddress,
+    };
+    return await this.withConnection(
+      async (client) => await client.autofill(unpreparedTx)
+    );
+  }
+
+  async createUnsignedTrustSetTx(
+    fromAddress: string,
+    limitAmount: IssuedCurrencyAmount
+  ): Promise<xrpl.TrustSet> {
+    const unpreparedTx: xrpl.TrustSet = {
+      Account: fromAddress,
+      TransactionType: 'TrustSet',
+      LimitAmount: limitAmount,
     };
     return await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
