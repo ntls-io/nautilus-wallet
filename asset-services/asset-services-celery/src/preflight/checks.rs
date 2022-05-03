@@ -34,7 +34,7 @@ pub async fn check_onfido(level: CheckLevel) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub async fn check_twilio(level: CheckLevel) -> anyhow::Result<()> {
+pub async fn check_twilio_verify(level: CheckLevel) -> anyhow::Result<()> {
     if level.local() {
         let client = tasks::verification::init_verify_client()?;
         log::info!(target: LOG_LOCAL, "Twilio Verify client configured");

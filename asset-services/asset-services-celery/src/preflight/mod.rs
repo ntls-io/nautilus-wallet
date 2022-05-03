@@ -20,7 +20,7 @@ pub async fn run_checks(level: CheckLevel) -> anyhow::Result<()> {
     tokio::try_join!(
         checks::check_redis_task_records(level),
         checks::check_onfido(level),
-        checks::check_twilio(level),
+        checks::check_twilio_verify(level),
     )?;
     log::info!(target: "preflight", "preflight checks successful");
     Ok(())
