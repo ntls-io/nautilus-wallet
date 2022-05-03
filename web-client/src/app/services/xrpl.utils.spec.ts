@@ -1,5 +1,6 @@
 import * as xrpl from 'xrpl';
 import {
+  checkRippledErrorResponse,
   hexToUint8Array,
   txnAfterSign,
   txnBeforeSign,
@@ -70,5 +71,37 @@ describe('uint8ArrayToHex', () => {
     expect(uint8ArrayToHex(new Uint8Array([0xab, 0xcd, 0xef]))).toEqual(
       'ABCDEF'
     );
+  });
+});
+
+describe('checkRippledErrorResponse', () => {
+  const exampleErrorResponse: xrpl.ErrorResponse = {
+    id: 'stub id',
+    status: 'error',
+    type: 'response',
+    error: 'stub error',
+    request: {
+      command: 'ping',
+    },
+  };
+
+  it('works', () => {
+    const err = new xrpl.RippledError('error message', exampleErrorResponse);
+    expect(checkRippledErrorResponse(err)).toEqual(exampleErrorResponse);
+  });
+
+  it('ignores RippledError without data', () => {
+    const err = new xrpl.RippledError('error message');
+    expect(checkRippledErrorResponse(err)).toBeUndefined();
+  });
+
+  it('ignores Error', () => {
+    expect(checkRippledErrorResponse(new Error('other'))).toBeUndefined();
+  });
+
+  it('ignores Error with data', () => {
+    const error = new Error('other');
+    (error as any).data = exampleErrorResponse;
+    expect(checkRippledErrorResponse(error)).toBeUndefined();
   });
 });

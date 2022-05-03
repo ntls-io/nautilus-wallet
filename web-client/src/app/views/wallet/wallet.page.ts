@@ -7,6 +7,7 @@ import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { withConsoleGroup } from 'src/app/utils/console.helpers';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -72,16 +73,17 @@ export class WalletPage implements OnInit {
     await withLoadingOverlayOpts(
       this.loadingController,
       { message: 'Refreshing…' },
-      async () => {
-        await Promise.all([
-          (async () => {
-            await this.sessionAlgorandService.loadAccountData();
-            await this.sessionAlgorandService.loadAssetParams();
-          })(),
-          this.sessionXrplService.loadAccountData(),
-          this.sessionService.loadOnfidoCheck(),
-        ]);
-      }
+      async () =>
+        await withConsoleGroup('WalletPage.onRefresh:', async () => {
+          await Promise.all([
+            (async () => {
+              await this.sessionAlgorandService.loadAccountData();
+              await this.sessionAlgorandService.loadAssetParams();
+            })(),
+            this.sessionXrplService.loadAccountData(),
+            this.sessionService.loadOnfidoCheck(),
+          ]);
+        })
     );
   }
 

@@ -48,9 +48,16 @@ export class SessionXrplService {
     // TODO: Fetch the following in parallel, sharing a connection context.
 
     // Get AccountRoot entry:
-    const accountInfo = await this.xrplService.getAccountInfo({
+    const accountInfo = await this.xrplService.getAccountInfoIfExists({
       account: xrplAddress,
     });
+    if (accountInfo === undefined) {
+      console.log(
+        'SessionXrplService.loadAccountData: account not found, bailing out',
+        { xrplAddress }
+      );
+      return;
+    }
     const xrplAccountRoot: xrpl.LedgerEntry.AccountRoot =
       accountInfo.result.account_data;
 
