@@ -58,6 +58,28 @@ export class XrplService {
   }
 
   /**
+   * Retrieve information about an account's trust lines.
+   *
+   * This call defaults to:
+   *
+   * - `ledger_index: 'validated'`
+   *
+   * @see https://xrpl.org/account_lines.html
+   */
+  async getAccountLines(
+    request: Omit<xrpl.AccountLinesRequest, 'command'>
+  ): Promise<xrpl.AccountLinesResponse> {
+    return await this.withConnection(
+      async (client) =>
+        await client.request({
+          ledger_index: 'validated',
+          ...request,
+          command: 'account_lines',
+        })
+    );
+  }
+
+  /**
    * Wrap {@link xrpl.Client.getBalances}.
    *
    * @see https://js.xrpl.org/classes/Client.html#getBalances
