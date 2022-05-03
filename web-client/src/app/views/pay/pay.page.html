@@ -9,6 +9,7 @@
       [receiverAddress]="receiverAddress | async"
       [algorandBalances]="algorandBalances | async"
       [xrplBalances]="xrplBalances | async"
+      [flagOnfidoCheckIsClear]="onfidoCheckIsClear | async"
       (paymentSubmitted)="onPaymentSubmitted($event)"
       [autofocus]="autofocus"
     ></app-pure-pay-page>
