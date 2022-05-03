@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -28,7 +29,7 @@ import { environment } from 'src/environments/environment';
 export class WalletPage implements OnInit {
   faWallet = faWallet;
 
-  actionItems = [
+  actionItems: ActionItem[] = [
     {
       title: 'Send Money',
       icon: faCreditCard,

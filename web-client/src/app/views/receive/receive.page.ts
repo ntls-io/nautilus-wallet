@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
 
 @Component({
   selector: 'app-receive',
@@ -7,7 +8,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./receive.page.scss'],
 })
 export class ReceivePage implements OnInit {
-  actionItems = [
+  actionItems: ActionItem[] = [
     {
       preTitle: 'Connect & receive money',
       title: 'Share link to connect',
