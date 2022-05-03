@@ -31,6 +31,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/kyc/start", post(handlers::kyc::start_kyc))
         .route("/kyc/checks/create", post(handlers::kyc::create_check))
         .route("/kyc/checks/retrieve", post(handlers::kyc::retrieve_check))
+        .route(
+            "/messages/create",
+            post(handlers::messaging::create_message),
+        )
         .layer(AddExtensionLayer::new(celery.clone()))
         // The CORS layer must come after the wrapped resources, for correct response headers.
         .layer(cors_layer);
