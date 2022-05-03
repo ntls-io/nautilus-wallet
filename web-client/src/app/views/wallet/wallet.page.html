@@ -8,26 +8,9 @@
 
 <ion-content>
   <ion-grid fixed>
-    <div class="ion-text-center p-2">
-      <fa-icon [icon]="faWallet" size="5x"></fa-icon>
-      <h1 class="font-semibold font-nasalization">
-        {{sessionQuery.name| async }}'s Wallet
-      </h1>
-      <p>Send or receive money quickly and easily, select an option below</p>
-    </div>
-
-    <app-balance-summary-card [balances]="balances | async">
-    </app-balance-summary-card>
-
-    <ion-list>
-      <app-action-item
-        *ngFor="let item of actionItems"
-        [title]="item.title"
-        [icon]="item.icon"
-        [path]="item.path"
-        [disabled]="item.disabled"
-        [url]="item.url"
-      ></app-action-item>
-    </ion-list>
+    <app-pure-wallet-page
+      [name]="sessionQuery.name | async"
+      [balances]="balances | async"
+    ></app-pure-wallet-page>
   </ion-grid>
 </ion-content>

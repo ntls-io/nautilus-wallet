@@ -81,7 +81,7 @@ describe('WalletPage', () => {
   const routerLinks: string[] = [
     '/wallet/send-funds',
     '/wallet/receive',
-    '/kyc',
+    // '/kyc', // XXX: Not shown by default:
   ];
 
   for (const routerLink of routerLinks) {
