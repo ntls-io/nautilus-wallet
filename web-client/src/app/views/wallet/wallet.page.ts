@@ -7,7 +7,10 @@ import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
-import { withConsoleGroup } from 'src/app/utils/console.helpers';
+import {
+  withConsoleGroup,
+  withConsoleGroupCollapsed,
+} from 'src/app/utils/console.helpers';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -64,28 +67,39 @@ export class WalletPage implements OnInit {
    * When the wallet first displays, perform opportunistic asset opt-in.
    */
   async ngOnInit(): Promise<void> {
-    await this.checkAlgorandAssetOptIn();
-    await this.checkXrplTokenOptIns();
+    await this.refreshWalletData();
   }
 
   async onRefresh(): Promise<void> {
     await withLoadingOverlayOpts(
       this.loadingController,
       { message: 'Refreshing…' },
-      async () =>
-        await withConsoleGroup('WalletPage.onRefresh:', async () => {
-          await Promise.all([
-            (async () => {
-              await this.sessionAlgorandService.loadAccountData();
-              await this.sessionAlgorandService.loadAssetParams();
-            })(),
-            this.sessionXrplService.loadAccountData(),
-            this.sessionService.loadOnfidoCheck(),
-          ]);
-        })
+      async () => await this.refreshWalletData()
     );
   }
 
+  async refreshWalletData(): Promise<void> {
+    await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
+      await withConsoleGroupCollapsed('Loading wallet data', async () => {
+        await Promise.all([
+          (async () => {
+            await this.sessionAlgorandService.loadAccountData();
+            await this.sessionAlgorandService.loadAssetParams();
+          })(),
+          this.sessionXrplService.loadAccountData(),
+          this.sessionService.loadOnfidoCheck(),
+        ]);
+      });
+      await withConsoleGroupCollapsed(
+        'Checking asset / token opt-ins',
+        async () => {
+          await this.checkAlgorandAssetOptIn();
+          await this.checkXrplTokenOptIns();
+        }
+      );
+      console.log('Done.');
+    });
+  }
   /**
    * Perform opportunistic Algorand asset opt-in.
    *
