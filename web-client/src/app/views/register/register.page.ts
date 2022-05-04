@@ -22,6 +22,8 @@ export class RegisterPage implements OnInit {
     rightAlign: false,
     placeholder: '',
   });
+  // TODO(Pi): We should replace this with something that handles international numbers (probably libphonenumber-based?)
+  //           (See also: E-164 hack in SessionService.)
   phoneInputMask = createMask({
     mask: '(999) 999-99-99',
     autoUnmask: true,
