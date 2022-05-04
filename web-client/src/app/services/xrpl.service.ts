@@ -18,10 +18,9 @@ import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
   providedIn: 'root',
 })
 export class XrplService {
-  protected xrplClient: xrpl.Client;
-
   constructor() {
-    this.xrplClient = getXrplClientFromEnvironment();
+    // Call this once on construction as a smoke test.
+    this.getClient();
   }
 
   /**
@@ -185,16 +184,26 @@ export class XrplService {
   }
 */
 
-  /** Run `f` with a connected {@link xrpl.Client}. */
+  /**
+   * Run `f` with a connected {@link xrpl.Client}.
+   *
+   * In particular, this runs each request with a separate client instance,
+   * to avoid state conflicts.
+   */
   protected async withConnection<T>(
     f: (client: xrpl.Client) => Promise<T>
   ): Promise<T> {
-    await this.xrplClient.connect();
+    const xrplClient = this.getClient();
     try {
-      return await f(this.xrplClient);
+      await xrplClient.connect();
+      return await f(xrplClient);
     } finally {
-      await this.xrplClient.disconnect();
+      await xrplClient.disconnect();
     }
+  }
+
+  protected getClient(): xrpl.Client {
+    return getXrplClientFromEnvironment();
   }
 }
 
