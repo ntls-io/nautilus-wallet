@@ -20,6 +20,7 @@ pub fn create_test_wallet() -> WalletDisplay {
     let request = &actions::CreateWallet {
         owner_name: "New Owner".to_string(),
         auth_pin: "123456".to_string(),
+        phone_number: None,
     };
     match create_wallet(request) {
         Result::Created(created) => created,
