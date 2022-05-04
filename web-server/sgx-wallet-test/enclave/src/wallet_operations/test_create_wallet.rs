@@ -10,6 +10,7 @@ pub(crate) fn create_wallet_works() {
     let request = &actions::CreateWallet {
         owner_name: "New Owner".to_string(),
         auth_pin: "123456".to_string(),
+        phone_number: None,
     };
     let display = &match create_wallet(request) {
         Result::Created(created) => created,

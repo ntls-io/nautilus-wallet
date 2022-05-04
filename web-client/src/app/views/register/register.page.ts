@@ -83,7 +83,8 @@ export class RegisterPage implements OnInit {
           this.registrationForm.controls.firstName.value +
             ' ' +
             this.registrationForm.controls.lastName.value,
-          this.registrationForm.controls.pin.value
+          this.registrationForm.controls.pin.value,
+          this.registrationForm.controls.mobile.value
         );
         this.router.navigate(['/print-wallet']);
       } catch (err) {

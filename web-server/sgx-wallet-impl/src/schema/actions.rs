@@ -20,6 +20,7 @@ use crate::wallet_operations::store::UnlockWalletError;
 pub struct CreateWallet {
     pub owner_name: String,
     pub auth_pin: WalletPin,
+    pub phone_number: Option<String>,
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
