@@ -106,6 +106,7 @@ dependencies = [
  "strum",
  "thiserror",
  "tokio",
+ "twilio-api",
  "twilio-verify",
  "url",
 ]
@@ -1896,9 +1897,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 
 [[package]]
+name = "twilio-api"
+version = "0.1.0"
+dependencies = [
+ "env-var-helpers",
+ "phonenumber",
+ "twilio-oai-api-v2010",
+]
+
+[[package]]
+name = "twilio-oai-api-v2010"
+version = "0.20.3"
+source = "git+https://github.com/PiDelport/twilio-oai-rust?branch=main#c48aa364f770e350a0a11cbe647339bdaee59a9c"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "url",
+]
+
+[[package]]
 name = "twilio-oai-verify-v2"
 version = "0.20.3"
-source = "git+https://github.com/PiDelport/twilio-oai-rust?branch=main#beb55087db384489cd8bbd748600928c5a415ed4"
+source = "git+https://github.com/PiDelport/twilio-oai-rust?branch=main#c48aa364f770e350a0a11cbe647339bdaee59a9c"
 dependencies = [
  "reqwest",
  "serde",
