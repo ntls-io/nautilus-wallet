@@ -15,7 +15,7 @@ import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { assetAmountXrplToken } from 'src/app/utils/assets/assets.xrp.token';
 import { defined } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
-import { allDefinedOrNone, ifDefined } from 'src/helpers/helpers';
+import { allDefinedOrNone, ifDefined, ignoreZero } from 'src/helpers/helpers';
 import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
 import { SessionState, SessionStore } from './session.store';
@@ -52,17 +52,17 @@ export class SessionQuery extends Query<SessionState> {
   // Algorand account field queries:
 
   algorandBalanceInMicroAlgos: Observable<MicroAlgos | undefined> = this.select(
-    ({ algorandAccountData }) => algorandAccountData?.amount
+    ({ algorandAccountData }) => ignoreZero(algorandAccountData?.amount)
   );
 
   algorandBalanceInAlgos: Observable<Algos | undefined> = this.select(
     ({ algorandAccountData }) =>
-      ifDefined(algorandAccountData?.amount, convertToAlgos)
+      ifDefined(ignoreZero(algorandAccountData?.amount), convertToAlgos)
   );
 
   algorandAlgoBalance: Observable<AssetAmount | undefined> = this.select(
     ({ algorandAccountData }) =>
-      ifDefined(algorandAccountData?.amount, (amount: MicroAlgos) =>
+      ifDefined(ignoreZero(algorandAccountData?.amount), (amount: MicroAlgos) =>
         assetAmountAlgo(convertToAlgos(amount))
       )
   );
@@ -160,12 +160,12 @@ export class SessionQuery extends Query<SessionState> {
   // Non-observable accessors:
 
   getAlgorandBalanceInMicroAlgos(): MicroAlgos | undefined {
-    return this.getValue().algorandAccountData?.amount;
+    return ignoreZero(this.getValue().algorandAccountData?.amount);
   }
 
   getAlgorandBalanceInAlgos(): Algos | undefined {
     return ifDefined(
-      this.getValue().algorandAccountData?.amount,
+      ignoreZero(this.getValue().algorandAccountData?.amount),
       convertToAlgos
     );
   }
