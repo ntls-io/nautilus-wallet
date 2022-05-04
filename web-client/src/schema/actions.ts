@@ -6,6 +6,7 @@ import { Bytes, WalletId, WalletPin } from './types';
 export type CreateWallet = {
   owner_name: string;
   auth_pin: WalletPin;
+  phone_number?: string;
 };
 
 export type CreateWalletResult =

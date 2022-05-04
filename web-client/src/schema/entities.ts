@@ -13,6 +13,8 @@ import {
 export type WalletDisplay = {
   wallet_id: WalletId;
   owner_name: string;
+  phone_number?: string;
+
   algorand_address_base32: AlgorandAddressBase32;
   xrpl_account: XrplAccountDisplay;
 };

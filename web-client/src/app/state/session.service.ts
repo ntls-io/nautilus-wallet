@@ -37,9 +37,17 @@ export class SessionService {
    *
    * @see EnclaveService#createWallet
    */
-  async createWallet(name: string, pin: string): Promise<void> {
+  async createWallet(
+    name: string,
+    pin: string,
+    phone_number?: string
+  ): Promise<void> {
     try {
-      const request: CreateWallet = { owner_name: name, auth_pin: pin };
+      const request: CreateWallet = {
+        owner_name: name,
+        auth_pin: pin,
+        phone_number,
+      };
       const result: CreateWalletResult = await this.enclaveService.createWallet(
         request
       );
