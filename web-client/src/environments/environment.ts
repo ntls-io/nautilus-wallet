@@ -24,6 +24,9 @@ export const environment: Environment = {
 
   xrplClient: {
     server: 'ws://localhost:4200/api/xrpl',
+    options: {
+      connectionTimeout: 20000,
+    },
   },
 };
 

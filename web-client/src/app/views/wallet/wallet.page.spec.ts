@@ -50,6 +50,9 @@ describe('WalletPage', () => {
       fixture = TestBed.createComponent(WalletPage);
       component = fixture.componentInstance;
 
+      // XXX: Stub this out, for now.
+      spyOn(component, 'refreshWalletData').and.resolveTo(undefined);
+
       // Satisfy OpenWalletGuard
       const sessionStore = TestBed.inject(SessionStore);
       stubActiveSession(sessionStore, {
@@ -63,9 +66,7 @@ describe('WalletPage', () => {
         },
       });
 
-      assertShowsStartupToast(() => {
-        fixture.detectChanges();
-      });
+      fixture.detectChanges();
     })
   );
 

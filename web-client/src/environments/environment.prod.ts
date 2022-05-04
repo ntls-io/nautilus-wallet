@@ -13,5 +13,8 @@ export const environment: Environment = {
   },
   xrplClient: {
     server: 'wss://s.altnet.rippletest.net/',
+    options: {
+      connectionTimeout: 20000,
+    },
   },
 };
