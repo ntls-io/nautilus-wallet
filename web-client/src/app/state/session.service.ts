@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
+import { MessagingService } from 'src/app/services/messaging.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
@@ -29,7 +30,8 @@ export class SessionService {
   constructor(
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
-    private enclaveService: EnclaveService
+    private enclaveService: EnclaveService,
+    private messagingService: MessagingService
   ) {}
 
   /**
@@ -158,6 +160,23 @@ export class SessionService {
       // XXX(Pi): It might be better to explicitly load this back,
       //          rather than optimistically persisting like this?
       this.sessionStore.update({ onfidoCheck: check });
+
+      if (wallet.phone_number) {
+        // FIXME(Pi): Hack country code in, for now.
+        //            (See also: comments in RegisterPage.)
+        const to_phone_number = wallet.phone_number.replace(/^0/, '+27');
+
+        const message = {
+          to_phone_number,
+          body: `Onfido check result: ${check.result}`,
+        };
+        await withLoggedExchange(
+          'SessionService',
+          async () => await this.messagingService.sendMessage(message),
+          message
+        );
+      }
+
       return;
     } else if ('InvalidAuth' in result) {
       throw panic('TODO', result);
