@@ -64,7 +64,6 @@ export class WalletPage implements OnInit {
    * When the wallet first displays, perform opportunistic asset opt-in.
    */
   async ngOnInit(): Promise<void> {
-    // this.actionItems = await this.getActionItems();
     await this.checkAlgorandAssetOptIn();
     await this.checkXrplTokenOptIns();
   }
