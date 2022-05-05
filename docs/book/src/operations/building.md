@@ -29,7 +29,7 @@ The build output is in the `www` directory.
 ### Requirements
 
 - Docker with buildkit enabled
-- Docker Compose
+- docker-compose
 
 ### Steps
 
@@ -54,7 +54,7 @@ Note: docker images build in HW mode can only function on SGX capable hardware w
 ### Requirements
 
 - Docker with buildkit enabled
-- Docker Compose
+- docker-compose
 
 ### Steps
 
