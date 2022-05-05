@@ -13,4 +13,4 @@ The application saves the user's KYC check, allowing the app to enforce limits d
 
 ### Asset configuration
 
-- `transactionLimitWithoutOnfidoCheck`: Transaction limit on the asset for users that have not completed the KYC process.
+- `transactionLimitWithoutOnfidoCheck`: Transaction limit that limits the amount of an asset a user can transact before they completed the KYC process.
