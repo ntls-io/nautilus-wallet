@@ -10,7 +10,7 @@
   - [Wallet TEE](design/wallet-tee.md)
   - [Wallet Connector app](design/wallet-connector-app.md)
 - [Asset services](design/asset-services.md)
-  - [KYC service]()
+  - [KYC service](design/kyc-service.md)
   - [User verification]()
 
 # Operations
