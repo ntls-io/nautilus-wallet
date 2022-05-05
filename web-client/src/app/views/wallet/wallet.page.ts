@@ -124,8 +124,6 @@ export class WalletPage implements OnInit {
         }
         await this.toast('Asset opt-in successful.');
       }
-    } else {
-      await this.toast('No account balance. Deposit some Algo to get started.');
     }
   }
 

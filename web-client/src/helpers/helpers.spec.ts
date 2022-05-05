@@ -1,4 +1,10 @@
-import { checkClass, Constructor, ifDefined, never } from 'src/helpers/helpers';
+import {
+  checkClass,
+  Constructor,
+  ifDefined,
+  ignoreZero,
+  never,
+} from 'src/helpers/helpers';
 import { assertConsoleLogs } from 'src/tests/test.helpers';
 
 describe('never', () => {
@@ -34,6 +40,27 @@ describe('ifDefined', () => {
   it('allows changing type', () => {
     const value = 5;
     expect(ifDefined(value, (n) => [n])).toEqual([value]);
+  });
+});
+
+describe('ignoreZero', () => {
+  it('ignores 0', () => {
+    expect(ignoreZero(0)).toBeUndefined();
+  });
+
+  it('ignores -0', () => {
+    expect(ignoreZero(-0)).toBeUndefined();
+  });
+
+  it('preserves undefined', () => {
+    expect(ignoreZero(undefined)).toBeUndefined();
+  });
+
+  it('passes other values', () => {
+    for (const n of [1, -1, Infinity]) {
+      expect(ignoreZero(n)).toBe(n);
+    }
+    expect(ignoreZero(NaN)).toBeNaN();
   });
 });
 
