@@ -7,6 +7,8 @@ The application saves the user's KYC check, allowing the app to enforce limits d
 
 ## Configuration
 
+The following configuration related to KYC is available in the app environment configuration.
+
 ### App wide configuration
 
 - `requireOnfidoCheckBeforeSendPayment`: If set to true this option will prevent the user from sending payments using the app if they have not completed the KYC process.
