@@ -4,6 +4,7 @@ import {
   assetAmountFromBase,
 } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
+import { ifDefined } from 'src/helpers/helpers';
 
 /**
  * Show a summary of a user balance and recipient address,
@@ -26,13 +27,31 @@ export class PayAmountConfirmComponent implements OnInit {
   /** The address to receive the payment. */
   @Input() receiverAddress?: string | null;
 
+  /** (Optional) A limit to impose on the transaction amount. */
+  @Input() transactionLimit?: number | null;
+
   /**
    * Emit the amount confirmed by the user.
    * This will be in the same asset / currency as {@link this.balance}
    */
   @Output() amountConfirmed = new EventEmitter<AssetAmount>();
 
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
+  /** @see PayAmountFormComponent.setInitialAmountValue */
+  @Input() setInitialAmountValue?: string;
+
   constructor() {}
+
+  /** Limit the available balance by the transaction limit, if defined. */
+  get maxAmount() {
+    return ifDefined(this.balance, (balance) =>
+      this.transactionLimit !== undefined && this.transactionLimit !== null
+        ? Math.min(balance.amount, this.transactionLimit)
+        : balance.amount
+    );
+  }
 
   ngOnInit() {}
 

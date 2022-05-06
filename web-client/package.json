@@ -16,7 +16,9 @@
     "format-check": "prettier --check .",
     "docs": "compodoc src -p ./tsconfig.json",
     "storybook": "ng run app:storybook --port 6006",
-    "build-storybook": "ng run app:build-storybook"
+    "storybook:compodoc": "compodoc src -p ./tsconfig.json -e json --silent",
+    "build-storybook": "ng run app:build-storybook",
+    "postinstall": "patch-package"
   },
   "akitaCli": {
     "template": "angular",
@@ -60,11 +62,13 @@
     "inputmask": "^5.0.6",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
+    "ripple-keypairs": "^1.1.3",
     "rxjs": "^7.5.5",
     "sweetalert2": "^11.3.0",
     "tailwindcss-children": "^2.1.0",
     "tslib": "^2.0.0",
     "tweetnacl": "^1.0.3",
+    "xrpl": "^2.2.1",
     "zone.js": "^0.11.5"
   },
   "devDependencies": {
@@ -123,6 +127,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-mocha-reporter": "^2.2.5",
+    "patch-package": "^6.4.7",
     "postcss": "^8.3.11",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-imports": "^2.3.4",

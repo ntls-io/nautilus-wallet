@@ -29,6 +29,12 @@ export const allDefinedOrNone = <T>(
 ): T[] | undefined =>
   values.every((v) => v !== undefined) ? (values as T[]) : undefined;
 
+/**
+ * Return `n` if non-zero, otherwise `undefined`.
+ */
+export const ignoreZero = (n?: number): number | undefined =>
+  n === 0 ? undefined : n;
+
 export type Constructor<T> = new (...args: any[]) => T;
 
 /**

@@ -11,8 +11,12 @@ import {
 import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import { convertFromLedgerToAssetAmountAsa } from 'src/app/utils/assets/assets.algo.asa';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
+import { assetAmountXrplToken } from 'src/app/utils/assets/assets.xrp.token';
 import { defined } from 'src/app/utils/errors/panic';
-import { allDefinedOrNone, ifDefined } from 'src/helpers/helpers';
+import { parseNumber } from 'src/app/utils/validators';
+import { allDefinedOrNone, ifDefined, ignoreZero } from 'src/helpers/helpers';
+import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
 import { SessionState, SessionStore } from './session.store';
 
@@ -23,8 +27,15 @@ import { SessionState, SessionStore } from './session.store';
 export class SessionQuery extends Query<SessionState> {
   wallet: Observable<SessionState['wallet']> = this.select('wallet');
   pin: Observable<SessionState['pin']> = this.select('pin');
+
   algorandAccountData: Observable<SessionState['algorandAccountData']> =
     this.select('algorandAccountData');
+
+  xrplAccountRoot: Observable<SessionState['xrplAccountRoot']> =
+    this.select('xrplAccountRoot');
+
+  xrplTrustlines: Observable<SessionState['xrplTrustlines']> =
+    this.select('xrplTrustlines');
 
   // Wallet field queries:
 
@@ -41,17 +52,17 @@ export class SessionQuery extends Query<SessionState> {
   // Algorand account field queries:
 
   algorandBalanceInMicroAlgos: Observable<MicroAlgos | undefined> = this.select(
-    ({ algorandAccountData }) => algorandAccountData?.amount
+    ({ algorandAccountData }) => ignoreZero(algorandAccountData?.amount)
   );
 
   algorandBalanceInAlgos: Observable<Algos | undefined> = this.select(
     ({ algorandAccountData }) =>
-      ifDefined(algorandAccountData?.amount, convertToAlgos)
+      ifDefined(ignoreZero(algorandAccountData?.amount), convertToAlgos)
   );
 
   algorandAlgoBalance: Observable<AssetAmount | undefined> = this.select(
     ({ algorandAccountData }) =>
-      ifDefined(algorandAccountData?.amount, (amount: MicroAlgos) =>
+      ifDefined(ignoreZero(algorandAccountData?.amount), (amount: MicroAlgos) =>
         assetAmountAlgo(convertToAlgos(amount))
       )
   );
@@ -95,6 +106,53 @@ export class SessionQuery extends Query<SessionState> {
     distinctUntilChanged()
   );
 
+  xrplBalances: Observable<AssetAmount[] | undefined> = this.select(
+    ({ xrplBalances }) =>
+      ifDefined(xrplBalances, (balances) =>
+        balances.map(({ value, currency, issuer }): AssetAmount => {
+          const amount = defined(
+            parseNumber(value),
+            `SessionQuery.xrplBalances: bad number: ${value}`
+          );
+          return currency === 'XRP'
+            ? assetAmountXrp(amount)
+            : assetAmountXrplToken(amount, {
+                currency,
+                issuer: defined(
+                  issuer,
+                  `SessionQuery.xrplBalances: unexpected undefined issuer for XRPL token currency ${currency}`
+                ),
+              });
+        })
+      )
+  );
+
+  allBalances: Observable<AssetAmount[]> = combineLatest([
+    this.algorandAlgoBalance,
+    this.algorandAssetBalances,
+    this.xrplBalances,
+  ]).pipe(
+    map(
+      ([algorandAlgoBalance, algorandAssetBalances, xrplBalances]: [
+        AssetAmount | undefined,
+        AssetAmount[] | undefined,
+        AssetAmount[] | undefined
+      ]) => [
+        ...(algorandAlgoBalance !== undefined ? [algorandAlgoBalance] : []),
+        ...(algorandAssetBalances ?? []),
+        ...(xrplBalances ?? []),
+      ]
+    ),
+    distinctUntilChanged()
+  );
+
+  onfidoCheck: Observable<SessionState['onfidoCheck']> =
+    this.select('onfidoCheck');
+
+  onfidoCheckIsClear: Observable<boolean> = this.onfidoCheck.pipe(
+    map((onfidoCheck?: OnfidoCheckResult) => onfidoCheck?.result === 'clear')
+  );
+
   constructor(protected store: SessionStore) {
     super(store);
   }
@@ -102,12 +160,12 @@ export class SessionQuery extends Query<SessionState> {
   // Non-observable accessors:
 
   getAlgorandBalanceInMicroAlgos(): MicroAlgos | undefined {
-    return this.getValue().algorandAccountData?.amount;
+    return ignoreZero(this.getValue().algorandAccountData?.amount);
   }
 
   getAlgorandBalanceInAlgos(): Algos | undefined {
     return ifDefined(
-      this.getValue().algorandAccountData?.amount,
+      ignoreZero(this.getValue().algorandAccountData?.amount),
       convertToAlgos
     );
   }
@@ -118,6 +176,14 @@ export class SessionQuery extends Query<SessionState> {
 
   hasAlgorandBalance() {
     return 0 < (this.getAlgorandBalanceInMicroAlgos() ?? 0);
+  }
+
+  getXrpBalanceInDrops(): number | undefined {
+    return ifDefined(this.getValue().xrplAccountRoot?.Balance, parseNumber);
+  }
+
+  hasXrpBalance() {
+    return 0 < (this.getXrpBalanceInDrops() ?? 0);
   }
 
   /**

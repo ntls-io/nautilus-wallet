@@ -1,81 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { filterNilValue } from '@datorama/akita';
-import {
-  faCreditCard,
-  faDonate,
-  faFingerprint,
-  faHandHoldingUsd,
-  faQrcode,
-  faReceipt,
-  faWallet,
-} from '@fortawesome/free-solid-svg-icons';
+import { Component, Input, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
+import { SessionService } from 'src/app/state/session.service';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import {
+  withConsoleGroup,
+  withConsoleGroupCollapsed,
+} from 'src/app/utils/console.helpers';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { showToast } from 'src/app/utils/toast.helpers';
 import { environment } from 'src/environments/environment';
+import { WalletDisplay } from 'src/schema/entities';
 
+/**
+ * @see PureWalletPageComponent
+ */
 @Component({
   selector: 'app-wallet',
   templateUrl: './wallet.page.html',
   styleUrls: ['./wallet.page.scss'],
 })
 export class WalletPage implements OnInit {
-  faWallet = faWallet;
+  /** (Optional) Hook to override environment setting, if given. */
+  @Input() requireKycBeforeSendPayment =
+    environment?.requireOnfidoCheckBeforeSendPayment;
 
-  actionItems = [
-    {
-      title: 'Send Money',
-      icon: faCreditCard,
-      path: '/wallet/send-funds',
-    },
-    {
-      title: 'Top Up Wallet',
-      icon: faDonate,
-      // TODO(Pi): Parameterize this
-      url: 'https://testnet.algoexplorer.io/dispenser',
-      disabled: true,
-    },
-    {
-      title: 'Verify Profile',
-      icon: faFingerprint,
-      path: '/kyc',
-    },
-    {
-      title: 'Withdraw',
-      icon: faHandHoldingUsd,
-      disabled: true,
-    },
-    {
-      title: 'Receive',
-      icon: faQrcode,
-      path: '/wallet/receive',
-      disabled: true,
-    },
-    {
-      title: 'My Transactions',
-      icon: faReceipt,
-      disabled: true,
-    },
-  ]; // Placeholder icons until we get definite ones.
+  /** Active wallet owner's name. */
+  name: Observable<WalletDisplay['owner_name'] | undefined> =
+    this.sessionQuery.name;
 
-  balances: Observable<Array<AssetAmount>> =
-    this.sessionQuery.algorandBalanceInAlgos.pipe(
-      filterNilValue(),
-      map((amount: number): AssetAmount[] => [assetAmountAlgo(amount)])
+  /** Active wallet's balances. */
+  balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
+
+  /** Enable the "Send Money" action if KYC status is either cleared or not required. */
+  actionSendMoneyEnabled: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear.pipe(
+      map(
+        (onfidoCheckIsClear: boolean) =>
+          onfidoCheckIsClear || !this.requireKycBeforeSendPayment
+      )
+    );
+
+  /** Show the "Verify Profile" if KYC status is not cleared. */
+  actionVerifyProfileShown: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear.pipe(
+      map((onfidoCheckIsClear: boolean) => !onfidoCheckIsClear)
     );
 
   constructor(
     private loadingController: LoadingController,
     public sessionQuery: SessionQuery,
+    public sessionService: SessionService,
     public sessionAlgorandService: SessionAlgorandService,
+    public sessionXrplService: SessionXrplService,
     private toastCtrl: ToastController,
     private notification: SwalHelper
   ) {}
@@ -84,20 +67,39 @@ export class WalletPage implements OnInit {
    * When the wallet first displays, perform opportunistic asset opt-in.
    */
   async ngOnInit(): Promise<void> {
-    await this.checkAlgorandAssetOptIn();
+    await this.refreshWalletData();
   }
 
   async onRefresh(): Promise<void> {
     await withLoadingOverlayOpts(
       this.loadingController,
       { message: 'Refreshing…' },
-      async () => {
-        await this.sessionAlgorandService.loadAccountData();
-        await this.sessionAlgorandService.loadAssetParams();
-      }
+      async () => await this.refreshWalletData()
     );
   }
 
+  async refreshWalletData(): Promise<void> {
+    await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
+      await withConsoleGroupCollapsed('Loading wallet data', async () => {
+        await Promise.all([
+          (async () => {
+            await this.sessionAlgorandService.loadAccountData();
+            await this.sessionAlgorandService.loadAssetParams();
+          })(),
+          this.sessionXrplService.loadAccountData(),
+          this.sessionService.loadOnfidoCheck(),
+        ]);
+      });
+      await withConsoleGroupCollapsed(
+        'Checking asset / token opt-ins',
+        async () => {
+          await this.checkAlgorandAssetOptIn();
+          await this.checkXrplTokenOptIns();
+        }
+      );
+      console.log('Done.');
+    });
+  }
   /**
    * Perform opportunistic Algorand asset opt-in.
    *
@@ -122,8 +124,32 @@ export class WalletPage implements OnInit {
         }
         await this.toast('Asset opt-in successful.');
       }
-    } else {
-      await this.toast('No account balance. Deposit some Algo to get started.');
+    }
+  }
+
+  /**
+   * Perform opportunistic XRPL token opt-in.
+   */
+  protected async checkXrplTokenOptIns(): Promise<void> {
+    if (this.sessionQuery.hasXrpBalance()) {
+      const txResponses = await this.sessionXrplService.checkTrustlineOptIns();
+      const unsuccessfulResponses = txResponses.filter((txResponse) => {
+        const { succeeded } = checkTxResponseSucceeded(txResponse);
+        return !succeeded;
+      });
+      if (0 < unsuccessfulResponses.length) {
+        console.log(
+          'WalletPage.checkXrplTokenOptIns: unsuccessful responses:',
+          { unsuccessfulResponses }
+        );
+        const errorMessage: string = unsuccessfulResponses
+          .map((txResponse) => {
+            const { resultCode } = checkTxResponseSucceeded(txResponse);
+            return resultCode;
+          })
+          .join('\n');
+        await this.errorNotification('XRPL token opt-in failed', errorMessage);
+      }
     }
   }
 

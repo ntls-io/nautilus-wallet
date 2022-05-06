@@ -21,6 +21,13 @@ export const environment: Environment = {
     // FIXME: Development key
     token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
+
+  xrplClient: {
+    server: 'ws://localhost:4200/api/xrpl',
+    options: {
+      connectionTimeout: 20000,
+    },
+  },
 };
 
 /*

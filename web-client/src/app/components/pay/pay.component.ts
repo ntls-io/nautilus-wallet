@@ -20,6 +20,9 @@ export class PayComponent implements OnInit {
   /** Emit the payment submitted by the user. */
   @Output() paymentSubmitted = new EventEmitter<Payment>();
 
+  /** @see PayAmountFormComponent.autofocus */
+  @Input() autofocus = true;
+
   selectedOption?: PaymentOption;
 
   constructor() {}
@@ -61,6 +64,9 @@ export type PaymentOption = {
 
   /** The receiving account's address. */
   receiverAddress: string;
+
+  /** (Optional) A transaction amount limit for this option. */
+  transactionLimit?: number;
 };
 
 /** A payment chosen by the user. */

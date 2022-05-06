@@ -10,10 +10,18 @@ import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { PayComponent, PaymentOption } from './pay.component';
 import { PayComponentModule } from './pay.module';
 
+/** This component needs more than the default 1 second to load. */
+const LOAD_TIMEOUT: milliseconds = 8_000;
+type milliseconds = number;
+
 export default ionicStoryMeta<PayComponent>(
   {
     title: 'Components/Pay/Pay',
     component: PayComponent,
+    parameters: {
+      // https://www.chromatic.com/docs/delay
+      chromatic: { delay: LOAD_TIMEOUT },
+    },
   },
   {
     imports: [PayComponentModule],
@@ -37,7 +45,10 @@ const xrpOption: PaymentOption = {
 };
 
 const Template: Story<PayComponent> = (args: PayComponent) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const OneOption = Template.bind({});
@@ -45,23 +56,35 @@ OneOption.args = {
   paymentOptions: [{ ...algoOption }],
 };
 
-export const PayAmount = Template.bind({});
-PayAmount.args = { ...OneOption.args };
-PayAmount.play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
-
-  // First wait for the Pay button to be ready, to give the page time to initialise.
-  const payButton = await canvas.findByText(
-    /Pay/i,
-    { selector: 'ion-button.hydrated' },
-    { timeout: 2000 }
-  );
-
+function getAmountInput(canvasElement: HTMLElement): HTMLIonInputElement {
   // canvas.type() doesn't seem to work with ion-input, so enter the value directly here.
   const amountInput = canvasElement.querySelector<HTMLIonInputElement>(
     'ion-input[placeholder="Amount"]'
   );
   if (amountInput === null) throw new Error('missing Amount input');
+  return amountInput;
+}
+
+async function findIonButton(
+  canvasElement: HTMLElement,
+  id: string | RegExp
+): Promise<HTMLIonButtonElement> {
+  const canvas = within(canvasElement);
+
+  // Wait for the button to be ready, to give the page time to initialise.
+  return await canvas.findByText<HTMLIonButtonElement>(
+    id,
+    { selector: 'ion-button.hydrated' },
+    { timeout: LOAD_TIMEOUT }
+  );
+}
+
+export const PayAmount = Template.bind({});
+PayAmount.args = { ...OneOption.args };
+PayAmount.play = async ({ canvasElement }) => {
+  const payButton = await findIonButton(canvasElement, /Pay/i);
+
+  const amountInput = getAmountInput(canvasElement);
   amountInput.value = '100';
 
   // Wait for the button to become enabled before clicking it.
@@ -79,14 +102,11 @@ TwoOptions.args = {
 export const ChangeAccount = Template.bind({});
 ChangeAccount.args = { ...TwoOptions.args };
 ChangeAccount.play = async ({ canvasElement }): Promise<void> => {
-  const canvas = within(canvasElement);
-  await userEvent.click(
-    await canvas.findByText(
-      'Change account',
-      { selector: 'ion-button.hydrated' },
-      { timeout: 2000 }
-    )
+  const changeAccountButton = await findIonButton(
+    canvasElement,
+    'Change account'
   );
+  await userEvent.click(changeAccountButton);
 };
 
 export const ChangedAccount = Template.bind({});
@@ -102,6 +122,20 @@ ChangedAccount.play = async (context): Promise<void> => {
       selector: 'ion-popover.hydrated *',
     })
   );
+};
+
+export const WithTransactionLimits = Template.bind({});
+WithTransactionLimits.args = {
+  paymentOptions: [
+    { ...algoOption, transactionLimit: 100 },
+    { ...xrpOption, transactionLimit: 500 },
+  ],
+};
+WithTransactionLimits.play = async ({ canvasElement }) => {
+  await findIonButton(canvasElement, /Pay/i);
+
+  const amountInput = getAmountInput(canvasElement);
+  amountInput.value = '123';
 };
 
 export const NoOptions = Template.bind({});

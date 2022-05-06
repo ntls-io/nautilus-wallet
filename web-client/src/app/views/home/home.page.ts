@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  faUserCircle,
-  faWallet,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
-
-type ActionItem = {
-  title: string;
-  icon: IconDefinition;
-  path?: string;
-  disabled?: boolean;
-};
+import { faUserCircle, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
 
 @Component({
   selector: 'app-home',

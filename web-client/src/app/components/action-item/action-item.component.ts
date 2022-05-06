@@ -18,3 +18,9 @@ export class ActionItemComponent implements OnInit {
 
   ngOnInit() {}
 }
+
+/** A convenience type alias for {@link ActionItemComponent}'s inputs. */
+export type ActionItem = Pick<
+  ActionItemComponent,
+  'preTitle' | 'title' | 'icon' | 'path' | 'disabled' | 'url'
+>;

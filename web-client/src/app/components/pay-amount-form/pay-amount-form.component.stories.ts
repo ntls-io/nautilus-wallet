@@ -26,12 +26,14 @@ export default ionicStoryMeta<PayAmountFormComponent>(
 const Template: Story<PayAmountFormComponent> = (
   args: PayAmountFormComponent
 ) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const Default = Template.bind({});
 Default.args = {
-  autofocus: false, // For Chromatic snapshots
   setInitialAmountValue: undefined,
 };
 

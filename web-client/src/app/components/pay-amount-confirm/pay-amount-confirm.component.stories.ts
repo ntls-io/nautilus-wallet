@@ -15,7 +15,14 @@ export default ionicStoryMeta<PayAmountConfirmComponent>(
   {
     imports: [PayAmountConfirmComponentModule],
     controls: {
-      shown: ['name', 'balance', 'receiverAddress', 'amountConfirmed'],
+      shown: [
+        'name',
+        'balance',
+        'receiverAddress',
+        'transactionLimit',
+        'setInitialAmountValue',
+        'amountConfirmed',
+      ],
       outputs: ['amountConfirmed'],
     },
   }
@@ -24,7 +31,10 @@ export default ionicStoryMeta<PayAmountConfirmComponent>(
 const Template: Story<PayAmountConfirmComponent> = (
   args: PayAmountConfirmComponent
 ) => ({
-  props: args,
+  props: {
+    ...args,
+    autofocus: false, // For Chromatic snapshots
+  },
 });
 
 export const WithAlgo = Template.bind({});
@@ -32,3 +42,15 @@ WithAlgo.args = { ...PayFromToAlgoArgs };
 
 export const WithXRP = Template.bind({});
 WithXRP.args = { ...PayFromToXRPArgs };
+
+export const WithAmount = Template.bind({});
+WithAmount.args = {
+  ...WithAlgo.args,
+  setInitialAmountValue: '1000',
+};
+
+export const AmountOverLimit = Template.bind({});
+AmountOverLimit.args = {
+  ...WithAmount.args,
+  transactionLimit: 500,
+};

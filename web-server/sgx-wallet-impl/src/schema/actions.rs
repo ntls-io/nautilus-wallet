@@ -4,13 +4,15 @@
 //!
 //! * <https://developer.algorand.org/docs/reference/rest-apis/kmd/>
 
-use std::prelude::v1::String;
+use std::io;
+use std::prelude::v1::{String, ToString};
 
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 use crate::schema::entities::WalletDisplay;
 use crate::schema::types::{Bytes, WalletId, WalletPin};
+use crate::wallet_operations::store::UnlockWalletError;
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -18,6 +20,7 @@ use crate::schema::types::{Bytes, WalletId, WalletPin};
 pub struct CreateWallet {
     pub owner_name: String,
     pub auth_pin: WalletPin,
+    pub phone_number: Option<String>,
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -43,6 +46,17 @@ pub enum OpenWalletResult {
     Failed(String),
 }
 
+impl From<UnlockWalletError> for OpenWalletResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
+}
+
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 #[derive(Zeroize, ZeroizeOnDrop)] // zeroize
@@ -52,6 +66,17 @@ pub struct SignTransaction {
 
     #[zeroize(skip)]
     pub transaction_to_sign: TransactionToSign,
+}
+
+impl From<UnlockWalletError> for SignTransactionResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
 }
 
 /// For [`SignTransaction`]: A choice of type of transaction to sign.
@@ -134,6 +159,88 @@ impl TransactionSigned {
     }
 }
 
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub struct SaveOnfidoCheck {
+    pub wallet_id: WalletId,
+    pub auth_pin: WalletPin,
+
+    pub check: OnfidoCheckResult,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum SaveOnfidoCheckResult {
+    Saved,
+    InvalidAuth,
+    Failed(String),
+}
+
+impl From<io::Error> for SaveOnfidoCheckResult {
+    fn from(err: io::Error) -> Self {
+        Self::Failed(err.to_string())
+    }
+}
+
+impl From<UnlockWalletError> for SaveOnfidoCheckResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::from(err),
+        }
+    }
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub struct LoadOnfidoCheck {
+    pub wallet_id: WalletId,
+    pub auth_pin: WalletPin,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum LoadOnfidoCheckResult {
+    Loaded(OnfidoCheckResult),
+    NotFound,
+    InvalidAuth,
+    Failed(String),
+}
+
+impl From<io::Error> for LoadOnfidoCheckResult {
+    fn from(err: io::Error) -> Self {
+        Self::Failed(err.to_string())
+    }
+}
+
+impl From<UnlockWalletError> for LoadOnfidoCheckResult {
+    fn from(err: UnlockWalletError) -> Self {
+        use UnlockWalletError::*;
+        match err {
+            InvalidWalletId => Self::InvalidAuth,
+            InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::from(err),
+        }
+    }
+}
+
+/// Docs: https://documentation.onfido.com/v2/#report-object
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub struct OnfidoCheckResult {
+    pub id: String,
+
+    pub href: String,
+
+    /// Docs: <https://documentation.onfido.com/v2/#report-results>
+    pub result: String,
+
+    /// Docs: <https://documentation.onfido.com/v2/#sub-results-document-reports>
+    pub sub_result: Option<String>,
+}
+
 /// Dispatching enum for action requests.
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -142,6 +249,12 @@ pub enum WalletRequest {
     CreateWallet(CreateWallet),
     OpenWallet(OpenWallet),
     SignTransaction(SignTransaction),
+
+    #[zeroize(skip)]
+    SaveOnfidoCheck(SaveOnfidoCheck),
+
+    #[zeroize(skip)]
+    LoadOnfidoCheck(LoadOnfidoCheck),
 }
 
 /// Dispatching enum for action results.
@@ -151,6 +264,8 @@ pub enum WalletResponse {
     CreateWallet(CreateWalletResult),
     OpenWallet(OpenWalletResult),
     SignTransaction(SignTransactionResult),
+    SaveOnfidoCheck(SaveOnfidoCheckResult),
+    LoadOnfidoCheck(LoadOnfidoCheckResult),
 }
 
 // Convenience conversions:
@@ -170,5 +285,17 @@ impl From<OpenWalletResult> for WalletResponse {
 impl From<SignTransactionResult> for WalletResponse {
     fn from(result: SignTransactionResult) -> Self {
         Self::SignTransaction(result)
+    }
+}
+
+impl From<SaveOnfidoCheckResult> for WalletResponse {
+    fn from(result: SaveOnfidoCheckResult) -> Self {
+        Self::SaveOnfidoCheck(result)
+    }
+}
+
+impl From<LoadOnfidoCheckResult> for WalletResponse {
+    fn from(result: LoadOnfidoCheckResult) -> Self {
+        Self::LoadOnfidoCheck(result)
     }
 }

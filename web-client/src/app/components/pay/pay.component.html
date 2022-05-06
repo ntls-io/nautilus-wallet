@@ -11,7 +11,9 @@
     [name]="selectedOption.senderName"
     [balance]="selectedOption.senderBalance"
     [receiverAddress]="selectedOption.receiverAddress"
+    [transactionLimit]="selectedOption.transactionLimit"
     (amountConfirmed)="onAmountConfirmed($event)"
+    [autofocus]="autofocus"
   ></app-pay-amount-confirm>
 </ng-container>
 

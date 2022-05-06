@@ -6,6 +6,7 @@
   <app-pay
     [paymentOptions]="paymentOptions"
     (paymentSubmitted)="paymentSubmitted.emit($event)"
+    [autofocus]="autofocus"
   ></app-pay>
 </ng-container>
 
