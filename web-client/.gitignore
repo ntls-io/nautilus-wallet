@@ -29,6 +29,8 @@ npm-debug.log*
 /documentation
 /documentation.json
 /node_modules
+/resources/ios
+/resources/android
 /platforms
 /ios
 /android
