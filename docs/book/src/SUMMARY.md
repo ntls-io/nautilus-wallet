@@ -15,8 +15,8 @@
 
 # Operations
 
-- [Building]()
-- [Deployment]()
+- [Building](operations/building.md)
+- [Deployment](operations/deployment.md)
 
 ---
 
