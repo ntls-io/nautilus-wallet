@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="nautilus-wallet.html">Nautilus Wallet</a></li><li class="chapter-item expanded affix "><li class="part-title">Design</li><li class="chapter-item expanded "><a href="design/overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="design/ledger-platform.html"><strong aria-hidden="true">2.</strong> Ledger platform</a></li><li class="chapter-item expanded "><a href="design/wallet.html"><strong aria-hidden="true">3.</strong> Wallet</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="design/wallet-tee.html"><strong aria-hidden="true">3.1.</strong> Wallet TEE</a></li><li class="chapter-item expanded "><a href="design/wallet-connector-app.html"><strong aria-hidden="true">3.2.</strong> Wallet Connector app</a></li></ol></li><li class="chapter-item expanded "><a href="design/asset-services.html"><strong aria-hidden="true">4.</strong> Asset services</a></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> KYC service</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> User verification</div></li></ol></li><li class="chapter-item expanded "><li class="part-title">Operations</li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Building</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Deployment</div></li><li class="spacer"></li><li class="chapter-item expanded affix "><div>Glossary</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="nautilus-wallet.html">Nautilus Wallet</a></li><li class="chapter-item expanded affix "><li class="part-title">Design</li><li class="chapter-item expanded "><a href="design/overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="design/ledger-platform.html"><strong aria-hidden="true">2.</strong> Ledger platform</a></li><li class="chapter-item expanded "><a href="design/wallet.html"><strong aria-hidden="true">3.</strong> Wallet</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="design/wallet-tee.html"><strong aria-hidden="true">3.1.</strong> Wallet TEE</a></li><li class="chapter-item expanded "><a href="design/wallet-connector-app.html"><strong aria-hidden="true">3.2.</strong> Wallet Connector app</a></li></ol></li><li class="chapter-item expanded "><a href="design/asset-services.html"><strong aria-hidden="true">4.</strong> Asset services</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="design/kyc-service.html"><strong aria-hidden="true">4.1.</strong> KYC service</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> User verification</div></li></ol></li><li class="chapter-item expanded "><li class="part-title">Operations</li><li class="chapter-item expanded "><a href="operations/building.html"><strong aria-hidden="true">5.</strong> Building</a></li><li class="chapter-item expanded "><a href="operations/deployment.html"><strong aria-hidden="true">6.</strong> Deployment</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><div>Glossary</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -227,6 +227,126 @@ The Connector app retains no session state between sessions, and device owners a
 <ul>
 <li><a href="https://github.com/ntls-io/nautilus-wallet/tree/main/asset-services">https://github.com/ntls-io/nautilus-wallet/tree/main/asset-services</a></li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kyc-service"><a class="header" href="#kyc-service">KYC Service</a></h1>
+<p>The KYC service currently integrates with <a href="https://onfido.com/">Onfido</a> to verify customer documents.</p>
+<p>The KYC service is responsible for confirming the results of the KYC process using the Onfido integration on the app.
+The application saves the user's KYC check, allowing the app to enforce limits depening on the deployment configuration.</p>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>The following configuration related to KYC is available in the app environment configuration.</p>
+<h3 id="app-wide-configuration"><a class="header" href="#app-wide-configuration">App wide configuration</a></h3>
+<ul>
+<li><code>requireOnfidoCheckBeforeSendPayment</code>: If set to true this option will prevent the user from sending payments using the app if they have not completed the KYC process.</li>
+</ul>
+<h3 id="asset-configuration"><a class="header" href="#asset-configuration">Asset configuration</a></h3>
+<ul>
+<li><code>transactionLimitWithoutOnfidoCheck</code>: Transaction limit that limits the amount of an asset a user can transact before they completed the KYC process.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building"><a class="header" href="#building">Building</a></h1>
+<h2 id="web-client"><a class="header" href="#web-client">Web Client</a></h2>
+<h3 id="requirements"><a class="header" href="#requirements">Requirements</a></h3>
+<ul>
+<li>Node 16</li>
+</ul>
+<h3 id="steps"><a class="header" href="#steps">Steps</a></h3>
+<ol>
+<li>
+<p>Install the dependencies:</p>
+<pre><code class="language-shell">npm install
+</code></pre>
+</li>
+<li>
+<p>Ensure the prod environment file at <code>web-client/src/environments/environment.prod.ts</code> is correct for the build.</p>
+</li>
+<li>
+<p>Build the bundle:</p>
+<pre><code class="language-shell">npm build:prod
+</code></pre>
+</li>
+</ol>
+<p>The build output is in the <code>www</code> directory.</p>
+<h2 id="web-server"><a class="header" href="#web-server">Web Server</a></h2>
+<h3 id="requirements-1"><a class="header" href="#requirements-1">Requirements</a></h3>
+<ul>
+<li>Docker with buildkit enabled</li>
+<li>docker-compose</li>
+</ul>
+<h3 id="steps-1"><a class="header" href="#steps-1">Steps</a></h3>
+<p>Note: docker images build in HW mode can only function on SGX capable hardware with the DCAP drivers installed</p>
+<ol>
+<li>
+<p>Building docker image</p>
+<ul>
+<li>
+<p>for HW mode:</p>
+<pre><code class="language-shell">docker-compose build server-hw
+</code></pre>
+</li>
+<li>
+<p>for SW mode:</p>
+<pre><code class="language-shell">docker-compose build server-sw
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="asset-services-1"><a class="header" href="#asset-services-1">Asset Services</a></h2>
+<h3 id="requirements-2"><a class="header" href="#requirements-2">Requirements</a></h3>
+<ul>
+<li>Docker with buildkit enabled</li>
+<li>docker-compose</li>
+</ul>
+<h3 id="steps-2"><a class="header" href="#steps-2">Steps</a></h3>
+<ol>
+<li>
+<p>Building optimised binaries:</p>
+<pre><code class="language-shell">docker-compose build --build-arg CARGO_BUILD_FLAGS=&quot;--release&quot; --build-arg CARGO_OUTPUT_PROFILE=&quot;release&quot;
+</code></pre>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="deployment"><a class="header" href="#deployment">Deployment</a></h1>
+<p>For build instructions see: <a href="operations/building.html">building</a></p>
+<h2 id="web-client-1"><a class="header" href="#web-client-1">Web Client</a></h2>
+<p>To deploy, serve the contents of the <code>www</code> bundle after building the application.</p>
+<h2 id="web-server-1"><a class="header" href="#web-server-1">Web Server</a></h2>
+<h3 id="requirements-3"><a class="header" href="#requirements-3">Requirements</a></h3>
+<ul>
+<li>Docker</li>
+<li>docker-compose</li>
+</ul>
+<p>To run the web server in HW mode:</p>
+<ul>
+<li>SGX capable machine with DCAP support</li>
+</ul>
+<h2 id="steps-3"><a class="header" href="#steps-3">Steps</a></h2>
+<p>To run in HW mode:
+<code>docker-compose up server-hw</code></p>
+<p>To run in SW mode:
+<code>docker-compose up server-sw</code></p>
+<p>By default the web server is bound to <code>0.0.0.0:8080</code></p>
+<h2 id="asset-services-2"><a class="header" href="#asset-services-2">Asset Services</a></h2>
+<h3 id="requirements-4"><a class="header" href="#requirements-4">Requirements</a></h3>
+<ul>
+<li>Docker</li>
+<li>docker-compose</li>
+</ul>
+<h3 id="steps-4"><a class="header" href="#steps-4">Steps</a></h3>
+<ol>
+<li>
+<p>After building the docker images make sure the environment configuration is correct.
+Environment variables to set:</p>
+<ul>
+<li><code>ONFIDO_API_TOKEN</code></li>
+<li><code>TWILIO_ACCOUNT_SID</code></li>
+<li><code>TWILIO_AUTH_TOKEN</code></li>
+<li><code>TWILIO_VERIFY_SERVICE_SID</code></li>
+<li><code>TWILIO_MESSAGING_SERVICE_SID</code></li>
+</ul>
+</li>
+<li>
+<p>To run the image, do <code>docker-compose up</code> in the asset services directory.</p>
+</li>
+</ol>
+<p>By default the asset services are bound to <code>0.0.0.0:8081</code></p>
 
                     </main>
 
