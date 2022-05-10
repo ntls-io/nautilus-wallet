@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { createMask } from '@ngneat/input-mask';
 import { SessionService } from 'src/app/state/session.service';
+import { IonIntlTelInputModel } from 'ion-intl-tel-input';
 
 @Component({
   selector: 'app-register',
@@ -24,10 +25,18 @@ export class RegisterPage implements OnInit {
   });
   // TODO(Pi): We should replace this with something that handles international numbers (probably libphonenumber-based?)
   //           (See also: E-164 hack in SessionService.)
-  phoneInputMask = createMask({
-    mask: '(999) 999-99-99',
-    autoUnmask: true,
-  });
+  //phoneInputMask = createMask({
+  //  mask: '(999) 999-99-99',
+  //  autoUnmask: true,
+  //});
+
+  mobile: IonIntlTelInputModel = {
+    dialCode: '+27',
+    internationalNumber: "+27 76 2736821",
+    isoCode: 'za',
+    nationalNumber: '076 273 6821'
+  };
+  formValue = {mobile: this.mobile};
 
   constructor(
     private formBuilder: FormBuilder,
