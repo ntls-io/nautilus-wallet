@@ -4,7 +4,7 @@
   </ion-card-header>
 
   <ion-card-content>
-    <ion-grid *ngIf="false; else empty">
+    <ion-grid *ngIf="noBalance; else empty">
       <ion-row class="ion-align-items-center" *ngFor="let balance of balances">
         <ion-col size="7" class="ion-text-end">
           <ion-text color="white" class="text-2xl font-audiowide">
