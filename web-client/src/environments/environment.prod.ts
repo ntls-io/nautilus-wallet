@@ -2,6 +2,9 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: true,
+
+  // Enable persistence for demo purposes.
+  persistAkitaState: true,
   // TODO: Production endpoint
   nautilusWalletServer: 'https://ntls-api.registree.io/',
   nautilusAssetServices: 'https://ntls-services.registree.io/',
