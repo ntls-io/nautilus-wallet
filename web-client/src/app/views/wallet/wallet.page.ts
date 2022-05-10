@@ -39,16 +39,16 @@ export class WalletPage implements OnInit {
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
   /** Enable the "Send Money" action if KYC status is either cleared or not required. */
-  actionSendMoneyEnabled: Observable<boolean> =
-    combineLatest(
-      this.sessionQuery.onfidoCheckIsClear,
-      this.sessionQuery.allBalances,
+  actionSendMoneyEnabled: Observable<boolean> = combineLatest(
+    this.sessionQuery.onfidoCheckIsClear,
+    this.sessionQuery.allBalances
+  ).pipe(
+    map(
+      ([onfidoCheckIsClear, assetAmounts]) =>
+        (onfidoCheckIsClear || !this.requireKycBeforeSendPayment) &&
+        assetAmounts.length > 0
     )
-      .pipe(
-        map(([onfidoCheckIsClear, assetAmounts]) =>
-          onfidoCheckIsClear || !this.requireKycBeforeSendPayment && assetAmounts.length > 0
-        )
-      );
+  );
 
   /** Show the "Verify Profile" if KYC status is not cleared. */
   actionVerifyProfileShown: Observable<boolean> =
