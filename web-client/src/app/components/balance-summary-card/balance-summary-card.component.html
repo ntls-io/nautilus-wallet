@@ -4,23 +4,23 @@
   </ion-card-header>
 
   <ion-card-content>
-    <ion-list lines="none">
-      <ion-grid>
-        <ng-container *ngFor="let balance of balances">
-          <ion-row class="ion-align-items-center">
-            <ion-col size="7" class="ion-text-end">
-              <ion-text color="white" class="text-2xl font-audiowide">
-                {{ balance | assetAmount }}
-              </ion-text>
-            </ion-col>
-            <ion-col size="5" class="ion-text-start">
-              <ion-text color="secondary" class="font-bold">
-                {{ balance | assetSymbol }}
-              </ion-text>
-            </ion-col>
-          </ion-row>
-        </ng-container>
-      </ion-grid>
-    </ion-list>
+    <ion-grid *ngIf="false; else empty">
+      <ion-row class="ion-align-items-center" *ngFor="let balance of balances">
+        <ion-col size="7" class="ion-text-end">
+          <ion-text color="white" class="text-2xl font-audiowide">
+            {{ balance | assetAmount }}
+          </ion-text>
+        </ion-col>
+        <ion-col size="5" class="ion-text-start">
+          <ion-text color="secondary" class="font-bold">
+            {{ balance | assetSymbol }}
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ng-template #empty>
+      <p>There are currently no assets in your wallet.</p>
+    </ng-template>
   </ion-card-content>
 </ion-card>
