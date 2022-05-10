@@ -38,7 +38,11 @@ export class WalletPage implements OnInit {
   /** Active wallet's balances. */
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
-  /** Enable the "Send Money" action if KYC status is either cleared or not required. */
+  /**
+   * Enable the "Send Money" action if both:
+   * - KYC status is either cleared or not required
+   * - At least one balance is available
+   */
   actionSendMoneyEnabled: Observable<boolean> = combineLatest(
     this.sessionQuery.onfidoCheckIsClear,
     this.sessionQuery.allBalances
