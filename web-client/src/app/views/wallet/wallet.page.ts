@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
@@ -40,12 +40,15 @@ export class WalletPage implements OnInit {
 
   /** Enable the "Send Money" action if KYC status is either cleared or not required. */
   actionSendMoneyEnabled: Observable<boolean> =
-    this.sessionQuery.onfidoCheckIsClear.pipe(
-      map(
-        (onfidoCheckIsClear: boolean) =>
-          onfidoCheckIsClear || !this.requireKycBeforeSendPayment
-      )
-    );
+    combineLatest(
+      this.sessionQuery.onfidoCheckIsClear,
+      this.sessionQuery.allBalances,
+    )
+      .pipe(
+        map(([onfidoCheckIsClear, assetAmounts]) =>
+          onfidoCheckIsClear || !this.requireKycBeforeSendPayment && assetAmounts.length > 0
+        )
+      );
 
   /** Show the "Verify Profile" if KYC status is not cleared. */
   actionVerifyProfileShown: Observable<boolean> =
