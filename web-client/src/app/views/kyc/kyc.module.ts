@@ -7,6 +7,7 @@ import { KycPageRoutingModule } from './kyc-routing.module';
 import { KycPage } from './kyc.page';
 import { OnfidoFormComponent } from './onfido-form/onfido-form.component';
 import { OnfidoWidgetComponent } from './onfido-widget/onfido-widget.component';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { OnfidoWidgetComponent } from './onfido-widget/onfido-widget.component';
     ReactiveFormsModule,
     IonicModule,
     KycPageRoutingModule,
+    IonIntlTelInputModule,
     SharedModule,
   ],
   declarations: [KycPage, OnfidoFormComponent, OnfidoWidgetComponent],

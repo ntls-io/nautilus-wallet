@@ -6,6 +6,7 @@ import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletAccessPageRoutingModule } from './wallet-access-routing.module';
 import { WalletAccessPage } from './wallet-access.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { WalletAccessPage } from './wallet-access.page';
     IonicModule,
     WalletAccessPageRoutingModule,
     SharedModule,
+    IonIntlTelInputModule,
     PinEntryComponentModule,
   ],
   declarations: [WalletAccessPage],

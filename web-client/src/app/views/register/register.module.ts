@@ -6,6 +6,7 @@ import { InputMaskModule } from '@ngneat/input-mask';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { RegisterPageRoutingModule } from './register-routing.module';
 import { RegisterPage } from './register.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { RegisterPage } from './register.page';
     IonicModule,
     RegisterPageRoutingModule,
     SharedModule,
+    IonIntlTelInputModule,
     InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
   ],
   declarations: [RegisterPage],

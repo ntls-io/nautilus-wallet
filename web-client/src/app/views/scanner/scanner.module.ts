@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ScannerPageRoutingModule } from './scanner-routing.module';
 import { ScannerPage } from './scanner.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { ScannerPage } from './scanner.page';
     FormsModule,
     IonicModule,
     ScannerPageRoutingModule,
+    IonIntlTelInputModule,
     ZXingScannerModule,
   ],
   declarations: [ScannerPage],

@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ReceivePageRoutingModule } from './receive-routing.module';
 import { ReceivePage } from './receive.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+
 
 @NgModule({
   imports: [
@@ -12,6 +14,7 @@ import { ReceivePage } from './receive.page';
     FormsModule,
     IonicModule,
     ReceivePageRoutingModule,
+    IonIntlTelInputModule,
     SharedModule,
   ],
   declarations: [ReceivePage],

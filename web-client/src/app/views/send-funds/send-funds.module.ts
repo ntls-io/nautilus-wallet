@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SendFundsPageRoutingModule } from './send-funds-routing.module';
 import { SendFundsPage } from './send-funds.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { SendFundsPage } from './send-funds.page';
     FormsModule,
     IonicModule,
     SendFundsPageRoutingModule,
+    IonIntlTelInputModule,
     SharedModule,
   ],
   declarations: [SendFundsPage],

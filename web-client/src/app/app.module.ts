@@ -12,6 +12,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ErrorHandlerModule } from './modules/error-handler.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +28,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     AkitaNgRouterStoreModule,
     NgxPrinterModule.forRoot({ printOpenWindow: false }),
     ErrorHandlerModule,
+    IonIntlTelInputModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

@@ -5,6 +5,7 @@ import { PureWalletPageComponentModule } from 'src/app/components/pure-wallet-pa
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletPageRoutingModule } from './wallet-routing.module';
 import { WalletPage } from './wallet.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { WalletPage } from './wallet.page';
     IonicModule,
     WalletPageRoutingModule,
     SharedModule,
+    IonIntlTelInputModule,
     PureWalletPageComponentModule,
   ],
   declarations: [WalletPage],

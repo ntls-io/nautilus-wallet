@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ManualAddressPageRoutingModule } from './manual-address-routing.module';
 import { ManualAddressPage } from './manual-address.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { ManualAddressPage } from './manual-address.page';
     FormsModule,
     IonicModule,
     ManualAddressPageRoutingModule,
+    IonIntlTelInputModule,
     SharedModule,
   ],
   declarations: [ManualAddressPage],

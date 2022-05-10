@@ -6,6 +6,8 @@ import { PurePayPageComponentModule } from 'src/app/components/pure-pay-page/pur
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { PayPageRoutingModule } from './pay-routing.module';
 import { PayPage } from './pay.page';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+
 
 @NgModule({
   imports: [
@@ -14,6 +16,7 @@ import { PayPage } from './pay.page';
     PayPageRoutingModule,
     SharedModule,
     PurePayPageComponentModule,
+    IonIntlTelInputModule,
     PayFromToModule,
   ],
   declarations: [PayPage],
