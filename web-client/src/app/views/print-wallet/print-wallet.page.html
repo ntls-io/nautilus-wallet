@@ -13,7 +13,7 @@
 <ion-content>
   <!-- TODO(Pi): Factor this out to component with walletId as input? -->
   <ion-grid fixed *ngIf="sessionQuery.walletId | async as walletId">
-    <ion-row #printSection>
+    <ion-row id="print-section">
       <ion-col size="12">
         <qrcode
           [qrdata]="walletId"

@@ -41,16 +41,14 @@ export class PrintWalletPage implements OnInit {
   }
 
   async print() {
-    const content = this.printSection?.nativeElement;
     if (Capacitor.isNativePlatform()) {
-      // NOTE: Native is failing when passing HTMLElement, so we passing undefined to print the whole page and hide the unwanted content
       this.nativePrint();
     } else {
-      this.printerService.printHTMLElement(content);
+      this.printerService.printDiv('print-section');
     }
   }
 
-  async nativePrint(content: HTMLElement | undefined = undefined) {
+  async nativePrint() {
     const options: PrintOptions = {
       name: 'MyWallet',
       autoFit: true,
@@ -58,7 +56,7 @@ export class PrintWalletPage implements OnInit {
       photo: true,
     };
     await this.nativePrinter
-      .print(content, options)
+      .print(undefined, options)
       .then((success) => {
         console.log('success: ', success);
       })
