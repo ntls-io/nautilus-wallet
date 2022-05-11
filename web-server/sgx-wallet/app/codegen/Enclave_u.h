@@ -215,6 +215,10 @@ int SGX_UBRIDGE(SGX_NOCONVENTION, u_unlink_ocall, (int* error, const char* pathn
 #define U_LINK_OCALL_DEFINED__
 int SGX_UBRIDGE(SGX_NOCONVENTION, u_link_ocall, (int* error, const char* oldpath, const char* newpath));
 #endif
+#ifndef U_LINKAT_OCALL_DEFINED__
+#define U_LINKAT_OCALL_DEFINED__
+int SGX_UBRIDGE(SGX_NOCONVENTION, u_linkat_ocall, (int* error, int olddirfd, const char* oldpath, int newdirfd, const char* newpath, int flags));
+#endif
 #ifndef U_RENAME_OCALL_DEFINED__
 #define U_RENAME_OCALL_DEFINED__
 int SGX_UBRIDGE(SGX_NOCONVENTION, u_rename_ocall, (int* error, const char* oldpath, const char* newpath));
