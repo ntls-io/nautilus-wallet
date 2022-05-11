@@ -5,21 +5,25 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
-  production: true,
+  production: false,
 
-  // Enable persistence for demo purposes.
+  // Enable persistence for easier development.
   persistAkitaState: true,
-  // TODO: Production endpoint
-  nautilusWalletServer: 'https://ntls-api.registree.io/',
-  nautilusAssetServices: 'https://ntls-services.registree.io/',
+
+  nautilusWalletServer: 'http://localhost:4200/api/nautilus/',
+  nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
+  // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
+  // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {
-    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
-    port: '',
+    // XXX: Algodv2's parameter handling is a bit weird: the HTTP port must be passed separately.
+    baseServer: 'http://localhost/api/algorand',
+    port: 4200,
     // FIXME: Development key
-    token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
+    token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
+
   xrplClient: {
-    server: 'wss://s.altnet.rippletest.net/',
+    server: 'ws://localhost:4200/api/xrpl',
     options: {
       connectionTimeout: 20000,
     },
