@@ -4,7 +4,7 @@
   </ion-card-header>
 
   <ion-card-content class="ion-no-padding">
-    <ion-list lines="none">
+    <ion-list lines="none" *ngIf="balances?.length; else empty">
       <ion-item *ngFor="let balance of balances">
         <ion-label class="ion-text-right">
           <ion-text color="white" class="font-audiowide">
@@ -18,5 +18,9 @@
         </div>
       </ion-item>
     </ion-list>
+
+    <ng-template #empty>
+      <p>There are currently no assets in your wallet.</p>
+    </ng-template>
   </ion-card-content>
 </ion-card>
