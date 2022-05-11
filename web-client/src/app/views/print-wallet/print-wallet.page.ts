@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Printer } from '@awesome-cordova-plugins/printer/ngx';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Printer, PrintOptions } from '@awesome-cordova-plugins/printer/ngx';
 import { Clipboard } from '@capacitor/clipboard';
 import { Capacitor } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
@@ -13,6 +13,8 @@ import { showToast } from 'src/app/utils/toast.helpers';
   styleUrls: ['./print-wallet.page.scss'],
 })
 export class PrintWalletPage implements OnInit {
+  @ViewChild('printSection', { static: false, read: ElementRef })
+  printSection: ElementRef | undefined;
   // Hook for testing
   public Clipboard = Clipboard;
 
@@ -39,13 +41,30 @@ export class PrintWalletPage implements OnInit {
   }
 
   async print() {
+    const content = this.printSection?.nativeElement;
     if (Capacitor.isNativePlatform()) {
-      await this.nativePrinter.check().then((available) => {
-        console.log(available);
-      });
+      // NOTE: Native is failing when passing HTMLElement, so we passing undefined to print the whole page and hide the unwanted content
+      this.nativePrint();
     } else {
-      this.printerService.printDiv('print-section');
+      this.printerService.printHTMLElement(content);
     }
+  }
+
+  async nativePrint(content: HTMLElement | undefined = undefined) {
+    const options: PrintOptions = {
+      name: 'MyWallet',
+      autoFit: true,
+      margin: false,
+      photo: true,
+    };
+    await this.nativePrinter
+      .print(content, options)
+      .then((success) => {
+        console.log('success: ', success);
+      })
+      .catch((error) => {
+        console.log('error: ', error);
+      });
   }
 
   async notice(message: string): Promise<HTMLIonToastElement> {
