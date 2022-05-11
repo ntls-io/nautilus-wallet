@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Printer } from '@awesome-cordova-plugins/printer/ngx';
 import { Clipboard } from '@capacitor/clipboard';
+import { Capacitor } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
+import { NgxPrinterService } from 'ngx-printer';
 import { SessionQuery } from 'src/app/state/session.query';
 import { showToast } from 'src/app/utils/toast.helpers';
 
@@ -15,7 +18,9 @@ export class PrintWalletPage implements OnInit {
 
   constructor(
     private toastCtrl: ToastController,
-    public sessionQuery: SessionQuery
+    public sessionQuery: SessionQuery,
+    public printerService: NgxPrinterService,
+    private nativePrinter: Printer
   ) {}
 
   ngOnInit() {}
@@ -31,6 +36,16 @@ export class PrintWalletPage implements OnInit {
       .catch(() => {
         this.notice('Something weird happened, please try again!');
       });
+  }
+
+  async print() {
+    if (Capacitor.isNativePlatform()) {
+      await this.nativePrinter.check().then((available) => {
+        console.log(available);
+      });
+    } else {
+      this.printerService.printDiv('print-section');
+    }
   }
 
   async notice(message: string): Promise<HTMLIonToastElement> {
