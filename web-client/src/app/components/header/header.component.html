@@ -10,8 +10,8 @@
     <ng-content></ng-content>
 
     <ion-buttons slot="end" *ngIf="sessionQuery.name | async">
-      <ion-button icon-only (click)="logoutAction()">
-        <ion-icon name="log-out"></ion-icon>
+      <ion-button (click)="logoutAction()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
