@@ -1,29 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
     <title>Nautilus Wallet</title>
 
-    <base href="/"/>
+    <base href="/">
 
     <!--
       See the "color-scheme" style in "global.scss".
       Docs: https://web.dev/color-scheme/#the-color-scheme-meta-tag
      -->
-    <meta name="color-scheme" content="dark"/>
+    <meta name="color-scheme" content="dark">
 
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
 
-    <link rel="icon" type="image/png" href="assets/icon/favicon.png"/>
+    <link rel="icon" type="image/png" href="assets/icon/favicon.png">
 
     <!-- add to homescreen for ios -->
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-  <link rel="stylesheet" href="styles.css"></head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>@import"https://fonts.googleapis.com/css2?family=Audiowide&family=Open+Sans&display=swap";*,:before,:after{--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / .5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia:}:root{--ion-font-family:"Open Sans", sans-serif;--ion-color-primary-background:#003450;--ion-color-primary-background-rgb:0, 52, 80;--ion-color-primary-background-contrast:#ffffff;--ion-color-primary-background-contrast-rgb:255, 255, 255;--ion-color-primary-background-shade:#002e46;--ion-color-primary-background-tint:#1a4862;--ion-color-primary:#ff642e;--ion-color-primary-rgb:255, 100, 46;--ion-color-primary-contrast:#ffffff;--ion-color-primary-contrast-rgb:255, 255, 255;--ion-color-primary-shade:#e05828;--ion-color-primary-tint:#ff7443;--ion-color-secondary:#209c95;--ion-color-secondary-rgb:32, 156, 149;--ion-color-secondary-contrast:#ffffff;--ion-color-secondary-contrast-rgb:255, 255, 255;--ion-color-secondary-shade:#1c8983;--ion-color-secondary-tint:#36a6a0;--ion-color-tertiary:#02a7ff;--ion-color-tertiary-rgb:2, 167, 255;--ion-color-tertiary-contrast:#ffffff;--ion-color-tertiary-contrast-rgb:255, 255, 255;--ion-color-tertiary-shade:#0293e0;--ion-color-tertiary-tint:#1bb0ff;--ion-color-success:#11ca92;--ion-color-success-rgb:17, 202, 146;--ion-color-success-contrast:#000000;--ion-color-success-contrast-rgb:0, 0, 0;--ion-color-success-shade:#0fb280;--ion-color-success-tint:#29cf9d;--ion-color-warning:#ffd952;--ion-color-warning-rgb:255, 217, 82;--ion-color-warning-contrast:#000000;--ion-color-warning-contrast-rgb:0, 0, 0;--ion-color-warning-shade:#e0bf48;--ion-color-warning-tint:#ffdd63;--ion-color-danger:#ff2d42;--ion-color-danger-rgb:255, 45, 66;--ion-color-danger-contrast:#ffffff;--ion-color-danger-contrast-rgb:255, 255, 255;--ion-color-danger-shade:#e0283a;--ion-color-danger-tint:#ff4255;--ion-color-dark:#025581;--ion-color-dark-rgb:2, 85, 129;--ion-color-dark-contrast:#ffffff;--ion-color-dark-contrast-rgb:255, 255, 255;--ion-color-dark-shade:#024b72;--ion-color-dark-tint:#1b668e;--ion-color-medium:#92a2a1;--ion-color-medium-rgb:146, 162, 161;--ion-color-medium-contrast:#000000;--ion-color-medium-contrast-rgb:0, 0, 0;--ion-color-medium-shade:#808f8e;--ion-color-medium-tint:#9dabaa;--ion-color-light:#dadfdf;--ion-color-light-rgb:218, 223, 223;--ion-color-light-contrast:#000000;--ion-color-light-contrast-rgb:0, 0, 0;--ion-color-light-shade:#c0c4c4;--ion-color-light-tint:#dee2e2;--ion-color-jungle-green:#1a4c48;--ion-color-jungle-green-rgb:26, 76, 72;--ion-color-jungle-green-contrast:#ffffff;--ion-color-jungle-green-contrast-rgb:255, 255, 255;--ion-color-jungle-green-shade:#17433f;--ion-color-jungle-green-tint:#315e5a;--ion-color-black:#000000;--ion-color-black-rgb:0, 0, 0;--ion-color-black-contrast:#ffffff;--ion-color-black-contrast-rgb:255, 255, 255;--ion-color-black-shade:#000000;--ion-color-black-tint:#1a1a1a;--ion-color-white:#ffffff;--ion-color-white-rgb:255, 255, 255;--ion-color-white-contrast:#000000;--ion-color-white-contrast-rgb:0, 0, 0;--ion-color-white-shade:#e0e0e0;--ion-color-white-tint:#ffffff}html{--ion-font-family:var(--ion-default-font)}body{background:var(--ion-background-color)}@supports (padding-top: 20px){html{--ion-safe-area-top:var(--ion-statusbar-padding)}}@supports (padding-top: constant(safe-area-inset-top)){html{--ion-safe-area-top:constant(safe-area-inset-top);--ion-safe-area-bottom:constant(safe-area-inset-bottom);--ion-safe-area-left:constant(safe-area-inset-left);--ion-safe-area-right:constant(safe-area-inset-right)}}@supports (padding-top: env(safe-area-inset-top)){html{--ion-safe-area-top:env(safe-area-inset-top);--ion-safe-area-bottom:env(safe-area-inset-bottom);--ion-safe-area-left:env(safe-area-inset-left);--ion-safe-area-right:env(safe-area-inset-right)}}*{box-sizing:border-box;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}html{width:100%;height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}html:not(.hydrated) body{display:none}body{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;margin:0;padding:0;position:fixed;width:100%;max-width:100%;height:100%;max-height:100%;transform:translateZ(0);text-rendering:optimizeLegibility;overflow:hidden;touch-action:manipulation;-webkit-user-drag:none;-ms-content-zooming:none;word-wrap:break-word;overscroll-behavior-y:none;-webkit-text-size-adjust:none;text-size-adjust:none}html{font-family:var(--ion-font-family)}:root{color-scheme:dark!important;--ion-grid-width-xs:100%;--ion-grid-width-sm:540px;--ion-grid-width-md:var(--ion-grid-width-sm);--ion-grid-width-lg:var(--ion-grid-width-sm);--ion-grid-width-xl:var(--ion-grid-width-sm);--ion-background-color:var(--ion-color-primary-background);--ion-background-color-rgb:var(--ion-color-primary-background-rgb);--ion-text-color:var(--ion-color-white);--ion-text-color-rgb:var(--ion-color-white-rgb);--ion-color-step-50:#0d3e59;--ion-color-step-100:#1a4862;--ion-color-step-150:#26526a;--ion-color-step-200:#335d73;--ion-color-step-250:#40677c;--ion-color-step-300:#4d7185;--ion-color-step-350:#597b8d;--ion-color-step-400:#668596;--ion-color-step-450:#738f9f;--ion-color-step-500:#809aa8;--ion-color-step-550:#8ca4b0;--ion-color-step-600:#99aeb9;--ion-color-step-650:#a6b8c2;--ion-color-step-700:#b3c2cb;--ion-color-step-750:#bfccd3;--ion-color-step-800:#ccd6dc;--ion-color-step-850:#d9e1e5;--ion-color-step-900:#e6ebee;--ion-color-step-950:#f2f5f6}</style><link rel="stylesheet" href="styles.5e133914326c3aa5.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles.5e133914326c3aa5.css"></noscript></head>
 
   <body>
     <app-root></app-root>
-  <script src="runtime.js" type="module"></script><script src="polyfills.js" type="module"></script><script src="vendor.js" type="module"></script><script src="main.js" type="module"></script></body>
-</html>
+  <script src="runtime.a46a5debb63ebe14.js" type="module"></script><script src="polyfills.989a48a59f260018.js" type="module"></script><script src="main.e86efaf4cf24f599.js" type="module"></script>
+
+</body></html>
