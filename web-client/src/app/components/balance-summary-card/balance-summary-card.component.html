@@ -11,9 +11,11 @@
             {{ balance | assetAmount }}
           </ion-text>
         </ion-label>
-        <ion-text slot="end" color="secondary" class="font-bold">
-          {{ balance | assetSymbol }}
-        </ion-text>
+        <div slot="end" class="w-12">
+          <ion-text slot="end" color="secondary" class="font-bold">
+            {{ balance | assetSymbol }}
+          </ion-text>
+        </div>
       </ion-item>
     </ion-list>
   </ion-card-content>
