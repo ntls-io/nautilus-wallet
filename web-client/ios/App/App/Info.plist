@@ -35,11 +35,11 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -50,5 +50,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to scan ID documents &amp; QR Code</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to select image from library for identification</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to select image from library for identification</string>
 </dict>
 </plist>
