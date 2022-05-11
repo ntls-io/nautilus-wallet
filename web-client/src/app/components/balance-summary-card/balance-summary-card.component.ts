@@ -8,7 +8,7 @@ import { AssetAmount } from 'src/app/utils/assets/assets.common';
 })
 export class BalanceSummaryCardComponent implements OnInit {
   @Input() balances?: AssetAmount[] | null;
-  @Input() isLoading: boolean = false;
+  @Input() isLoading = false;
 
   constructor() {}
 

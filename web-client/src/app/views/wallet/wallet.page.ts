@@ -39,7 +39,7 @@ export class WalletPage implements OnInit {
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
   /** True if balances are in the process of being updated */
-  balancesIsLoading: boolean = false;
+  balancesIsLoading = false;
 
   /**
    * Enable the "Send Money" action if both:
