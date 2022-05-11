@@ -9,7 +9,7 @@
     <ng-content></ng-content>
 
     <ion-buttons slot="end" *ngIf="sessionQuery.name | async">
-      <ion-button routerLink="/" routerDirection="root"> Logout </ion-button>
+      <ion-button (click)="logoutAction()"> Logout </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-grid>
