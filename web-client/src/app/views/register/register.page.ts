@@ -54,22 +54,25 @@ export class RegisterPage implements OnInit {
             Validators.required,
             Validators.minLength(10),
             Validators.maxLength(10),
+            Validators.pattern(/^\d*$/),
           ]),
         ],
         pin: [
           '',
           Validators.compose([
             Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
+          Validators.minLength(4),
+          Validators.maxLength(10),
+          Validators.pattern(/^\d*$/),
           ]),
         ],
         confirmPin: [
           '',
           Validators.compose([
             Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
+          Validators.minLength(4),
+          Validators.maxLength(10),
+          Validators.pattern(/^\d*$/),
           ]),
         ],
       },
@@ -89,9 +92,9 @@ export class RegisterPage implements OnInit {
           this.registrationForm.controls.mobile.value
         );
         this.router.navigate(['/print-wallet']);
-      } catch (err) {
+      } catch (error) {
         // TODO: error handling
-        console.log(err);
+        console.log("error submitting form in register component", error);
       }
     } else {
       this.showErrors();
