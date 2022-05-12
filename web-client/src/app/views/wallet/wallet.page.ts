@@ -38,6 +38,9 @@ export class WalletPage implements OnInit {
   /** Active wallet's balances. */
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
+  /** True if balances are in the process of being updated */
+  balancesIsLoading = false;
+
   /**
    * Enable the "Send Money" action if both:
    * - KYC status is either cleared or not required
@@ -86,26 +89,31 @@ export class WalletPage implements OnInit {
   }
 
   async refreshWalletData(): Promise<void> {
-    await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
-      await withConsoleGroupCollapsed('Loading wallet data', async () => {
-        await Promise.all([
-          (async () => {
-            await this.sessionAlgorandService.loadAccountData();
-            await this.sessionAlgorandService.loadAssetParams();
-          })(),
-          this.sessionXrplService.loadAccountData(),
-          this.sessionService.loadOnfidoCheck(),
-        ]);
+    this.balancesIsLoading = true;
+    try {
+      await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
+        await withConsoleGroupCollapsed('Loading wallet data', async () => {
+          await Promise.all([
+            (async () => {
+              await this.sessionAlgorandService.loadAccountData();
+              await this.sessionAlgorandService.loadAssetParams();
+            })(),
+            this.sessionXrplService.loadAccountData(),
+            this.sessionService.loadOnfidoCheck(),
+          ]);
+        });
+        await withConsoleGroupCollapsed(
+          'Checking asset / token opt-ins',
+          async () => {
+            await this.checkAlgorandAssetOptIn();
+            await this.checkXrplTokenOptIns();
+          }
+        );
+        console.log('Done.');
       });
-      await withConsoleGroupCollapsed(
-        'Checking asset / token opt-ins',
-        async () => {
-          await this.checkAlgorandAssetOptIn();
-          await this.checkXrplTokenOptIns();
-        }
-      );
-      console.log('Done.');
-    });
+    } finally {
+      this.balancesIsLoading = false;
+    }
   }
   /**
    * Perform opportunistic Algorand asset opt-in.

@@ -16,6 +16,7 @@ export default ionicStoryMeta<PureWalletPageComponent>(
       shown: [
         'name',
         'balances',
+        'balancesIsLoading',
         'actionSendMoneyEnabled',
         'actionTopUpUrl',
         'actionVerifyProfileShown',
