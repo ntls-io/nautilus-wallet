@@ -3,13 +3,16 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-
-    <ion-title class="font-audiowide font-bold">{{ title }}</ion-title>
+    <ion-title class="font-audiowide font-bold hidden xs:block">{{
+      title
+    }}</ion-title>
 
     <ng-content></ng-content>
 
     <ion-buttons slot="end" *ngIf="sessionQuery.name | async">
-      <ion-button (click)="logoutAction()"> Logout </ion-button>
+      <ion-button (click)="logoutAction()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-grid>
