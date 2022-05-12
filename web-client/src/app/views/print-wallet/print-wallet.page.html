@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-grid fixed>
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons slot="start" class="print:hidden">
         <ion-button [routerLink]="['/']">
           <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
         </ion-button>
@@ -30,7 +30,7 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row class="print:hidden">
       <ion-col>
         <ion-button
           id="copy-button"
@@ -49,14 +49,15 @@
           fill="outline"
           color="white"
           shape="round"
-          ngxPrintItemButton
-          divID="print-section"
+          (click)="print()"
         >
           <ion-icon name="print-outline"></ion-icon> Print page
         </ion-button>
       </ion-col>
     </ion-row>
 
-    <ion-button expand="block" shape="round" routerLink="/">Home</ion-button>
+    <ion-button expand="block" shape="round" routerLink="/" class="print:hidden"
+      >Home
+    </ion-button>
   </ion-grid>
 </ion-content>

@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Printer, PrintOptions } from '@awesome-cordova-plugins/printer/ngx';
 import { Clipboard } from '@capacitor/clipboard';
+import { Capacitor } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
+import { NgxPrinterService } from 'ngx-printer';
 import { SessionQuery } from 'src/app/state/session.query';
 import { showToast } from 'src/app/utils/toast.helpers';
 
@@ -10,12 +13,16 @@ import { showToast } from 'src/app/utils/toast.helpers';
   styleUrls: ['./print-wallet.page.scss'],
 })
 export class PrintWalletPage implements OnInit {
+  @ViewChild('printSection', { static: false, read: ElementRef })
+  printSection: ElementRef | undefined;
   // Hook for testing
   public Clipboard = Clipboard;
 
   constructor(
     private toastCtrl: ToastController,
-    public sessionQuery: SessionQuery
+    public sessionQuery: SessionQuery,
+    public printerService: NgxPrinterService,
+    private nativePrinter: Printer
   ) {}
 
   ngOnInit() {}
@@ -30,6 +37,31 @@ export class PrintWalletPage implements OnInit {
       })
       .catch(() => {
         this.notice('Something weird happened, please try again!');
+      });
+  }
+
+  async print() {
+    if (Capacitor.isNativePlatform()) {
+      this.nativePrint();
+    } else {
+      this.printerService.printDiv('print-section');
+    }
+  }
+
+  async nativePrint() {
+    const options: PrintOptions = {
+      name: 'MyWallet',
+      autoFit: true,
+      margin: false,
+      photo: true,
+    };
+    await this.nativePrinter
+      .print(undefined, options)
+      .then((success) => {
+        console.log('success: ', success);
+      })
+      .catch((error) => {
+        console.log('error: ', error);
       });
   }
 

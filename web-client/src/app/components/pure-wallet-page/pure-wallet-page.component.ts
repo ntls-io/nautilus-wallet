@@ -25,6 +25,9 @@ export class PureWalletPageComponent implements OnInit {
   /** Wallet's balances. */
   @Input() balances?: AssetAmount[] | null;
 
+  /** True if balances are in the process of being updated */
+  @Input() balancesIsLoading = false;
+
   // Naming convention: Prefix action item parameters with "action".
 
   /** "Send Money" action: Enabled? */

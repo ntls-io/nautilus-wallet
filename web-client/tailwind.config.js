@@ -24,6 +24,9 @@ module.exports = {
         nasalization: "nasalization",
         audiowide: "Audiowide, cursive",
       },
+      screens: {
+        print: { raw: "print" },
+      },
     },
   },
   plugins: [
