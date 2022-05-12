@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Printer } from '@awesome-cordova-plugins/printer/ngx';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -33,6 +34,7 @@ import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-
     ProfileCardHorizontalComponent,
     ActionItemComponent,
   ],
+  providers: [Printer],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

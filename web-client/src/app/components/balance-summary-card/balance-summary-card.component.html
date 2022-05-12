@@ -1,6 +1,16 @@
 <ion-card class="app-item ion-text-center">
   <ion-card-header>
-    <ion-card-title class="font-nasalization">Balances</ion-card-title>
+    <ion-grid>
+      <ion-row>
+        <ion-col> </ion-col>
+        <ion-col>
+          <ion-card-title class="font-nasalization">Balances</ion-card-title>
+        </ion-col>
+        <ion-col>
+          <ion-spinner class="ion-float-right" *ngIf="isLoading"></ion-spinner>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-card-header>
 
   <ion-card-content class="ion-no-padding">

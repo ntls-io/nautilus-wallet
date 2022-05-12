@@ -13,7 +13,7 @@ export default ionicStoryMeta<BalanceSummaryCardComponent>(
   {
     imports: [BalanceSummaryCardComponentModule],
     controls: {
-      shown: ['balances'],
+      shown: ['balances', 'isLoading'],
     },
   }
 );
@@ -30,4 +30,13 @@ Empty.args = {};
 export const WithBalances = Template.bind({});
 WithBalances.args = {
   balances: [assetAmountAlgo(1234.56), assetAmountXrp(123.456789)],
+};
+
+export const LoadingEmpty = Template.bind({});
+LoadingEmpty.args = { isLoading: true };
+
+export const LoadingWithBalances = Template.bind({});
+LoadingWithBalances.args = {
+  balances: [assetAmountAlgo(1234.56), assetAmountXrp(123.456789)],
+  isLoading: true,
 };
