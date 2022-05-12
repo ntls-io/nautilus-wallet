@@ -94,7 +94,7 @@ export class RegisterPage implements OnInit {
         this.router.navigate(['/print-wallet']);
       } catch (error) {
         // TODO: error handling
-        console.log("error submitting form in register component", error);
+        console.log('error submitting form in register component', error);
       }
     } else {
       this.showErrors();
