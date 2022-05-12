@@ -5,6 +5,11 @@ const config: CapacitorConfig = {
   appName: 'Nautilus wallet',
   webDir: 'www',
   bundledWebRuntime: false,
+  plugins: {
+    Keyboard: {
+      resize: 'none',
+    },
+  },
 };
 
 export default config;
