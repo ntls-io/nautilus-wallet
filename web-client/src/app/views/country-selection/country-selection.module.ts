@@ -1,11 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { CountrySelectionPageRoutingModule } from './country-selection-routing.module';
-
 import { CountrySelectionPage } from './country-selection.page';
 
 @NgModule({
@@ -13,8 +10,8 @@ import { CountrySelectionPage } from './country-selection.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    CountrySelectionPageRoutingModule
+    CountrySelectionPageRoutingModule,
   ],
-  declarations: [CountrySelectionPage]
+  declarations: [CountrySelectionPage],
 })
 export class CountrySelectionPageModule {}
