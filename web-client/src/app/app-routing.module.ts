@@ -78,6 +78,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
   },
+  {
+    path: 'country-selection',
+    loadChildren: () =>
+      import('./views/country-selection/country-selection.module').then(
+        (m) => m.CountrySelectionPageModule
+      ),
+  },
 ];
 
 @NgModule({
