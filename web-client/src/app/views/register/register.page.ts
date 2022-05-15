@@ -6,10 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { createMask } from '@ngneat/input-mask';
+import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionService } from 'src/app/state/session.service';
-import { CountrySelectionPage } from '../country-selection/country-selection.page';
 
 @Component({
   selector: 'app-register',
@@ -24,18 +23,11 @@ export class RegisterPage implements OnInit {
     rightAlign: false,
     placeholder: '',
   });
-  // TODO(Pi): We should replace this with something that handles international numbers (probably libphonenumber-based?)
-  //           (See also: E-164 hack in SessionService.)
-  phoneInputMask = createMask({
-    mask: '(999) 9999-999',
-    autoUnmask: true,
-  });
 
   constructor(
     private formBuilder: FormBuilder,
     private sessionService: SessionService,
-    private router: Router,
-    private modalCtrl: ModalController
+    private router: Router
   ) {
     this.registrationForm = this.generateFormGroup();
   }
@@ -56,8 +48,7 @@ export class RegisterPage implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
+            IonIntlTelInputValidators.phone,
           ]),
         ],
         pin: [
@@ -83,17 +74,20 @@ export class RegisterPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     /* istanbul ignore next TODO */
-    if (this.registrationForm.valid) {
-      try {
-        const phoneNumber =
-          this.registrationForm.controls.country.value +
-          parseInt(this.registrationForm.controls.mobile.value, 10);
+    console.log(this.registrationForm.value);
 
+    if (this.registrationForm.valid) {
+      const phoneNumber =
+        this.registrationForm.controls.mobile.value.internationalNumber
+          .split(' ')
+          .join('');
+
+      const { firstName, lastName, pin } = this.registrationForm.value;
+
+      try {
         await this.sessionService.createWallet(
-          this.registrationForm.controls.firstName.value +
-            ' ' +
-            this.registrationForm.controls.lastName.value,
-          this.registrationForm.controls.pin.value,
+          firstName + ' ' + lastName,
+          pin,
           phoneNumber
         );
         this.router.navigate(['/print-wallet']);
@@ -117,17 +111,5 @@ export class RegisterPage implements OnInit {
 
   showErrors() {
     this.nonValidSubmit = false;
-  }
-
-  async selectCountry() {
-    const modal = await this.modalCtrl.create({
-      component: CountrySelectionPage,
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data?.prefix) {
-      this.registrationForm.controls.country.setValue(data.prefix);
-    }
   }
 }

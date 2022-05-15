@@ -7,6 +7,7 @@ import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 import { NgxPrinterModule } from 'ngx-printer';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +28,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     AkitaNgRouterStoreModule,
     NgxPrinterModule.forRoot({ printOpenWindow: false }),
     ErrorHandlerModule,
+    IonIntlTelInputModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
