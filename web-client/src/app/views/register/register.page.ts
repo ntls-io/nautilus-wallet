@@ -108,7 +108,7 @@ export class RegisterPage implements OnInit {
         : { mismatch: true };
   }
 
-  onModalOpen(event: { target: any }) {
+  onModalOpen(event: { target: { type: 'button' | 'tel' } }) {
     if (event?.target?.type === 'button') {
       this.isOpening = true;
     }
