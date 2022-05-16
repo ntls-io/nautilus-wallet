@@ -44,16 +44,9 @@ describe('RegisterPage', () => {
       'valid',
       'get'
     ).and.returnValue(false);
-    const showErrorsSpy = spyOn(component, 'showErrors');
 
     component.onSubmit();
 
-    expect(showErrorsSpy).toHaveBeenCalled();
     expect(getValidSpy).toHaveBeenCalled();
-  });
-
-  it('#showErrors should set nonValidSubmit to false', () => {
-    component.showErrors();
-    expect(component.nonValidSubmit).toBeFalse();
   });
 });
