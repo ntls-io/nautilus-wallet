@@ -3,6 +3,7 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,12 +18,12 @@ import { SessionService } from 'src/app/state/session.service';
 })
 export class RegisterPage implements OnInit {
   public registrationForm: FormGroup;
-  nonValidSubmit = true;
   numInputMask = createMask({
     alias: 'numeric',
     rightAlign: false,
     placeholder: '',
   });
+  isOpening = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,40 +40,39 @@ export class RegisterPage implements OnInit {
   ngOnInit() {}
 
   generateFormGroup(): FormGroup {
-    return this.formBuilder.group(
-      {
-        firstName: ['', Validators.compose([Validators.required])],
-        lastName: ['', Validators.compose([Validators.required])],
-        mobile: [
-          '',
-          Validators.compose([
-            Validators.required,
-            IonIntlTelInputValidators.phone,
-          ]),
-        ],
-        pin: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
-          ]),
-        ],
-        confirmPin: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
-          ]),
-        ],
-      },
-      { validator: this.pinValidator }
-    );
+    return this.formBuilder.group({
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      mobile: [
+        '',
+        Validators.compose([
+          Validators.required,
+          IonIntlTelInputValidators.phone,
+        ]),
+      ],
+      pin: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(10),
+        ]),
+      ],
+      confirmPin: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(10),
+          this.matchValues('pin'),
+        ]),
+      ],
+    });
   }
 
   async onSubmit(): Promise<void> {
     /* istanbul ignore next TODO */
+    this.registrationForm.markAllAsTouched();
 
     if (this.registrationForm.valid) {
       const phoneNumber =
@@ -93,21 +93,24 @@ export class RegisterPage implements OnInit {
         // TODO: error handling
         console.log(err);
       }
-    } else {
-      this.showErrors();
     }
   }
 
-  pinValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const pin = control.get('pin');
-    const confirmPin = control.get('confirmPin');
-
-    return pin && confirmPin && pin.value !== confirmPin.value
-      ? { misMatch: true }
-      : null;
+  matchValues(
+    matchTo: string
+  ): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null =>
+      !!control?.parent?.value &&
+      control?.value ===
+        (control.parent.controls as { [key: string]: AbstractControl })[matchTo]
+          .value
+        ? null
+        : { mismatch: true };
   }
 
-  showErrors() {
-    this.nonValidSubmit = false;
+  onModalOpen(event: { target: any }) {
+    if (event?.target?.type === 'button') {
+      this.isOpening = true;
+    }
   }
 }
