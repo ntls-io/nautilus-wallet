@@ -28,23 +28,19 @@
             Last Name Is Required
           </p>
         </ng-container>
+
         <ng-container>
           <ion-label position="stacked" for="mobile">Mobile</ion-label>
-          <ion-input
-            type="text"
+          <ion-intl-tel-input
             formControlName="mobile"
-            [inputMask]="phoneInputMask"
-          ></ion-input>
-          <p
-            *ngIf="(f.mobile.touched && f.mobile.errors?.required) ||!nonValidSubmit && f.mobile.errors?.required"
+            class="ion-align-items-center"
+            defaultCountryiso="za"
           >
-            Mobile Number Is Required
-          </p>
-          <p
-            *ngIf="(f.mobile.touched && f.mobile.dirty  && (f.mobile.errors?.minlength || f.mobile.errors?.maxlength)) || !nonValidSubmit && (f.mobile.touched && f.mobile.dirty  && (f.mobile.errors?.minlength || f.mobile.errors?.maxlength))"
-          >
-            Invalid Phone Number
-          </p>
+          </ion-intl-tel-input>
+          <ng-container *ngIf="f.mobile.invalid && f.mobile.touched">
+            <p *ngIf="f.mobile.errors?.required">Phone is required.</p>
+            <p *ngIf="f.mobile.errors?.phone">Phone is not valid.</p>
+          </ng-container>
         </ng-container>
         <ng-container>
           <ion-label position="stacked" for="pin">PIN</ion-label>

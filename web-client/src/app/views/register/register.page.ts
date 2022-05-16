@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createMask } from '@ngneat/input-mask';
+import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionService } from 'src/app/state/session.service';
 
 @Component({
@@ -21,12 +22,6 @@ export class RegisterPage implements OnInit {
     alias: 'numeric',
     rightAlign: false,
     placeholder: '',
-  });
-  // TODO(Pi): We should replace this with something that handles international numbers (probably libphonenumber-based?)
-  //           (See also: E-164 hack in SessionService.)
-  phoneInputMask = createMask({
-    mask: '(999) 999-99-99',
-    autoUnmask: true,
   });
 
   constructor(
@@ -48,12 +43,12 @@ export class RegisterPage implements OnInit {
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
+        country: ['', Validators.compose([Validators.required])],
         mobile: [
           '',
           Validators.compose([
             Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
+            IonIntlTelInputValidators.phone,
           ]),
         ],
         pin: [
@@ -79,14 +74,21 @@ export class RegisterPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     /* istanbul ignore next TODO */
+    console.log(this.registrationForm.value);
+
     if (this.registrationForm.valid) {
+      const phoneNumber =
+        this.registrationForm.controls.mobile.value.internationalNumber
+          .split(' ')
+          .join('');
+
+      const { firstName, lastName, pin } = this.registrationForm.value;
+
       try {
         await this.sessionService.createWallet(
-          this.registrationForm.controls.firstName.value +
-            ' ' +
-            this.registrationForm.controls.lastName.value,
-          this.registrationForm.controls.pin.value,
-          this.registrationForm.controls.mobile.value
+          firstName + ' ' + lastName,
+          pin,
+          phoneNumber
         );
         this.router.navigate(['/print-wallet']);
       } catch (err) {

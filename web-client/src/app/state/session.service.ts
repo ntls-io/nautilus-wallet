@@ -162,12 +162,8 @@ export class SessionService {
       this.sessionStore.update({ onfidoCheck: check });
 
       if (wallet.phone_number) {
-        // FIXME(Pi): Hack country code in, for now.
-        //            (See also: comments in RegisterPage.)
-        const to_phone_number = wallet.phone_number.replace(/^0/, '+27');
-
         const message = {
-          to_phone_number,
+          to_phone_number: wallet.phone_number,
           body: `Onfido check result: ${check.result}`,
         };
         await withLoggedExchange(
