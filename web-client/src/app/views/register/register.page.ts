@@ -43,7 +43,6 @@ export class RegisterPage implements OnInit {
       {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
-        country: ['', Validators.compose([Validators.required])],
         mobile: [
           '',
           Validators.compose([
@@ -74,7 +73,6 @@ export class RegisterPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     /* istanbul ignore next TODO */
-    console.log(this.registrationForm.value);
 
     if (this.registrationForm.valid) {
       const phoneNumber =
