@@ -31,8 +31,11 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss",
-            {"input": "node_modules/flag-icon-css/sass/flag-icon.scss"}],
+            "styles": ["src/theme/variables.scss","src/global.scss",
+              {
+                "input": "./node_modules/flag-icon-css/sass/flag-icon.scss"
+              }
+              ],
             "scripts": [],
             "aot": true,
             "vendorChunk": true,

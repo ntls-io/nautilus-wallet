@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createMask } from '@ngneat/input-mask';
 import { SessionService } from 'src/app/state/session.service';
-import { IonIntlTelInputModel } from 'ion-intl-tel-input';
+import { IonIntlTelInputModel, IonIntlTelInputValidators } from 'ion-intl-tel-input';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ import { IonIntlTelInputModel } from 'ion-intl-tel-input';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+  [x: string]: any;
   public registrationForm: FormGroup;
   nonValidSubmit = true;
   numInputMask = createMask({
@@ -38,6 +40,7 @@ export class RegisterPage implements OnInit {
   };
   formValue = {mobile: this.mobile};
 
+
   constructor(
     private formBuilder: FormBuilder,
     private sessionService: SessionService,
@@ -50,7 +53,18 @@ export class RegisterPage implements OnInit {
     return this.registrationForm.controls;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.form = new FormGroup({
+      mobile: new FormControl({
+        value: this.formValue.mobile
+      }, [
+        Validators.required,
+        IonIntlTelInputValidators.phone
+      ])
+    });
+  }
+
+  get phoneNumber() { return this.form.get('phoneNumber'); }
 
   generateFormGroup(): FormGroup {
     return this.formBuilder.group(
@@ -87,6 +101,8 @@ export class RegisterPage implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+
+    console.log(this.phoneNumber.value);
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       try {
