@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,10 +15,11 @@ import { SessionService } from 'src/app/state/session.service';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnDestroy {
   registrationForm: FormGroup;
   numInputMask = '9999999999';
   isOpening = false;
+  subscription$;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,13 +27,15 @@ export class RegisterPage implements OnInit {
     private router: Router
   ) {
     this.registrationForm = this.generateFormGroup();
+
+    this.subscription$ = this.f.pin.valueChanges.pipe().subscribe(() => {
+      this.f.confirmPin.updateValueAndValidity();
+    });
   }
 
   get f() {
     return this.registrationForm.controls;
   }
-
-  ngOnInit() {}
 
   generateFormGroup(): FormGroup {
     return this.formBuilder.group({
@@ -113,5 +116,9 @@ export class RegisterPage implements OnInit {
     if (event?.target?.type === 'button') {
       this.isOpening = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription$.unsubscribe();
   }
 }
