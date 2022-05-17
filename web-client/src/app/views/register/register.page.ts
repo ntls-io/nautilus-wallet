@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { createMask } from '@ngneat/input-mask';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionService } from 'src/app/state/session.service';
 
@@ -17,12 +16,8 @@ import { SessionService } from 'src/app/state/session.service';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-  public registrationForm: FormGroup;
-  numInputMask = createMask({
-    alias: 'numeric',
-    rightAlign: false,
-    placeholder: '',
-  });
+  registrationForm: FormGroup;
+  numInputMask = '9999999999';
   isOpening = false;
 
   constructor(
@@ -41,8 +36,14 @@ export class RegisterPage implements OnInit {
 
   generateFormGroup(): FormGroup {
     return this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
+      firstName: [
+        '',
+        Validators.compose([Validators.minLength(2), Validators.required]),
+      ],
+      lastName: [
+        '',
+        Validators.compose([Validators.minLength(2), Validators.required]),
+      ],
       mobile: [
         '',
         Validators.compose([

@@ -67,6 +67,7 @@
     "inputmask": "^5.0.6",
     "ion-intl-tel-input": "^1.0.5",
     "ionic-selectable": "^4.9.0",
+    "ngx-ion-simple-mask": "^0.9.0",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
     "ripple-keypairs": "^1.1.3",

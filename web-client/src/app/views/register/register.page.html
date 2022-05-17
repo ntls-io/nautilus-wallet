@@ -5,7 +5,11 @@
   <ion-grid fixed>
     <h1 class="font-bold font-nasalization text-center">Sign Up</h1>
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-      <ion-list lines="none" class="inputList ion-padding-horizontal">
+      <ion-list
+        lines="none"
+        mode="ios"
+        class="inputList ion-padding-horizontal"
+      >
         <ion-item>
           <ion-label position="stacked" for="firstName">First Name</ion-label>
           <ion-input
@@ -23,7 +27,11 @@
         </ion-item>
         <ion-item>
           <ion-label position="stacked" for="lastName">Last Name</ion-label>
-          <ion-input type="text" formControlName="lastName"></ion-input>
+          <ion-input
+            type="text"
+            formControlName="lastName"
+            name="lastName"
+          ></ion-input>
           <ion-text
             slot="error"
             *ngIf="(f.lastName.dirty || f.lastName.touched) && f.lastName.hasError "
@@ -36,6 +44,7 @@
           <ion-label position="stacked" for="mobile">Mobile</ion-label>
           <ion-intl-tel-input
             formControlName="mobile"
+            name="mobile"
             class="ion-align-items-center"
             defaultCountryiso="za"
             (click)="onModalOpen($event)"
@@ -56,9 +65,11 @@
           <ion-input
             type="password"
             formControlName="pin"
+            name="pin"
             minlength="4"
             maxlength="10"
-            [inputMask]="numInputMask"
+            [simpleMask]="numInputMask"
+            inputmode="numeric"
           ></ion-input>
           <ion-text
             slot="error"
@@ -78,9 +89,11 @@
           <ion-input
             type="password"
             formControlName="confirmPin"
+            name="confirmPin"
             minlength="4"
             maxlength="10"
-            [inputMask]="numInputMask"
+            [simpleMask]="numInputMask"
+            inputmode="numeric"
           ></ion-input>
           <ion-text
             slot="error"
