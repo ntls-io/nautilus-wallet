@@ -96,7 +96,8 @@ ion-input,
   @apply bg-transparent border-white rounded-full border-2 my-1.5 border-solid #{!important};
 
   ionic-selectable {
-    padding: 0 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     .ionic-selectable-icon {
       display: none;
     }

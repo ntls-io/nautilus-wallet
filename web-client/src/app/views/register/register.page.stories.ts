@@ -17,7 +17,7 @@ export default ionicStoryMeta<RegisterPage>(
       InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
     ],
     controls: {
-      shown: ['nonValidSubmit', 'onSubmit'],
+      shown: ['onSubmit'],
       outputs: ['onSubmit'],
     },
     layoutType: 'page',
