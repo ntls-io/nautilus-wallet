@@ -96,12 +96,12 @@
             *ngIf="(f.confirmPin.dirty || f.confirmPin.touched) &&  f.confirmPin.hasError"
           >
             <p *ngIf="f.confirmPin.errors?.required">
-              PIN Confirmation Is Required
+              Pin Confirmation is required
             </p>
             <p
               *ngIf="!f.confirmPin.errors?.required && f.confirmPin.errors?.mismatch"
             >
-              PIN Do Not Match
+              Pin does not match
             </p>
           </ion-text>
         </ion-item>
