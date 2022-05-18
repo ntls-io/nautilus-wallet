@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { InputMaskModule } from '@ngneat/input-mask';
 import { routes } from '../../app-routing.module';
 import { RegisterPage } from './register.page';
 
@@ -22,7 +21,6 @@ describe('RegisterPage', () => {
           ReactiveFormsModule,
           FormsModule,
           HttpClientTestingModule,
-          InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
         ],
       }).compileComponents();
 
