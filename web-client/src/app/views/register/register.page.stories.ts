@@ -1,5 +1,4 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { InputMaskModule } from '@ngneat/input-mask';
 import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ionicStoryMeta } from 'src/stories/storybook.helpers';
@@ -11,13 +10,9 @@ export default ionicStoryMeta<RegisterPage>(
     component: RegisterPage,
   },
   {
-    imports: [
-      HttpClientTestingModule,
-      SharedModule,
-      InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
-    ],
+    imports: [HttpClientTestingModule, SharedModule],
     controls: {
-      shown: ['nonValidSubmit', 'onSubmit'],
+      shown: ['onSubmit'],
       outputs: ['onSubmit'],
     },
     layoutType: 'page',
