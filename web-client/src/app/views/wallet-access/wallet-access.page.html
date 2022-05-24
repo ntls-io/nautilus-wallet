@@ -33,10 +33,20 @@
 <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
 <ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
   <ng-template>
-    <div class="ion-page ion-justify-content-center ion-align-items-center">
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
       <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
         (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
       ></app-pin-entry>
-    </div>
+    </ion-content>
   </ng-template>
 </ion-modal>
