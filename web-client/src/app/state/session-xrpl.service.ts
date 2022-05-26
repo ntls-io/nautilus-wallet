@@ -174,14 +174,9 @@ export class SessionXrplService {
     }
   }
 
-  /**
-   * Helper: Sign, submit, and confirm the given transaction.
-   *
-   * NOTE: This does not check for success: the caller is responsible for that.
-   */
-  protected async sendTransaction(
+  protected async signTransaction(
     txnUnsigned: xrpl.Transaction
-  ): Promise<xrpl.TxResponse> {
+  ): Promise<string> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     const { txnBeingSigned, bytesToSignEncoded } = txnBeforeSign(
@@ -201,26 +196,39 @@ export class SessionXrplService {
     if ('XrplTransactionSigned' in signed) {
       const { signature_bytes } = signed.XrplTransactionSigned;
 
-      const { txnSigned, txnSignedEncoded } = txnAfterSign(
-        txnBeingSigned,
-        uint8ArrayToHex(signature_bytes)
-      );
-
-      const txResponse: xrpl.TxResponse = await withLoggedExchange(
-        'SessionXrplService.sendTransaction: signed, submitting:',
-        async () =>
-          await this.xrplService.submitAndWaitForSigned(txnSignedEncoded),
-        txnSignedEncoded
-      );
-
-      await this.loadAccountData(); // FIXME(Pi): Move to caller?
-
-      return txResponse;
+      return txnAfterSign(txnBeingSigned, uint8ArrayToHex(signature_bytes))
+        .txnSignedEncoded;
     } else {
       throw panic(
         'SessionXrplService.sendTransaction: expected XrplTransactionSigned, got:',
         signed
       );
     }
+  }
+
+  protected async submitTransaction(
+    signedTransaction: string
+  ): Promise<xrpl.TxResponse> {
+    return withLoggedExchange(
+      'SessionXrplService.sendTransaction: signed, submitting:',
+      async () =>
+        await this.xrplService.submitAndWaitForSigned(signedTransaction),
+      signedTransaction
+    );
+  }
+  /**
+   * Helper: Sign, submit, and confirm the given transaction.
+   *
+   * NOTE: This does not check for success: the caller is responsible for that.
+   */
+  protected async sendTransaction(
+    txnUnsigned: xrpl.Transaction
+  ): Promise<xrpl.TxResponse> {
+    const txnSignedEncoded = await this.signTransaction(txnUnsigned);
+    const txResponse = await this.submitTransaction(txnSignedEncoded);
+
+    await this.loadAccountData(); // FIXME(Pi): Move to caller?
+
+    return txResponse;
   }
 }
