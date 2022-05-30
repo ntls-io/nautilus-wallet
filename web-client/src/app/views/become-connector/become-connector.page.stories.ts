@@ -1,4 +1,4 @@
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ionicStoryMeta } from 'src/stories/storybook.helpers';
@@ -10,7 +10,7 @@ export default ionicStoryMeta<BecomeConnectorPage>(
     component: BecomeConnectorPage,
   },
   {
-    imports: [ReactiveFormsModule, SharedModule],
+    imports: [FormsModule, ReactiveFormsModule, SharedModule],
     layoutType: 'page',
   }
 );
