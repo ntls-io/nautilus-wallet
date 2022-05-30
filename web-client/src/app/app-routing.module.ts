@@ -80,7 +80,10 @@ export const routes: Routes = [
   },
   {
     path: 'become-connector',
-    loadChildren: () => import('./views/become-connector/become-connector.module').then( m => m.BecomeConnectorPageModule)
+    loadChildren: () =>
+      import('./views/become-connector/become-connector.module').then(
+        (m) => m.BecomeConnectorPageModule
+      ),
   },
 ];
 

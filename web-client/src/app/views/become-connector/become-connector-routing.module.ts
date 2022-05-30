@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { BecomeConnectorPage } from './become-connector.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: BecomeConnectorPage
-  }
+    component: BecomeConnectorPage,
+  },
 ];
 
 @NgModule({
