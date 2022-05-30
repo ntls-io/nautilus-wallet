@@ -5,12 +5,17 @@ import { ModalController } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { SessionService } from 'src/app/state/session.service';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import {
   withConsoleGroup,
   withConsoleGroupCollapsed,
 } from 'src/app/utils/console.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { SessionQuery } from 'src/app/state/session.query';
+import { Observable } from 'rxjs';
 
 
 
@@ -22,8 +27,8 @@ import {
 export class DeleteUserPage implements OnInit {
   addressForm: FormGroup;
 
-  /** Wallet's balances. */
-  @Input() balances?: AssetAmount[] | null;
+  /** Active wallet's balances. */
+  balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
   /** True if balances are in the process of being updated */
   @Input() balancesIsLoading = false;
@@ -31,6 +36,9 @@ export class DeleteUserPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private loadingController: LoadingController,
+    public sessionService: SessionService,
+    public sessionQuery: SessionQuery,
+    public notification: SwalHelper,
     public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService
     ) {
@@ -81,8 +89,16 @@ export class DeleteUserPage implements OnInit {
               await this.sessionAlgorandService.loadAssetParams();
             })(),
             this.sessionXrplService.loadAccountData(),
+            this.sessionService.loadOnfidoCheck(),
           ]);
         });
+        await withConsoleGroupCollapsed(
+          'Checking asset / token opt-ins',
+          async () => {
+            //await this.checkAlgorandAssetOptIn(); TODO
+            await this.checkXrplTokenOptIns();
+          }
+        );
         console.log('Done.');
       });
     } finally {
@@ -90,7 +106,41 @@ export class DeleteUserPage implements OnInit {
     }
   }
 
+  protected async checkXrplTokenOptIns(): Promise<void> {
+    if (this.sessionQuery.hasXrpBalance()) {
+      const txResponses = await this.sessionXrplService.checkTrustlineOptIns();
+      const unsuccessfulResponses = txResponses.filter((txResponse) => {
+        const { succeeded } = checkTxResponseSucceeded(txResponse);
+        return !succeeded;
+      });
+      if (0 < unsuccessfulResponses.length) {
+        console.log(
+          'DekewteUserPage.checkXrplTokenOptIns: unsuccessful responses:',
+          { unsuccessfulResponses }
+        );
+        const errorMessage: string = unsuccessfulResponses
+          .map((txResponse) => {
+            const { resultCode } = checkTxResponseSucceeded(txResponse);
+            return resultCode;
+          })
+          .join('\n');
+        await this.errorNotification('XRPL token opt-in failed', errorMessage);
+      }
+    }
+  }
 
+  protected async errorNotification(
+    titleText: string,
+    err: any
+  ): Promise<void> {
+    const text = err?.response?.body?.message ?? err?.response?.body ?? err;
+    console.error('UserDeletePage.withAlertErrors caught', { err });
+    await this.notification.swal.fire({
+      icon: 'error',
+      titleText,
+      text,
+    });
+  }
 
 }
 

@@ -14,7 +14,7 @@
 </div>
 
 <app-balance-summary-card
-  [balances]="balances"
+  [balances]="balances | async"
   [isLoading]="balancesIsLoading"
 ></app-balance-summary-card>
 
@@ -22,9 +22,9 @@
   <p class="ion-text-center p-2">Where should the funds be deposited?</p>
   <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
     <ion-textarea
-            text-center
+            class="ion-text-center"
             type="text"
-            placeholder="Enter in Wallet Address"
+            placeholder="Enter Wallet Address"
             class="p-0"
             formControlName="address"
           ></ion-textarea>
@@ -35,7 +35,7 @@
             This address is not valid
           </p>
 
-        <ion-button expand="block" shape="round" type="submit" class="mt-4">
+        <ion-button expand="block" shape="round" type="submit" class="mt-4" strong="true">
           Scan QR Code
         </ion-button>
 </form>
