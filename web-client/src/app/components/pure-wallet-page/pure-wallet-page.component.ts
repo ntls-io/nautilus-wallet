@@ -45,7 +45,7 @@ export class PureWalletPageComponent implements OnInit {
   @Input() actionWithdrawUrl?: string | null;
 
   /** "Receive" action: Enabled? */
-  @Input() actionReceiveEnabled: boolean | null = false;
+  @Input() actionReceiveEnabled: boolean | null = true;
 
   /** "My Transactions" action: Optional external URL. */
   @Input() actionMyTransactionsUrl?: string | null;
