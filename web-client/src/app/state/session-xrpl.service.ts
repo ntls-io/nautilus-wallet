@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
+  checkTxResponseSucceeded,
   hexToUint8Array,
   txnAfterSign,
   txnBeforeSign,
@@ -23,6 +24,32 @@ import { SessionStore, XrplBalance } from './session.store';
 /**
  * This service manages session state and operations related to the XRP ledger.
  */
+
+// TODO(Herman): Move these types to a better place?
+
+export type TransactionSuccess = {
+  success: true;
+  response: xrpl.TxResponse;
+};
+export type TransactionFailure = {
+  success: false;
+  response: xrpl.TxResponse;
+  resultCode: xrpl.TransactionMetadata['TransactionResult'];
+};
+
+export type CommissionedTxResponse =
+  | {
+      mainTx: TransactionSuccess;
+      commissionedTx: TransactionSuccess;
+    }
+  /** Commission transaction will not be sent if the main transaction fails */
+  | {
+      mainTx: TransactionFailure;
+    }
+  | {
+      mainTx: TransactionSuccess;
+      commissionedTx: TransactionFailure;
+    };
 @Injectable({ providedIn: 'root' })
 export class SessionXrplService {
   constructor(
@@ -92,7 +119,69 @@ export class SessionXrplService {
       { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
     );
 
-    return await this.sendTransaction(preparedTx);
+    const txResponse = await this.sendTransaction(preparedTx);
+    await this.loadAccountData();
+    return txResponse;
+  }
+
+  async sendFundsCommissioned(
+    txnUnsigned: xrpl.Transaction,
+    commissionTxnUnsigned: xrpl.Transaction
+  ): Promise<CommissionedTxResponse> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    let [signedTxn, signedComissionTxn] = await Promise.all([
+      this.signTransaction(txnUnsigned),
+      this.signTransaction(commissionTxnUnsigned),
+    ]);
+
+    // Only submit commission transaction once the main transaction have succeeded.
+    // There is currently no way to submit 2 transactions as an atomic unit with XRPL
+    const txResponse = await this.submitTransaction(signedTxn);
+    const txSucceeded = checkTxResponseSucceeded(txResponse);
+    if (!txSucceeded.succeeded) {
+      return {
+        mainTx: {
+          success: false,
+          response: txResponse,
+          resultCode: txSucceeded.resultCode,
+        },
+      };
+    }
+
+    const commissionTxResponse = await this.submitTransaction(
+      signedComissionTxn
+    );
+
+    const commissionTxSucceeded =
+      checkTxResponseSucceeded(commissionTxResponse);
+
+    if (!commissionTxSucceeded.succeeded) {
+      await this.loadAccountData();
+      return {
+        mainTx: {
+          success: true,
+          response: txResponse,
+        },
+        commissionedTx: {
+          success: false,
+          response: commissionTxResponse,
+          resultCode: commissionTxSucceeded.resultCode,
+        },
+      };
+    }
+
+    await this.loadAccountData();
+    return {
+      mainTx: {
+        success: true,
+        response: txResponse,
+      },
+      commissionedTx: {
+        success: true,
+        response: commissionTxResponse,
+      },
+    };
   }
 
   /**
@@ -226,8 +315,6 @@ export class SessionXrplService {
   ): Promise<xrpl.TxResponse> {
     const txnSignedEncoded = await this.signTransaction(txnUnsigned);
     const txResponse = await this.submitTransaction(txnSignedEncoded);
-
-    await this.loadAccountData(); // FIXME(Pi): Move to caller?
 
     return txResponse;
   }
