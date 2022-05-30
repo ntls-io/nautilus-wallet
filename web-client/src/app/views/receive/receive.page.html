@@ -13,12 +13,12 @@
           >Scan to pay me
         </ion-text>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="sessionQuery.walletId | async as walletId">
         <qrcode
-          [qrdata]="'Your data string'"
+          [qrdata]="walletId"
           errorCorrectionLevel="H"
-          elementType="img"
-          [width]="1000"
+          elementType="svg"
+          cssClass="children:w-full children:h-auto"
           [margin]="2"
         ></qrcode>
       </ion-card-content>
