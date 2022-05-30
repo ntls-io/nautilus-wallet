@@ -5,7 +5,7 @@ import { BecomeConnectorPage } from './become-connector.page';
 
 export default ionicStoryMeta<BecomeConnectorPage>(
   {
-    title: 'Views/HomePage',
+    title: 'Views/BecomeConnectorPage',
     component: BecomeConnectorPage,
   },
   {
