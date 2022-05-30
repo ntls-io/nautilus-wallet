@@ -5,6 +5,13 @@ import { ModalController } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import {
+  withConsoleGroup,
+  withConsoleGroupCollapsed,
+} from 'src/app/utils/console.helpers';
+
 
 
 @Component({
@@ -23,7 +30,9 @@ export class DeleteUserPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    public sessionAlgorandService: SessionAlgorandService,
+    public sessionXrplService: SessionXrplService
     ) {
     this.addressForm = new FormGroup({
       address: new FormControl('', [Validators.required, addressValidator]),
@@ -60,8 +69,25 @@ export class DeleteUserPage implements OnInit {
       async () => await this.refreshWalletData()
     );
   }
-  refreshWalletData(): any {
-    throw new Error('Method not implemented.');
+
+  async refreshWalletData(): Promise<void> {
+    this.balancesIsLoading = true;
+    try {
+      await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
+        await withConsoleGroupCollapsed('Loading wallet data', async () => {
+          await Promise.all([
+            (async () => {
+              await this.sessionAlgorandService.loadAccountData();
+              await this.sessionAlgorandService.loadAssetParams();
+            })(),
+            this.sessionXrplService.loadAccountData(),
+          ]);
+        });
+        console.log('Done.');
+      });
+    } finally {
+      this.balancesIsLoading = false;
+    }
   }
 
 
