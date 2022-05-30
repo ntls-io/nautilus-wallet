@@ -7,6 +7,7 @@ import {
   faQrcode,
   faReceipt,
   faWallet,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 
@@ -64,4 +65,5 @@ const ICONS = {
   faQrcode,
   faReceipt,
   faWallet,
+  faTrash
 };
