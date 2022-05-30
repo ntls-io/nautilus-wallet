@@ -78,6 +78,10 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
   },
+  {
+    path: 'delete-user',
+    loadChildren: () => import('./views/delete-user/delete-user.module').then( m => m.DeleteUserPageModule)
+  },
 ];
 
 @NgModule({

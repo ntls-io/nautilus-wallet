@@ -1,0 +1,42 @@
+<ion-header>
+  <app-header>
+    <ion-buttons slot="end">
+      <ion-button (click)="onRefresh()">
+        <ion-icon slot="icon-only" name="refresh-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </app-header>
+</ion-header>
+
+<div class="ion-text-center p-2">
+  <h3 class="font-semibold font-nasalization">Delete My wallet</h3>
+  <p>You will need to enter a wallet address to send your remaining balance to.</p>
+</div>
+
+<app-balance-summary-card
+  [balances]="balances"
+  [isLoading]="balancesIsLoading"
+></app-balance-summary-card>
+
+<ion-content>
+  <p class="ion-text-center p-2">Where should the funds be deposited?</p>
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <ion-textarea
+            text-center
+            type="text"
+            placeholder="Enter in Wallet Address"
+            class="p-0"
+            formControlName="address"
+          ></ion-textarea>
+          <p
+            class="text-danger text-sm"
+            *ngIf="!addressForm?.pristine && addressForm.errors?.invalidAddress"
+          >
+            This address is not valid
+          </p>
+
+        <ion-button expand="block" shape="round" type="submit" class="mt-4">
+          Scan QR Code
+        </ion-button>
+</form>
+</ion-content>
