@@ -78,6 +78,10 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
   },
+  {
+    path: 'become-connector',
+    loadChildren: () => import('./views/become-connector/become-connector.module').then( m => m.BecomeConnectorPageModule)
+  },
 ];
 
 @NgModule({

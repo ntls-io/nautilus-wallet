@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
+  faCircleNodes,
   faCreditCard,
   faDonate,
   faFingerprint,
@@ -64,4 +65,5 @@ const ICONS = {
   faQrcode,
   faReceipt,
   faWallet,
+  faCircleNodes,
 };
