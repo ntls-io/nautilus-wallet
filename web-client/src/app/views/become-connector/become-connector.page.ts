@@ -19,7 +19,6 @@ export class BecomeConnectorPage implements OnInit {
 
   setWalletId() {
     const { wallet } = this.sessionQuery.getValue();
-    console.log(wallet?.wallet_id);
     this.connectorService.becomeConnector(wallet?.wallet_id);
   }
 }
