@@ -53,6 +53,7 @@
   ></app-action-item>
 
   <app-action-item
+    *ngIf="(connectorQuery.isConnector | async) === false"
     title="Become a Connector"
     [icon]="icons.faCircleNodes"
     path="/become-connector"

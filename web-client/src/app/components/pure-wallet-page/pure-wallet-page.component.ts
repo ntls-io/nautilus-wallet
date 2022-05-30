@@ -9,6 +9,7 @@ import {
   faReceipt,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { ConnectorQuery } from 'src/app/state/connector';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 
 /**
@@ -51,7 +52,7 @@ export class PureWalletPageComponent implements OnInit {
 
   icons = ICONS;
 
-  constructor() {}
+  constructor(public connectorQuery: ConnectorQuery) {}
 
   ngOnInit() {}
 }
