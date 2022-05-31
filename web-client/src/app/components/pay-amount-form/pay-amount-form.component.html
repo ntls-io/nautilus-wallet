@@ -27,6 +27,22 @@
   </div>
 
   <div class="ion-margin-vertical">
+    <ion-card class="ion-no-margin">
+      <ion-item lines="none" color="white">
+        <ion-label>
+          <ion-text>Transaction Fees:</ion-text>
+        </ion-label>
+        <ion-text slot="end">
+          {{ paymentForm.value.amount / 1000 }}
+        </ion-text>
+      </ion-item>
+      <ion-item lines="none" color="white">
+        <ion-label>
+          <h2>Total Sent:</h2>
+        </ion-label>
+        <ion-text slot="end"></ion-text>
+      </ion-item>
+    </ion-card>
     <ion-button
       expand="block"
       shape="round"
