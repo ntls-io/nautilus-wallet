@@ -1,0 +1,33 @@
+<ion-header class="ion-no-border">
+  <app-header></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <h1 class="font-nasalization font-bold text-center">
+          Become a connector
+        </h1>
+      </ion-col>
+      <ion-col size="12" class="text-center">
+        <p>Share access to your app with others.</p>
+        <p>0.1% of each transaction will be paid into your wallet.</p>
+      </ion-col>
+      <ion-col size="12" class="text-center">
+        <ion-item lines="none" color="primary-background">
+          <ion-checkbox slot="start" [(ngModel)]="isConfirmed"></ion-checkbox>
+          <ion-label class="ion-text-wrap">
+            <p>I confirm that I am the owner of this device.</p>
+          </ion-label>
+        </ion-item>
+        <ion-button
+          shape="round"
+          [disabled]="!isConfirmed"
+          (click)="setWalletId()"
+          >Become a connector
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
