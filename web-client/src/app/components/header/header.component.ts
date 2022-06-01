@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   logoutAction() {
-    resetStores();
+    resetStores({ exclude: ['connector'] });
     this.navController.navigateRoot('/');
   }
 
