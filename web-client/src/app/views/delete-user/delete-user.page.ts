@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { LoadingController, ToastController } from '@ionic/angular';
@@ -16,6 +15,15 @@ import {
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { SessionQuery } from 'src/app/state/session.query';
 import { Observable } from 'rxjs';
+import { handleScan } from '../scanner.helpers';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
+import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import {
+  AlertController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import { ManualAddressPage } from '../manual-address/manual-address.page';
 
 
 
@@ -25,15 +33,42 @@ import { Observable } from 'rxjs';
   styleUrls: ['./delete-user.page.scss'],
 })
 export class DeleteUserPage implements OnInit {
+
+  actionItems: Array<SendFundsActionItem> = [
+    {
+      title: 'Scan a QR code',
+      icon: faQrcode,
+      action: 'presentScanner',
+    },
+    {
+      title: 'Enter address manually',
+      icon: faKeyboard,
+      action: 'presentAddressModal',
+    },
+    // {
+    //   title: 'Share my wallet address',
+    //   icon: faLink,
+    //   disabled: true,
+    // },
+  ];
+
   addressForm: FormGroup;
 
   /** Active wallet's balances. */
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
+  @Input() isPinEntryOpen = false;
+
   /** True if balances are in the process of being updated */
   @Input() balancesIsLoading = false;
 
+  hasCamera?: boolean;
+
+  /** @see validatedAddress */
+  address?: string;
+
   constructor(
+    private navCtrl: NavController,
     private modalCtrl: ModalController,
     private loadingController: LoadingController,
     public sessionService: SessionService,
@@ -49,6 +84,37 @@ export class DeleteUserPage implements OnInit {
 
    async ngOnInit(): Promise<void> {
     await this.refreshWalletData();
+  }
+
+  get validatedAddress(): string | undefined {
+    const trimmed = this.address?.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }
+
+  async openScanner(): Promise<void> {
+    await handleScan(
+      this.modalCtrl,
+      this.notification.swal,
+      this.confirmAddress
+    );
+  }
+
+  /** User clicked to confirm address: show PIN entry. */
+  async confirmAddress(): Promise<void> {
+    if (this.validatedAddress !== undefined) {
+      this.showPinEntryModal();
+    } else {
+      await this.notification.swal.fire({
+        icon: 'warning',
+        title: 'Invalid Address',
+        text: 'Please input a valid wallet address',
+      });
+    }
+  }
+
+  /** Show the PIN entry modal. */
+  showPinEntryModal(): void {
+    this.isPinEntryOpen = true;
   }
 
   dismiss(success: boolean, address?: string) {
@@ -142,6 +208,41 @@ export class DeleteUserPage implements OnInit {
     });
   }
 
+  async execItemAction(action: ItemAction): Promise<void> {
+    switch (action) {
+      case 'presentScanner':
+        await this.presentScanner();
+        break;
+      case 'presentAddressModal':
+        await this.presentAddressModal();
+        break;
+      default:
+        break;
+    }
+  }
+
+  async presentScanner() {
+    const scanSuccess = async (address: string) => {
+      await this.navCtrl.navigateForward('pay', {
+        queryParams: { receiverAddress: address },
+      });
+    };
+    await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
+  }
+
+  async presentAddressModal() {
+    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success && data?.address) {
+      this.navCtrl.navigateForward('pay', {
+        queryParams: { receiverAddress: data?.address },
+      });
+    }
+  }
+
 }
 
 const addressValidator = (formGroup: FormControl) => {
@@ -157,3 +258,8 @@ const trimmedValue = (formControl: FormControl) => {
     throw TypeError(`ManualAddressPage: expected string, got ${typeof value}`);
   }
 };
+
+// Customise ActionItem for this page with an 'action' field:
+
+type SendFundsActionItem = ActionItem & { action: ItemAction };
+type ItemAction = 'presentScanner' | 'presentAddressModal'

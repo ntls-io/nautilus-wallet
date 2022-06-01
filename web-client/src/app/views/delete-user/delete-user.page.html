@@ -13,30 +13,24 @@
   <p>You will need to enter a wallet address to send your remaining balance to.</p>
 </div>
 
-<app-balance-summary-card
-  [balances]="balances | async"
-  [isLoading]="balancesIsLoading"
-></app-balance-summary-card>
+<ion-grid fixed>
+  <app-balance-summary-card
+    [balances]="balances | async"
+    [isLoading]="balancesIsLoading"
+  ></app-balance-summary-card>
+
 
 <ion-content>
   <p class="ion-text-center p-2">Where should the funds be deposited?</p>
-  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
-    <ion-textarea
-            class="ion-text-center"
-            type="text"
-            placeholder="Enter Wallet Address"
-            class="p-0"
-            formControlName="address"
-          ></ion-textarea>
-          <p
-            class="text-danger text-sm"
-            *ngIf="!addressForm?.pristine && addressForm.errors?.invalidAddress"
-          >
-            This address is not valid
-          </p>
-
-        <ion-button expand="block" shape="round" type="submit" class="mt-4" strong="true">
-          Scan QR Code
-        </ion-button>
-</form>
+  <ion-list>
+    <ion-item-group *ngFor="let item of actionItems">
+      <app-action-item
+        [title]="item.title"
+        [icon]="item.icon"
+        [disabled]="item.disabled"
+        (click)="execItemAction(item.action)"
+      ></app-action-item>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
+</ion-grid>
