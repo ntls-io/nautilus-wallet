@@ -10,11 +10,14 @@
       <ion-item color="white">
         <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
         <ion-label slot="end">
-          <ion-text color="primary" class="font-bold !text-xl">
+          <ion-text
+            color="primary"
+            class="font-bold font-nasalization !text-xl"
+          >
             {{ balance | assetAmount }}
           </ion-text>
         </ion-label>
-        <ion-text slot="end" class="font-bold !text-xl">
+        <ion-text slot="end" class="font-bold font-nasalization !text-xl">
           {{ balance | assetSymbol }}
         </ion-text>
       </ion-item>

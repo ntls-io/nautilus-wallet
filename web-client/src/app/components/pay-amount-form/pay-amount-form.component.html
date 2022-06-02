@@ -26,29 +26,33 @@
     </ion-text>
   </div>
 
-  <div class="ion-margin-vertical">
-    <ion-card class="ion-no-margin">
-      <ion-item lines="none" color="white">
-        <ion-label>
-          <ion-text>Transaction Fees:</ion-text>
-        </ion-label>
-        <ion-text slot="end">
-          {{ paymentForm.value.amount / 1000 }}
+  <ion-card class="ion-no-margin ion-margin-vertical">
+    <ion-item lines="none" color="white">
+      <ion-label>
+        <ion-text>Transaction Fees:</ion-text>
+      </ion-label>
+      <div slot="end">
+        <ion-text color="primary" class="font-nasalization">
+          {{ paymentForm.value.amount | transactionFee: 1 }}
         </ion-text>
-      </ion-item>
-      <ion-item lines="none" color="white">
-        <ion-label>
-          <h2>Total Sent:</h2>
-        </ion-label>
-        <ion-text slot="end"></ion-text>
-      </ion-item>
-    </ion-card>
-    <ion-button
-      expand="block"
-      shape="round"
-      type="submit"
-      [disabled]="!paymentForm.valid"
-      >PAY
-    </ion-button>
-  </div>
+      </div>
+    </ion-item>
+    <ion-item lines="none" color="white">
+      <ion-label>
+        <h2>Total Sent:</h2>
+      </ion-label>
+      <div slot="end">
+        <ion-text color="primary" class="font-nasalization">
+          {{ paymentForm.value.amount | transactionFee: 1:true }}
+        </ion-text>
+      </div>
+    </ion-item>
+  </ion-card>
+  <ion-button
+    expand="block"
+    shape="round"
+    type="submit"
+    [disabled]="!paymentForm.valid"
+    >PAY
+  </ion-button>
 </form>
