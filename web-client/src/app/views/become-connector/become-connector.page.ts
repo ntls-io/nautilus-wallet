@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { ConnectorService } from 'src/app/state/connector';
-import { SessionQuery } from 'src/app/state/session.query';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
   selector: 'app-become-connector',
@@ -12,13 +13,26 @@ export class BecomeConnectorPage implements OnInit {
 
   constructor(
     private connectorService: ConnectorService,
-    public sessionQuery: SessionQuery
+    private notification: SwalHelper,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {}
 
-  setWalletId() {
-    const { wallet } = this.sessionQuery.getValue();
-    this.connectorService.becomeConnector(wallet?.wallet_id);
+  optin() {
+    this.connectorService.becomeConnector(true).finally(() => {
+      this.notify();
+    });
+  }
+
+  notify() {
+    this.notification.swal
+      .fire({
+        icon: 'success',
+        text: 'You have successfully become a connector.',
+      })
+      .then(() => {
+        this.navCtrl.pop();
+      });
   }
 }

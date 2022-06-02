@@ -21,10 +21,7 @@
             <p>I confirm that I am the owner of this device.</p>
           </ion-label>
         </ion-item>
-        <ion-button
-          shape="round"
-          [disabled]="!isConfirmed"
-          (click)="setWalletId()"
+        <ion-button shape="round" [disabled]="!isConfirmed" (click)="optin()"
           >Become a connector
         </ion-button>
       </ion-col>
