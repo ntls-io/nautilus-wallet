@@ -12,6 +12,7 @@
   <ion-row>
     <ion-col>
       <app-pay-amount-form
+        [balance]="balance"
         [maxAmount]="maxAmount"
         (amountSubmitted)="onAmountSubmitted($event)"
         [autofocus]="autofocus"

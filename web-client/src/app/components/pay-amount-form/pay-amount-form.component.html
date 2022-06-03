@@ -26,28 +26,14 @@
     </ion-text>
   </div>
 
-  <ion-card class="ion-no-margin ion-margin-vertical">
-    <ion-item lines="none" color="white">
-      <ion-label>
-        <ion-text>Transaction Fees:</ion-text>
-      </ion-label>
-      <div slot="end">
-        <ion-text color="primary" class="font-nasalization">
-          {{ paymentForm.value.amount | transactionFee: 1 }}
-        </ion-text>
-      </div>
-    </ion-item>
-    <ion-item lines="none" color="white">
-      <ion-label>
-        <h2>Total Sent:</h2>
-      </ion-label>
-      <div slot="end">
-        <ion-text color="primary" class="font-nasalization">
-          {{ paymentForm.value.amount | transactionFee: 1:true }}
-        </ion-text>
-      </div>
-    </ion-item>
-  </ion-card>
+  <div class="ion-margin-vertical">
+    <app-transaction-fees
+      *ngIf="balance"
+      [transactionAmount]="paymentForm.value.amount"
+      [balance]="balance"
+    ></app-transaction-fees>
+  </div>
+
   <ion-button
     expand="block"
     shape="round"
