@@ -56,3 +56,11 @@ export const assetAmountFromBase = (
   assetDisplay,
   ledgerInfo,
 });
+
+/**  Calculates the commission for a given asset amount, returning an instance of the same asset/token type */
+export const getAssetCommission = (assetAmount: AssetAmount): AssetAmount => ({
+  ...assetAmount,
+  // Assume 1% comission amount
+  // TODO(Herman): configure this as an environment variable
+  amount: assetAmount ? assetAmount.amount * 0.01 : 0,
+});

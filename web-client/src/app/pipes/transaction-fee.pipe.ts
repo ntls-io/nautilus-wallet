@@ -1,18 +1,25 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { AssetAmount, getAssetCommission } from '../utils/assets/assets.common';
 
 @Pipe({
   name: 'transactionFee',
 })
 export class TransactionFeePipe implements PipeTransform {
   transform(
-    amount: number = 0,
-    percentage: number = 0,
+    assetAmount: AssetAmount | undefined,
     isTotal?: boolean
-  ): number {
-    const fee = Number(((amount * percentage) / 100).toFixed(2));
-    if (isNaN(amount)) {
-      return 0;
+  ): AssetAmount | undefined {
+    if (assetAmount) {
+      const assetTransactedFee = getAssetCommission(assetAmount);
+
+      if (isTotal) {
+        //TODO: check if we add or subtract fee to/from total (Jonathan)
+        assetAmount.amount = assetAmount.amount - assetTransactedFee.amount;
+      }
+
+      return isTotal ? assetAmount : assetTransactedFee;
     }
-    return isTotal ? amount - fee : fee;
+
+    return undefined;
   }
 }
