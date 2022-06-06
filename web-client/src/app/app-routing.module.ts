@@ -82,6 +82,13 @@ export const routes: Routes = [
     path: 'delete-user',
     loadChildren: () => import('./views/delete-user/delete-user.module').then( m => m.DeleteUserPageModule)
   },
+  {
+    path: 'become-connector',
+    loadChildren: () =>
+      import('./views/become-connector/become-connector.module').then(
+        (m) => m.BecomeConnectorPageModule
+      ),
+  },
 ];
 
 @NgModule({

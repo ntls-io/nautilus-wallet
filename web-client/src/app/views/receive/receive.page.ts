@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
+import { SessionQuery } from 'src/app/state/session.query';
 
 @Component({
   selector: 'app-receive',
@@ -17,7 +18,7 @@ export class ReceivePage implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(public sessionQuery: SessionQuery) {}
 
   ngOnInit() {}
 }
