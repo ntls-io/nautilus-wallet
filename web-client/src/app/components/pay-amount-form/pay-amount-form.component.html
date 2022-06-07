@@ -26,9 +26,8 @@
     </ion-text>
   </div>
 
-  <div class="ion-margin-vertical">
+  <div class="ion-margin-vertical" *ngIf="balance">
     <app-transaction-fees
-      *ngIf="balance"
       [transactionAmount]="paymentForm.value.amount"
       [balance]="balance"
     ></app-transaction-fees>
