@@ -15,14 +15,10 @@ export class TransactionFeesComponent implements OnChanges {
   @Input() transactionAmount = 0;
   assetAmount!: AssetAmount;
 
-  constructor() {
-    console.log('the balance ', this.balance);
-    console.log(this.assetAmount);
-  }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('the balance ', this.balance);
-    const amount = changes.transactionAmount.currentValue ?? 0;
+    const amount = changes?.transactionAmount?.currentValue ?? 0;
 
     this.assetAmount = assetAmountFromBase(amount, this.balance);
   }
