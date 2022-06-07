@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { AssetAmountPipe } from 'src/app/pipes/asset-amount.pipe';
-import { AssetSymbolPipe } from 'src/app/pipes/asset-symbol.pipe';
+import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
 import { TransactionFeePipe } from 'src/app/pipes/transaction-fee.pipe';
 import { TransactionFeesComponent } from './transaction-fees.component';
 
@@ -12,13 +11,8 @@ describe('TransactionFeesComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          TransactionFeesComponent,
-          AssetAmountPipe,
-          AssetSymbolPipe,
-          TransactionFeePipe,
-        ],
-        imports: [IonicModule.forRoot()],
+        declarations: [TransactionFeesComponent, TransactionFeePipe],
+        imports: [IonicModule.forRoot(), AssetPipesModule],
       }).compileComponents();
 
       fixture = TestBed.createComponent(TransactionFeesComponent);
