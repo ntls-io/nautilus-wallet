@@ -12,14 +12,17 @@
         <p>Share access to your app with others.</p>
         <p>0.1% of each transaction will be paid into your wallet.</p>
       </ion-col>
-      <ion-col size="auto">
+      <ion-col size="auto" *ngIf="sessionQuery.walletId | async as walletId">
         <ion-item lines="none" color="primary-background">
           <ion-checkbox slot="start" [(ngModel)]="isConfirmed"></ion-checkbox>
           <ion-label class="ion-text-wrap">
             <p>I confirm that I am the owner of this device.</p>
           </ion-label>
         </ion-item>
-        <ion-button shape="round" [disabled]="!isConfirmed" (click)="optin()"
+        <ion-button
+          shape="round"
+          [disabled]="!isConfirmed"
+          (click)="optin(walletId)"
           >Become a connector
         </ion-button>
       </ion-col>

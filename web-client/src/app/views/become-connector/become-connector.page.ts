@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ConnectorService } from 'src/app/state/connector';
+import { SessionQuery } from 'src/app/state/session.query';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
@@ -14,13 +15,14 @@ export class BecomeConnectorPage implements OnInit {
   constructor(
     private connectorService: ConnectorService,
     private notification: SwalHelper,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    public sessionQuery: SessionQuery
   ) {}
 
   ngOnInit() {}
 
-  optin() {
-    this.connectorService.becomeConnector(true).finally(() => {
+  optin(walletId: string) {
+    this.connectorService.becomeConnector(walletId).finally(() => {
       this.notify();
     });
   }
