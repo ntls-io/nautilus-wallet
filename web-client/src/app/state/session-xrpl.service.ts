@@ -106,17 +106,9 @@ export class SessionXrplService {
     receiverId: string,
     amount: xrpl.Payment['Amount']
   ): Promise<xrpl.TxResponse> {
-    const { wallet } = this.sessionQuery.assumeActiveSession();
-
-    const preparedTx: xrpl.Payment = await withLoggedExchange(
-      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
-      async () =>
-        await this.xrplService.createUnsignedTransaction(
-          wallet.xrpl_account.address_base58,
-          receiverId,
-          amount
-        ),
-      { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
+      receiverId,
+      amount
     );
 
     const txResponse = await this.sendTransaction(preparedTx);
@@ -125,19 +117,29 @@ export class SessionXrplService {
   }
 
   async sendFundsCommissioned(
-    txnUnsigned: xrpl.Transaction,
-    commissionTxnUnsigned: xrpl.Transaction
+    receiverId: string,
+    mainAmount: xrpl.Payment['Amount'],
+    commissionAmmount: xrpl.Payment['Amount']
   ): Promise<CommissionedTxResponse> {
-    const { wallet } = this.sessionQuery.assumeActiveSession();
+    const mainTxnUnsigned: xrpl.Payment = await this.prepareUnsignedTransaction(
+      receiverId,
+      mainAmount
+    );
+    // TODO(Herman): Change receiverId to the id of the connector
+    const commissionTxnUnsigned: xrpl.Payment =
+      await this.prepareUnsignedTransaction(receiverId, commissionAmmount);
 
-    let [signedTxn, signedComissionTxn] = await Promise.all([
-      this.signTransaction(txnUnsigned),
+    // const txnUnsigned: xrpl.Transaction = await withLo
+    // const commissionTxnUnsigned: xrpl.Transaction
+
+    const [signedMainTxn, signedComissionTxn] = await Promise.all([
+      this.signTransaction(mainTxnUnsigned),
       this.signTransaction(commissionTxnUnsigned),
     ]);
 
     // Only submit commission transaction once the main transaction have succeeded.
     // There is currently no way to submit 2 transactions as an atomic unit with XRPL
-    const txResponse = await this.submitTransaction(signedTxn);
+    const txResponse = await this.submitTransaction(signedMainTxn);
     const txSucceeded = checkTxResponseSucceeded(txResponse);
     if (!txSucceeded.succeeded) {
       return {
@@ -261,6 +263,24 @@ export class SessionXrplService {
         limitAmount
       );
     }
+  }
+
+  protected async prepareUnsignedTransaction(
+    receiverId: string,
+    amount: xrpl.Payment['Amount']
+  ): Promise<xrpl.Payment> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    return withLoggedExchange(
+      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedTransaction(
+          wallet.xrpl_account.address_base58,
+          receiverId,
+          amount
+        ),
+      { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    );
   }
 
   protected async signTransaction(
