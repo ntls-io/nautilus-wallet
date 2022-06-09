@@ -18,6 +18,7 @@ import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
+import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
 
@@ -57,7 +58,8 @@ export class SessionXrplService {
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     private enclaveService: EnclaveService,
-    private xrplService: XrplService
+    private xrplService: XrplService,
+    private connectorQuery: ConnectorQuery
   ) {}
 
   /**
@@ -121,16 +123,25 @@ export class SessionXrplService {
     mainAmount: xrpl.Payment['Amount'],
     commissionAmmount: xrpl.Payment['Amount']
   ): Promise<CommissionedTxResponse> {
+    const connectorWalletId = await firstValueFrom(
+      this.connectorQuery.walletId
+    );
+    if (!connectorWalletId) {
+      throw panic(
+        'No wallet id for connector. Cannot do a commissioned transaction',
+        connectorWalletId
+      );
+    }
     const mainTxnUnsigned: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
       mainAmount
     );
-    // TODO(Herman): Change receiverId to the id of the connector
-    const commissionTxnUnsigned: xrpl.Payment =
-      await this.prepareUnsignedTransaction(receiverId, commissionAmmount);
 
-    // const txnUnsigned: xrpl.Transaction = await withLo
-    // const commissionTxnUnsigned: xrpl.Transaction
+    const commissionTxnUnsigned: xrpl.Payment =
+      await this.prepareUnsignedTransaction(
+        connectorWalletId,
+        commissionAmmount
+      );
 
     const [signedMainTxn, signedComissionTxn] = await Promise.all([
       this.signTransaction(mainTxnUnsigned),
