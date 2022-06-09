@@ -1,0 +1,33 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-grid fixed>
+  <ion-content>
+    <div class="ion-text-center p-2">
+      <h1>Deposit Funds</h1>
+      <p></p>
+    </div>
+
+    <div class="ion-text-center p-2">
+      <ng-container *ngFor="let currency of balance | async">
+        <app-pay-from-to
+          *ngIf="currency.assetDisplay.assetSymbol==='XRP'"
+          [name]="sessionQuery.name | async"
+          [balance]="currency"
+          [receiverAddress]="receiverAddress"
+        ></app-pay-from-to>
+      </ng-container>
+    </div>
+
+    <div class="ion-text-center p-2">
+      <ion-button
+        shape="round"
+        fill="solid"
+        (click)="deleteWallet()"
+      >
+        Delete My wallet
+      </ion-button>
+    </div>
+  </ion-content>
+</ion-grid>
