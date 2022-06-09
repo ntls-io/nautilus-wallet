@@ -12,6 +12,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:prod": "cross-env NODE_ENV=production ng build --configuration production",
+    "build:staging": "cross-env NODE_ENV=production ng build --configuration staging",
+    "build:demo": "cross-env NODE_ENV=production ng build --configuration demo",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "docs": "compodoc src -p ./tsconfig.json",
