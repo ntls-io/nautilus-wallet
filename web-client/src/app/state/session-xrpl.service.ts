@@ -46,6 +46,7 @@ export type CommissionedTxResponse =
   /** Commission transaction will not be sent if the main transaction fails */
   | {
       mainTx: TransactionFailure;
+      commissionedTx: undefined;
     }
   | {
       mainTx: TransactionSuccess;
@@ -121,7 +122,7 @@ export class SessionXrplService {
   async sendFundsCommissioned(
     receiverId: string,
     mainAmount: xrpl.Payment['Amount'],
-    commissionAmmount: xrpl.Payment['Amount']
+    commissionAmount: xrpl.Payment['Amount']
   ): Promise<CommissionedTxResponse> {
     const connectorWalletId = await firstValueFrom(
       this.connectorQuery.walletId
@@ -137,16 +138,7 @@ export class SessionXrplService {
       mainAmount
     );
 
-    const commissionTxnUnsigned: xrpl.Payment =
-      await this.prepareUnsignedTransaction(
-        connectorWalletId,
-        commissionAmmount
-      );
-
-    const [signedMainTxn, signedComissionTxn] = await Promise.all([
-      this.signTransaction(mainTxnUnsigned),
-      this.signTransaction(commissionTxnUnsigned),
-    ]);
+    const signedMainTxn = await this.signTransaction(mainTxnUnsigned);
 
     // Only submit commission transaction once the main transaction have succeeded.
     // There is currently no way to submit 2 transactions as an atomic unit with XRPL
@@ -159,11 +151,22 @@ export class SessionXrplService {
           response: txResponse,
           resultCode: txSucceeded.resultCode,
         },
+        commissionedTx: undefined,
       };
     }
 
+    const commissionTxnUnsigned: xrpl.Payment =
+      await this.prepareUnsignedTransaction(
+        connectorWalletId,
+        commissionAmount
+      );
+
+    const signedCommissionTxn = await this.signTransaction(
+      commissionTxnUnsigned
+    );
+
     const commissionTxResponse = await this.submitTransaction(
-      signedComissionTxn
+      signedCommissionTxn
     );
 
     const commissionTxSucceeded =
