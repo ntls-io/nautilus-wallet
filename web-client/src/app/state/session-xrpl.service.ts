@@ -82,9 +82,9 @@ export class SessionXrplService {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     const preparedTx: xrpl.Payment = await withLoggedExchange(
-      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
       async () =>
-        await this.xrplService.createUnsignedTransaction(
+        await this.xrplService.createUnsignedPaymentTransaction(
           wallet.xrpl_account.address_base58,
           receiverId,
           amount
@@ -93,6 +93,24 @@ export class SessionXrplService {
     );
 
     return await this.sendTransaction(preparedTx);
+  }
+
+ async deleteAccount (
+   receiverAddress: string
+   ): Promise<xrpl.TxResponse> {
+   const { wallet } = this.sessionQuery.assumeActiveSession();
+
+   const preparedTx: xrpl.AccountDelete = await withLoggedExchange(
+    'SessionXrplService.deleteAccount: XrplService.createcreateUnsignedDeleteTransaction:',
+   async () =>
+     await this.xrplService.createUnsignedDeleteTransaction(
+       wallet.xrpl_account.address_base58,
+       receiverAddress
+     ),
+     { from: wallet.xrpl_account.address_base58, to: receiverAddress}
+   );
+
+   return await this.sendTransaction(preparedTx);
   }
 
   /**
