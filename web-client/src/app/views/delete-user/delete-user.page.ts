@@ -223,7 +223,7 @@ export class DeleteUserPage implements OnInit {
 
   async presentScanner() {
     const scanSuccess = async (address: string) => {
-      await this.navCtrl.navigateForward('pay', {
+      await this.navCtrl.navigateForward('deposit-funds', {
         queryParams: { receiverAddress: address },
       });
     };
@@ -237,7 +237,7 @@ export class DeleteUserPage implements OnInit {
 
     const { data } = await modal.onDidDismiss();
     if (data?.success && data?.address) {
-      this.navCtrl.navigateForward('pay', {
+      this.navCtrl.navigateForward('deposit-funds', {
         queryParams: { receiverAddress: data?.address },
       });
     }
