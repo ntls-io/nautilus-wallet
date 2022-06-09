@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 
 export interface ConnectorState {
-  optin: boolean;
+  walletId: string | null;
 }
 
-const createInitialState = (): ConnectorState => ({ optin: false });
+const createInitialState = (): ConnectorState => ({
+  walletId: null,
+});
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'connector', resettable: false })
