@@ -82,6 +82,10 @@ export const routes: Routes = [
     path: 'delete-user',
     loadChildren: () => import('./views/delete-user/delete-user.module').then( m => m.DeleteUserPageModule)
   },
+  {
+    path: 'deposit-funds',
+    loadChildren: () => import('./views/deposit-funds/deposit-funds.module').then( m => m.DepositFundsPageModule)
+  },
 ];
 
 @NgModule({
