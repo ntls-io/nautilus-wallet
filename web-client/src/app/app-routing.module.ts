@@ -86,6 +86,13 @@ export const routes: Routes = [
     path: 'deposit-funds',
     loadChildren: () => import('./views/deposit-funds/deposit-funds.module').then( m => m.DepositFundsPageModule)
   },
+  {
+    path: 'become-connector',
+    loadChildren: () =>
+      import('./views/become-connector/become-connector.module').then(
+        (m) => m.BecomeConnectorPageModule
+      ),
+  },
 ];
 
 @NgModule({

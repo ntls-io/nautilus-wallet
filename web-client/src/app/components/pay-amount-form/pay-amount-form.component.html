@@ -26,13 +26,18 @@
     </ion-text>
   </div>
 
-  <div class="ion-margin-vertical">
-    <ion-button
-      expand="block"
-      shape="round"
-      type="submit"
-      [disabled]="!paymentForm.valid"
-      >PAY
-    </ion-button>
+  <div class="ion-margin-vertical" *ngIf="balance">
+    <app-transaction-fees
+      [transactionAmount]="paymentForm.value.amount"
+      [balance]="balance"
+    ></app-transaction-fees>
   </div>
+
+  <ion-button
+    expand="block"
+    shape="round"
+    type="submit"
+    [disabled]="!paymentForm.valid"
+    >PAY
+  </ion-button>
 </form>
