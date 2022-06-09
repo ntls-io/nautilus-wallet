@@ -5,7 +5,7 @@ import { ConnectorStore } from './connector.store';
 export class ConnectorService {
   constructor(private connectorStore: ConnectorStore) {}
 
-  async becomeConnector(optin: boolean) {
-    return await this.connectorStore.update({ optin });
+  async becomeConnector(walletId: string) {
+    return await this.connectorStore.update({ walletId });
   }
 }

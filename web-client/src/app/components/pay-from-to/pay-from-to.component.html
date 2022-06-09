@@ -1,50 +1,40 @@
-<ion-card>
+<ion-card class="ion-no-margin">
   <ion-list lines="full" class="!p-0">
-    <ion-item color="white">
-      <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
-
-      <div
-        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
-      >
-        <div>
-          <ion-label class="ion-margin-end">
-            <h2 class="!font-black">From:</h2>
-            <p>{{ name }}</p>
-            <small>Available Balance</small>
-          </ion-label>
-        </div>
-
-        <div>
+    <ion-item-group>
+      <ion-item color="white" lines="none">
+        <ion-label>
+          <h2 class="!font-bold">From:</h2>
+          <p>{{ name }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item color="white">
+        <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+        <ion-label slot="end">
           <ion-text
             color="primary"
-            class="text-3xl font-audiowide overflow-wrap-anywhere"
+            class="font-bold font-nasalization !text-xl"
           >
             {{ balance | assetAmount }}
           </ion-text>
+        </ion-label>
+        <ion-text slot="end" class="font-bold font-nasalization !text-xl">
+          {{ balance | assetSymbol }}
+        </ion-text>
+      </ion-item>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item color="white" lines="none">
+        <ion-label>
+          <h2 class="!font-bold">To:</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item color="white">
+        <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
 
-          <ion-text class="text-xl font-bold">
-            {{ balance | assetSymbol }}
-          </ion-text>
-        </div>
-      </div>
-    </ion-item>
-
-    <ion-item color="white">
-      <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
-
-      <div
-        class="ion-margin-vertical w-full flex justify-between items-center flex-wrap gap-4"
-      >
-        <div>
-          <ion-label>
-            <h2 class="!font-black">To:</h2>
-          </ion-label>
-        </div>
-
-        <div class="font-mono overflow-wrap-anywhere">
-          {{ receiverAddress }}
-        </div>
-      </div>
-    </ion-item>
+        <ion-label class="ion-text-wrap">
+          <p class="font-mono font-bold">{{ receiverAddress }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
   </ion-list>
 </ion-card>

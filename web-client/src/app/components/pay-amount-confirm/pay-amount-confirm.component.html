@@ -11,28 +11,20 @@
 
   <ion-row>
     <ion-col>
-      <!--
-        NOTE(Pi): <app-pay-from-to> is inside an <ion-card>,
-        which gives it some extra margin compared to <app-pay-amount-form>,
-        which isn't inside a margined contained.
+      <app-pay-amount-form
+        [balance]="balance"
+        [maxAmount]="maxAmount"
+        (amountSubmitted)="onAmountSubmitted($event)"
+        [autofocus]="autofocus"
+        [setInitialAmountValue]="setInitialAmountValue"
+      ></app-pay-amount-form>
 
-        Add an outer .ion-margin here to balance them out.
-      -->
-      <div class="ion-margin">
-        <app-pay-amount-form
-          [maxAmount]="maxAmount"
-          (amountSubmitted)="onAmountSubmitted($event)"
-          [autofocus]="autofocus"
-          [setInitialAmountValue]="setInitialAmountValue"
-        ></app-pay-amount-form>
-
-        <p class="text-sm text-center">
-          Please check payment amount carefully. Transaction fees
-          <!-- XXX(Pi): Comment this amount out for now, until we have a better idea of what's needed here. -->
-          <!-- up to R0.01 -->
-          apply.
-        </p>
-      </div>
+      <p class="text-sm text-center">
+        Please check payment amount carefully. Transaction fees
+        <!-- XXX(Pi): Comment this amount out for now, until we have a better idea of what's needed here. -->
+        <!-- up to R0.01 -->
+        apply.
+      </p>
     </ion-col>
   </ion-row>
 </ion-grid>

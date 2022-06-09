@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import {
   MaxValidationError,
@@ -30,6 +31,8 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./pay-amount-form.component.scss'],
 })
 export class PayAmountFormComponent implements OnInit, OnChanges {
+  /** A balance held by the current user. */
+  @Input() balance?: AssetAmount | null;
   /** Emit the amount submitted by the user. */
   @Output() amountSubmitted = new EventEmitter<number>();
 
