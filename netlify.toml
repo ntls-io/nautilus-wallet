@@ -5,6 +5,11 @@ base = "web-client"
 publish = "www"
 command = "npm run build:prod"
 
+[context.production.build]
+base = "web-client"
+publish = "www"
+command = "npm run $NPM_BUILD_SCRIPT"
+
 # Set fallback
 #
 # Docs:
