@@ -53,6 +53,7 @@
   ></app-action-item>
 
   <app-action-item
+  *ngIf="balances?.length!==0"
     title="Delete My Wallet"
     [icon]="icons.faTrash"
     path="/delete-user"
