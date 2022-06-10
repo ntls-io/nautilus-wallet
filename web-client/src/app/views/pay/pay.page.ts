@@ -6,8 +6,12 @@ import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
+import { ConnectorQuery } from 'src/app/state/connector';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
-import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import {
+  CommissionedTxResponse,
+  SessionXrplService,
+} from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import {
@@ -18,12 +22,15 @@ import {
   AssetAmount,
   formatAssetAmount,
   formatAssetSymbol,
+  getAssetCommission,
 } from 'src/app/utils/assets/assets.common';
 import {
+  AssetAmountXrp,
   convertFromAssetAmountXrpToLedger,
   isAssetAmountXrp,
 } from 'src/app/utils/assets/assets.xrp';
 import {
+  AssetAmountXrplToken,
   convertFromAssetAmountXrplTokenToLedger,
   isAssetAmountXrplToken,
 } from 'src/app/utils/assets/assets.xrp.token';
@@ -69,7 +76,8 @@ export class PayPage implements OnInit {
     private sessionXrplService: SessionXrplService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private connectorQuery: ConnectorQuery
   ) {}
 
   ngOnInit() {}
@@ -100,7 +108,9 @@ export class PayPage implements OnInit {
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<
-    { algorandResult: TransactionConfirmation } | { xrplResult: TxResponse }
+    | { algorandResult: TransactionConfirmation }
+    | { xrplResult: TxResponse }
+    | CommissionedTxResponse
   > {
     if (isAssetAmountAlgo(amount)) {
       return {
@@ -119,29 +129,56 @@ export class PayPage implements OnInit {
           amountInLedgerUnits
         ),
       };
-    } else if (isAssetAmountXrp(amount)) {
-      return {
-        xrplResult: await this.sessionXrplService.sendFunds(
-          receiverAddress,
-          convertFromAssetAmountXrpToLedger(amount)
-        ),
-      };
-    } else if (isAssetAmountXrplToken(amount)) {
-      return {
-        xrplResult: await this.sessionXrplService.sendFunds(
-          receiverAddress,
-          convertFromAssetAmountXrplTokenToLedger(amount)
-        ),
-      };
+    } else if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
+      return this.sendXrpl(amount, receiverAddress);
     } else {
       throw panic('PayPage.sendAmount: unexpected amount', { amount });
+    }
+  }
+
+  protected convertXrpAmount(
+    amount: AssetAmountXrp | AssetAmountXrplToken
+  ): xrpl.Payment['Amount'] {
+    if (isAssetAmountXrp(amount)) {
+      return convertFromAssetAmountXrpToLedger(amount);
+    } else if (isAssetAmountXrplToken(amount)) {
+      return convertFromAssetAmountXrplTokenToLedger(amount);
+    } else {
+      throw never(amount);
+    }
+  }
+
+  protected async sendXrpl(
+    amount: AssetAmountXrp | AssetAmountXrplToken,
+    receiverAddress: string
+  ): Promise<CommissionedTxResponse | { xrplResult: TxResponse }> {
+    const mainAmount = this.convertXrpAmount(amount);
+    const isConnector = !!this.connectorQuery.getValue().walletId;
+
+    if (isConnector) {
+      const commissionAmount = this.convertXrpAmount(
+        getAssetCommission(amount) as AssetAmountXrp | AssetAmountXrplToken
+      );
+      return this.sessionXrplService.sendFundsCommissioned(
+        receiverAddress,
+        mainAmount,
+        commissionAmount
+      );
+    } else {
+      return {
+        xrplResult: await this.sessionXrplService.sendFunds(
+          receiverAddress,
+          mainAmount
+        ),
+      };
     }
   }
 
   protected async notifyResult(
     result:
       | { algorandResult: TransactionConfirmation }
-      | { xrplResult: TxResponse },
+      | { xrplResult: TxResponse }
+      | CommissionedTxResponse,
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<void> {
@@ -168,6 +205,29 @@ export class PayPage implements OnInit {
         });
       } else {
         await this.notifyXrplFailure({ resultCode });
+      }
+    } else if ('mainTx' in result) {
+      // TODO(Jonathan): Update the success notification to cater for commissioned transactions
+      const { mainTx, commissionedTx } = result;
+      if (mainTx.success && commissionedTx?.success) {
+        this.notifySuccess({
+          amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
+          address: receiverAddress,
+          txId: mainTx.response.id.toString(),
+          timestamp: new Date(),
+        });
+      } else if (!mainTx.success) {
+        await this.notifyXrplFailure({ resultCode: mainTx.resultCode });
+      } else if (
+        result.mainTx.success &&
+        commissionedTx &&
+        !commissionedTx.success
+      ) {
+        await this.notifyXrplFailure({
+          resultCode: commissionedTx.resultCode,
+        });
+      } else {
+        throw panic('Invalid commisioned transaction result.', result);
       }
     } else {
       throw never(result);
