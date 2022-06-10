@@ -124,9 +124,8 @@ export class SessionXrplService {
     mainAmount: xrpl.Payment['Amount'],
     commissionAmount: xrpl.Payment['Amount']
   ): Promise<CommissionedTxResponse> {
-    const connectorWalletId = await firstValueFrom(
-      this.connectorQuery.walletId
-    );
+    const connectorWalletId = this.connectorQuery.getValue().walletId;
+
     if (!connectorWalletId) {
       throw panic(
         'No wallet id for connector. Cannot do a commissioned transaction',

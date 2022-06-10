@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
-import { firstValueFrom, Observable, pluck } from 'rxjs';
+import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
@@ -153,7 +153,7 @@ export class PayPage implements OnInit {
     receiverAddress: string
   ): Promise<CommissionedTxResponse | { xrplResult: TxResponse }> {
     const mainAmount = this.convertXrpAmount(amount);
-    const isConnector = await firstValueFrom(this.connectorQuery.isConnector);
+    const isConnector = !!this.connectorQuery.getValue().walletId;
 
     if (isConnector) {
       const commissionAmount = this.convertXrpAmount(
