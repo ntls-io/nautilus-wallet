@@ -22,8 +22,8 @@ describe('DeleteUserPage', () => {
         ],
       }).compileComponents();
 
-      router = TestBed.inject(Router)
-      router.navigate(['delete-user'])
+      router = TestBed.inject(Router);
+      router.navigate(['delete-user']);
       fixture = TestBed.createComponent(DeleteUserPage);
       component = fixture.componentInstance;
       fixture.detectChanges();

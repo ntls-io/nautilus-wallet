@@ -22,8 +22,8 @@ describe('DepositFundsPage', () => {
         ],
       }).compileComponents();
 
-      router = TestBed.inject(Router)
-      router.navigate(['deposit-funds'])
+      router = TestBed.inject(Router);
+      router.navigate(['deposit-funds']);
       fixture = TestBed.createComponent(DepositFundsPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
