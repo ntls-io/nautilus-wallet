@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
+  checkTxResponseSucceeded,
   hexToUint8Array,
   txnAfterSign,
   txnBeforeSign,
@@ -17,12 +18,40 @@ import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
+import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
 
 /**
  * This service manages session state and operations related to the XRP ledger.
  */
+
+// TODO(Herman): Move these types to a better place?
+
+export type TransactionSuccess = {
+  success: true;
+  response: xrpl.TxResponse;
+};
+export type TransactionFailure = {
+  success: false;
+  response: xrpl.TxResponse;
+  resultCode: xrpl.TransactionMetadata['TransactionResult'];
+};
+
+export type CommissionedTxResponse =
+  | {
+      mainTx: TransactionSuccess;
+      commissionedTx: TransactionSuccess;
+    }
+  /** Commission transaction will not be sent if the main transaction fails */
+  | {
+      mainTx: TransactionFailure;
+      commissionedTx: undefined;
+    }
+  | {
+      mainTx: TransactionSuccess;
+      commissionedTx: TransactionFailure;
+    };
 @Injectable({ providedIn: 'root' })
 export class SessionXrplService {
   constructor(
@@ -30,7 +59,8 @@ export class SessionXrplService {
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     private enclaveService: EnclaveService,
-    private xrplService: XrplService
+    private xrplService: XrplService,
+    private connectorQuery: ConnectorQuery
   ) {}
 
   /**
@@ -79,38 +109,94 @@ export class SessionXrplService {
     receiverId: string,
     amount: xrpl.Payment['Amount']
   ): Promise<xrpl.TxResponse> {
-    const { wallet } = this.sessionQuery.assumeActiveSession();
-
-    const preparedTx: xrpl.Payment = await withLoggedExchange(
-      'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
-      async () =>
-        await this.xrplService.createUnsignedPaymentTransaction(
-          wallet.xrpl_account.address_base58,
-          receiverId,
-          amount
-        ),
-      { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
+      receiverId,
+      amount
     );
 
-    return await this.sendTransaction(preparedTx);
+    const txResponse = await this.sendTransaction(preparedTx);
+    await this.loadAccountData();
+    return txResponse;
   }
 
- async deleteAccount (
-   receiverAddress: string
-   ): Promise<xrpl.TxResponse> {
-   const { wallet } = this.sessionQuery.assumeActiveSession();
+  async sendFundsCommissioned(
+    receiverId: string,
+    mainAmount: xrpl.Payment['Amount'],
+    commissionAmount: xrpl.Payment['Amount']
+  ): Promise<CommissionedTxResponse> {
+    const connectorWalletId = this.connectorQuery.getValue().walletId;
 
-   const preparedTx: xrpl.AccountDelete = await withLoggedExchange(
-    'SessionXrplService.deleteAccount: XrplService.createcreateUnsignedDeleteTransaction:',
-   async () =>
-     await this.xrplService.createUnsignedDeleteTransaction(
-       wallet.xrpl_account.address_base58,
-       receiverAddress
-     ),
-     { from: wallet.xrpl_account.address_base58, to: receiverAddress}
-   );
+    if (!connectorWalletId) {
+      throw panic(
+        'No wallet id for connector. Cannot do a commissioned transaction',
+        connectorWalletId
+      );
+    }
+    const mainTxnUnsigned: xrpl.Payment = await this.prepareUnsignedTransaction(
+      receiverId,
+      mainAmount
+    );
 
-   return await this.sendTransaction(preparedTx);
+    const signedMainTxn = await this.signTransaction(mainTxnUnsigned);
+
+    // Only submit commission transaction once the main transaction have succeeded.
+    // There is currently no way to submit 2 transactions as an atomic unit with XRPL
+    const txResponse = await this.submitTransaction(signedMainTxn);
+    const txSucceeded = checkTxResponseSucceeded(txResponse);
+    if (!txSucceeded.succeeded) {
+      return {
+        mainTx: {
+          success: false,
+          response: txResponse,
+          resultCode: txSucceeded.resultCode,
+        },
+        commissionedTx: undefined,
+      };
+    }
+
+    const commissionTxnUnsigned: xrpl.Payment =
+      await this.prepareUnsignedTransaction(
+        connectorWalletId,
+        commissionAmount
+      );
+
+    const signedCommissionTxn = await this.signTransaction(
+      commissionTxnUnsigned
+    );
+
+    const commissionTxResponse = await this.submitTransaction(
+      signedCommissionTxn
+    );
+
+    const commissionTxSucceeded =
+      checkTxResponseSucceeded(commissionTxResponse);
+
+    if (!commissionTxSucceeded.succeeded) {
+      await this.loadAccountData();
+      return {
+        mainTx: {
+          success: true,
+          response: txResponse,
+        },
+        commissionedTx: {
+          success: false,
+          response: commissionTxResponse,
+          resultCode: commissionTxSucceeded.resultCode,
+        },
+      };
+    }
+
+    await this.loadAccountData();
+    return {
+      mainTx: {
+        success: true,
+        response: txResponse,
+      },
+      commissionedTx: {
+        success: true,
+        response: commissionTxResponse,
+      },
+    };
   }
 
   /**
@@ -132,6 +218,22 @@ export class SessionXrplService {
           limitAmount
         ),
       { from: wallet.xrpl_account.address_base58, limitAmount }
+    );
+
+    return await this.sendTransaction(preparedTx);
+  }
+
+  async deleteAccount(receiverAddress: string): Promise<xrpl.TxResponse> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    const preparedTx: xrpl.AccountDelete = await withLoggedExchange(
+      'SessionXrplService.deleteAccount: XrplService.createcreateUnsignedDeleteTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedDeleteTransaction(
+          wallet.xrpl_account.address_base58,
+          receiverAddress
+        ),
+      { from: wallet.xrpl_account.address_base58, to: receiverAddress }
     );
 
     return await this.sendTransaction(preparedTx);
@@ -192,14 +294,27 @@ export class SessionXrplService {
     }
   }
 
-  /**
-   * Helper: Sign, submit, and confirm the given transaction.
-   *
-   * NOTE: This does not check for success: the caller is responsible for that.
-   */
-  protected async sendTransaction(
+  protected async prepareUnsignedTransaction(
+    receiverId: string,
+    amount: xrpl.Payment['Amount']
+  ): Promise<xrpl.Payment> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    return withLoggedExchange(
+      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedTransaction(
+          wallet.xrpl_account.address_base58,
+          receiverId,
+          amount
+        ),
+      { from: wallet.xrpl_account.address_base58, to: receiverId, amount }
+    );
+  }
+
+  protected async signTransaction(
     txnUnsigned: xrpl.Transaction
-  ): Promise<xrpl.TxResponse> {
+  ): Promise<string> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     const { txnBeingSigned, bytesToSignEncoded } = txnBeforeSign(
@@ -219,26 +334,37 @@ export class SessionXrplService {
     if ('XrplTransactionSigned' in signed) {
       const { signature_bytes } = signed.XrplTransactionSigned;
 
-      const { txnSigned, txnSignedEncoded } = txnAfterSign(
-        txnBeingSigned,
-        uint8ArrayToHex(signature_bytes)
-      );
-
-      const txResponse: xrpl.TxResponse = await withLoggedExchange(
-        'SessionXrplService.sendTransaction: signed, submitting:',
-        async () =>
-          await this.xrplService.submitAndWaitForSigned(txnSignedEncoded),
-        txnSignedEncoded
-      );
-
-      await this.loadAccountData(); // FIXME(Pi): Move to caller?
-
-      return txResponse;
+      return txnAfterSign(txnBeingSigned, uint8ArrayToHex(signature_bytes))
+        .txnSignedEncoded;
     } else {
       throw panic(
         'SessionXrplService.sendTransaction: expected XrplTransactionSigned, got:',
         signed
       );
     }
+  }
+
+  protected async submitTransaction(
+    signedTransaction: string
+  ): Promise<xrpl.TxResponse> {
+    return withLoggedExchange(
+      'SessionXrplService.sendTransaction: signed, submitting:',
+      async () =>
+        await this.xrplService.submitAndWaitForSigned(signedTransaction),
+      signedTransaction
+    );
+  }
+  /**
+   * Helper: Sign, submit, and confirm the given transaction.
+   *
+   * NOTE: This does not check for success: the caller is responsible for that.
+   */
+  protected async sendTransaction(
+    txnUnsigned: xrpl.Transaction
+  ): Promise<xrpl.TxResponse> {
+    const txnSignedEncoded = await this.signTransaction(txnUnsigned);
+    const txResponse = await this.submitTransaction(txnSignedEncoded);
+
+    return txResponse;
   }
 }

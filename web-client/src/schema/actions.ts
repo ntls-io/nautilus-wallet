@@ -48,7 +48,7 @@ export type TransactionSigned =
   /** A signed Algorand transaction. */
   | { AlgorandTransactionSigned: { signed_transaction_bytes: Bytes } }
 
-  /** A signed Algorand transaction.*/
+  /** A signed Xrpl transaction.*/
   | {
       XrplTransactionSigned: {
         signed_transaction_bytes: Bytes;
