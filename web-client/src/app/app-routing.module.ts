@@ -80,11 +80,17 @@ export const routes: Routes = [
   },
   {
     path: 'delete-user',
-    loadChildren: () => import('./views/delete-user/delete-user.module').then( m => m.DeleteUserPageModule)
+    loadChildren: () =>
+      import('./views/delete-user/delete-user.module').then(
+        (m) => m.DeleteUserPageModule
+      ),
   },
   {
     path: 'deposit-funds',
-    loadChildren: () => import('./views/deposit-funds/deposit-funds.module').then( m => m.DepositFundsPageModule)
+    loadChildren: () =>
+      import('./views/deposit-funds/deposit-funds.module').then(
+        (m) => m.DepositFundsPageModule
+      ),
   },
   {
     path: 'become-connector',

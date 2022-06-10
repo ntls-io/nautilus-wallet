@@ -10,8 +10,14 @@
 
 <div class="ion-text-center p-2">
   <h3 class="font-semibold font-nasalization">Delete My wallet</h3>
-  <p style="font-size:80%;">You will need to enter a wallet address to send your remaining XRP balance to.</p>
-  <p style="font-size:80%;">For other account balances, please make sure you transfer remaining balances through the <strong>Send Money tab</strong>.</p>
+  <p style="font-size: 80%">
+    You will need to enter a wallet address to send your remaining XRP balance
+    to.
+  </p>
+  <p style="font-size: 80%">
+    For other account balances, please make sure you transfer remaining balances
+    through the <strong>Send Money tab</strong>.
+  </p>
 </div>
 
 <ion-grid fixed>
@@ -20,18 +26,17 @@
     [isLoading]="balancesIsLoading"
   ></app-balance-summary-card>
 
-
-<ion-content>
-  <p class="ion-text-center p-2">Where should the funds be deposited?</p>
-  <ion-list>
-    <ion-item-group *ngFor="let item of actionItems">
-      <app-action-item
-        [title]="item.title"
-        [icon]="item.icon"
-        [disabled]="item.disabled"
-        (click)="execItemAction(item.action)"
-      ></app-action-item>
-    </ion-item-group>
-  </ion-list>
-</ion-content>
+  <ion-content>
+    <p class="ion-text-center p-2">Where should the funds be deposited?</p>
+    <ion-list>
+      <ion-item-group *ngFor="let item of actionItems">
+        <app-action-item
+          [title]="item.title"
+          [icon]="item.icon"
+          [disabled]="item.disabled"
+          (click)="execItemAction(item.action)"
+        ></app-action-item>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
 </ion-grid>

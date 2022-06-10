@@ -1,31 +1,28 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { checkClass } from 'src/helpers/helpers';
-import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
-import { LoadingController, ToastController } from '@ionic/angular';
-import { SessionService } from 'src/app/state/session.service';
+import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { ActionItem } from 'src/app/components/action-item/action-item.component';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
-import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
+import { SessionQuery } from 'src/app/state/session.query';
+import { SessionService } from 'src/app/state/session.service';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import {
   withConsoleGroup,
   withConsoleGroupCollapsed,
 } from 'src/app/utils/console.helpers';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { SessionQuery } from 'src/app/state/session.query';
-import { Observable } from 'rxjs';
-import { handleScan } from '../scanner.helpers';
-import { ActionItem } from 'src/app/components/action-item/action-item.component';
-import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import {
-  AlertController,
-  ModalController,
-  NavController,
-} from '@ionic/angular';
+import { checkClass } from 'src/helpers/helpers';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
-
-
+import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-delete-user',
@@ -33,7 +30,6 @@ import { ManualAddressPage } from '../manual-address/manual-address.page';
   styleUrls: ['./delete-user.page.scss'],
 })
 export class DeleteUserPage implements OnInit {
-
   actionItems: Array<SendFundsActionItem> = [
     {
       title: 'Scan a QR code',
@@ -76,13 +72,13 @@ export class DeleteUserPage implements OnInit {
     public notification: SwalHelper,
     public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService
-    ) {
+  ) {
     this.addressForm = new FormGroup({
       address: new FormControl('', [Validators.required, addressValidator]),
     });
-   }
+  }
 
-   async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {
     await this.refreshWalletData();
   }
 
@@ -242,7 +238,6 @@ export class DeleteUserPage implements OnInit {
       });
     }
   }
-
 }
 
 const addressValidator = (formGroup: FormControl) => {
@@ -262,4 +257,4 @@ const trimmedValue = (formControl: FormControl) => {
 // Customise ActionItem for this page with an 'action' field:
 
 type SendFundsActionItem = ActionItem & { action: ItemAction };
-type ItemAction = 'presentScanner' | 'presentAddressModal'
+type ItemAction = 'presentScanner' | 'presentAddressModal';

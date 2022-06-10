@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 import { PayFromToModule } from 'src/app/components/pay-from-to/pay-from-to.module';
 import { PurePayPageComponentModule } from 'src/app/components/pure-pay-page/pure-pay-page.module';
-import { DepositFundsPageRoutingModule } from './deposit-funds-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { DepositFundsPageRoutingModule } from './deposit-funds-routing.module';
 import { DepositFundsPage } from './deposit-funds.page';
 
 @NgModule({
@@ -17,8 +16,8 @@ import { DepositFundsPage } from './deposit-funds.page';
     PayFromToModule,
     PurePayPageComponentModule,
     SharedModule,
-    DepositFundsPageRoutingModule
+    DepositFundsPageRoutingModule,
   ],
-  declarations: [DepositFundsPage]
+  declarations: [DepositFundsPage],
 })
 export class DepositFundsPageModule {}

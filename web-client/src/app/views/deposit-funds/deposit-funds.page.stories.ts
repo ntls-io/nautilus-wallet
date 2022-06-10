@@ -21,4 +21,3 @@ const Template: Story<DepositFundsPage> = (args: DepositFundsPage) => ({
 });
 
 export const Default = Template.bind({});
-
