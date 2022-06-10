@@ -301,9 +301,9 @@ export class SessionXrplService {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     return withLoggedExchange(
-      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
       async () =>
-        await this.xrplService.createUnsignedTransaction(
+        await this.xrplService.createUnsignedPaymentTransaction(
           wallet.xrpl_account.address_base58,
           receiverId,
           amount
