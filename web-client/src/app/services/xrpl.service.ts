@@ -142,11 +142,11 @@ export class XrplService {
       TransactionType: 'AccountDelete',
       Destination: toAddress,
     };
-    let Tx = await this.withConnection(
+    const tX = await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
     );
-    //Tx.LastLedgerSequence = Tx.LastLedgerSequence! + 10
-    return Tx;
+    //tX.LastLedgerSequence = Tx.LastLedgerSequence! + 10
+    return tX;
   }
 
   async createUnsignedTrustSetTx(

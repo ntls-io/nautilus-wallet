@@ -30,6 +30,11 @@ import { handleScan } from '../scanner.helpers';
   styleUrls: ['./delete-user.page.scss'],
 })
 export class DeleteUserPage implements OnInit {
+  @Input() isPinEntryOpen = false;
+
+  /** True if balances are in the process of being updated */
+  @Input() balancesIsLoading = false;
+
   actionItems: Array<SendFundsActionItem> = [
     {
       title: 'Scan a QR code',
@@ -53,11 +58,6 @@ export class DeleteUserPage implements OnInit {
   /** Active wallet's balances. */
   balances: Observable<AssetAmount[]> = this.sessionQuery.allBalances;
 
-  @Input() isPinEntryOpen = false;
-
-  /** True if balances are in the process of being updated */
-  @Input() balancesIsLoading = false;
-
   hasCamera?: boolean;
 
   /** @see validatedAddress */
@@ -78,13 +78,13 @@ export class DeleteUserPage implements OnInit {
     });
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.refreshWalletData();
-  }
-
   get validatedAddress(): string | undefined {
     const trimmed = this.address?.trim();
     return trimmed === '' ? undefined : trimmed;
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.refreshWalletData();
   }
 
   async openScanner(): Promise<void> {
@@ -168,6 +168,41 @@ export class DeleteUserPage implements OnInit {
     }
   }
 
+  async execItemAction(action: ItemAction): Promise<void> {
+    switch (action) {
+      case 'presentScanner':
+        await this.presentScanner();
+        break;
+      case 'presentAddressModal':
+        await this.presentAddressModal();
+        break;
+      default:
+        break;
+    }
+  }
+
+  async presentScanner() {
+    const scanSuccess = async (address: string) => {
+      await this.navCtrl.navigateForward('deposit-funds', {
+        queryParams: { receiverAddress: address },
+      });
+    };
+    await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
+  }
+
+  async presentAddressModal() {
+    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success && data?.address) {
+      this.navCtrl.navigateForward('deposit-funds', {
+        queryParams: { receiverAddress: data?.address },
+      });
+    }
+  }
+
   protected async checkXrplTokenOptIns(): Promise<void> {
     if (this.sessionQuery.hasXrpBalance()) {
       const txResponses = await this.sessionXrplService.checkTrustlineOptIns();
@@ -202,41 +237,6 @@ export class DeleteUserPage implements OnInit {
       titleText,
       text,
     });
-  }
-
-  async execItemAction(action: ItemAction): Promise<void> {
-    switch (action) {
-      case 'presentScanner':
-        await this.presentScanner();
-        break;
-      case 'presentAddressModal':
-        await this.presentAddressModal();
-        break;
-      default:
-        break;
-    }
-  }
-
-  async presentScanner() {
-    const scanSuccess = async (address: string) => {
-      await this.navCtrl.navigateForward('deposit-funds', {
-        queryParams: { receiverAddress: address },
-      });
-    };
-    await handleScan(this.modalCtrl, this.notification.swal, scanSuccess);
-  }
-
-  async presentAddressModal() {
-    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
-
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-    if (data?.success && data?.address) {
-      this.navCtrl.navigateForward('deposit-funds', {
-        queryParams: { receiverAddress: data?.address },
-      });
-    }
   }
 }
 

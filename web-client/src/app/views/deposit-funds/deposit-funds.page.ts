@@ -32,13 +32,19 @@ export class DepositFundsPage implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.receiverAddress = params.receiverAddress;
+    });
+  }
+
   async deleteWallet(): Promise<void> {
     if (this.receiverAddress) {
       const result = await withLoadingOverlayOpts<
         { xrplResult: TxResponse } | undefined
       >(this.loadingCtrl, { message: 'Confirming Transaction' }, () => {
         if (this.receiverAddress) {
-          return this.DeleteByLedgerType(this.receiverAddress);
+          return this.deleteByLedgerType(this.receiverAddress);
         }
         return Promise.resolve(undefined);
       });
@@ -48,7 +54,7 @@ export class DepositFundsPage implements OnInit {
     }
   }
 
-  protected async DeleteByLedgerType(
+  protected async deleteByLedgerType(
     receiverAddress: string
   ): Promise<{ xrplResult: TxResponse }> {
     return {
@@ -127,12 +133,6 @@ export class DepositFundsPage implements OnInit {
         `<p>Result code: ${resultCode}</p>`,
         '<p>See <a href="https://xrpl.org/transaction-results.html" target="_blank">Transaction Results</a> for more details.</p>',
       ].join('\n'),
-    });
-  }
-
-  ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.receiverAddress = params['receiverAddress'];
     });
   }
 }
