@@ -67,6 +67,6 @@ const ICONS = {
   faQrcode,
   faReceipt,
   faWallet,
-  faTrash
-  faCircleNodes,
+  faTrash,
+  faCircleNodes
 };
