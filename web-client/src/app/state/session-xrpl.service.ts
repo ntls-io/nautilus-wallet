@@ -227,7 +227,7 @@ export class SessionXrplService {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     const preparedTx: xrpl.AccountDelete = await withLoggedExchange(
-      'SessionXrplService.deleteAccount: XrplService.createcreateUnsignedDeleteTransaction:',
+      'SessionXrplService.deleteAccount: XrplService.createUnsignedDeleteTransaction:',
       async () =>
         await this.xrplService.createUnsignedDeleteTransaction(
           wallet.xrpl_account.address_base58,
