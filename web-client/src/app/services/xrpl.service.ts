@@ -144,7 +144,6 @@ export class XrplService {
     const tX = await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
     );
-    //tX.LastLedgerSequence = Tx.LastLedgerSequence! + 10
     return tX;
   }
 
