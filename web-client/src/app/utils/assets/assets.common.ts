@@ -3,6 +3,7 @@
  */
 
 import { formatNumber } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 /**
  * Application-wide description of how to display a particular asset.
@@ -61,6 +62,7 @@ export const assetAmountFromBase = (
 export const getAssetCommission = (assetAmount: AssetAmount): AssetAmount => ({
   ...assetAmount,
   // Assume 1% comission amount
-  // TODO(Herman): configure this as an environment variable
-  amount: assetAmount ? assetAmount.amount * 0.01 : 0,
+  amount: assetAmount
+    ? assetAmount.amount * environment.commissionPercentage
+    : 0,
 });
