@@ -116,7 +116,6 @@ export class XrplService {
       async (client) => await client.getBalances(address)
     );
   }
-  // Rename below to createUnsignedPaymentTransaction
   async createUnsignedPaymentTransaction(
     fromAddress: string,
     toAddress: string,
