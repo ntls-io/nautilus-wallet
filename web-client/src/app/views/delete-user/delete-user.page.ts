@@ -46,11 +46,6 @@ export class DeleteUserPage implements OnInit {
       icon: faKeyboard,
       action: 'presentAddressModal',
     },
-    // {
-    //   title: 'Share my wallet address',
-    //   icon: faLink,
-    //   disabled: true,
-    // },
   ];
 
   addressForm: FormGroup;
