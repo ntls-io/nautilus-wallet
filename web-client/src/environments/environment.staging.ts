@@ -21,4 +21,5 @@ export const environment: Environment = {
       connectionTimeout: 20000,
     },
   },
+  commissionPercentage: 0.01,
 };
