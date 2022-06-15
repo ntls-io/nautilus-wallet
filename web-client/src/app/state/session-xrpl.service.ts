@@ -267,6 +267,9 @@ export class SessionXrplService {
    * This sends a `TrustSet` transaction matching the peer's limit
    * if the active session's wallet's limit is zero.
    *
+   * This also sends a `TrustSet` transaction matching the peer's limit
+   * if the active session's wallet's limit_peer is zero.
+   *
    * @return the `TrustSet` response, or undefined
    */
   async checkTrustlineOptIn(
@@ -281,6 +284,27 @@ export class SessionXrplService {
     }
 
     if (trustline.limit === '0' && 0 < limit_peer) {
+      const limitAmount = {
+        currency: trustline.currency,
+        issuer: trustline.account,
+        value: trustline.limit_peer, // XXX: For now, just match the peer's limit.
+      };
+      return await withLoggedExchange(
+        'SessionXrplService.checkTrustlineOptIn: sending TrustSet',
+        async () => await this.sendTrustSetTx(limitAmount),
+        limitAmount
+      );
+    }
+
+    const limit = parseNumber(trustline.limit);
+    if (limit === undefined) {
+      throw panic(
+        'SessionXrplService.checkTrustlineOptIn: bad limit:',
+        trustline
+      );
+    }
+
+    if (trustline.limit_peer === '0' && 0 < limit) {
       const limitAmount = {
         currency: trustline.currency,
         issuer: trustline.account,
