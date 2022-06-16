@@ -12,12 +12,12 @@ export class TransactionFeePipe implements PipeTransform {
     if (assetAmount) {
       const assetTransactedFee = getAssetCommission(assetAmount);
 
+      const total = { ...assetAmount };
       if (isTotal) {
-        //TODO: check if we add or subtract fee to/from total (Jonathan)
-        assetAmount.amount = assetAmount.amount - assetTransactedFee.amount;
+        total.amount = +assetAmount.amount + assetTransactedFee.amount;
       }
 
-      return isTotal ? assetAmount : assetTransactedFee;
+      return isTotal ? total : assetTransactedFee;
     }
 
     return undefined;

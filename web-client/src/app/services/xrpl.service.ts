@@ -116,8 +116,7 @@ export class XrplService {
       async (client) => await client.getBalances(address)
     );
   }
-
-  async createUnsignedTransaction(
+  async createUnsignedPaymentTransaction(
     fromAddress: string,
     toAddress: string,
     amount: xrpl.Payment['Amount']
@@ -131,6 +130,21 @@ export class XrplService {
     return await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
     );
+  }
+
+  async createUnsignedDeleteTransaction(
+    fromAddress: string,
+    toAddress: string
+  ): Promise<xrpl.AccountDelete> {
+    const unpreparedTx: xrpl.AccountDelete = {
+      Account: fromAddress,
+      TransactionType: 'AccountDelete',
+      Destination: toAddress,
+    };
+    const tX = await this.withConnection(
+      async (client) => await client.autofill(unpreparedTx)
+    );
+    return tX;
   }
 
   async createUnsignedTrustSetTx(

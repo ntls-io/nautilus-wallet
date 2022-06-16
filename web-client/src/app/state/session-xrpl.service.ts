@@ -223,6 +223,22 @@ export class SessionXrplService {
     return await this.sendTransaction(preparedTx);
   }
 
+  async deleteAccount(receiverAddress: string): Promise<xrpl.TxResponse> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    const preparedTx: xrpl.AccountDelete = await withLoggedExchange(
+      'SessionXrplService.deleteAccount: XrplService.createUnsignedDeleteTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedDeleteTransaction(
+          wallet.xrpl_account.address_base58,
+          receiverAddress
+        ),
+      { from: wallet.xrpl_account.address_base58, to: receiverAddress }
+    );
+
+    return await this.sendTransaction(preparedTx);
+  }
+
   /**
    * Check trustline opt-in for each of this account's trust lines.
    *
@@ -251,6 +267,9 @@ export class SessionXrplService {
    * This sends a `TrustSet` transaction matching the peer's limit
    * if the active session's wallet's limit is zero.
    *
+   * This also sends a `TrustSet` transaction matching the peer's limit
+   * if the active session's wallet's limit_peer is zero.
+   *
    * @return the `TrustSet` response, or undefined
    */
   async checkTrustlineOptIn(
@@ -276,6 +295,27 @@ export class SessionXrplService {
         limitAmount
       );
     }
+
+    const limit = parseNumber(trustline.limit);
+    if (limit === undefined) {
+      throw panic(
+        'SessionXrplService.checkTrustlineOptIn: bad limit:',
+        trustline
+      );
+    }
+
+    if (trustline.limit_peer === '0' && 0 < limit) {
+      const limitAmount = {
+        currency: trustline.currency,
+        issuer: trustline.account,
+        value: trustline.limit_peer, // XXX: For now, just match the peer's limit.
+      };
+      return await withLoggedExchange(
+        'SessionXrplService.checkTrustlineOptIn: sending TrustSet',
+        async () => await this.sendTrustSetTx(limitAmount),
+        limitAmount
+      );
+    }
   }
 
   protected async prepareUnsignedTransaction(
@@ -285,9 +325,9 @@ export class SessionXrplService {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
     return withLoggedExchange(
-      'SessionXrplService.sendFunds: XrplService.createUnsignedTransaction:',
+      'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
       async () =>
-        await this.xrplService.createUnsignedTransaction(
+        await this.xrplService.createUnsignedPaymentTransaction(
           wallet.xrpl_account.address_base58,
           receiverId,
           amount

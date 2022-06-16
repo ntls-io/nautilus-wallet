@@ -79,6 +79,20 @@ export const routes: Routes = [
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
   },
   {
+    path: 'delete-user',
+    loadChildren: () =>
+      import('./views/delete-user/delete-user.module').then(
+        (m) => m.DeleteUserPageModule
+      ),
+  },
+  {
+    path: 'deposit-funds',
+    loadChildren: () =>
+      import('./views/deposit-funds/deposit-funds.module').then(
+        (m) => m.DepositFundsPageModule
+      ),
+  },
+  {
     path: 'become-connector',
     loadChildren: () =>
       import('./views/become-connector/become-connector.module').then(

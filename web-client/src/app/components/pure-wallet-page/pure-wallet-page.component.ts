@@ -7,6 +7,7 @@ import {
   faHandHoldingUsd,
   faQrcode,
   faReceipt,
+  faTrash,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
 import { ConnectorQuery } from 'src/app/state/connector';
@@ -66,5 +67,6 @@ const ICONS = {
   faQrcode,
   faReceipt,
   faWallet,
+  faTrash,
   faCircleNodes,
 };

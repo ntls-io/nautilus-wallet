@@ -20,6 +20,7 @@ import {
   numericValidator,
   parseNumber,
 } from 'src/app/utils/validators';
+import { environment } from 'src/environments/environment';
 import { checkClass } from 'src/helpers/helpers';
 
 /**
@@ -104,10 +105,14 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
           this.minAmount !== undefined
             ? Validators.min(this.minAmount)(control)
             : null,
-        (control) =>
-          this.maxAmount !== undefined
-            ? Validators.max(this.maxAmount)(control)
-            : null,
+        (control) => {
+          if (this.maxAmount !== undefined) {
+            const max = this.maxAmount * (1 - environment.commissionPercentage);
+            return Validators.max(max)(control);
+          }
+
+          return null;
+        },
       ]),
     });
   }

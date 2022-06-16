@@ -71,6 +71,8 @@ export type Environment = {
     options?: xrpl.ClientOptions;
   };
 
+  commissionPercentage: number;
+
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */
