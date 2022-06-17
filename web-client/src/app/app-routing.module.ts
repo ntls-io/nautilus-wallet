@@ -7,7 +7,7 @@ import { OpenWalletGuard } from './open-wallet.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'landing',
+    redirectTo: 'nfc',
     pathMatch: 'full',
   },
   {
@@ -98,6 +98,11 @@ export const routes: Routes = [
       import('./views/become-connector/become-connector.module').then(
         (m) => m.BecomeConnectorPageModule
       ),
+  },
+  {
+    path: 'nfc',
+    loadChildren: () =>
+      import('./views/nfc/nfc.module').then((m) => m.NfcPageModule),
   },
 ];
 
