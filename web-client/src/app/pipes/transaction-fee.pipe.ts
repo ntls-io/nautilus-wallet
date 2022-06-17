@@ -6,7 +6,7 @@ import { AssetAmount, getAssetCommission } from '../utils/assets/assets.common';
   name: 'transactionFee',
 })
 export class TransactionFeePipe implements PipeTransform {
-  constructor(public connectorQuery: ConnectorQuery) {}
+  constructor(private connectorQuery: ConnectorQuery) {}
 
   transform(
     assetAmount: AssetAmount | undefined,
