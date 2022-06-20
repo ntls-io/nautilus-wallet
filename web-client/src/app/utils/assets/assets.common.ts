@@ -59,10 +59,17 @@ export const assetAmountFromBase = (
 });
 
 /**  Calculates the commission for a given asset amount, returning an instance of the same asset/token type */
-export const getAssetCommission = (assetAmount: AssetAmount): AssetAmount => ({
-  ...assetAmount,
-  // Assume 1% comission amount
-  amount: assetAmount
-    ? assetAmount.amount * environment.commissionPercentage
-    : 0,
-});
+export const getAssetCommission = (
+  assetAmount: AssetAmount,
+  isConnector?: boolean
+): AssetAmount => {
+  const commissionPercentage = isConnector
+    ? environment.commissionPercentage
+    : 0;
+
+  return {
+    ...assetAmount,
+    // Assume 1% comission amount
+    amount: assetAmount ? assetAmount.amount * commissionPercentage : 0,
+  };
+};

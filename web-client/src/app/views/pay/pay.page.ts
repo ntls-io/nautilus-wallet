@@ -157,7 +157,9 @@ export class PayPage implements OnInit {
 
     if (isConnector) {
       const commissionAmount = this.convertXrpAmount(
-        getAssetCommission(amount) as AssetAmountXrp | AssetAmountXrplToken
+        getAssetCommission(amount, isConnector) as
+          | AssetAmountXrp
+          | AssetAmountXrplToken
       );
       return this.sessionXrplService.sendFundsCommissioned(
         receiverAddress,

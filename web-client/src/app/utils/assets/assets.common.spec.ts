@@ -80,7 +80,7 @@ describe('getAssetCommission', () => {
 
     for (const [assetAmount, expected] of exampleAssets) {
       it(`${JSON.stringify(assetAmount)} → ${JSON.stringify(expected)}`, () => {
-        expect(getAssetCommission(assetAmount)).toEqual(expected);
+        expect(getAssetCommission(assetAmount, true)).toEqual(expected);
       });
     }
   });
