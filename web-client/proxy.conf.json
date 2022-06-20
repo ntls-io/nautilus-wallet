@@ -1,6 +1,6 @@
 {
   "/api/nautilus": {
-    "target": "https://ntls-api.registree.io/",
+    "target": "https://wallet-staging-api.ntls.io/",
     "secure": true,
     "changeOrigin": true,
     "pathRewrite": {
@@ -9,7 +9,7 @@
     "logLevel": "debug"
   },
   "/api/asset-services": {
-    "target": "https://ntls-services.registree.io/",
+    "target": "https://ntls-staging-services.ntls.io/",
     "secure": true,
     "changeOrigin": true,
     "pathRewrite": {
