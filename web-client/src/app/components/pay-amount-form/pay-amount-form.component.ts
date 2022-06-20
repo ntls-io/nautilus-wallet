@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConnectorQuery } from 'src/app/state/connector';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import {
@@ -51,7 +52,7 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
 
   #paymentForm?: FormGroup;
 
-  constructor() {}
+  constructor(private connectorQuery: ConnectorQuery) {}
 
   /** Safe accessor. */
   get paymentForm() {
@@ -107,7 +108,11 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
             : null,
         (control) => {
           if (this.maxAmount !== undefined) {
-            const max = this.maxAmount * (1 - environment.commissionPercentage);
+            const isConnector = !!this.connectorQuery.getValue().walletId;
+            const commission = isConnector
+              ? 1 - environment.commissionPercentage
+              : 1;
+            const max = this.maxAmount * commission;
             return Validators.max(max)(control);
           }
 
