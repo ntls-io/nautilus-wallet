@@ -18,7 +18,7 @@ export class TransactionFeePipe implements PipeTransform {
 
       const total = { ...assetAmount };
       if (isTotal) {
-        total.amount = +assetAmount.amount + assetTransactedFee.amount;
+        total.amount = assetAmount.amount - assetTransactedFee.amount;
       }
 
       return isTotal ? total : assetTransactedFee;
