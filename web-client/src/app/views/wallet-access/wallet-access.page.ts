@@ -42,6 +42,22 @@ export class WalletAccessPage implements OnInit {
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
   }
 
+  ionViewDidEnter() {
+    const options = {
+      token: 'mobile sdk token here', // IMPORTANT: see notes
+      applicant_id: 'applicant id here',
+      flow_steps: ['welcome', 'document', 'face', 'final'],
+    };
+
+    const onComplete = (completeResponse: any) => {
+      console.log(completeResponse);
+    };
+
+    console.log((window as any).plugins.onfido);
+
+    // (window as any).plugins.onfido.init(onComplete, options);
+  }
+
   async openScanner(): Promise<void> {
     await handleScan(
       this.modalCtrl,
