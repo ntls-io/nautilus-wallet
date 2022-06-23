@@ -1,0 +1,51 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>2 Factor Authentication</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="text-center" fixed>
+    <ion-row>
+      <ion-col>
+        <p>What number should we use to authenticate against?</p>
+        <ion-input></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <h4 class="font-semibold mt-0">Limits</h4>
+        <ion-button expand="block" color="secondary">Change Account</ion-button>
+        <p>Set limit which will require 2 FA for this account</p>
+        <ion-input></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <h4 class="font-semibold mt-0">Wallet Addresses</h4>
+        <ion-item lines="none">
+          <ion-input></ion-input>
+          <ion-buttons>
+            <ion-button color="white">
+              <ion-icon slot="end" name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <p>Add a wallet address that should require 2FA</p>
+        <ion-input></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" shape="round">Confirm</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

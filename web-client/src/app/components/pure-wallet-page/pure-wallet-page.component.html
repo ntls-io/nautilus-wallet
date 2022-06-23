@@ -53,6 +53,12 @@
   ></app-action-item>
 
   <app-action-item
+    title="2 FA"
+    [icon]="icons.faKey"
+    path="/two-factor"
+  ></app-action-item>
+
+  <app-action-item
     *ngIf="balances?.length !== 0"
     title="Delete My Wallet"
     [icon]="icons.faTrash"
