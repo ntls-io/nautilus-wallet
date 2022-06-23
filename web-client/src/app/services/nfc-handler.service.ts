@@ -13,15 +13,35 @@ export class NfcHandlerService {
   ) {}
 
   async checkEnabled() {
-    try {
-      const isEnabled = await this.nfc.enabled();
-      console.log('NFC Check success ', isEnabled);
-    } catch (err) {
-      console.log('NFC Check error ', err);
-    }
+    await this.nfc
+      .enabled()
+      .then((success) => {
+        console.log(success);
+        this.listenToNFC();
+      })
+      .catch((err) => {
+        console.log('NFC Check error ', err);
+        this.nfc.showSettings();
+      });
   }
 
-  startSession() {}
+  listenToNFC() {
+    this.nfc
+      .addTagDiscoveredListener(
+        (onSuccess: any) => console.log('onSuccess ', onSuccess),
+        (onFailure: any) => console.log('onFailure ', onFailure)
+      )
+      .subscribe((data) => {
+        if (data && data.tag && data.tag.id) {
+          const tagId = this.nfc.bytesToHexString(data.tag.id);
+          if (tagId) {
+            console.log('success ', tagId);
+          } else {
+            console.log('error ', 'NFC_NOT_DETECTED');
+          }
+        }
+      });
+  }
 
   read() {
     if (this.platform.is('ios')) {

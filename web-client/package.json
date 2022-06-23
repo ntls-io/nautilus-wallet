@@ -75,7 +75,7 @@
     "ngx-ion-simple-mask": "^0.9.0",
     "ngx-printer": "^1.0.0",
     "onfido-sdk-ui": "^6.15.5",
-    "phonegap-nfc": "^1.2.0",
+    "phonegap-nfc": "git+https://github.com/johncocks/phonegap-nfc.git",
     "ripple-keypairs": "^1.1.3",
     "rxjs": "^7.5.5",
     "sweetalert2": "^11.3.0",
