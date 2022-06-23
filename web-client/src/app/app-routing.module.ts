@@ -99,6 +99,10 @@ export const routes: Routes = [
         (m) => m.BecomeConnectorPageModule
       ),
   },
+  {
+    path: 'two-factor',
+    loadChildren: () => import('./views/two-factor/two-factor.module').then( m => m.TwoFactorPageModule)
+  },
 ];
 
 @NgModule({

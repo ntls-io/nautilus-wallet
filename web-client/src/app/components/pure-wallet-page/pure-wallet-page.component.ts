@@ -5,6 +5,7 @@ import {
   faDonate,
   faFingerprint,
   faHandHoldingUsd,
+  faKey,
   faQrcode,
   faReceipt,
   faTrash,
@@ -69,4 +70,5 @@ const ICONS = {
   faWallet,
   faTrash,
   faCircleNodes,
+  faKey,
 };
