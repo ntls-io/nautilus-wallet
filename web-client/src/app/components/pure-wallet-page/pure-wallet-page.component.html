@@ -28,7 +28,7 @@
     *ngIf="actionVerifyProfileShown"
     title="Verify Profile"
     [icon]="icons.faFingerprint"
-    path="/kyc"
+    (click)="verifyProfile()"
   ></app-action-item>
 
   <app-action-item

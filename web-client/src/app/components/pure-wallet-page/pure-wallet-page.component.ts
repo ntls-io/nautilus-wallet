@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { OpenNativeSettings } from '@awesome-cordova-plugins/open-native-settings/ngx';
+import { Capacitor } from '@capacitor/core';
 import {
   faCircleNodes,
   faCreditCard,
@@ -10,8 +12,11 @@ import {
   faTrash,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { NavController } from '@ionic/angular';
+import { ScannerService } from 'src/app/services/scanner.service';
 import { ConnectorQuery } from 'src/app/state/connector';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 /**
  * @see WalletPage
@@ -53,9 +58,39 @@ export class PureWalletPageComponent implements OnInit {
 
   icons = ICONS;
 
-  constructor(public connectorQuery: ConnectorQuery) {}
+  constructor(
+    public connectorQuery: ConnectorQuery,
+    private scannerService: ScannerService,
+    private navCtrl: NavController,
+    private notification: SwalHelper,
+    private openNativeSettings: OpenNativeSettings
+  ) {}
 
   ngOnInit() {}
+  async verifyProfile() {
+    if (Capacitor.isNativePlatform()) {
+      const granted = await this.scannerService.requestPermissions();
+      if (granted) {
+        this.navCtrl.navigateForward('/kyc');
+      } else {
+        this.notification.swal
+          .fire({
+            title: 'Permission Denied',
+            text: 'Please enable camera permissions in your device settings.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Open Settings',
+          })
+          .then(async ({ isConfirmed }) => {
+            if (isConfirmed) {
+              await this.openNativeSettings.open('application_details');
+            }
+          });
+      }
+    } else {
+      this.navCtrl.navigateForward('/kyc');
+    }
+  }
 }
 
 // Placeholder icons until we get definite ones.

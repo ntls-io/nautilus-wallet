@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { OpenNativeSettings } from '@awesome-cordova-plugins/open-native-settings/ngx';
 import { Printer } from '@awesome-cordova-plugins/printer/ngx';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
@@ -30,6 +31,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    OpenNativeSettings,
     Printer,
   ],
   bootstrap: [AppComponent],
