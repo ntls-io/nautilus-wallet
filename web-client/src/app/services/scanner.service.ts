@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraPermissionState } from '@capacitor/camera';
-import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root',
@@ -22,18 +21,11 @@ export class ScannerService {
     if ((await this.checkPermissions()) !== 'denied') {
       //NOTE: https://github.com/ionic-team/capacitor/discussions/4944#discussioncomment-1205023
       try {
-        if (Capacitor.isNativePlatform()) {
-          const { camera } = await Camera.requestPermissions({
-            permissions: ['camera'],
-          });
-          return camera === 'granted';
-        } else {
-          //NOTE: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-          const { active } = await navigator.mediaDevices.getUserMedia({
-            video: true,
-          });
-          return active;
-        }
+        //NOTE: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+        const { active } = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        return active;
       } catch (e) {
         return false;
       }
