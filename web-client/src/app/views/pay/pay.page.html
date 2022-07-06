@@ -3,15 +3,13 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed>
-    <app-pure-pay-page
-      [senderName]="senderName | async"
-      [receiverAddress]="receiverAddress | async"
-      [algorandBalances]="algorandBalances | async"
-      [xrplBalances]="xrplBalances | async"
-      [flagOnfidoCheckIsClear]="onfidoCheckIsClear | async"
-      (paymentSubmitted)="onPaymentSubmitted($event)"
-      [autofocus]="autofocus"
-    ></app-pure-pay-page>
-  </ion-grid>
+  <app-pure-pay-page
+    [senderName]="senderName | async"
+    [receiverAddress]="receiverAddress | async"
+    [algorandBalances]="algorandBalances | async"
+    [xrplBalances]="xrplBalances | async"
+    [flagOnfidoCheckIsClear]="onfidoCheckIsClear | async"
+    (paymentSubmitted)="onPaymentSubmitted($event)"
+    [autofocus]="autofocus"
+  ></app-pure-pay-page>
 </ion-content>

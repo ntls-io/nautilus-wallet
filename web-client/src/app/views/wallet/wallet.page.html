@@ -9,13 +9,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed>
-    <app-pure-wallet-page
-      [name]="name | async"
-      [balances]="balances | async"
-      [actionSendMoneyEnabled]="actionSendMoneyEnabled | async"
-      [actionVerifyProfileShown]="actionVerifyProfileShown | async"
-      [balancesIsLoading]="balancesIsLoading"
-    ></app-pure-wallet-page>
-  </ion-grid>
+  <app-pure-wallet-page
+    [name]="name | async"
+    [balances]="balances | async"
+    [actionSendMoneyEnabled]="actionSendMoneyEnabled | async"
+    [actionVerifyProfileShown]="actionVerifyProfileShown | async"
+    [balancesIsLoading]="balancesIsLoading"
+  ></app-pure-wallet-page>
 </ion-content>

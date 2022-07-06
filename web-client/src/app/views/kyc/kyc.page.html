@@ -3,73 +3,69 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed class="h-full">
-    <app-onfido-form
-      *ngIf="viewState === 'step1_form'"
-      (submitted)="onSubmit($event)"
-    ></app-onfido-form>
+  <app-onfido-form
+    *ngIf="viewState === 'step1_form'"
+    (submitted)="onSubmit($event)"
+  ></app-onfido-form>
 
-    <app-onfido-widget
-      *ngIf="viewState === 'step2_widget'"
-      [token]="token"
-      (completed)="onSdkComplete($event)"
-    ></app-onfido-widget>
+  <app-onfido-widget
+    *ngIf="viewState === 'step2_widget'"
+    [token]="token"
+    (completed)="onSdkComplete($event)"
+  ></app-onfido-widget>
 
-    <div *ngIf="viewState === 'step3_result'" class="text-center">
-      <h1 class="text-center font-nasalization">
-        Verifying Identity<ng-container *ngIf="!checkIsComplete"
-          >…</ng-container
-        >
-      </h1>
+  <div *ngIf="viewState === 'step3_result'" class="text-center">
+    <h1 class="text-center font-nasalization">
+      Verifying Identity<ng-container *ngIf="!checkIsComplete">…</ng-container>
+    </h1>
 
-      <div>
-        <table class="inline-table check-result">
-          <tr>
-            <th>Check created:</th>
-            <td [innerText]="check?.created_at"></td>
-          </tr>
-          <tr>
-            <th>Status:</th>
-            <td
-              [innerText]="check?.status?.replace?.('_', ' ') | titlecase "
-            ></td>
-          </tr>
-          <tr *ngIf="check?.result">
-            <th>Result:</th>
-            <td
-              class="font-bold text-lg"
-              [innerText]="check?.result?.replace?.('_', ' ') | titlecase"
-            ></td>
-          </tr>
-        </table>
-      </div>
-
-      <div>
-        <ion-button
-          *ngIf="!checkIsComplete"
-          (click)="refreshCheck()"
-          shape="round"
-          class="ion-margin"
-          >Refresh</ion-button
-        >
-        <ion-button
-          *ngIf="checkIsComplete && checkIsClear"
-          (click)="saveCheck()"
-          color="success"
-          shape="round"
-          class="ion-margin"
-          >Save</ion-button
-        >
-        <ion-button
-          routerLink="/wallet"
-          routerDirection="root"
-          color="medium"
-          fill="outline"
-          shape="round"
-          class="ion-margin"
-          >Cancel</ion-button
-        >
-      </div>
+    <div>
+      <table class="inline-table check-result">
+        <tr>
+          <th>Check created:</th>
+          <td [innerText]="check?.created_at"></td>
+        </tr>
+        <tr>
+          <th>Status:</th>
+          <td
+            [innerText]="check?.status?.replace?.('_', ' ') | titlecase "
+          ></td>
+        </tr>
+        <tr *ngIf="check?.result">
+          <th>Result:</th>
+          <td
+            class="font-bold text-lg"
+            [innerText]="check?.result?.replace?.('_', ' ') | titlecase"
+          ></td>
+        </tr>
+      </table>
     </div>
-  </ion-grid>
+
+    <div>
+      <ion-button
+        *ngIf="!checkIsComplete"
+        (click)="refreshCheck()"
+        shape="round"
+        class="ion-margin"
+        >Refresh</ion-button
+      >
+      <ion-button
+        *ngIf="checkIsComplete && checkIsClear"
+        (click)="saveCheck()"
+        color="success"
+        shape="round"
+        class="ion-margin"
+        >Save</ion-button
+      >
+      <ion-button
+        routerLink="/wallet"
+        routerDirection="root"
+        color="medium"
+        fill="outline"
+        shape="round"
+        class="ion-margin"
+        >Cancel</ion-button
+      >
+    </div>
+  </div>
 </ion-content>

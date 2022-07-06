@@ -17,7 +17,7 @@ export const Theme: Story<void> = () => ThemeComponent;
 //                        but using an inline template still works, as a workaround for now.
 const template = `
 <ion-content>
-  <ion-grid fixed>
+  <ion-grid >
     <h1>Nautilus theme</h1>
 
     Based on the

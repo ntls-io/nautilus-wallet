@@ -1,18 +1,16 @@
 <ion-header class="ion-no-border">
-  <ion-grid fixed>
-    <ion-toolbar>
-      <ion-buttons slot="start" class="print:hidden">
-        <ion-button [routerLink]="['/']">
-          <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-grid>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="print:hidden">
+      <ion-button [routerLink]="['/']">
+        <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <!-- TODO(Pi): Factor this out to component with walletId as input? -->
-  <ion-grid fixed *ngIf="sessionQuery.walletId | async as walletId">
+  <ion-grid *ngIf="sessionQuery.walletId | async as walletId">
     <ion-row id="print-section">
       <ion-col size="12">
         <qrcode
