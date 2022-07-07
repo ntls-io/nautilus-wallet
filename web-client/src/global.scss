@@ -150,4 +150,7 @@ ion-header {
   ion-toolbar {
     --border-width: 0 !important;
   }
+  &.header-md:after {
+    background: none;
+  }
 }
