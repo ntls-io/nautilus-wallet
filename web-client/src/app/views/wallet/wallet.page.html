@@ -1,11 +1,17 @@
 <ion-header class="ion-no-border">
-  <app-header>
-    <ion-buttons slot="end">
+  <ion-toolbar>
+    <ion-buttons slot="start">
       <ion-button (click)="onRefresh()">
         <ion-icon slot="icon-only" name="refresh-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </app-header>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/settings']">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>

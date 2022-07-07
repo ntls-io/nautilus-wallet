@@ -1,11 +1,15 @@
-<ion-header>
-  <app-header>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Delete My wallet</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onRefresh()">
         <ion-icon slot="icon-only" name="refresh-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </app-header>
+  </ion-toolbar>
 </ion-header>
 
 <div class="ion-text-center p-2">
