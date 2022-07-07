@@ -99,6 +99,10 @@ export const routes: Routes = [
         (m) => m.BecomeConnectorPageModule
       ),
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./views/settings/settings.module').then( m => m.SettingsPageModule)
+  },
 ];
 
 @NgModule({
