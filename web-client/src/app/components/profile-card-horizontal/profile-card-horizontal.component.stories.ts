@@ -15,8 +15,8 @@ const Template: Story<ProfileCardHorizontalComponent> = (
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Dr.',
-  fullName: 'Nautilus Wallet',
-  cellphone: '+27 (12) 456-7890',
+  isVerified: true,
+  owner_name: 'Nautilus Wallet',
+  phone_number: '+27 (12) 456-7890',
   avatar: 'assets/img/logo.svg',
 };

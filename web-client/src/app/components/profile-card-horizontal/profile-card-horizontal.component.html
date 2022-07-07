@@ -1,10 +1,14 @@
 <ion-item lines="none" class="app-item">
-  <ion-avatar slot="start" class="h-2/5 w-2/5 m-0">
+  <ion-avatar slot="start" class="h-20 w-20 mr-2 my-2">
     <img [src]="avatar" />
   </ion-avatar>
-  <ion-label>
-    <h4>{{ title }}</h4>
-    <h2>{{ fullName }}</h2>
-    <h3>{{ cellphone }}</h3>
+  <ion-label class="!font-nasalization">
+    <h2 class="!font-semibold">{{ owner_name }}</h2>
+    <h3>{{ phone_number }}</h3>
   </ion-label>
+  <ion-buttons slot="end">
+    <ion-button *ngIf="isVerified">
+      <ion-icon slot="icon-only" name="finger-print" color="primary"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-item>
