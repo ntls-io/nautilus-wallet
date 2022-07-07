@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button [routerLink]="['/settings']">
@@ -39,7 +39,7 @@
 <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
 <ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
   <ng-template>
-    <ion-header class="ion-no-border">
+    <ion-header>
       <ion-toolbar>
         <ion-buttons>
           <ion-button slot="start" (click)="isPinEntryOpen = false">
