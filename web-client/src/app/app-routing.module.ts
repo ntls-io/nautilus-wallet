@@ -101,7 +101,10 @@ export const routes: Routes = [
   },
   {
     path: 'settings',
-    loadChildren: () => import('./views/settings/settings.module').then( m => m.SettingsPageModule)
+    loadChildren: () =>
+      import('./views/settings/settings.module').then(
+        (m) => m.SettingsPageModule
+      ),
   },
 ];
 
