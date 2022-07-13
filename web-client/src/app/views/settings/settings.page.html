@@ -51,15 +51,6 @@
               <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
             </ng-template>
           </ion-item>
-          <ion-item class="app-item" button detail="false">
-            <ion-icon slot="start" name="key"></ion-icon>
-            <ion-label>2FA</ion-label>
-            <ion-icon
-              slot="end"
-              name="close-circle-outline"
-              color="danger"
-            ></ion-icon>
-          </ion-item>
           <ng-container *ngIf="sessionQuery.allBalances | async as balances">
             <ion-item
               *ngIf="balances.length > 0"
