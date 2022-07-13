@@ -1,16 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  faCircleNodes,
   faCreditCard,
   faDonate,
   faFingerprint,
   faHandHoldingUsd,
   faQrcode,
   faReceipt,
-  faTrash,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { ConnectorQuery } from 'src/app/state/connector';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 
 /**
@@ -53,7 +50,7 @@ export class PureWalletPageComponent implements OnInit {
 
   icons = ICONS;
 
-  constructor(public connectorQuery: ConnectorQuery) {}
+  constructor() {}
 
   ngOnInit() {}
 }
@@ -67,6 +64,4 @@ const ICONS = {
   faQrcode,
   faReceipt,
   faWallet,
-  faTrash,
-  faCircleNodes,
 };

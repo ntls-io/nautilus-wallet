@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from './header.component';
+import { SettingsPage } from './settings.page';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('SettingsPage', () => {
+  let component: SettingsPage;
+  let fixture: ComponentFixture<SettingsPage>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [HeaderComponent],
+        declarations: [SettingsPage],
         imports: [IonicModule.forRoot(), RouterTestingModule],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(HeaderComponent);
+      fixture = TestBed.createComponent(SettingsPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
     })

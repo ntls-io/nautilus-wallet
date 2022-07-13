@@ -1,22 +1,24 @@
-<ion-header class="ion-no-border">
-  <app-header></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed>
-    <div class="ion-text-center p-2">
-      <h1 class="font-semibold font-nasalization">Send Money</h1>
-    </div>
-    <!-- <ion-searchbar class="px-3"></ion-searchbar> -->
-    <ion-list>
-      <ion-item-group *ngFor="let item of actionItems">
-        <app-action-item
-          [title]="item.title"
-          [icon]="item.icon"
-          [disabled]="item.disabled"
-          (click)="execItemAction(item.action)"
-        ></app-action-item>
-      </ion-item-group>
-    </ion-list>
-  </ion-grid>
+  <div class="ion-text-center p-2">
+    <h1 class="font-semibold font-nasalization">Send Money</h1>
+  </div>
+  <!-- <ion-searchbar class="px-3"></ion-searchbar> -->
+  <ion-list>
+    <ion-item-group *ngFor="let item of actionItems">
+      <app-action-item
+        [title]="item.title"
+        [icon]="item.icon"
+        [disabled]="item.disabled"
+        (click)="execItemAction(item.action)"
+      ></app-action-item>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
