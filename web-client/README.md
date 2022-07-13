@@ -6,6 +6,8 @@
 
 ## Quick start
 
+This README SUCKS
+
 ```shell
 npm install
 ```
