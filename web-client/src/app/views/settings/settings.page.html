@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="signOut()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <app-profile-card-horizontal
+          *ngIf="sessionQuery.select('wallet') | async as wallet"
+          [owner_name]="wallet?.owner_name"
+          [phone_number]="wallet?.phone_number"
+          [isVerified]="sessionQuery.onfidoCheckIsClear | async"
+        ></app-profile-card-horizontal>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none">
+          <ion-item
+            *ngIf="sessionQuery.onfidoCheckIsClear | async"
+            class="app-item"
+            button
+            detail="false"
+            routerLink="../become-connector"
+            [disabled]="connectorQuery.isConnector | async"
+          >
+            <ion-icon slot="start" name="git-merge"></ion-icon>
+            <ion-label>
+              {{ (connectorQuery.isConnector | async) ? 'Is a connector' :
+              'Become a connector'}}
+            </ion-label>
+            <ion-icon
+              slot="end"
+              name="checkmark-circle"
+              color="success"
+              *ngIf="connectorQuery.isConnector | async; else isNotConnector"
+            ></ion-icon>
+            <ng-template #isNotConnector>
+              <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
+            </ng-template>
+          </ion-item>
+          <ng-container *ngIf="sessionQuery.allBalances | async as balances">
+            <ion-item
+              *ngIf="balances.length > 0"
+              detail="false"
+              class="app-item"
+              button
+              routerLink="../delete-user"
+            >
+              <ion-icon slot="start" name="trash" color="danger"></ion-icon>
+              <ion-label>Delete My Wallet</ion-label>
+              <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

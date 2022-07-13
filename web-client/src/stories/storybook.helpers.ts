@@ -152,9 +152,7 @@ export const DEFAULT_EXCLUDE_CONTROLS: Array<DefaultExcludeControls> = [
 const ionAppComponentWrapper = (story: string): string =>
   ionAppPageWrapper(`
     <ion-content>
-      <ion-grid fixed style="height: 100%">
         ${story}
-      </ion-grid>
     </ion-content>
   `);
 
@@ -162,7 +160,7 @@ const ionAppComponentWrapper = (story: string): string =>
 const ionAppPageWrapper = (story: string): string =>
   `
     <ion-app>
-      <ion-router-outlet>
+      <ion-router-outlet class="md:max-w-lg mx-auto">
         ${story}
       </ion-router-outlet>
     </ion-app>

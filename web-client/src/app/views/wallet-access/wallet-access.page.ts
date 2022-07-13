@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { LoadingController, ModalController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -27,7 +30,7 @@ export class WalletAccessPage implements OnInit {
     private modalCtrl: ModalController,
     private sessionService: SessionService,
     private notification: SwalHelper,
-    private router: Router,
+    private navCtrl: NavController,
     private loadingCtrl: LoadingController
   ) {}
 
@@ -86,7 +89,7 @@ export class WalletAccessPage implements OnInit {
         text: openWalletErrorMessage,
       });
     } else {
-      await this.router.navigate(['/wallet']);
+      await this.navCtrl.navigateRoot(['/wallet']);
     }
   }
 }

@@ -75,8 +75,8 @@ describe('WalletPage', () => {
   });
 
   it('shows name from store', () => {
-    const heading = componentElement(fixture, 'h1');
-    expect(heading.textContent?.trim()).toBe("Wallet Owner's Wallet");
+    const heading = componentElement(fixture, 'h3');
+    expect(heading.textContent?.trim()).toBe('Wallet Owner');
   });
 
   const routerLinks: string[] = [

@@ -141,3 +141,16 @@ ion-textarea {
 .overflow-wrap-anywhere {
   overflow-wrap: anywhere;
 }
+
+ion-header {
+  ion-title {
+    @apply font-nasalization;
+  }
+
+  ion-toolbar {
+    --border-width: 0 !important;
+  }
+  &.header-md:after {
+    background: none;
+  }
+}

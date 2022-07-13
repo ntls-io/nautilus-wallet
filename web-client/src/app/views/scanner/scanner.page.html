@@ -1,26 +1,22 @@
-<ion-header class="ion-no-border">
-  <ion-grid fixed>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button (click)="dismissModal()">
-          <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <ion-title>scanner</ion-title>
-    </ion-toolbar>
-  </ion-grid>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>scanner</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed>
-    <!-- TODO: Show a waiting state while scanner loads. -->
-    <zxing-scanner
-      class="h-full p-4"
-      (scanSuccess)="scanSuccessHandler($event)"
-      (scanError)="scanErrorHandler($event)"
-      (camerasFound)="camerasFoundHandler($event)"
-      (camerasNotFound)="camerasNotFoundHandler($event)"
-      (permissionResponse)="permissionResponseHandler($event)"
-    ></zxing-scanner>
-  </ion-grid>
+  <!-- TODO: Show a waiting state while scanner loads. -->
+  <zxing-scanner
+    class="h-full p-4"
+    (scanSuccess)="scanSuccessHandler($event)"
+    (scanError)="scanErrorHandler($event)"
+    (camerasFound)="camerasFoundHandler($event)"
+    (camerasNotFound)="camerasNotFoundHandler($event)"
+    (permissionResponse)="permissionResponseHandler($event)"
+  ></zxing-scanner>
 </ion-content>

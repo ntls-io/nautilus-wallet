@@ -1,21 +1,25 @@
-<ion-header class="ion-no-border">
-  <app-header>
-    <ion-buttons slot="end">
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
       <ion-button (click)="onRefresh()">
         <ion-icon slot="icon-only" name="refresh-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </app-header>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/settings']">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid fixed>
-    <app-pure-wallet-page
-      [name]="name | async"
-      [balances]="balances | async"
-      [actionSendMoneyEnabled]="actionSendMoneyEnabled | async"
-      [actionVerifyProfileShown]="actionVerifyProfileShown | async"
-      [balancesIsLoading]="balancesIsLoading"
-    ></app-pure-wallet-page>
-  </ion-grid>
+  <app-pure-wallet-page
+    [name]="name | async"
+    [balances]="balances | async"
+    [actionSendMoneyEnabled]="actionSendMoneyEnabled | async"
+    [actionVerifyProfileShown]="actionVerifyProfileShown | async"
+    [balancesIsLoading]="balancesIsLoading"
+  ></app-pure-wallet-page>
 </ion-content>
