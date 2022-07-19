@@ -11,7 +11,7 @@ if (environment.production) {
 }
 
 if (environment.persistAkitaState) {
-  persistState({});
+  persistState({ enableInNonBrowser: true });
 }
 
 platformBrowserDynamic()

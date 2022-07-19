@@ -35,3 +35,6 @@ npm-debug.log*
 /plugins
 /storybook-static
 /www
+
+resources/ios/**/*
+resources/android/**/*
