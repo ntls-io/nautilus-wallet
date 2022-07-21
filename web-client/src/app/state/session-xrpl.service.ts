@@ -320,6 +320,43 @@ export class SessionXrplService {
     }
   }
 
+  /**
+   * Helper: Create a trust line between active session's wallet and targeted account.
+   *
+   * This creates and sends a `TrustSet` transaction.
+   *
+   * @return the `TrustSet` response, or undefined
+   */
+  async createTrustline(
+    currency: string,
+    issuer: string,
+    value: string,
+    rippling: boolean
+  ): Promise<xrpl.TxResponse | undefined> {
+    const limitAmount = {
+      currency,
+      issuer,
+      value,
+    };
+
+    if (rippling) {
+      const enableRippling: xrpl.TrustSetFlagsInterface = {
+        tfClearNoRipple: true,
+      };
+      return await withLoggedExchange(
+        'SessionXrplService.createTrustline: sending TrustSet',
+        async () => await this.sendTrustSetTx(limitAmount, enableRippling),
+        limitAmount
+      );
+    }
+
+    return await withLoggedExchange(
+      'SessionXrplService.createTrustline: sending TrustSet',
+      async () => await this.sendTrustSetTx(limitAmount),
+      limitAmount
+    );
+  }
+
   protected async prepareUnsignedTransaction(
     receiverId: string,
     amount: xrpl.Payment['Amount']
