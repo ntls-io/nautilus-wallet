@@ -357,6 +357,78 @@ export class SessionXrplService {
     );
   }
 
+  /**
+   * Default trustline opt-in for each of this account's trust lines.
+   *
+   * @return The responses to `TrustSet` transactions sent out (empty if none sent)
+   * @see defaultTrustlineOptIn
+   */
+  async defaultTrustlineOptIns(): Promise<xrpl.TxResponse[]> {
+    // TODO(Pi): Check for necessary owner reserves before sending.
+    //           See: https://xrpl.org/reserves.html
+
+    const trustLines =
+      (await firstValueFrom(this.sessionQuery.xrplTrustlines)) ?? [];
+
+    const txResponses: xrpl.TxResponse[] = [];
+    for (const trustLine of trustLines) {
+      ifDefined(await this.defaultTrustlineOptIn(trustLine), (txResponse) =>
+        txResponses.push(txResponse)
+      );
+    }
+    return txResponses;
+  }
+
+  /**
+   * Helper: Default trustline opt-in for the given trust-line.
+   *
+   * This sends a `TrustSet` transaction defaulting the limit to zero.
+   *
+   * @return the `TrustSet` response, or undefined
+   */
+  async defaultTrustlineOptIn(
+    trustline: Trustline
+  ): Promise<xrpl.TxResponse | undefined> {
+    const limit_peer = parseNumber(trustline.limit_peer);
+    if (limit_peer === undefined) {
+      throw panic(
+        'SessionXrplService.defaultTrustlineOptIn: bad limit_peer:',
+        trustline
+      );
+    }
+    if (limit_peer !== 0) {
+      throw panic(
+        'SessionXrplService.defaultTrustlineOptIn: limit_peer is not zero:',
+        trustline
+      );
+    }
+
+    const limit = parseNumber(trustline.limit);
+    if (limit === undefined) {
+      throw panic(
+        'SessionXrplService.defaultTrustlineOptIn: bad limit:',
+        trustline
+      );
+    }
+
+    if (0 < limit) {
+      const limitAmount = {
+        currency: trustline.currency,
+        issuer: trustline.account,
+        value: '0',
+      };
+      const defaultFlags: xrpl.TrustSetFlagsInterface = {
+        tfSetNoRipple: true,
+        tfClearFreeze: true,
+      };
+      return await withLoggedExchange(
+        'SessionXrplService.defaultTrustlineOptIn: sending TrustSet',
+        async () => await this.sendTrustSetTx(limitAmount, defaultFlags),
+        limitAmount
+      );
+    }
+  }
+
   protected async prepareUnsignedTransaction(
     receiverId: string,
     amount: xrpl.Payment['Amount']
