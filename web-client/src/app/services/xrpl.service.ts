@@ -150,7 +150,7 @@ export class XrplService {
   async createUnsignedTrustSetTx(
     fromAddress: string,
     limitAmount: IssuedCurrencyAmount,
-    flags?: number | xrpl.TrustSetFlagsInterface,
+    flags?: number | xrpl.TrustSetFlagsInterface
   ): Promise<xrpl.TrustSet> {
     const unpreparedTx: xrpl.TrustSet = {
       Account: fromAddress,

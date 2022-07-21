@@ -138,7 +138,7 @@ export class DeleteUserPage implements OnInit {
   async refreshWalletData(): Promise<void> {
     this.balancesIsLoading = true;
     try {
-      await withConsoleGroup('WalletPage.refreshWalletData:', async () => {
+      await withConsoleGroup('DeleteUserPage.refreshWalletData:', async () => {
         await withConsoleGroupCollapsed('Loading wallet data', async () => {
           await Promise.all([
             (async () => {
@@ -207,7 +207,7 @@ export class DeleteUserPage implements OnInit {
       });
       if (0 < unsuccessfulResponses.length) {
         console.log(
-          'DekewteUserPage.checkXrplTokenOptIns: unsuccessful responses:',
+          'DeleteUserPage.checkXrplTokenOptIns: unsuccessful responses:',
           { unsuccessfulResponses }
         );
         const errorMessage: string = unsuccessfulResponses
