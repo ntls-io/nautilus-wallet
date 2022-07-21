@@ -255,11 +255,11 @@ export class SessionXrplService {
       (await firstValueFrom(this.sessionQuery.xrplTrustlines)) ?? [];
 
     const txResponses: xrpl.TxResponse[] = [];
-    for (const trustLine of trustLines) {
-      ifDefined(await this.checkTrustlineOptIn(trustLine), (txResponse) =>
-        txResponses.push(txResponse)
-      );
-    }
+    // for (const trustLine of trustLines) {
+    //   ifDefined(await this.checkTrustlineOptIn(trustLine), (txResponse) =>
+    //     txResponses.push(txResponse)
+    //   );
+    // }
     return txResponses;
   }
 
