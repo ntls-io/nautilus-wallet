@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { EnclaveService } from 'src/app/services/enclave/index';
+import { EnclaveService } from '../services/enclave';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
   checkTxResponseSucceeded,
@@ -16,7 +16,7 @@ import { parseNumber } from 'src/app/utils/validators';
 import { ifDefined } from 'src/helpers/helpers';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
-import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
+import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
@@ -206,7 +206,8 @@ export class SessionXrplService {
    * @see XrplService.createUnsignedTrustSetTx
    */
   async sendTrustSetTx(
-    limitAmount: IssuedCurrencyAmount
+    limitAmount: IssuedCurrencyAmount,
+    flags?: number | xrpl.TrustSetFlagsInterface,
   ): Promise<xrpl.TxResponse> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
 
@@ -215,7 +216,8 @@ export class SessionXrplService {
       async () =>
         await this.xrplService.createUnsignedTrustSetTx(
           wallet.xrpl_account.address_base58,
-          limitAmount
+          limitAmount,
+          flags
         ),
       { from: wallet.xrpl_account.address_base58, limitAmount }
     );
