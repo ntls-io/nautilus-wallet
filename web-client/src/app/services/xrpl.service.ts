@@ -149,13 +149,18 @@ export class XrplService {
 
   async createUnsignedTrustSetTx(
     fromAddress: string,
-    limitAmount: IssuedCurrencyAmount
+    limitAmount: IssuedCurrencyAmount,
+    flags?: number | xrpl.TrustSetFlagsInterface
   ): Promise<xrpl.TrustSet> {
     const unpreparedTx: xrpl.TrustSet = {
       Account: fromAddress,
       TransactionType: 'TrustSet',
       LimitAmount: limitAmount,
     };
+    if (typeof flags !== 'undefined') {
+      unpreparedTx.Flags = flags;
+    }
+
     return await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
     );

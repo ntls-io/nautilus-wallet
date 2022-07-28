@@ -4,6 +4,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { withConsoleGroupCollapsed } from 'src/app/utils/console.helpers';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import * as xrpl from 'xrpl';
@@ -39,6 +40,13 @@ export class DepositFundsPage implements OnInit {
   }
 
   async deleteWallet(): Promise<void> {
+    await withConsoleGroupCollapsed(
+      'Defaulting asset / token opt-ins',
+      async () => {
+        await this.defaultXrplTokenOptIns();
+      }
+    );
+
     if (this.receiverAddress) {
       const result = await withLoadingOverlayOpts<
         { xrplResult: TxResponse } | undefined
@@ -52,6 +60,43 @@ export class DepositFundsPage implements OnInit {
         await this.notifyResult(result, this.receiverAddress);
       }
     }
+  }
+
+  protected async defaultXrplTokenOptIns(): Promise<void> {
+    if (this.sessionQuery.hasXrpBalance()) {
+      const txResponses =
+        await this.sessionXrplService.defaultTrustlineOptIns();
+      const unsuccessfulResponses = txResponses.filter((txResponse) => {
+        const { succeeded } = checkTxResponseSucceeded(txResponse);
+        return !succeeded;
+      });
+      if (0 < unsuccessfulResponses.length) {
+        console.log(
+          'DepositFundsPage.defaultXrplTokenOptIns: unsuccessful responses:',
+          { unsuccessfulResponses }
+        );
+        const errorMessage: string = unsuccessfulResponses
+          .map((txResponse) => {
+            const { resultCode } = checkTxResponseSucceeded(txResponse);
+            return resultCode;
+          })
+          .join('\n');
+        await this.errorNotification('XRPL token opt-out failed', errorMessage);
+      }
+    }
+  }
+
+  protected async errorNotification(
+    titleText: string,
+    err: any
+  ): Promise<void> {
+    const text = err?.response?.body?.message ?? err?.response?.body ?? err;
+    console.error('DepositFundsPage.withAlertErrors caught', { err });
+    await this.notification.swal.fire({
+      icon: 'error',
+      titleText,
+      text,
+    });
   }
 
   protected async deleteByLedgerType(
