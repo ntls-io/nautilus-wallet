@@ -1,0 +1,18 @@
+<form [formGroup]="questionForm" (ngSubmit)="validateForm()" class="form-item">
+  <ion-list lines="none" mode="ios" class="form-item">
+    <ion-item>
+      <ion-label position="stacked"
+        >What is your mothers maiden name?
+      </ion-label>
+      <ion-input type="text" name="mother" formControlName="mother"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">What city were you born in? </ion-label>
+      <ion-input type="text" name="city" formControlName="city"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">What is your pet name? </ion-label>
+      <ion-input type="text" name="pet" formControlName="pet"></ion-input>
+    </ion-item>
+  </ion-list>
+</form>
