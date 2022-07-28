@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import {
   init,
-  PublicStepConfig,
   SdkHandle,
   SdkResponse,
+  StepConfig,
   UICustomizationOptions,
 } from 'onfido-sdk-ui';
 
@@ -62,7 +62,7 @@ export class OnfidoWidgetComponent implements OnInit, OnDestroy {
   }
 }
 
-const nautilusSteps: Array<PublicStepConfig> = [
+const nautilusSteps: Array<StepConfig> = [
   {
     type: 'document',
     options: {
