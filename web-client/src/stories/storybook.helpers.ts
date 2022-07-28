@@ -11,6 +11,7 @@ import {
   ViewportMap,
 } from '@storybook/addon-viewport/dist/ts3.9/models';
 import {
+  Args,
   componentWrapperDecorator,
   Meta,
   moduleMetadata,
@@ -78,14 +79,14 @@ export const ionicStoryMeta = <TArgs>(
 
   // Augment decorators
   decorators: [
-    moduleMetadata<TArgs>({
+    moduleMetadata<Args>({
       imports: [
         IonicModule.forRoot(),
         RouterTestingModule, // TODO: Replace with <https://storybook.js.org/addons/storybook-addon-angular-router>?
         ...(extra?.imports ?? []),
       ],
     }),
-    componentWrapperDecorator<TArgs>(
+    componentWrapperDecorator<Args>(
       // prettier-ignore
       extra?.layoutType === 'page' ? ionAppPageWrapper :
         extra?.layoutType === 'component' ? ionAppComponentWrapper :
