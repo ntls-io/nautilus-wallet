@@ -1,115 +1,153 @@
 <ion-header>
-  <ion-buttons slot="start">
-    <ion-back-button></ion-back-button>
-  </ion-buttons>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sign Up</ion-title>
+  </ion-toolbar>
 </ion-header>
-<ion-content>
-  <h1 class="font-bold font-nasalization text-center">Sign Up</h1>
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-    <ion-list lines="none" mode="ios" class="ion-padding-horizontal">
-      <ion-item>
-        <ion-label position="stacked" for="firstName">First Name</ion-label>
-        <ion-input
-          type="text"
-          formControlName="firstName"
-          name="firstName"
-        ></ion-input>
-        <ion-text
-          slot="error"
-          color="danger"
-          *ngIf="(f.firstName.dirty || f.firstName.touched) && f.firstName.hasError"
-        >
-          <p *ngIf="f.firstName.errors?.required">First Name Is Required</p>
-        </ion-text>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" for="lastName">Last Name</ion-label>
-        <ion-input
-          type="text"
-          formControlName="lastName"
-          name="lastName"
-        ></ion-input>
-        <ion-text
-          slot="error"
-          *ngIf="(f.lastName.dirty || f.lastName.touched) && f.lastName.hasError "
-        >
-          <p *ngIf="f.lastName.errors?.required">Last Name Is Required</p>
-        </ion-text>
-      </ion-item>
+<ion-content class="ion-padding-horizontal">
+  <swiper #swiper [allowTouchMove]="false" [pagination]="true" class="h-full">
+    <ng-template swiperSlide>
+      <form
+        [formGroup]="registrationForm"
+        (ngSubmit)="validateForm()"
+        class="form-item"
+      >
+        <ion-list lines="none" mode="ios">
+          <ion-item>
+            <ion-label position="stacked" for="firstName">First Name</ion-label>
+            <ion-input
+              type="text"
+              formControlName="firstName"
+              name="firstName"
+            ></ion-input>
+            <ion-text
+              slot="error"
+              color="danger"
+              *ngIf="(f.firstName.dirty || f.firstName.touched) && f.firstName.hasError"
+            >
+              <p *ngIf="f.firstName.errors?.required">First Name Is Required</p>
+            </ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked" for="lastName">Last Name</ion-label>
+            <ion-input
+              type="text"
+              formControlName="lastName"
+              name="lastName"
+            ></ion-input>
+            <ion-text
+              slot="error"
+              *ngIf="(f.lastName.dirty || f.lastName.touched) && f.lastName.hasError "
+            >
+              <p *ngIf="f.lastName.errors?.required">Last Name Is Required</p>
+            </ion-text>
+          </ion-item>
 
-      <ion-item [disabled]="isOpening">
-        <ion-label position="stacked" for="mobile">Mobile</ion-label>
-        <ion-intl-tel-input
-          formControlName="mobile"
-          name="mobile"
-          class="ion-align-items-center"
-          defaultCountryiso="za"
-          (click)="onModalOpen($event)"
-          (codeOpen)="isOpening = false"
-        >
-        </ion-intl-tel-input>
+          <ion-item [disabled]="isOpening">
+            <ion-label position="stacked" for="mobile">Mobile</ion-label>
+            <ion-intl-tel-input
+              formControlName="mobile"
+              name="mobile"
+              class="ion-align-items-center"
+              defaultCountryiso="za"
+              (click)="onModalOpen($event)"
+              (codeOpen)="isOpening = false"
+            >
+            </ion-intl-tel-input>
 
-        <small *ngIf="isOpening"><em> Loading country codes... </em></small>
-        <ion-text slot="error" *ngIf="f.mobile.touched && f.mobile.hasError">
-          <p *ngIf="f.mobile.errors?.required">Phone is required.</p>
-          <p *ngIf="!f.mobile.errors?.required && f.mobile.errors?.phone">
-            Phone is not valid.
-          </p>
-        </ion-text>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" for="pin">PIN</ion-label>
-        <ion-input
-          type="password"
-          formControlName="pin"
-          name="pin"
-          minlength="4"
-          maxlength="10"
-          [simpleMask]="numInputMask"
-          inputmode="numeric"
-        ></ion-input>
-        <ion-text
-          slot="error"
-          *ngIf="(f.pin.dirty || f.pin.touched) && f.pin.hasError"
-        >
-          <p *ngIf="f.pin.errors?.required">PIN Is Required</p>
-          <p *ngIf="f.pin.errors?.minlength">
-            A Minimum Of 4 Digits Is Required
-          </p>
-          <p *ngIf="f.pin.errors?.maxlength">
-            Your PIN Can Only Be Up To 10 Characters
-          </p>
-        </ion-text>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked" for="confirmPin">Confirm PIN</ion-label>
-        <ion-input
-          type="password"
-          formControlName="confirmPin"
-          name="confirmPin"
-          minlength="4"
-          maxlength="10"
-          [simpleMask]="numInputMask"
-          inputmode="numeric"
-        ></ion-input>
-        <ion-text
-          slot="error"
-          *ngIf="(f.confirmPin.dirty || f.confirmPin.touched) &&  f.confirmPin.hasError"
-        >
-          <p *ngIf="f.confirmPin.errors?.required">
-            Pin Confirmation is required
-          </p>
-          <p
-            *ngIf="!f.confirmPin.errors?.required && f.confirmPin.errors?.mismatch"
-          >
-            Pin does not match
-          </p>
-        </ion-text>
-      </ion-item>
-
-      <ion-button expand="block" shape="round" type="submit" class="mt-3">
-        Submit
-      </ion-button>
-    </ion-list>
-  </form>
+            <small *ngIf="isOpening"><em> Loading country codes... </em></small>
+            <ion-text
+              slot="error"
+              *ngIf="f.mobile.touched && f.mobile.hasError"
+            >
+              <p *ngIf="f.mobile.errors?.required">Phone is required.</p>
+              <p *ngIf="!f.mobile.errors?.required && f.mobile.errors?.phone">
+                Phone is not valid.
+              </p>
+            </ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked" for="pin">PIN</ion-label>
+            <ion-input
+              type="password"
+              formControlName="pin"
+              name="pin"
+              minlength="4"
+              maxlength="10"
+              [simpleMask]="numInputMask"
+              inputmode="numeric"
+            ></ion-input>
+            <ion-text
+              slot="error"
+              *ngIf="(f.pin.dirty || f.pin.touched) && f.pin.hasError"
+            >
+              <p *ngIf="f.pin.errors?.required">PIN Is Required</p>
+              <p *ngIf="f.pin.errors?.minlength">
+                A Minimum Of 4 Digits Is Required
+              </p>
+              <p *ngIf="f.pin.errors?.maxlength">
+                Your PIN Can Only Be Up To 10 Characters
+              </p>
+            </ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked" for="confirmPin"
+              >Confirm PIN
+            </ion-label>
+            <ion-input
+              type="password"
+              formControlName="confirmPin"
+              name="confirmPin"
+              minlength="4"
+              maxlength="10"
+              [simpleMask]="numInputMask"
+              inputmode="numeric"
+            ></ion-input>
+            <ion-text
+              slot="error"
+              *ngIf="(f.confirmPin.dirty || f.confirmPin.touched) &&  f.confirmPin.hasError"
+            >
+              <p *ngIf="f.confirmPin.errors?.required">
+                Pin Confirmation is required
+              </p>
+              <p
+                *ngIf="!f.confirmPin.errors?.required && f.confirmPin.errors?.mismatch"
+              >
+                Pin does not match
+              </p>
+            </ion-text>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" shape="round" class="mt-3" type="submit">
+          Next
+        </ion-button>
+      </form>
+    </ng-template>
+    <ng-template swiperSlide>
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <app-sign-up-questions
+              (answers)="onSubmit($event)"
+            ></app-sign-up-questions>
+          </ion-col>
+        </ion-row>
+        <ion-row class="mt-3">
+          <ion-col size="auto">
+            <ion-button
+              (click)="swiper?.swiperRef?.slidePrev()"
+              shape="round"
+              color="white"
+              >Previous
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button shape="round" expand="block">Submit</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </swiper>
 </ion-content>
