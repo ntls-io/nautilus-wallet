@@ -6,7 +6,7 @@ import { OpenWalletGuard } from './open-wallet.guard';
 // XXX(Pi, 2021-10-07): Is this workaround still needed?
 export const routes: Routes = [
   {
-    path: '',
+    path: 'landing',
     redirectTo: 'landing',
     pathMatch: 'full',
   },
@@ -104,6 +104,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/settings/settings.module').then(
         (m) => m.SettingsPageModule
+      ),
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./views/search-wallet/search-wallet.module').then(
+        (m) => m.SearchWalletPageModule
       ),
   },
 ];
