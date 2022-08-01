@@ -97,7 +97,7 @@
     "@compodoc/compodoc": "^1.1.19",
     "@datorama/akita-cli": "^6.1.1",
     "@datorama/akita-ngdevtools": "^7.0.0",
-    "@ionic/angular-toolkit": "^6.1.0",
+    "@ionic/angular-toolkit": "^5.0.3",
     "@ionic/lab": "^3.2.13",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
