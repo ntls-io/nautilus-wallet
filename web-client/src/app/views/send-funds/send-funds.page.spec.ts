@@ -13,24 +13,22 @@ describe('SendFundsPage', () => {
   let fixture: ComponentFixture<SendFundsPage>;
   let modalCtrl: ModalController;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          SharedModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        SharedModule,
+      ],
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-      router.navigate(['send-funds']);
-      fixture = TestBed.createComponent(SendFundsPage);
-      component = fixture.componentInstance;
-      modalCtrl = TestBed.get(ModalController);
-      fixture.detectChanges();
-    })
-  );
+    router = TestBed.inject(Router);
+    router.navigate(['send-funds']);
+    fixture = TestBed.createComponent(SendFundsPage);
+    component = fixture.componentInstance;
+    modalCtrl = TestBed.get(ModalController);
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

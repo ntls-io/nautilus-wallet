@@ -32,43 +32,41 @@ describe('WalletPage', () => {
     );
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          HttpClientTestingModule,
-          WalletPageModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        HttpClientTestingModule,
+        WalletPageModule,
+      ],
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-      router.navigate(['wallet']);
-      toastCtrl = TestBed.inject(ToastController);
+    router = TestBed.inject(Router);
+    router.navigate(['wallet']);
+    toastCtrl = TestBed.inject(ToastController);
 
-      fixture = TestBed.createComponent(WalletPage);
-      component = fixture.componentInstance;
+    fixture = TestBed.createComponent(WalletPage);
+    component = fixture.componentInstance;
 
-      // XXX: Stub this out, for now.
-      spyOn(component, 'refreshWalletData').and.resolveTo(undefined);
+    // XXX: Stub this out, for now.
+    spyOn(component, 'refreshWalletData').and.resolveTo(undefined);
 
-      // Satisfy OpenWalletGuard
-      const sessionStore = TestBed.inject(SessionStore);
-      stubActiveSession(sessionStore, {
-        wallet: { owner_name: 'Wallet Owner' },
-      });
-      // For the balance checks:
-      sessionStore.update({
-        algorandAccountData: {
-          address: 'placeholder address',
-          amount: 0,
-        },
-      });
+    // Satisfy OpenWalletGuard
+    const sessionStore = TestBed.inject(SessionStore);
+    stubActiveSession(sessionStore, {
+      wallet: { owner_name: 'Wallet Owner' },
+    });
+    // For the balance checks:
+    sessionStore.update({
+      algorandAccountData: {
+        address: 'placeholder address',
+        amount: 0,
+      },
+    });
 
-      fixture.detectChanges();
-    })
-  );
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
