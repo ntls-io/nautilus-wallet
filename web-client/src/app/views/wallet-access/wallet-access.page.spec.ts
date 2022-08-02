@@ -19,25 +19,27 @@ describe('WalletAccessPage', () => {
   let modalCtrl: ModalController;
   let swalSpy: jasmine.Spy<SwalFire>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [WalletAccessPage],
-      imports: [
-        IonicModule.forRoot(),
-        WalletAccessPageModule,
-        RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule,
-      ],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [WalletAccessPage],
+        imports: [
+          IonicModule.forRoot(),
+          WalletAccessPageModule,
+          RouterTestingModule.withRoutes(routes),
+          HttpClientTestingModule,
+        ],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(WalletAccessPage);
-    component = fixture.componentInstance;
+      fixture = TestBed.createComponent(WalletAccessPage);
+      component = fixture.componentInstance;
 
-    modalCtrl = TestBed.inject(ModalController);
-    swalSpy = spyOn(Swal, 'fire');
+      modalCtrl = TestBed.inject(ModalController);
+      swalSpy = spyOn(Swal, 'fire');
 
-    fixture.detectChanges();
-  }));
+      fixture.detectChanges();
+    })
+  );
 
   // Check for any unexpected SweetAlert alerts.
   // (Tests that assert alerts must call swalSpy.calls.reset() after asserting.)

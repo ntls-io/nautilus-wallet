@@ -12,21 +12,23 @@ describe('LandingPage', () => {
   let component: LandingPage;
   let fixture: ComponentFixture<LandingPage>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        IonicModule.forRoot(),
-        RouterTestingModule.withRoutes(routes),
-        getTranslocoTestingModule(),
-      ],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule.withRoutes(routes),
+          getTranslocoTestingModule(),
+        ],
+      }).compileComponents();
 
-    router = TestBed.inject(Router);
-    router.navigate(['landing']);
-    fixture = TestBed.createComponent(LandingPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      router = TestBed.inject(Router);
+      router.navigate(['landing']);
+      fixture = TestBed.createComponent(LandingPage);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

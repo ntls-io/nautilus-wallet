@@ -10,15 +10,17 @@ describe('OnfidoFormComponent', () => {
   let component: OnfidoFormComponent;
   let fixture: ComponentFixture<OnfidoFormComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [KycPageModule],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [KycPageModule],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(OnfidoFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(OnfidoFormComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();
