@@ -61,7 +61,7 @@
     "@zxing/browser": "^0.1.1",
     "@zxing/library": "^0.19.1",
     "@zxing/ngx-scanner": "^3.5.0",
-    "algosdk": "^1.12.0",
+    "algosdk": "^1.19.0",
     "angularx-qrcode": "^13.0.1",
     "cordova-plugin-printer": "^0.8.0",
     "flag-icon-css": "^4.1.7",
