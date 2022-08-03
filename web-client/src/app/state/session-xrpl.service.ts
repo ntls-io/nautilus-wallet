@@ -328,17 +328,9 @@ export class SessionXrplService {
    * @return the `TrustSet` response, or undefined
    */
   async createTrustline(
-    currency: string,
-    issuer: string,
-    value: string,
+    limitAmount: IssuedCurrencyAmount,
     rippling: boolean
   ): Promise<xrpl.TxResponse | undefined> {
-    const limitAmount = {
-      currency,
-      issuer,
-      value,
-    };
-
     if (rippling) {
       const enableRippling: xrpl.TrustSetFlagsInterface = {
         tfClearNoRipple: true,

@@ -1,8 +1,7 @@
 <ion-card class="app-item ion-text-center">
-  <ion-card-header>
+  <ion-card-header class="pb-0">
     <ion-grid>
       <ion-row>
-        <ion-col> </ion-col>
         <ion-col>
           <ion-card-title class="font-nasalization">Balances</ion-card-title>
         </ion-col>
@@ -13,8 +12,8 @@
     </ion-grid>
   </ion-card-header>
 
-  <ion-card-content class="ion-no-padding">
-    <ion-list lines="none" *ngIf="balances?.length; else empty">
+  <ng-container *ngIf="balances?.length; else empty">
+    <ion-list lines="none">
       <ion-item *ngFor="let balance of balances">
         <ion-label class="ion-text-right">
           <ion-text color="white" class="font-audiowide">
@@ -29,8 +28,12 @@
       </ion-item>
     </ion-list>
 
-    <ng-template #empty>
+    <app-asset-accordion *ngIf="!isLoading && !showAsset"></app-asset-accordion>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="px-2">
       <p>There are currently no assets in your wallet.</p>
-    </ng-template>
-  </ion-card-content>
+    </div>
+  </ng-template>
 </ion-card>
