@@ -324,45 +324,4 @@ describe('SessionQuery', () => {
       expect(query.isActiveSession()).toBeTrue();
     });
   });
-
-  describe('assumeSession', () => {
-    it('empty session', () => {
-      expect(() => query.assumeActiveSession()).toThrowError(
-        'SessionAlgorandService.assumeSession: invalid state: wallet not defined'
-      );
-    });
-
-    it('wallet undefined', () => {
-      stubActiveSession(store);
-      store.update({ wallet: undefined });
-      expect(() => query.assumeActiveSession()).toThrowError(
-        'SessionAlgorandService.assumeSession: invalid state: wallet not defined'
-      );
-    });
-
-    it('pin undefined', () => {
-      stubActiveSession(store);
-      store.update({ pin: undefined });
-      expect(() => query.assumeActiveSession()).toThrowError(
-        'SessionAlgorandService.assumeSession: invalid state: pin not defined'
-      );
-    });
-
-    it('active session', () => {
-      stubActiveSession(store);
-      expect(query.assumeActiveSession()).toEqual({
-        wallet: {
-          wallet_id: 'stub',
-          owner_name: 'stub',
-          algorand_address_base32: 'stub',
-          xrpl_account: {
-            key_type: 'secp256k1',
-            public_key_hex: 'stub',
-            address_base58: 'stub',
-          },
-        },
-        pin: 'stub',
-      });
-    });
-  });
 });

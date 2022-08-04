@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { environment } from 'src/environments/environment';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
@@ -9,7 +9,9 @@ import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
   styleUrls: ['./asset-accordion.component.scss'],
 })
 export class AssetAccordionComponent implements OnInit {
+  @Output() refreshBalances = new EventEmitter<boolean>();
   isOpting = false;
+
   constructor(private sessionXrplService: SessionXrplService) {}
 
   ngOnInit() {}
@@ -31,6 +33,7 @@ export class AssetAccordionComponent implements OnInit {
         console.log(err);
       })
       .finally(() => {
+        this.refreshBalances.emit(true);
         this.isOpting = false;
       });
   }

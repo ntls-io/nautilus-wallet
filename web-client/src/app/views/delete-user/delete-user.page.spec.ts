@@ -31,9 +31,6 @@ describe('DeleteUserPage', () => {
 
       component = fixture.componentInstance;
 
-      // XXX: Stub this out, for now.
-      spyOn(component, 'refreshWalletData').and.resolveTo(undefined);
-
       fixture.detectChanges();
     })
   );

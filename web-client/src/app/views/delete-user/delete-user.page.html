@@ -4,11 +4,6 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Delete My wallet</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="onRefresh()">
-        <ion-icon slot="icon-only" name="refresh-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,10 +14,7 @@
       to.
     </p>
   </div>
-  <app-balance-summary-card
-    [balances]="balances | async"
-    [isLoading]="balancesIsLoading"
-  ></app-balance-summary-card>
+  <app-balance-summary-card></app-balance-summary-card>
 
   <p class="ion-text-center p-2">Where should the funds be deposited?</p>
   <ion-list>
