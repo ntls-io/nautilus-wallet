@@ -18,6 +18,8 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
         Err(err) => return err.into(),
     };
 
+    // TODO: Check OTP, if OK, proceed to next action, if failed, user sent another OTP.
+
     let sign_result: Result<TransactionSigned, String> = match &request.transaction_to_sign {
         TransactionToSign::AlgorandTransaction { transaction_bytes } => {
             sign_algorand(&stored.algorand_account, transaction_bytes)
