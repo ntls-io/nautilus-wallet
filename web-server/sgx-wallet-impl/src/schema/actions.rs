@@ -4,14 +4,17 @@
 //!
 //! * <https://developer.algorand.org/docs/reference/rest-apis/kmd/>
 
+use std::cell::RefCell;
 use std::io;
 use std::prelude::v1::{String, ToString};
 
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
+use crate::crypto::common::{PublicKey, Bytes32};
+use crate::schema::auth::AuthError;
 use crate::schema::entities::WalletDisplay;
-use crate::schema::types::{Bytes, WalletId, WalletPin};
+use crate::schema::types::{Bytes, WalletAuthMap, WalletId, WalletPin};
 use crate::wallet_operations::store::UnlockWalletError;
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -20,6 +23,8 @@ use crate::wallet_operations::store::UnlockWalletError;
 pub struct CreateWallet {
     pub owner_name: String,
     pub auth_pin: WalletPin,
+    #[zeroize(skip)]
+    pub auth_map: WalletAuthMap,
     pub phone_number: Option<String>,
 }
 
@@ -55,6 +60,57 @@ impl From<UnlockWalletError> for OpenWalletResult {
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct StartPinReset {
+    pub wallet_id: WalletId,
+    /*
+     *  The ['RefCell'] below is in adherence to the interior mutability
+     *  pattern. This is necessary, since draining a ['WalletAuthMap']
+     *  mutates it.
+     */
+    #[zeroize(skip)]
+    pub wallet_auth_map: RefCell<WalletAuthMap>,
+    pub client_pk: PublicKey,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum StartPinResetResult {
+    ServerPk(PublicKey),
+    InvalidAuth,
+    Failed(String),
+}
+
+impl From<AuthError> for StartPinResetResult {
+    fn from(error: AuthError) -> Self {
+        match error {
+            AuthError::InvalidAttempt => Self::InvalidAuth,
+            AuthError::InvalidWalletId(_) => Self::InvalidAuth,
+            AuthError::Io(err) => Self::Failed(err.to_string()),
+        }
+    }
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct PinReset {
+    pub wallet_id: WalletId,
+    pub new_pin: WalletPin,
+    pub new_pin_mac: Bytes32,
+    pub client_pk: PublicKey,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum PinResetResult {
+    Reset,
+    InvalidAuth,
+    Failed(String),
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -250,6 +306,9 @@ pub enum WalletRequest {
     OpenWallet(OpenWallet),
     SignTransaction(SignTransaction),
 
+    StartPinReset(StartPinReset),
+    PinReset(PinReset),
+
     #[zeroize(skip)]
     SaveOnfidoCheck(SaveOnfidoCheck),
 
@@ -263,6 +322,8 @@ pub enum WalletRequest {
 pub enum WalletResponse {
     CreateWallet(CreateWalletResult),
     OpenWallet(OpenWalletResult),
+    StartPinReset(StartPinResetResult),
+    PinReset(PinResetResult),
     SignTransaction(SignTransactionResult),
     SaveOnfidoCheck(SaveOnfidoCheckResult),
     LoadOnfidoCheck(LoadOnfidoCheckResult),
@@ -285,6 +346,18 @@ impl From<OpenWalletResult> for WalletResponse {
 impl From<SignTransactionResult> for WalletResponse {
     fn from(result: SignTransactionResult) -> Self {
         Self::SignTransaction(result)
+    }
+}
+
+impl From<StartPinResetResult> for WalletResponse {
+    fn from(result: StartPinResetResult) -> Self {
+        Self::StartPinReset(result)
+    }
+}
+
+impl From<PinResetResult> for WalletResponse {
+    fn from(result: PinResetResult) -> Self {
+        Self::PinReset(result)
     }
 }
 

@@ -1,10 +1,13 @@
 //! Supporting data types.
 
 use std::boxed::Box;
+use std::collections::HashMap;
 use std::prelude::v1::String;
 
 use ripple_keypairs::{Algorithm, EntropyArray};
 use serde::{Deserialize, Serialize};
+
+use crate::schema::entities::WalletSecret;
 
 pub type Bytes = Box<[u8]>;
 
@@ -13,6 +16,12 @@ pub type WalletId = String;
 
 /// A wallet owner's authenticating PIN.
 pub type WalletPin = String;
+
+/// A predefined security challenge or question
+pub type WalletAuthKey = String;
+
+/// Mapping of security challenges to expected responses
+pub type WalletAuthMap = HashMap<WalletAuthKey, WalletSecret>;
 
 /// Algorand account seed, as bytes.
 pub type AlgorandAccountSeedBytes = [u8; 32];
