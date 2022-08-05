@@ -202,6 +202,19 @@ pub struct LoadOnfidoCheck {
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
+pub struct GenerateOtp {
+    pub wallet_id: WalletId,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum GenerateOtpResult {
+    Generated(String),
+    Failed(String),
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
 pub enum LoadOnfidoCheckResult {
     Loaded(OnfidoCheckResult),
     NotFound,
@@ -255,6 +268,8 @@ pub enum WalletRequest {
 
     #[zeroize(skip)]
     LoadOnfidoCheck(LoadOnfidoCheck),
+
+    GenerateOtp(GenerateOtp),
 }
 
 /// Dispatching enum for action results.
@@ -266,6 +281,7 @@ pub enum WalletResponse {
     SignTransaction(SignTransactionResult),
     SaveOnfidoCheck(SaveOnfidoCheckResult),
     LoadOnfidoCheck(LoadOnfidoCheckResult),
+    GenerateOtp(GenerateOtpResult),
 }
 
 // Convenience conversions:
@@ -297,5 +313,11 @@ impl From<SaveOnfidoCheckResult> for WalletResponse {
 impl From<LoadOnfidoCheckResult> for WalletResponse {
     fn from(result: LoadOnfidoCheckResult) -> Self {
         Self::LoadOnfidoCheck(result)
+    }
+}
+
+impl From<GenerateOtpResult> for WalletResponse {
+    fn from(result: GenerateOtpResult) -> Self {
+        Self::GenerateOtp(result)
     }
 }

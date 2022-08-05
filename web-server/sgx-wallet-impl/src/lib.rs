@@ -3,6 +3,8 @@
 
 #[macro_use]
 extern crate sgx_tstd as std;
+extern crate alloc;
+
 
 mod ecall_helpers;
 pub mod ecalls;

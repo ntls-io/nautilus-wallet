@@ -66,6 +66,8 @@ pub struct WalletStorable {
 
     #[zeroize(skip)]
     pub onfido_check_result: Option<OnfidoCheckResult>,
+
+    pub otp: Option<String>
 }
 
 // Algorand entities:

@@ -22,6 +22,7 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
         xrpl_account: new_xrpl_account,
 
         onfido_check_result: None,
+        otp: None
     };
     match save_new_wallet(&storable) {
         Ok(()) => Result::Created(WalletDisplay::from(storable)),
