@@ -7,18 +7,16 @@ describe('AssetAccordionComponent', () => {
   let component: AssetAccordionComponent;
   let fixture: ComponentFixture<AssetAccordionComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [AssetAccordionComponent],
-        imports: [IonicModule.forRoot(), HttpClientTestingModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AssetAccordionComponent],
+      imports: [IonicModule.forRoot(), HttpClientTestingModule],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(AssetAccordionComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(AssetAccordionComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
