@@ -14,7 +14,6 @@ const Template: Story<BalanceSummaryCardComponent> = (
 });
 
 export const Empty = Template.bind({});
-Empty.args = {};
 
 export const LoadingEmpty = Template.bind({});
 LoadingEmpty.args = { isLoading: true };
