@@ -1,0 +1,30 @@
+<ion-accordion-group>
+  <ion-accordion value="shapes">
+    <ion-item slot="header" color="white">
+      <ion-label>
+        <p>Show Assets</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-list slot="content" lines="full" class="py-0 asset-list">
+      <ion-item color="white" *ngFor="let token of ['FOO']">
+        <ion-icon slot="start" name="cash-outline"></ion-icon>
+        <ion-label>
+          <h2 class="!font-bold">{{ token }}</h2>
+        </ion-label>
+        <ng-container slot="end">
+          <ion-spinner
+            name="crescent"
+            color="primary"
+            *ngIf="isOpting; else isNotOpting"
+          ></ion-spinner>
+          <ng-template #isNotOpting>
+            <ion-button (click)="optin(token)">
+              opt in <ion-icon name="arrow-forward-outline"></ion-icon>
+            </ion-button>
+          </ng-template>
+        </ng-container>
+      </ion-item>
+    </ion-list>
+  </ion-accordion>
+</ion-accordion-group>

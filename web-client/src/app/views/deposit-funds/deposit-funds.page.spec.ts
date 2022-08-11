@@ -9,22 +9,20 @@ describe('DepositFundsPage', () => {
   let component: DepositFundsPage;
   let fixture: ComponentFixture<DepositFundsPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [DepositFundsPage],
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          HttpClientTestingModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [DepositFundsPage],
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        HttpClientTestingModule,
+      ],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(DepositFundsPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(DepositFundsPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

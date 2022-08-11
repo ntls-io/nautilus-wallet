@@ -11,17 +11,15 @@ describe('PayAmountFormComponent', () => {
   let component: PayAmountFormComponent;
   let fixture: ComponentFixture<PayAmountFormComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [PayAmountFormComponentModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [PayAmountFormComponentModule],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(PayAmountFormComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(PayAmountFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

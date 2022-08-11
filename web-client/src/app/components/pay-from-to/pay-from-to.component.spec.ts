@@ -7,17 +7,15 @@ describe('PayFromToComponent', () => {
   let component: PayFromToComponent;
   let fixture: ComponentFixture<PayFromToComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [IonicModule.forRoot(), SharedModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [IonicModule.forRoot(), SharedModule],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(PayFromToComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(PayFromToComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
