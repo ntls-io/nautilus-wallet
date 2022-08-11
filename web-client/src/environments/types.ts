@@ -73,6 +73,8 @@ export type Environment = {
 
   commissionPercentage: number;
 
+  tokenIssuer: string;
+
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */

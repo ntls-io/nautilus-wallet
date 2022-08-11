@@ -11,23 +11,21 @@ describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          SharedModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        SharedModule,
+      ],
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-      router.navigate(['home']);
-      fixture = TestBed.createComponent(HomePage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    router = TestBed.inject(Router);
+    router.navigate(['home']);
+    fixture = TestBed.createComponent(HomePage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

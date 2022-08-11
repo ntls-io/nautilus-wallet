@@ -1,36 +1,54 @@
-<ion-card class="app-item ion-text-center">
-  <ion-card-header>
-    <ion-grid>
-      <ion-row>
-        <ion-col> </ion-col>
-        <ion-col>
-          <ion-card-title class="font-nasalization">Balances</ion-card-title>
-        </ion-col>
-        <ion-col>
-          <ion-spinner class="ion-float-right" *ngIf="isLoading"></ion-spinner>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-header>
-
-  <ion-card-content class="ion-no-padding">
-    <ion-list lines="none" *ngIf="balances?.length; else empty">
-      <ion-item *ngFor="let balance of balances">
-        <ion-label class="ion-text-right">
-          <ion-text color="white" class="font-audiowide">
-            {{ balance | assetAmount }}
+<ion-card class="app-item">
+  <ng-container>
+    <ion-list lines="none">
+      <ion-list-header>
+        <ion-label>
+          <ion-text class="font-nasalization font-bold text-2xl"
+            >Balances
           </ion-text>
         </ion-label>
-        <div slot="end" class="w-12">
-          <ion-text slot="end" color="secondary" class="font-bold">
-            {{ balance | assetSymbol }}
-          </ion-text>
-        </div>
-      </ion-item>
+        <ion-button
+          [disabled]="isLoading"
+          color="white"
+          shape="round"
+          (click)="refresh()"
+        >
+          <ion-spinner
+            color="white"
+            *ngIf="isLoading; else notLoading"
+          ></ion-spinner>
+          <ng-template #notLoading>
+            <ion-icon slot="icon-only" name="sync"></ion-icon>
+          </ng-template>
+        </ion-button>
+      </ion-list-header>
+      <ng-container *ngIf="sessionQuery.allBalances | async as balances">
+        <ion-item-group *ngIf="balances?.length; else empty">
+          <ion-item *ngFor="let balance of balances">
+            <ion-label class="ion-text-right">
+              <ion-text color="white" class="font-audiowide">
+                {{ balance | assetAmount }}
+              </ion-text>
+            </ion-label>
+            <div slot="end" class="w-12">
+              <ion-text slot="end" color="secondary" class="font-bold">
+                {{ balance | assetSymbol }}
+              </ion-text>
+            </div>
+          </ion-item>
+        </ion-item-group>
+      </ng-container>
     </ion-list>
 
-    <ng-template #empty>
+    <app-asset-accordion
+      *ngIf="!isLoading && !showAsset"
+      (refreshBalances)="refreshWalletData()"
+    ></app-asset-accordion>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="px-2 ion-text-center">
       <p>There are currently no assets in your wallet.</p>
-    </ng-template>
-  </ion-card-content>
+    </div>
+  </ng-template>
 </ion-card>
