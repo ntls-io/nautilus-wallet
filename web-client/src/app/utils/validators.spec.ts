@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { numericValidator, parseNumber } from 'src/app/utils/validators';
 
 describe('Numeric validation', () => {
@@ -55,8 +55,8 @@ describe('Numeric validation', () => {
   });
 
   describe('numericValidator', () => {
-    const formControlWithValue = (value: string): FormControl =>
-      new FormControl(value);
+    const formControlWithValue = (value: string): UntypedFormControl =>
+      new UntypedFormControl(value);
 
     describe('accepts', () => {
       for (const [example] of acceptExamples) {

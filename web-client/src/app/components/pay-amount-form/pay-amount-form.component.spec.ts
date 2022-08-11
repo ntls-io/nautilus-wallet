@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { defined } from 'src/app/utils/errors/panic';
 import { AngularValidationErrors } from 'src/app/utils/validation.errors';
 import { NumericValidationError, parseNumber } from 'src/app/utils/validators';
@@ -25,7 +25,7 @@ describe('PayAmountFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  const getForm = (): FormGroup => defined(component.paymentForm);
+  const getForm = (): UntypedFormGroup => defined(component.paymentForm);
 
   describe('form submission', () => {
     const submitForm = (): void =>

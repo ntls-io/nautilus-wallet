@@ -1,8 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -16,13 +16,13 @@ import { SessionService } from 'src/app/state/session.service';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnDestroy {
-  registrationForm: FormGroup;
+  registrationForm: UntypedFormGroup;
   numInputMask = '9999999999';
   isOpening = false;
   subscription$;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private sessionService: SessionService,
     private router: Router
   ) {
@@ -37,7 +37,7 @@ export class RegisterPage implements OnDestroy {
     return this.registrationForm.controls;
   }
 
-  generateFormGroup(): FormGroup {
+  generateFormGroup(): UntypedFormGroup {
     return this.formBuilder.group({
       firstName: [
         '',

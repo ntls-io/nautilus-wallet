@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.module';
 import { defined } from 'src/app/utils/errors/panic';
 import { AngularValidationErrors } from 'src/app/utils/validation.errors';
@@ -24,7 +24,7 @@ describe('PinEntryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  const getForm = (): FormGroup => defined(component.pinForm);
+  const getForm = (): UntypedFormGroup => defined(component.pinForm);
 
   describe('form submission', () => {
     const submitForm = (): void =>
