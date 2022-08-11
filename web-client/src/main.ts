@@ -10,11 +10,13 @@ if (environment.production) {
   enableAkitaProdMode();
 }
 
-if (environment.persistAkitaState) {
-  persistState({ enableInNonBrowser: true });
-}
+const storage = persistState({
+  enableInNonBrowser: true,
+});
 
-platformBrowserDynamic()
+const providers = [{ provide: 'persistStorage', useValue: storage }];
+
+platformBrowserDynamic(providers)
   .bootstrapModule(AppModule)
   .catch((err) => console.log(err));
 
