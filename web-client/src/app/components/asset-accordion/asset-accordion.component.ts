@@ -20,7 +20,7 @@ export class AssetAccordionComponent implements OnInit {
     const limitAmount: IssuedCurrencyAmount = {
       currency,
       issuer: environment.tokenIssuer,
-      value: '2',
+      value: '10000',
     };
 
     this.isOpting = true;
