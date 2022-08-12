@@ -21,19 +21,35 @@
 
   <ion-list lines="none">
     <ion-item
-      *ngFor="let item of actionItems"
+      *ngIf="(sessionQuery.onfidoCheckIsClear | async) !== true"
       class="app-item"
       button
       detail
       detailIcon="chevron-forward-circle"
       class="app-item"
-      [routerLink]="item.path"
-      [disabled]="item.disabled"
+      routerLink="/kyc"
     >
-      <ion-icon slot="start" [name]="item.icon"></ion-icon>
+      <ion-icon slot="start" name="finger-print"></ion-icon>
       <ion-label>
-        <ion-text class="block font-bold"> {{item.title}} </ion-text>
+        <ion-text class="block font-bold"> Verify Profile </ion-text>
       </ion-label>
     </ion-item>
+
+    <ng-container *ngFor="let item of actionItems">
+      <ion-item
+        class="app-item"
+        button
+        detail
+        detailIcon="chevron-forward-circle"
+        class="app-item"
+        [routerLink]="item.path"
+        [disabled]="item.disabled"
+      >
+        <ion-icon slot="start" [name]="item.icon"></ion-icon>
+        <ion-label>
+          <ion-text class="block font-bold"> {{item.title}} </ion-text>
+        </ion-label>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>

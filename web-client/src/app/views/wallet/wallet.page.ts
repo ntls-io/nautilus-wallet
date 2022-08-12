@@ -39,12 +39,6 @@ export class WalletPage implements OnInit {
 
   actionItems = [
     {
-      title: 'Verify Profile',
-      icon: 'finger-print',
-      path: '/kyc',
-      disabled: false,
-    },
-    {
       title: 'Send Money',
       icon: 'card',
       path: '/wallet/send-funds',
@@ -58,16 +52,7 @@ export class WalletPage implements OnInit {
     },
   ];
 
-  constructor(public sessionQuery: SessionQuery) {
-    this.sessionQuery.onfidoCheckIsClear.subscribe((onfidoCheckIsClear) => {
-      console.log(onfidoCheckIsClear);
-      this.actionItems.find((item) => {
-        if (item.title === 'Verify Profile') {
-          item.disabled = !onfidoCheckIsClear;
-        }
-      });
-    });
-  }
+  constructor(public sessionQuery: SessionQuery) {}
 
   ngOnInit() {}
 }
