@@ -52,6 +52,7 @@ impl From<UnlockWalletError> for OpenWalletResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            InvalidOtp => Self::InvalidAuth,
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
@@ -66,14 +67,18 @@ pub struct SignTransaction {
 
     #[zeroize(skip)]
     pub transaction_to_sign: TransactionToSign,
+
+    #[zeroize(skip)]
+    pub otp: Option<String>
 }
 
 impl From<UnlockWalletError> for SignTransactionResult {
     fn from(err: UnlockWalletError) -> Self {
         use UnlockWalletError::*;
         match err {
-            InvalidWalletId => Self::InvalidAuth,
-            InvalidAuthPin => Self::InvalidAuth,
+            InvalidWalletId => Self::InvalidAuthPin,
+            InvalidAuthPin => Self::InvalidAuthPin,
+            InvalidOtp => Self::InvalidAuthOtp,
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
@@ -100,7 +105,8 @@ pub enum TransactionToSign {
 #[derive(Deserialize, Serialize)] // serde
 pub enum SignTransactionResult {
     Signed(TransactionSigned),
-    InvalidAuth,
+    InvalidAuthPin,
+    InvalidAuthOtp,
     Failed(String),
 }
 
@@ -188,6 +194,8 @@ impl From<UnlockWalletError> for SaveOnfidoCheckResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            //FIXME: Do additional error handling to prevent panic.
+            InvalidOtp => unreachable!(), // This variant should never happen as otp is not a feature required for KYC.
             IoError(err) => Self::from(err),
         }
     }
@@ -234,6 +242,8 @@ impl From<UnlockWalletError> for LoadOnfidoCheckResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            //FIXME: Do additional error handling to prevent panic.
+            InvalidOtp => unreachable!(), // This variant should never happen as otp is not a feature required for KYC.
             IoError(err) => Self::from(err),
         }
     }
@@ -269,6 +279,7 @@ pub enum WalletRequest {
     #[zeroize(skip)]
     LoadOnfidoCheck(LoadOnfidoCheck),
 
+    #[zeroize(skip)]
     GenerateOtp(GenerateOtp),
 }
 

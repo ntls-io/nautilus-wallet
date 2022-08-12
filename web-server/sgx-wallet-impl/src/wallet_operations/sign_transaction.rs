@@ -10,15 +10,17 @@ use crate::schema::actions::{
 };
 use crate::wallet_operations::sign_transaction_algorand::sign_algorand;
 use crate::wallet_operations::sign_transaction_xrpl::sign_xrpl;
-use crate::wallet_operations::store::unlock_wallet;
+use crate::wallet_operations::store::{mutate_wallet, unlock_wallet_with_otp, UnlockWalletError};
+
+use crate::schema::actions::{GenerateOtp, GenerateOtpResult};
+use crate::schema::entities::WalletStorable;
 
 pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
-    let stored = match unlock_wallet(&request.wallet_id, &request.auth_pin) {
+    if let Some(otp) = &request.otp {
+    let stored = match unlock_wallet_with_otp(&request.wallet_id, &request.auth_pin, otp) {
         Ok(stored) => stored,
         Err(err) => return err.into(),
     };
-
-    // TODO: Check OTP, if OK, proceed to next action, if failed, user sent another OTP.
 
     let sign_result: Result<TransactionSigned, String> = match &request.transaction_to_sign {
         TransactionToSign::AlgorandTransaction { transaction_bytes } => {
@@ -35,9 +37,13 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
         }
     };
 
+    mutate_wallet(&request.wallet_id,|mut stored|{stored.otp = None; stored});
     // `Result` → `SignTransactionResult`
     match sign_result {
         Ok(signed) => SignTransactionResult::Signed(signed),
         Err(message) => SignTransactionResult::Failed(message),
+    }} else {
+        mutate_wallet(&request.wallet_id,|mut stored|{stored.otp = None; stored});
+        SignTransactionResult::InvalidAuthOtp
     }
 }

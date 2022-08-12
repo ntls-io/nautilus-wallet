@@ -61,6 +61,20 @@ pub fn unlock_wallet(wallet_id: &str, auth_pin: &str) -> Result<WalletStorable, 
     }
 }
 
+pub fn unlock_wallet_with_otp(wallet_id: &str, auth_pin: &str, auth_otp: &str) -> Result<WalletStorable, UnlockWalletError> {
+    let stored: WalletStorable =
+        load_wallet(wallet_id)?.ok_or(UnlockWalletError::InvalidWalletId)?;
+
+    let pin_match = ConsttimeMemEq::consttime_memeq(stored.auth_pin.as_bytes(), auth_pin.as_bytes());
+    // XXX: Panics if OTP is None
+    let otp_match = ConsttimeMemEq::consttime_memeq(stored.otp.clone().unwrap().as_bytes(), auth_otp.as_bytes());
+    match (pin_match,otp_match) {
+        (true,true) => Ok(stored),
+        (true,false) => Err(UnlockWalletError::InvalidOtp),
+        _ => Err(UnlockWalletError::InvalidAuthPin),
+    }
+}
+
 /// [`unlock_wallet`] failed.
 ///
 /// # Security note
@@ -78,6 +92,9 @@ pub enum UnlockWalletError {
 
     #[error("I/O error while opening wallet")]
     IoError(#[from] io::Error),
+
+    #[error("invalid OTP provided")]
+    InvalidOtp,
 }
 
 pub fn mutate_wallet(
