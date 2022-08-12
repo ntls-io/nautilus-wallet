@@ -1,10 +1,8 @@
-use alloc::string::{String, ToString};
-use rand::{Rng, thread_rng};
-use std::{io, string};
-use crate::wallet_operations::store::{unlock_wallet,mutate_wallet};
+use alloc::string::ToString;
+use rand::Rng;
+use crate::wallet_operations::store::{mutate_wallet};
 use crate::schema::actions::{GenerateOtp, GenerateOtpResult};
 use crate::schema::entities::WalletStorable;
-use crate::schema::types::WalletId;
 
 static OTP_DIGIT_LENGTH:usize = 6;
 
@@ -23,5 +21,5 @@ pub fn generate_otp(request: &GenerateOtp) -> GenerateOtpResult{
         stored.otp = Some(otp);
         stored
     };
-    GenerateOtpResult::Generated(mutate_wallet(&request.wallet_id, store_otp).unwrap().unwrap().otp.unwrap())
+    GenerateOtpResult::Generated(mutate_wallet(&request.wallet_id, store_otp).unwrap().unwrap().otp.clone().unwrap())
 }
