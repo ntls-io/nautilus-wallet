@@ -1,7 +1,7 @@
 /** Core request / response message types. */
 
 import { WalletDisplay } from './entities';
-import { Bytes, WalletId, WalletPin } from './types';
+import {Bytes, Otp, WalletId, WalletPin} from './types';
 
 export type CreateWallet = {
   owner_name: string;
@@ -30,6 +30,14 @@ export type SignTransaction = {
   transaction_to_sign: TransactionToSign;
 };
 
+export type SignTransactionWithOtp = {
+  wallet_id: WalletId;
+  auth_pin: WalletPin;
+  otp: Otp;
+
+  transaction_to_sign: TransactionToSign;
+};
+
 /** For {@link SignTransaction}: A choice of type of transaction to sign. */
 export type TransactionToSign =
   /** An unsigned Algorand transaction. */
@@ -41,6 +49,12 @@ export type TransactionToSign =
 export type SignTransactionResult =
   | { Signed: TransactionSigned }
   | { InvalidAuth: null }
+  | { Failed: string };
+
+export type SignTransactionResultWithOtp =
+  | { Signed: TransactionSigned }
+  | { InvalidAuth: null }
+  | { InvalidOtp: null}
   | { Failed: string };
 
 /** For {@link SignTransactionResult}: The possible types of signed transactions. */
@@ -99,6 +113,7 @@ export type WalletRequest =
   | { CreateWallet: CreateWallet }
   | { OpenWallet: OpenWallet }
   | { SignTransaction: SignTransaction }
+  | { SignTransactionWithOtp: SignTransactionWithOtp }
   | { SaveOnfidoCheck: SaveOnfidoCheck }
   | { LoadOnfidoCheck: LoadOnfidoCheck };
 
@@ -107,5 +122,6 @@ export type WalletResponse =
   | { CreateWallet: CreateWalletResult }
   | { OpenWallet: OpenWalletResult }
   | { SignTransaction: SignTransactionResult }
+  | { SignTransactionWithOtp: SignTransactionResultWithOtp }
   | { SaveOnfidoCheck: SaveOnfidoCheckResult }
   | { LoadOnfidoCheck: LoadOnfidoCheckResult };

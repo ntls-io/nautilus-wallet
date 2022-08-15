@@ -14,6 +14,9 @@ export type WalletId = string;
 /** A wallet owner's authenticating PIN. */
 export type WalletPin = string;
 
+/** An OTP an owner would require before sending funds */
+export type Otp = string;
+
 /** Algorand account seed, as bytes. */
 export type AlgorandAccountSeedBytes = Bytes32;
 
