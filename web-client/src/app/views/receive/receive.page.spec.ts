@@ -7,18 +7,16 @@ describe('ReceivePage', () => {
   let component: ReceivePage;
   let fixture: ComponentFixture<ReceivePage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ReceivePage],
-        imports: [IonicModule.forRoot(), RouterTestingModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ReceivePage],
+      imports: [IonicModule.forRoot(), RouterTestingModule],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(ReceivePage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(ReceivePage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

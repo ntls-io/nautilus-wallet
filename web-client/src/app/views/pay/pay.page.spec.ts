@@ -10,24 +10,22 @@ describe('PayPage', () => {
   let component: PayPage;
   let fixture: ComponentFixture<PayPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PayPage],
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule,
-          SharedModule,
-          HttpClientTestingModule,
-          InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PayPage],
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule,
+        SharedModule,
+        HttpClientTestingModule,
+        InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
+      ],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(PayPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(PayPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
