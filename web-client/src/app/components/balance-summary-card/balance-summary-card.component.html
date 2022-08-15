@@ -41,7 +41,7 @@
     </ion-list>
 
     <app-asset-accordion
-      *ngIf="!isLoading && !showAsset"
+      *ngIf="!isLoading && showAsset"
       (refreshBalances)="refreshWalletData()"
     ></app-asset-accordion>
   </ng-container>

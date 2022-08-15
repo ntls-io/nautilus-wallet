@@ -33,9 +33,16 @@ export class BalanceSummaryCardComponent implements OnInit {
     private notification: SwalHelper
   ) {
     this.sessionQuery.allBalances.subscribe((balances) => {
-      this.showAsset = balances?.some(
-        (e: AssetAmount) => e?.assetDisplay.assetSymbol === 'FOO'
+      const hasXRP = balances.some(
+        ({ assetDisplay, amount }) =>
+          assetDisplay?.assetSymbol === 'XRP' && amount > 0.01
       );
+
+      if (hasXRP) {
+        this.showAsset = !balances?.some(
+          (e: AssetAmount) => e?.assetDisplay.assetSymbol === 'FOO'
+        );
+      }
     });
   }
 
