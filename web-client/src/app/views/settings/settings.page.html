@@ -28,29 +28,35 @@
     <ion-row>
       <ion-col>
         <ion-list lines="none">
-          <ion-item
-            *ngIf="sessionQuery.onfidoCheckIsClear | async"
-            class="app-item"
-            button
-            detail="false"
-            routerLink="../become-connector"
-            [disabled]="connectorQuery.isConnector | async"
-          >
-            <ion-icon slot="start" name="git-merge"></ion-icon>
-            <ion-label>
-              {{ (connectorQuery.isConnector | async) ? 'Is a connector' :
-              'Become a connector'}}
-            </ion-label>
-            <ion-icon
-              slot="end"
-              name="checkmark-circle"
-              color="success"
-              *ngIf="connectorQuery.isConnector | async; else isNotConnector"
-            ></ion-icon>
-            <ng-template #isNotConnector>
-              <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
-            </ng-template>
-          </ion-item>
+          <ng-container *ngIf="(sessionQuery.onfidoCheckIsClear | async)">
+            <ion-item
+              *ngIf="showConnector"
+              class="app-item"
+              button
+              detail="false"
+              routerLink="../become-connector"
+              [disabled]="isWalletConnector"
+            >
+              <ion-icon slot="start" name="git-merge"></ion-icon>
+              <ion-label>
+                <h2>
+                  {{ isWalletConnector ? 'You are a connector' : 'Become a
+                  connector' }}
+                </h2>
+                <p>On this device</p>
+              </ion-label>
+              <ion-icon
+                slot="end"
+                name="checkmark-circle"
+                color="success"
+                *ngIf="isWalletConnector; else isNotConnector"
+              ></ion-icon>
+              <ng-template #isNotConnector>
+                <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
+              </ng-template>
+            </ion-item>
+          </ng-container>
+
           <ng-container *ngIf="sessionQuery.allBalances | async as balances">
             <ion-item
               *ngIf="balances.length > 0"
