@@ -35,7 +35,7 @@ export class BalanceSummaryCardComponent implements OnInit {
     this.sessionQuery.allBalances.subscribe((balances) => {
       const hasXRP = balances.some(
         ({ assetDisplay, amount }) =>
-          assetDisplay?.assetSymbol === 'XRP' && amount > 0.01
+          assetDisplay?.assetSymbol === 'XRP' && amount > 0.0001
       );
 
       if (hasXRP) {
