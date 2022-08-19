@@ -8,16 +8,42 @@ use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 use crate::schema::actions::OnfidoCheckResult;
+use crate::schema::session::Session;
 use crate::schema::types::{
     AlgorandAccountSeedBytes,
     AlgorandAddressBase32,
     AlgorandAddressBytes,
+    Base64String,
     WalletId,
     WalletPin,
     XrplAddressBase58,
     XrplKeyType,
     XrplPublicKeyHex,
 };
+
+/// A storable representation of an authenticated session with the wallet
+/// enclave.
+///
+/// This is used if a future message from the client is expected, such as in
+/// any multi-step operations. The underlying fields are base64-encoded.
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)]
+pub struct SessionStorable {
+    /// A session identifier encoded in base64.
+    pub session_id: Base64String,
+    /// A session key encoded in base64.
+    pub session_key: Base64String,
+}
+
+impl From<Session> for SessionStorable {
+    fn from(session: Session) -> Self {
+        Self {
+            session_id: base64::encode(session.id.as_slice()),
+            session_key: base64::encode(session.key.as_slice()),
+        }
+    }
+}
 
 /// A Nautilus wallet's basic displayable details.
 ///
@@ -57,6 +83,8 @@ impl From<WalletStorable> for WalletDisplay {
 pub struct WalletStorable {
     pub wallet_id: WalletId,
     pub auth_pin: WalletPin,
+
+    pub session: Option<SessionStorable>,
 
     pub owner_name: String,
     pub phone_number: Option<String>,

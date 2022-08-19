@@ -6,6 +6,9 @@ use std::prelude::v1::String;
 use ripple_keypairs::{Algorithm, EntropyArray};
 use serde::{Deserialize, Serialize};
 
+/// A base64-encoded string.
+pub type Base64String = String;
+
 pub type Bytes = Box<[u8]>;
 
 /// Nautilus Wallet ID.

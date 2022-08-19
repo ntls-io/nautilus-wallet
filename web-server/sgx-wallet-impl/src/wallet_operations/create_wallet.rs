@@ -16,6 +16,9 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
         wallet_id: new_xrpl_account.to_address_base58(),
         owner_name: request.owner_name.clone(),
         auth_pin: request.auth_pin.clone(),
+
+        session: None,
+
         phone_number: request.phone_number.clone(),
 
         algorand_account: new_algorand_account,
