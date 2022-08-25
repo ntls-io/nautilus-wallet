@@ -1,0 +1,33 @@
+diff --git a/node_modules/@stablelib/hash/tsconfig.json b/node_modules/@stablelib/hash/tsconfig.json
+index 81435d2..4082f16 100644
+--- a/node_modules/@stablelib/hash/tsconfig.json
++++ b/node_modules/@stablelib/hash/tsconfig.json
+@@ -1,27 +1,3 @@
+ {
+-    "compilerOptions": {
+-        "target": "es5",
+-        "module": "commonjs",
+-        "strict": true,
+-        "noUnusedParameters": true,
+-        "noImplicitReturns": true,
+-        "noUnusedLocals": true,
+-        "removeComments": false,
+-        "preserveConstEnums": true,
+-        "moduleResolution": "node",
+-        "newLine": "LF",
+-        "sourceMap": true,
+-        "declaration": true,
+-        "outDir": "lib",
+-        "lib": [
+-            "es5",
+-            "es2015.promise",
+-            "dom",
+-            "scripthost"
+-        ]
+-    },
+-    "exclude": [
+-        "node_modules",
+-        "lib"
+-    ]
++  "extends": "../../tsconfig.json"
+ }
