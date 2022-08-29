@@ -11,4 +11,5 @@ pub mod sign_transaction;
 pub mod sign_transaction_algorand;
 pub(crate) mod sign_transaction_xrpl;
 pub mod store;
+mod new_transaction;
 
