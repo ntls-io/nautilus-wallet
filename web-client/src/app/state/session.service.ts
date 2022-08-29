@@ -8,13 +8,13 @@ import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
+  GenerateOtp,
+  GenerateOtpResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
-  GenerateOtp,
-  GenerateOtpResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
@@ -105,14 +105,13 @@ export class SessionService {
   }
 
   async generateOtp(walletId: string): Promise<string | undefined> {
-    const {wallet, pin} = this.sessionQuery.assumeActiveSession();
-    const request: GenerateOtp = {wallet_id: walletId};
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+    const request: GenerateOtp = { wallet_id: walletId };
     const result: GenerateOtpResult = await this.enclaveService.generateOtp(
       request
     );
 
     if ('Generated' in result) {
-
       if (wallet.phone_number) {
         const message = {
           to_phone_number: wallet.phone_number,
@@ -126,7 +125,7 @@ export class SessionService {
       }
 
       return;
-    } else if ('Failed' in result){
+    } else if ('Failed' in result) {
       console.error(result);
     }
   }
@@ -191,10 +190,16 @@ export class SessionService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransactionWithOtp: invalid auth', signResult);
-    } else if ('InvalidOtp' in signResult){
+      throw panic(
+        'SessionService.signTransactionWithOtp: invalid auth',
+        signResult
+      );
+    } else if ('InvalidOtp' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransactionWithOtp: invalid OTP', signResult);
+      throw panic(
+        'SessionService.signTransactionWithOtp: invalid OTP',
+        signResult
+      );
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(

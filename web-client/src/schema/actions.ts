@@ -1,7 +1,7 @@
 /** Core request / response message types. */
 
 import { WalletDisplay } from './entities';
-import {Bytes, Otp, WalletId, WalletPin} from './types';
+import { Bytes, WalletId, WalletPin } from './types';
 
 export type CreateWallet = {
   owner_name: string;
@@ -27,9 +27,7 @@ export type GenerateOtp = {
   wallet_id: WalletId;
 };
 
-export type GenerateOtpResult =
-  | {Generated: string}
-  | {Failed: string};
+export type GenerateOtpResult = { Generated: string } | { Failed: string };
 
 export type SignTransaction = {
   wallet_id: WalletId;
@@ -62,7 +60,7 @@ export type SignTransactionResult =
 export type SignTransactionWithOtpResult =
   | { Signed: TransactionSigned }
   | { InvalidAuth: null }
-  | { InvalidOtp: null}
+  | { InvalidOtp: null }
   | { Failed: string };
 
 /** For {@link SignTransactionResult}: The possible types of signed transactions. */

@@ -6,18 +6,18 @@ import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  GenerateOtp,
+  GenerateOtpResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
-  GenerateOtp,
-  GenerateOtpResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
   SignTransactionWithOtp,
-  SignTransactionWithOtpResult
+  SignTransactionWithOtpResult,
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
@@ -65,13 +65,13 @@ export class EnclaveService {
   }
 
   async generateOtp(request: GenerateOtp): Promise<GenerateOtpResult> {
-    const generateOtpRequest = {GenerateOtp: request};
+    const generateOtpRequest = { GenerateOtp: request };
     const response = await this.postSealedExchange<
       { GenerateOtp: GenerateOtp },
       { GenerateOtp: GenerateOtpResult }
-      >(generateOtpRequest);
-    const {GenerateOtp: result} = response;
-    return  result;
+    >(generateOtpRequest);
+    const { GenerateOtp: result } = response;
+    return result;
   }
 
   async signTransaction(
