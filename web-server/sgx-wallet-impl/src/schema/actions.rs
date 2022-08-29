@@ -9,6 +9,7 @@ use std::prelude::v1::{String, ToString};
 
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
+use crate::schema::actions::TransactionToSign::AlgorandTransaction;
 
 use crate::schema::entities::WalletDisplay;
 use crate::schema::types::{Bytes, WalletId, WalletPin};
@@ -68,6 +69,18 @@ pub struct SignTransaction {
     #[zeroize(skip)]
     pub transaction_to_sign: TransactionToSign,
 
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct SignTransactionWithOtp {
+    pub wallet_id: WalletId,
+    pub auth_pin: WalletPin,
+
+    #[zeroize(skip)]
+    pub transaction_to_sign: TransactionToSign,
+
     #[zeroize(skip)]
     pub otp: Option<String>
 }
@@ -99,6 +112,22 @@ pub enum TransactionToSign {
         #[serde(with = "serde_bytes")]
         transaction_bytes: Bytes,
     },
+}
+
+pub enum CheckLimitResult {
+    OtpNeeded,
+    OtpNotNeeded,
+}
+
+impl TransactionToSign {
+    pub fn check_limit(&self) -> CheckLimitResult {
+        match self  {
+            // TODO: Parse Transaction and check amount
+            TransactionToSign::XrplTransaction {transaction_bytes} => {CheckLimitResult::OtpNeeded},
+            // TODO: Add Algorand case
+            TransactionToSign::AlgorandTransaction {..} => todo!(),
+        }
+    }
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -272,6 +301,7 @@ pub enum WalletRequest {
     CreateWallet(CreateWallet),
     OpenWallet(OpenWallet),
     SignTransaction(SignTransaction),
+    SignTransactionWithOtp(SignTransactionWithOtp),
 
     #[zeroize(skip)]
     SaveOnfidoCheck(SaveOnfidoCheck),

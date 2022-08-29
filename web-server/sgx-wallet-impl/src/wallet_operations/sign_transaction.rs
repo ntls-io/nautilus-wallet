@@ -2,12 +2,7 @@
 
 use std::prelude::v1::String;
 
-use crate::schema::actions::{
-    SignTransaction,
-    SignTransactionResult,
-    TransactionSigned,
-    TransactionToSign,
-};
+use crate::schema::actions::{SignTransaction, SignTransactionResult, SignTransactionWithOtp, TransactionSigned, TransactionToSign};
 use crate::wallet_operations::sign_transaction_algorand::sign_algorand;
 use crate::wallet_operations::sign_transaction_xrpl::sign_xrpl;
 use crate::wallet_operations::store::{mutate_wallet, unlock_wallet_with_otp, unlock_wallet, UnlockWalletError};
@@ -43,7 +38,7 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
     }
 }
 
-pub fn sign_transaction_with_otp(request: &SignTransaction) -> SignTransactionResult {
+pub fn sign_transaction_with_otp(request: &SignTransactionWithOtp) -> SignTransactionResult {
     if let Some(otp) = &request.otp {
     let stored = match unlock_wallet_with_otp(&request.wallet_id, &request.auth_pin, otp) {
         Ok(stored) => stored,
