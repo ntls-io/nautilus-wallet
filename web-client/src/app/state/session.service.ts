@@ -13,10 +13,14 @@ import {
   OnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  GenerateOtp,
+  GenerateOtpResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
+  SignTransactionWithOtp,
+  SignTransactionWithOtpResult,
   TransactionSigned,
   TransactionToSign,
 } from 'src/schema/actions';
@@ -100,6 +104,33 @@ export class SessionService {
     }
   }
 
+  async generateOtp(walletId: string): Promise<string | undefined> {
+    const {wallet, pin} = this.sessionQuery.assumeActiveSession();
+    const request: GenerateOtp = {wallet_id: walletId};
+    const result: GenerateOtpResult = await this.enclaveService.generateOtp(
+      request
+    );
+
+    if ('Generated' in result) {
+
+      if (wallet.phone_number) {
+        const message = {
+          to_phone_number: wallet.phone_number,
+          body: `Your OTP is: ${result.Generated}`,
+        };
+        await withLoggedExchange(
+          'SessionService',
+          async () => await this.messagingService.sendMessage(message),
+          message
+        );
+      }
+
+      return;
+    } else if ('Failed' in result){
+      console.error(result);
+    }
+  }
+
   /**
    * Sign a transaction using the active session's wallet.
    *
@@ -133,6 +164,41 @@ export class SessionService {
       this.sessionStore.setError({ signResult });
       throw panic(
         `SessionService.signTransaction failed: ${signResult.Failed}`,
+        signResult
+      );
+    } else {
+      throw never(signResult);
+    }
+  }
+
+  async signTransactionWithOtp(
+    transaction_to_sign: TransactionToSign
+  ): Promise<TransactionSigned> {
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+
+    const signRequest: SignTransactionWithOtp = {
+      auth_pin: pin,
+      wallet_id: wallet.wallet_id,
+      transaction_to_sign,
+    };
+    const signResult: SignTransactionWithOtpResult = await withLoggedExchange(
+      'SessionService: EnclaveService.signTransactionWithOtp:',
+      async () => await this.enclaveService.signTransactionWithOtp(signRequest),
+      signRequest
+    );
+
+    if ('Signed' in signResult) {
+      return signResult.Signed;
+    } else if ('InvalidAuth' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic('SessionService.signTransactionWithOtp: invalid auth', signResult);
+    } else if ('InvalidOtp' in signResult){
+      this.sessionStore.setError({ signResult });
+      throw panic('SessionService.signTransactionWithOtp: invalid OTP', signResult);
+    } else if ('Failed' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic(
+        `SessionService.signTransactionWithOtp failed: ${signResult.Failed}`,
         signResult
       );
     } else {

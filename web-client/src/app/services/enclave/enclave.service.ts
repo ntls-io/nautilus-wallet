@@ -10,10 +10,14 @@ import {
   LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  GenerateOtp,
+  GenerateOtpResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
+  SignTransactionWithOtp,
+  SignTransactionWithOtpResult
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
@@ -60,6 +64,16 @@ export class EnclaveService {
     return result;
   }
 
+  async generateOtp(request: GenerateOtp): Promise<GenerateOtpResult> {
+    const generateOtpRequest = {GenerateOtp: request};
+    const response = await this.postSealedExchange<
+      { GenerateOtp: GenerateOtp },
+      { GenerateOtp: GenerateOtpResult }
+      >(generateOtpRequest);
+    const {GenerateOtp: result} = response;
+    return  result;
+  }
+
   async signTransaction(
     request: SignTransaction
   ): Promise<SignTransactionResult> {
@@ -69,6 +83,18 @@ export class EnclaveService {
       { SignTransaction: SignTransactionResult }
     >(walletRequest);
     const { SignTransaction: result } = response;
+    return result;
+  }
+
+  async signTransactionWithOtp(
+    request: SignTransactionWithOtp
+  ): Promise<SignTransactionWithOtpResult> {
+    const walletRequest = { SignTransactionWithOtp: request };
+    const response = await this.postSealedExchange<
+      { SignTransactionWithOtp: SignTransactionWithOtp },
+      { SignTransactionWithOtp: SignTransactionWithOtpResult }
+    >(walletRequest);
+    const { SignTransactionWithOtp: result } = response;
     return result;
   }
 

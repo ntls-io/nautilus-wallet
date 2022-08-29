@@ -23,6 +23,14 @@ export type OpenWalletResult =
   | { InvalidAuth: null }
   | { Failed: string };
 
+export type GenerateOtp = {
+  wallet_id: WalletId;
+};
+
+export type GenerateOtpResult =
+  | {Generated: string}
+  | {Failed: string};
+
 export type SignTransaction = {
   wallet_id: WalletId;
   auth_pin: WalletPin;
@@ -33,7 +41,7 @@ export type SignTransaction = {
 export type SignTransactionWithOtp = {
   wallet_id: WalletId;
   auth_pin: WalletPin;
-  otp: Otp;
+  /** otp: Otp; */
 
   transaction_to_sign: TransactionToSign;
 };
@@ -51,7 +59,7 @@ export type SignTransactionResult =
   | { InvalidAuth: null }
   | { Failed: string };
 
-export type SignTransactionResultWithOtp =
+export type SignTransactionWithOtpResult =
   | { Signed: TransactionSigned }
   | { InvalidAuth: null }
   | { InvalidOtp: null}
@@ -112,6 +120,7 @@ export type OnfidoCheckResult = {
 export type WalletRequest =
   | { CreateWallet: CreateWallet }
   | { OpenWallet: OpenWallet }
+  | { GenerateOtp: GenerateOtp }
   | { SignTransaction: SignTransaction }
   | { SignTransactionWithOtp: SignTransactionWithOtp }
   | { SaveOnfidoCheck: SaveOnfidoCheck }
@@ -121,7 +130,8 @@ export type WalletRequest =
 export type WalletResponse =
   | { CreateWallet: CreateWalletResult }
   | { OpenWallet: OpenWalletResult }
+  | { GenerateOtp: GenerateOtpResult }
   | { SignTransaction: SignTransactionResult }
-  | { SignTransactionWithOtp: SignTransactionResultWithOtp }
+  | { SignTransactionWithOtp: SignTransactionWithOtpResult }
   | { SaveOnfidoCheck: SaveOnfidoCheckResult }
   | { LoadOnfidoCheck: LoadOnfidoCheckResult };
