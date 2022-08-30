@@ -5,10 +5,7 @@ use std::prelude::v1::String;
 use crate::schema::actions::{SignTransaction, SignTransactionResult, SignTransactionWithOtp, TransactionSigned, TransactionToSign};
 use crate::wallet_operations::sign_transaction_algorand::sign_algorand;
 use crate::wallet_operations::sign_transaction_xrpl::sign_xrpl;
-use crate::wallet_operations::store::{mutate_wallet, unlock_wallet_with_otp, unlock_wallet, UnlockWalletError};
-
-use crate::schema::actions::{GenerateOtp, GenerateOtpResult};
-use crate::schema::entities::WalletStorable;
+use crate::wallet_operations::store::{mutate_wallet, unlock_wallet_with_otp, unlock_wallet};
 
 pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
     let stored = match unlock_wallet(&request.wallet_id, &request.auth_pin) {

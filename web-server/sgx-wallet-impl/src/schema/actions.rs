@@ -9,7 +9,6 @@ use std::prelude::v1::{String, ToString};
 
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
-use crate::schema::actions::TransactionToSign::AlgorandTransaction;
 
 use crate::schema::entities::WalletDisplay;
 use crate::schema::types::{Bytes, WalletId, WalletPin};

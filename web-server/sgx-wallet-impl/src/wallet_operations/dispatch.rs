@@ -14,7 +14,6 @@ use crate::wallet_operations::open_wallet::open_wallet;
 use crate::wallet_operations::save_onfido_check::save_onfido_check;
 use crate::wallet_operations::sign_transaction::{sign_transaction, sign_transaction_with_otp};
 use crate::wallet_operations::generate_otp::generate_otp;
-use crate::wallet_operations::new_transaction::new_transaction;
 
 /// Implementation for [`crate::ecalls::wallet_operation::wallet_operation`].
 ///
