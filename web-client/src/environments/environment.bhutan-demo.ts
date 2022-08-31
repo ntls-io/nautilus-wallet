@@ -5,8 +5,8 @@ export const environment: Environment = {
 
   // Enable persistence for demo purposes.
   persistAkitaState: true,
-  nautilusWalletServer: 'https://wallet-bhutan-demo-api.ntls.io/',
-  nautilusAssetServices: 'https://wallet-bhutan-demo-services.ntls.io/',
+  nautilusWalletServer: 'https://wallet-bhutan-api.ntls.io/',
+  nautilusAssetServices: 'https://wallet-bhutan-services.ntls.io/',
   algod: {
     baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
     port: '',
