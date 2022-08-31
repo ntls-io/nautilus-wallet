@@ -16,7 +16,7 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://ledger-primary.cdbc.ripplesandbox.com',
+    server: 'wss://s1.cbdc-sandbox.rippletest.net',
     options: {
       connectionTimeout: 20000,
     },
