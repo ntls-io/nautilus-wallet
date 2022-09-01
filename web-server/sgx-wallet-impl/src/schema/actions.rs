@@ -222,8 +222,8 @@ impl From<UnlockWalletError> for SaveOnfidoCheckResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
-            //FIXME: Do additional error handling to prevent panic.
-            InvalidOtp => unreachable!(), // This variant should never happen as otp is not a feature required for KYC.
+            //FIXME: The match expression has to be exhausted, hence adding InvalidOtp here.
+            InvalidOtp => todo!(), // This variant should never happen as otp is not a feature required for KYC.
             IoError(err) => Self::from(err),
         }
     }
@@ -270,8 +270,8 @@ impl From<UnlockWalletError> for LoadOnfidoCheckResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
-            //FIXME: Do additional error handling to prevent panic.
-            InvalidOtp => unreachable!(), // This variant should never happen as otp is not a feature required for KYC.
+           //FIXME: The match expression has to be exhausted, hence adding InvalidOtp here.
+            InvalidOtp => todo!(), // This variant should never happen as otp is not a feature required for KYC.
             IoError(err) => Self::from(err),
         }
     }
