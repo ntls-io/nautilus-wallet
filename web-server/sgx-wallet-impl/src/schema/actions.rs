@@ -81,7 +81,7 @@ pub struct SignTransactionWithOtp {
     pub transaction_to_sign: TransactionToSign,
 
     #[zeroize(skip)]
-    pub otp: Option<String>
+    pub otp: String
 }
 
 impl From<UnlockWalletError> for SignTransactionResult {
