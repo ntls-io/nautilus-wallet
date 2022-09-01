@@ -24,6 +24,7 @@ import {
   TransactionSigned,
   TransactionToSign,
 } from 'src/schema/actions';
+import { Otp } from 'src/schema/types';
 import { SessionStore } from './session.store';
 
 /**
@@ -171,13 +172,15 @@ export class SessionService {
   }
 
   async signTransactionWithOtp(
-    transaction_to_sign: TransactionToSign
+    transaction_to_sign: TransactionToSign,
+    otp: Otp
   ): Promise<TransactionSigned> {
     const { wallet, pin } = this.sessionQuery.assumeActiveSession();
 
     const signRequest: SignTransactionWithOtp = {
       auth_pin: pin,
       wallet_id: wallet.wallet_id,
+      otp,
       transaction_to_sign,
     };
     const signResult: SignTransactionWithOtpResult = await withLoggedExchange(

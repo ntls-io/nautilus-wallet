@@ -1,7 +1,7 @@
 /** Core request / response message types. */
 
 import { WalletDisplay } from './entities';
-import { Bytes, WalletId, WalletPin } from './types';
+import { Bytes, Otp, WalletId, WalletPin } from './types';
 
 export type CreateWallet = {
   owner_name: string;
@@ -39,7 +39,7 @@ export type SignTransaction = {
 export type SignTransactionWithOtp = {
   wallet_id: WalletId;
   auth_pin: WalletPin;
-  /** otp: Otp; */
+  otp: Otp;
 
   transaction_to_sign: TransactionToSign;
 };
