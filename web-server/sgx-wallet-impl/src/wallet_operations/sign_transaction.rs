@@ -36,7 +36,7 @@ pub fn sign_transaction(request: &SignTransaction) -> SignTransactionResult {
 }
 
 pub fn sign_transaction_with_otp(request: &SignTransactionWithOtp) -> SignTransactionResult {
-    if let Some(otp) = &request.otp {
+    let otp = &request.otp;
     let stored = match unlock_wallet_with_otp(&request.wallet_id, &request.auth_pin, otp) {
         Ok(stored) => stored,
         Err(err) => return err.into(),
@@ -62,8 +62,5 @@ pub fn sign_transaction_with_otp(request: &SignTransactionWithOtp) -> SignTransa
     match sign_result {
         Ok(signed) => SignTransactionResult::Signed(signed),
         Err(message) => SignTransactionResult::Failed(message),
-    }} else {
-        mutate_wallet(&request.wallet_id,|mut stored|{stored.otp = None; stored});
-        SignTransactionResult::InvalidAuthOtp
     }
 }
