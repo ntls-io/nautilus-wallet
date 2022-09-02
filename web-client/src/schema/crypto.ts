@@ -19,7 +19,7 @@ type EncryptedMessage = {
 };
 
 export class TweetNaClCrypto {
-  constructor(public keyPair: BoxKeyPair) { }
+  constructor(public keyPair: BoxKeyPair) {}
 
   get public_key(): PublicKey {
     return this.keyPair.publicKey;

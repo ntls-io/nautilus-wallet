@@ -25,4 +25,5 @@ pub mod entities;
 pub mod msgpack;
 pub mod sealing;
 pub(crate) mod serde_bytes_array;
+pub mod session;
 pub mod types;
