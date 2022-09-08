@@ -50,7 +50,7 @@ export class SgxSession {
    * Compute and return a message authentication code for an input message.
    */
   message_authentication_code = (msg: Bytes): Bytes32 => {
-    let hmac = new HMAC(SHA256, this.secret);
+    const hmac = new HMAC(SHA256, this.secret);
     hmac.update(msg);
     return hmac.digest();
   };
