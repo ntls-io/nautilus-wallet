@@ -19,6 +19,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('../receive/receive.module').then((m) => m.ReceivePageModule),
   },
+  {
+    path: 'pull-payment',
+    loadChildren: () =>
+      import('../pull-payment/pull-payment.module').then(
+        (m) => m.PullPaymentPageModule
+      ),
+  },
 ];
 
 @NgModule({
