@@ -14,6 +14,8 @@ use crate::wallet_operations::open_wallet::open_wallet;
 use crate::wallet_operations::save_onfido_check::save_onfido_check;
 use crate::wallet_operations::sign_transaction::sign_transaction;
 
+use super::pin_reset::{start_pin_reset, reset_wallet_pin};
+
 /// Implementation for [`crate::ecalls::wallet_operation::wallet_operation`].
 ///
 /// This processes an exchange of the following:
@@ -109,6 +111,8 @@ fn wallet_operation_impl_dispatch(wallet_request: &WalletRequest) -> WalletRespo
         WalletRequest::CreateWallet(request) => create_wallet(request).into(),
         WalletRequest::OpenWallet(request) => open_wallet(request).into(),
         WalletRequest::SignTransaction(request) => sign_transaction(request).into(),
+        WalletRequest::StartPinReset(request) => start_pin_reset(request).into(),
+        WalletRequest::PinReset(request) => reset_wallet_pin(request).into(),
         WalletRequest::SaveOnfidoCheck(request) => save_onfido_check(request).into(),
         WalletRequest::LoadOnfidoCheck(request) => load_onfido_check(request).into(),
     }

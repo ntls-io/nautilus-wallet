@@ -1,4 +1,4 @@
-use hkdf::hmac::Hmac;
+pub use hkdf::hmac::{Hmac, Mac};
 use hkdf::Hkdf;
 pub use secrecy::{self, zeroize, ExposeSecret, Secret, SecretBox, SecretString, SecretVec};
 pub use sha2::{Digest, Sha256};

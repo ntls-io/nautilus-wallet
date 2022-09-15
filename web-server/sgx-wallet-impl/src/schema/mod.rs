@@ -21,6 +21,7 @@
 //! * <https://developer.algorand.org/docs/reference/rest-apis/kmd/>
 
 pub mod actions;
+pub mod auth;
 pub mod entities;
 pub mod msgpack;
 pub mod sealing;
