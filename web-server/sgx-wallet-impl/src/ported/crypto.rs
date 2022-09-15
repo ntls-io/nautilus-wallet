@@ -168,20 +168,28 @@ impl SodaBoxCrypto {
     }
 }
 
-pub fn get_enclave_key() -> Secret<sgx_key_128bit_t> {
+pub(crate) fn sgx_get_key_helper(
+    key_id: Option<sgx_key_id_t>,
+    key_name: uint16_t,
+    key_policy: uint16_t,
+) -> sgx_key_128bit_t {
     // From my testing, this is deterministic if the environment and binary is the same
     // TODO: Test in Azure VM using HW mode
     // TODO: Find documentation that confirms that the effect is normative
     let report = rsgx_self_report();
+
     let attribute_mask = sgx_attributes_t {
         flags: TSEAL_DEFAULT_FLAGSMASK,
         xfrm: 0,
     };
-    let key_id = sgx_key_id_t::default();
+    let key_id = match key_id {
+        None => sgx_key_id_t::default(),
+        Some(id) => id,
+    };
 
     let key_request = sgx_key_request_t {
-        key_name: SGX_KEYSELECT_SEAL,
-        key_policy: SGX_KEYPOLICY_MRENCLAVE | SGX_KEYPOLICY_MRSIGNER,
+        key_name,
+        key_policy,
         isv_svn: report.body.isv_svn,
         reserved1: 0_u16,
         cpu_svn: report.body.cpu_svn,
@@ -194,7 +202,16 @@ pub fn get_enclave_key() -> Secret<sgx_key_128bit_t> {
 
     // This should never fail since the input values are constant
     // TODO: remove unwrap and deal with error?
-    Secret::new(rsgx_get_key(&key_request).unwrap())
+    rsgx_get_key(&key_request).unwrap()
+}
+
+pub fn get_enclave_key() -> Secret<sgx_key_128bit_t> {
+    Secret::new(sgx_get_key_helper(
+        None,
+        SGX_KEYSELECT_SEAL,
+        // C-style bitflags:
+        SGX_KEYPOLICY_MRENCLAVE | SGX_KEYPOLICY_MRSIGNER,
+    ))
 }
 
 /// Drop the first `prefix_len` elements of `vec`, keeping the rest.
