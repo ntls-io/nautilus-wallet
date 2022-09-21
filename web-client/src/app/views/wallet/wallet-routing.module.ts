@@ -20,10 +20,10 @@ export const routes: Routes = [
       import('../receive/receive.module').then((m) => m.ReceivePageModule),
   },
   {
-    path: 'pull-payment',
+    path: 'transfer-funds',
     loadChildren: () =>
-      import('../pull-payment/pull-payment.module').then(
-        (m) => m.PullPaymentPageModule
+      import('../transfer-funds/transfer-funds.module').then(
+        (m) => m.TransferFundsPageModule
       ),
   },
 ];
