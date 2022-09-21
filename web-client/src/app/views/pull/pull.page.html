@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>pull</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pull Payment</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -21,7 +24,7 @@
                 >
                   <ion-select
                     [value]="selectedCurrency"
-                    (ionChange)="setBalance($event)"
+                    (ionChange)="setCurrency($event)"
                     slot="end"
                     *ngIf="balances.length > 1"
                     class="font-nasalization text-primary"
@@ -66,10 +69,30 @@
         <app-pay-amount-form
           (amountSubmitted)="onAmountSubmitted($event)"
           [autofocus]="true"
-          [balance]="balanceLimit"
+          [balance]="balance"
           [maxAmount]="maxAmount"
         ></app-pay-amount-form>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
+        (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+      ></app-pin-entry>
+    </ion-content>
+  </ng-template>
+</ion-modal>

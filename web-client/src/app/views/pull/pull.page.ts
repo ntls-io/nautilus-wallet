@@ -14,10 +14,11 @@ import {
   styleUrls: ['./pull.page.scss'],
 })
 export class PullPage implements OnInit {
+  isPinEntryOpen = false;
   senderAddress: string | undefined;
   selectedCurrency = 'XRP';
 
-  balanceLimit: AssetAmount | undefined;
+  balance: AssetAmount | undefined;
   maxAmount = 1000000000;
 
   constructor(
@@ -33,27 +34,42 @@ export class PullPage implements OnInit {
     }
   }
 
+  async getXrplBalance(currency: string): Promise<AssetAmount | undefined> {
+    const xrplBalances = await firstValueFrom(this.sessionQuery.xrplBalances);
+    const balance = xrplBalances?.find(
+      ({ assetDisplay }) => assetDisplay.assetSymbol === currency
+    );
+
+    return balance;
+  }
+
   ngOnInit() {
     this.setBalanceLimit(this.selectedCurrency);
   }
 
-  setBalance(event: any) {
+  setCurrency(event: any) {
     const { value } = event.target;
     this.setBalanceLimit(value);
   }
 
-  async setBalanceLimit(value: string) {
-    const xrplBalances = await firstValueFrom(this.sessionQuery.xrplBalances);
-    const balance = xrplBalances?.find(
-      ({ assetDisplay }) => assetDisplay.assetSymbol === value
-    );
+  async setBalanceLimit(currency: string) {
+    const balance = await this.getXrplBalance(currency);
 
     if (balance) {
-      this.balanceLimit = assetAmountFromBase(this.maxAmount, balance);
+      this.balance = assetAmountFromBase(this.maxAmount, balance);
     }
   }
 
-  onAmountSubmitted(amount: number): void {
-    console.log(amount);
+  async onAmountSubmitted(amount: number): Promise<void> {
+    const balance = await this.getXrplBalance(this.selectedCurrency);
+    if (balance) {
+      const assetAmount: AssetAmount = assetAmountFromBase(amount, balance);
+      console.log(assetAmount);
+      this.isPinEntryOpen = true;
+    }
+  }
+
+  onPinConfirmed(event: any) {
+    console.log(event);
   }
 }
