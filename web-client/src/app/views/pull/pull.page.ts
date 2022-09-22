@@ -2,11 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
+import { ConnectorQuery } from 'src/app/state/connector';
+import {
+  CommissionedTxResponse,
+  SessionXrplService,
+} from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { SessionStore } from 'src/app/state/session.store';
 import {
   AssetAmount,
   assetAmountFromBase,
+  getAssetCommission,
 } from 'src/app/utils/assets/assets.common';
+import {
+  AssetAmountXrp,
+  convertFromAssetAmountXrpToLedger,
+  isAssetAmountXrp,
+} from 'src/app/utils/assets/assets.xrp';
+import {
+  AssetAmountXrplToken,
+  convertFromAssetAmountXrplTokenToLedger,
+  isAssetAmountXrplToken,
+} from 'src/app/utils/assets/assets.xrp.token';
+import { never } from 'src/helpers/helpers';
+import { Payment, TxResponse } from 'xrpl';
 
 @Component({
   selector: 'app-pull',
@@ -23,8 +42,11 @@ export class PullPage implements OnInit {
 
   constructor(
     public sessionQuery: SessionQuery,
+    private sessionStore: SessionStore,
     private router: Router,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private connectorQuery: ConnectorQuery,
+    private sessionXrplService: SessionXrplService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state?.address) {
@@ -69,7 +91,57 @@ export class PullPage implements OnInit {
     }
   }
 
-  onPinConfirmed(event: any) {
-    console.log(event);
+  onPinConfirmed(pin: any) {
+    this.sessionStore.update({
+      externalSesion: { wallet: this.senderAddress, pin },
+    });
+  }
+
+  protected async receiveXrpl(
+    amount: AssetAmountXrp | AssetAmountXrplToken,
+    senderAddress: string
+  ): Promise<CommissionedTxResponse | { xrplResult: TxResponse }> {
+    const mainAmount = this.convertXrpAmount(amount);
+    const isConnector = !!this.connectorQuery.getValue().walletId;
+    const receiverAddress =
+      this.sessionQuery.assumeActiveSession().wallet.xrpl_account
+        .address_base58;
+
+    if (isConnector) {
+      const assetCommission = getAssetCommission(amount, isConnector) as
+        | AssetAmountXrp
+        | AssetAmountXrplToken;
+      const commissionAmount = this.convertXrpAmount(assetCommission);
+      const amountMinusCommision = this.convertXrpAmount({
+        ...amount,
+        amount: amount.amount - assetCommission.amount,
+      });
+      return this.sessionXrplService.sendFundsCommissioned(
+        receiverAddress,
+        amountMinusCommision,
+        commissionAmount,
+        senderAddress
+      );
+    } else {
+      return {
+        xrplResult: await this.sessionXrplService.sendFunds(
+          receiverAddress,
+          mainAmount,
+          senderAddress
+        ),
+      };
+    }
+  }
+
+  protected convertXrpAmount(
+    amount: AssetAmountXrp | AssetAmountXrplToken
+  ): Payment['Amount'] {
+    if (isAssetAmountXrp(amount)) {
+      return convertFromAssetAmountXrpToLedger(amount);
+    } else if (isAssetAmountXrplToken(amount)) {
+      return convertFromAssetAmountXrplTokenToLedger(amount);
+    } else {
+      throw never(amount);
+    }
   }
 }

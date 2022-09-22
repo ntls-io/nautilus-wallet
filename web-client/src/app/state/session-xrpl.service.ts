@@ -113,11 +113,13 @@ export class SessionXrplService {
 
   async sendFunds(
     receiverId: string,
-    amount: xrpl.Payment['Amount']
+    amount: xrpl.Payment['Amount'],
+    senderId?: string
   ): Promise<xrpl.TxResponse> {
     const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
-      amount
+      amount,
+      senderId
     );
 
     const txResponse = await this.sendTransaction(preparedTx);
@@ -159,7 +161,8 @@ export class SessionXrplService {
   async sendFundsCommissioned(
     receiverId: string,
     mainAmount: xrpl.Payment['Amount'],
-    commissionAmount: xrpl.Payment['Amount']
+    commissionAmount: xrpl.Payment['Amount'],
+    senderId?: string
   ): Promise<CommissionedTxResponse> {
     const connectorWalletId = this.connectorQuery.getValue().walletId;
 
@@ -171,7 +174,8 @@ export class SessionXrplService {
     }
     const mainTxnUnsigned: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
-      mainAmount
+      mainAmount,
+      senderId
     );
 
     const signedMainTxn = await this.signXrplTransaction(mainTxnUnsigned);
