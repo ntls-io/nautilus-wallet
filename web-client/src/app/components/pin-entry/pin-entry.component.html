@@ -33,8 +33,12 @@
         shape="round"
         type="submit"
         [disabled]="!pinForm.valid"
-        >Confirm</ion-button
-      >
+        >Confirm
+      </ion-button>
     </form>
+
+    <ion-button color="white" fill="clear" (click)="goToReset()"
+      >I can't remember my pin
+    </ion-button>
   </div>
 </div>
