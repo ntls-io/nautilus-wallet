@@ -7,4 +7,5 @@ members = [
     'onfido',
     'twilio-api',
     'twilio-verify',
+    'wallet-address-db-api'
 ]
