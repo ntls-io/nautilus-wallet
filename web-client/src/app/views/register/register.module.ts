@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 import { SimpleMaskModule } from 'ngx-ion-simple-mask';
-import { SignUpQuestionsComponent } from 'src/app/components/sign-up-questions/sign-up-questions.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { SwiperModule } from 'swiper/angular';
 import { RegisterPageRoutingModule } from './register-routing.module';
@@ -21,6 +20,6 @@ import { RegisterPage } from './register.page';
     IonIntlTelInputModule,
     SwiperModule,
   ],
-  declarations: [RegisterPage, SignUpQuestionsComponent],
+  declarations: [RegisterPage],
 })
 export class RegisterPageModule {}
