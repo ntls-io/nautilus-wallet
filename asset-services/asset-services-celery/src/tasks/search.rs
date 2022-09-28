@@ -1,8 +1,10 @@
 use wallet_address_db_api::client::CosmosDBMongo;
-use wallet_address_db_api::exports::Bson;
+use wallet_address_db_api::exports;
 
 use crate::exports::celery_prelude::{TaskError, TaskResult};
 use crate::task_records::callbacks::{save_failure, save_success};
+
+pub type Bson = exports::Bson;
 
 #[celery::task(
 on_success = save_success,
