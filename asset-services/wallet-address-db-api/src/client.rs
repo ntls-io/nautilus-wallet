@@ -1,6 +1,8 @@
-use bson::{Bson, Document};
+use bson::{doc, Bson, Document};
 use env_var_helpers::env_vars;
-use mongodb::{error::Error, options::ClientOptions, Client};
+use mongodb::{error::Error, options::ClientOptions, Client, Collection};
+
+use crate::model::WalletDocument;
 
 pub struct CosmosDBMongo {
     connection_string: String,
@@ -18,7 +20,7 @@ impl CosmosDBMongo {
     }
 
     pub fn from_env() -> Result<CosmosDBMongo, env_vars::EnvVarError> {
-        let connection_string = env_vars::var("WALLET_ADDRESS_DB_DATABASE_NAME")?;
+        let connection_string = env_vars::var("WALLET_ADDRESS_DB_CONNECTION_STRING")?;
         let database_name = env_vars::var("WALLET_ADDRESS_DB_DATABASE_NAME")?;
         let collection_name = env_vars::var("WALLET_ADDRESS_DB_COLLECTION_NAME")?;
         Ok(Self::new(connection_string, database_name, collection_name))
@@ -26,31 +28,65 @@ impl CosmosDBMongo {
 
     /// Creates a new document in the collection.
     /// Returns document id (ObjectId) if successfully inserted.
-    pub async fn create(&self, doc: Document) -> Result<Bson, Error> {
+    pub async fn create(
+        &self,
+        wallet_id: String,
+        owner_name: String,
+        phone_number: String,
+    ) -> Result<Bson, Error> {
         let client = MongoClient::connect(&self.connection_string).await?;
 
-        let collection = client
+        let collection: Collection<Document> = client
             .client
             .database(&self.database_name)
             .collection(&self.collection_name);
 
-        match collection.insert_one(doc, None).await {
+        let wallet_document = WalletDocument {
+            id: None,
+            wallet_id,
+            owner_name,
+            phone_number,
+        };
+
+        // Convert `captain_marvel` to a Bson instance:
+        let serialized_wallet_document = bson::to_bson(&wallet_document)?;
+        let document = serialized_wallet_document.as_document().unwrap();
+
+        match collection.insert_one(document, None).await {
             Ok(result) => Ok(result.inserted_id),
             Err(e) => Err(e),
         }
     }
 
-    /// Reads a document from the collection.
-    /// Returns the document if it exists, else returns `None`.
-    pub async fn read(&self, doc: Document) -> Result<Option<Document>, Error> {
+    /// Finds wallet document from the collection.
+    /// Returns the wallet id if exists, else returns `None`.
+    pub async fn find_one(
+        &self,
+        owner_name: String,
+        phone_number: String,
+    ) -> Result<Option<String>, Error> {
         let client = MongoClient::connect(&self.connection_string).await?;
 
-        let collection = client
+        let collection: Collection<Document> = client
             .client
             .database(&self.database_name)
             .collection(&self.collection_name);
 
-        collection.find_one(Some(doc), None).await
+        let doc_filter = doc! {"owner_name": owner_name, "phone_number": phone_number};
+        match collection.find_one(Some(doc_filter), None).await {
+            Ok(result) => match result {
+                None => Ok(None),
+                Some(document) => {
+                    let wallet_document: WalletDocument =
+                        bson::from_bson(Bson::Document(document))?;
+                    Ok(Some(wallet_document.wallet_id))
+                }
+            },
+            Err(e) => Err(e),
+        }
+
+        // Deserialize the document into a WalletDocument instance
+        //         let loaded_movie_struct: Movie = bson::from_bson(Bson::Document(loaded_movie))?;
     }
 }
 

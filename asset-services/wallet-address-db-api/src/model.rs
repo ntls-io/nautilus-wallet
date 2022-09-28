@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub(crate) struct WalletDocument {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
-    id: Option<ObjectId>,
-    wallet_id: WalletId,
-    owner_name: String,
-    phone_number: String,
+    pub(crate) id: Option<ObjectId>,
+    pub(crate) wallet_id: WalletId,
+    pub(crate) owner_name: String,
+    pub(crate) phone_number: String,
 }
