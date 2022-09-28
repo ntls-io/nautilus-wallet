@@ -1,6 +1,7 @@
-use crate::types::WalletId;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
+
+use crate::types::WalletId;
 
 /// WalletDocument Model to represent a document in the database collection.
 #[derive(Serialize, Deserialize, Debug)]

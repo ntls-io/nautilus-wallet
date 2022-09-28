@@ -1,6 +1,8 @@
 use bson::{doc, Bson, Document};
 use env_var_helpers::env_vars;
-use mongodb::{error::Error, options::ClientOptions, Client, Collection};
+use mongodb::error::Error;
+use mongodb::options::ClientOptions;
+use mongodb::{Client, Collection};
 
 use crate::model::WalletDocument;
 
