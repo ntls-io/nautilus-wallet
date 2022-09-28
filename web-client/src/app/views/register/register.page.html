@@ -129,22 +129,15 @@
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col>
-            <app-security-questions
-              (answers)="onSubmit($event)"
-            ></app-security-questions>
-          </ion-col>
-        </ion-row>
-        <ion-row class="mt-3">
-          <ion-col size="auto">
-            <ion-button
-              (click)="swiper?.swiperRef?.slidePrev()"
-              shape="round"
-              color="white"
-              >Previous
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button shape="round" expand="block">Submit</ion-button>
+            <app-security-questions (answers)="onSubmit($event)">
+              <ion-button
+                actionButton
+                (click)="swiper?.swiperRef?.slidePrev()"
+                shape="round"
+                color="white"
+                >Previous
+              </ion-button>
+            </app-security-questions>
           </ion-col>
         </ion-row>
       </ion-grid>
