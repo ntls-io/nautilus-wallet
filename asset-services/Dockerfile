@@ -4,7 +4,7 @@
 
 # Pre-stage build args:
 
-ARG RUST_TOOLCHAIN="1.59"
+ARG RUST_TOOLCHAIN="1.55"
 
 # For release builds, set both CARGO_BUILD_FLAGS="--release" and CARGO_OUTPUT_PROFILE="release"
 ARG CARGO_BUILD_FLAGS
