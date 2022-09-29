@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use crate::ported::kv_store::fs::{FsStore, SgxFiler};
 use crate::ported::kv_store::{Key, KvStore};
-use crate::schema::entities::WalletStorable;
+use crate::schema::entities::{WalletStorable, XrplAccountDisplay};
 
 type WalletStore = FsStore<SgxFiler, WalletStorable>;
 
@@ -61,6 +61,14 @@ pub fn unlock_wallet(wallet_id: &str, auth_pin: &str) -> Result<WalletStorable, 
     }
 }
 
+pub fn load_xrpl_wallet(wallet_id: &str) -> Result<XrplAccountDisplay, GetXrplWalletError> {
+    let stored: WalletStorable =
+        load_wallet(wallet_id)?.ok_or(GetXrplWalletError::InvalidWalletId)?;
+
+    let xrpl_account = stored.xrpl_account.clone();
+    Ok(XrplAccountDisplay::from(xrpl_account))
+}
+
 /// [`unlock_wallet`] failed.
 ///
 /// # Security note
@@ -75,6 +83,16 @@ pub enum UnlockWalletError {
 
     #[error("invalid authentication PIN provided")]
     InvalidAuthPin,
+
+    #[error("I/O error while opening wallet")]
+    IoError(#[from] io::Error),
+}
+
+/// [`get_xrpl_wallet`] failed.
+#[derive(Debug, Error)]
+pub enum GetXrplWalletError {
+    #[error("invalid wallet ID provided")]
+    InvalidWalletId,
 
     #[error("I/O error while opening wallet")]
     IoError(#[from] io::Error),

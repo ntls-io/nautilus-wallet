@@ -11,11 +11,11 @@ use std::prelude::v1::{String, ToString};
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
-use crate::crypto::common::{PublicKey, Bytes32};
+use crate::crypto::common::{Bytes32, PublicKey};
 use crate::schema::auth::AuthError;
-use crate::schema::entities::WalletDisplay;
+use crate::schema::entities::{WalletDisplay, XrplAccountDisplay};
 use crate::schema::types::{Bytes, WalletAuthMap, WalletId, WalletPin};
-use crate::wallet_operations::store::UnlockWalletError;
+use crate::wallet_operations::store::{GetXrplWalletError, UnlockWalletError};
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -57,6 +57,30 @@ impl From<UnlockWalletError> for OpenWalletResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct GetXrplWallet {
+    pub wallet_id: WalletId,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum GetXrplWalletResult {
+    Opened(XrplAccountDisplay),
+    Failed(String),
+}
+
+impl From<GetXrplWalletError> for GetXrplWalletResult {
+    fn from(err: GetXrplWalletError) -> Self {
+        use GetXrplWalletError::*;
+        match err {
+            InvalidWalletId => Self::Failed("Invalid wallet id".to_string()),
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
@@ -304,6 +328,7 @@ pub struct OnfidoCheckResult {
 pub enum WalletRequest {
     CreateWallet(CreateWallet),
     OpenWallet(OpenWallet),
+    GetXrplWallet(GetXrplWallet),
     SignTransaction(SignTransaction),
 
     StartPinReset(StartPinReset),
@@ -322,6 +347,7 @@ pub enum WalletRequest {
 pub enum WalletResponse {
     CreateWallet(CreateWalletResult),
     OpenWallet(OpenWalletResult),
+    GetXrplWallet(GetXrplWalletResult),
     StartPinReset(StartPinResetResult),
     PinReset(PinResetResult),
     SignTransaction(SignTransactionResult),
@@ -340,6 +366,12 @@ impl From<CreateWalletResult> for WalletResponse {
 impl From<OpenWalletResult> for WalletResponse {
     fn from(result: OpenWalletResult) -> Self {
         Self::OpenWallet(result)
+    }
+}
+
+impl From<GetXrplWalletResult> for WalletResponse {
+    fn from(result: GetXrplWalletResult) -> Self {
+        Self::GetXrplWallet(result)
     }
 }
 
