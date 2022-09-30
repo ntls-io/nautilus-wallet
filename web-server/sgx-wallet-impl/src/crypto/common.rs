@@ -45,9 +45,11 @@ pub fn hash_when_too_long(msg: &[u8]) -> [u8; 32] {
  * FIXME(panic): assumes output buffer is no more than 255 times the length of a
  * SHA-256 digest
  */
-pub fn hkdf_expand(hkdf: &HkdfSha256, okm: &mut [u8;32]) {
+pub fn hkdf_expand(hkdf: &HkdfSha256, okm: &mut [u8; 32]) {
     match hkdf.expand(&[], okm) {
         Ok(()) => (),
-        Err(hkdf::InvalidLength) => panic!("Output buffer has fixed size of 32 bytes, well within the valid range."),
+        Err(hkdf::InvalidLength) => {
+            panic!("Output buffer has fixed size of 32 bytes, well within the valid range.")
+        }
     };
 }

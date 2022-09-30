@@ -74,7 +74,13 @@ impl Session {
             Some(_) => (),
         }
 
-        let mac = create_mac_context(*self.shared_secret.expect("Should contain a value").expose_secret(), new_msg);
+        let mac = create_mac_context(
+            *self
+                .shared_secret
+                .expect("Should contain a value")
+                .expose_secret(),
+            new_msg,
+        );
         match mac.verify_slice(tag) {
             Ok(()) => ValidateMsgResult::Valid,
             _ => ValidateMsgResult::InvalidMsg,

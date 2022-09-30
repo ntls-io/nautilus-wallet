@@ -88,7 +88,7 @@ pub enum UnlockWalletError {
     IoError(#[from] io::Error),
 }
 
-/// [`get_xrpl_wallet`] failed.
+/// [`load_xrpl_wallet`] failed.
 #[derive(Debug, Error)]
 pub enum GetXrplWalletError {
     #[error("invalid wallet ID provided")]

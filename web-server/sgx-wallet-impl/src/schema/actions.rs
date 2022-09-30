@@ -306,7 +306,7 @@ impl From<UnlockWalletError> for LoadOnfidoCheckResult {
     }
 }
 
-/// Docs: https://documentation.onfido.com/v2/#report-object
+/// Docs: <https://documentation.onfido.com/v2/#report-object>
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 pub struct OnfidoCheckResult {
