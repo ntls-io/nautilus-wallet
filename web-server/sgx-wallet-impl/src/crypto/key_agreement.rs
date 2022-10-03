@@ -9,9 +9,7 @@ pub struct DiffieHellman {
 
 impl DiffieHellman {
     pub fn new(our_keys: KeyPair, dh_context: Option<&[u8]>) -> Self {
-        let ctx = dh_context.and_then(|ctx| -> Option<[u8; 32]> {
-            Some(hash_when_too_long(ctx))
-        });
+        let ctx = dh_context.and_then(|ctx| -> Option<[u8; 32]> { Some(hash_when_too_long(ctx)) });
         Self { ctx, our_keys }
     }
     #[must_use]

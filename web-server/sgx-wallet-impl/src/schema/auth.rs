@@ -37,8 +37,7 @@ impl WalletChallenge {
         /*
          *  Attempt to retrieve wallet and convert any ['io::Error'] values returned
          */
-        let stored =
-            load_wallet(wallet_id).or_else(|err| Err(AuthError::from(err)))?;
+        let stored = load_wallet(wallet_id).or_else(|err| Err(AuthError::from(err)))?;
 
         /*
          *  If ['None'], then the given wallet id was invalid so we return an ['AuthError']

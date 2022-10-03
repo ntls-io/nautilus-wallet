@@ -1,5 +1,6 @@
 pub(crate) mod test_create_wallet;
 pub(crate) mod test_dispatch;
+pub(crate) mod test_get_xrpl_wallet;
 pub(crate) mod test_load_onfido_check;
 pub(crate) mod test_open_wallet;
 pub(crate) mod test_save_onfido_check;

@@ -17,7 +17,9 @@ hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 hkdf = { version = "0.12.3", default-features = false, features = [] }
 secrecy = "0.8.0"
 sodalite = { version = "0.4.0", default-features = false }
-x25519-dalek = { version = "1.1.0", default-features = false, features = ["u64_backend"] }
+x25519-dalek = { version = "1.1.0", default-features = false, features = [
+  "u64_backend",
+] }
 sha2 = { version = "0.10.3", default-features = false, features = [] }
 zeroize = { version = "1.5.3", features = ["alloc", "zeroize_derive"] }
 
@@ -37,7 +39,7 @@ thiserror = { git = "https://github.com/mesalock-linux/thiserror-sgx" }
 
 # Our SGX forks
 algonaut = { git = "https://github.com/registreerocks/algonaut-sgx", branch = "main-sgx" }
-serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" } # SGX: registreerocks fork for 0.11.4
+serde_bytes = { version = "0.11.4", git = "https://github.com/registreerocks/serde-bytes-sgx" }                    # SGX: registreerocks fork for 0.11.4
 ripple-keypairs = { git = "https://github.com/ntls-io/ripple-keypairs-rust-sgx", branch = "v0.1.0-sgx" }
 ripple-address-codec = { git = "https://github.com/ntls-io/ripple-address-codec-rust-sgx", branch = "v0.1.1-sgx" }
 
