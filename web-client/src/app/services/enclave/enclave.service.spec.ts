@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   OpenWallet,
   OpenWalletResult,
   SignTransaction,
@@ -16,7 +18,7 @@ import {
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { TweetNaClCrypto } from 'src/schema/crypto';
-import { WalletDisplay } from 'src/schema/entities';
+import { WalletDisplay, XrplAccountDisplay } from 'src/schema/entities';
 import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
@@ -155,6 +157,38 @@ describe('EnclaveService', () => {
     });
   });
 
+  describe('getXrplWallet', () => {
+    const requestOpen: GetXrplWallet = {
+      wallet_id: 'placeholder wallet id',
+    };
+
+    it('Opened', async () => {
+      const stubResultOpened: GetXrplWalletResult = {
+        Opened: placeholderXrplAccountDisplay(),
+      };
+      const result = await simulateWalletOperation(
+        httpTestingController,
+        service.getXrplWallet(requestOpen),
+        { GetXrplWallet: requestOpen },
+        { GetXrplWallet: stubResultOpened }
+      );
+      await expect(result).toEqual(stubResultOpened);
+    });
+
+    it('Failed', async () => {
+      const stubResultFailed: GetXrplWalletResult = {
+        Failed: 'failed to open wallet',
+      };
+      const result = await simulateWalletOperation(
+        httpTestingController,
+        service.getXrplWallet(requestOpen),
+        { GetXrplWallet: requestOpen },
+        { GetXrplWallet: stubResultFailed }
+      );
+      await expect(result).toEqual(stubResultFailed);
+    });
+  });
+
   describe('signTransaction', () => {
     const requestSign: SignTransaction = {
       wallet_id: 'placeholder wallet id',
@@ -224,6 +258,12 @@ const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
     public_key_hex: 'placeholder public key hex',
     address_base58: 'placeholder xrp address',
   },
+});
+
+const placeholderXrplAccountDisplay = (): XrplAccountDisplay => ({
+  key_type: 'secp256k1',
+  public_key_hex: 'placeholder public key hex',
+  address_base58: 'placeholder xrp address',
 });
 
 /**
