@@ -1,18 +1,15 @@
-<form [formGroup]="questionForm" (ngSubmit)="validateForm()" class="form-item">
+<form [formGroup]="form" (ngSubmit)="validateForm()" class="form-item">
   <ion-list lines="none" mode="ios" class="form-item">
-    <ion-item>
-      <ion-label position="stacked"
-        >What is your mothers maiden name?
-      </ion-label>
-      <ion-input type="text" name="mother" formControlName="mother"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">What city were you born in? </ion-label>
-      <ion-input type="text" name="city" formControlName="city"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">What is your pet name? </ion-label>
-      <ion-input type="text" name="pet" formControlName="pet"></ion-input>
+    <ion-item *ngFor="let question of questions">
+      <ion-label position="stacked">{{ question.text }} </ion-label>
+      <ion-input
+        type="text"
+        [name]="question.field"
+        [formControlName]="question.field"
+      ></ion-input>
+      <ion-note *ngIf="form.get(question.field)?.touched" slot="error"
+        >Required
+      </ion-note>
     </ion-item>
   </ion-list>
 

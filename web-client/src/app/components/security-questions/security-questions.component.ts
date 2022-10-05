@@ -8,35 +8,38 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SecurityQuestionsComponent implements OnInit {
   @Output() answers = new EventEmitter<any>();
-  questionForm: FormGroup;
+  questions = [
+    { field: 'mother', text: 'What is your mothers maiden name?' },
+    { field: 'city', text: 'What city were you born in?' },
+    { field: 'pet', text: 'What is your pet name?' },
+  ];
+  form: FormGroup = this.formBuilder.group({
+    mother: [
+      '',
+      Validators.compose([Validators.minLength(2), Validators.required]),
+    ],
+    city: [
+      '',
+      Validators.compose([Validators.minLength(2), Validators.required]),
+    ],
+    pet: [
+      '',
+      Validators.compose([Validators.minLength(2), Validators.required]),
+    ],
+  });
 
-  constructor(private formBuilder: FormBuilder) {
-    this.questionForm = this.generateFormGroup();
-  }
+  constructor(private formBuilder: FormBuilder) {}
 
-  generateFormGroup(): FormGroup {
-    return this.formBuilder.group({
-      mother: [
-        '',
-        Validators.compose([Validators.minLength(2), Validators.required]),
-      ],
-      city: [
-        '',
-        Validators.compose([Validators.minLength(2), Validators.required]),
-      ],
-      pet: [
-        '',
-        Validators.compose([Validators.minLength(2), Validators.required]),
-      ],
-    });
+  get f() {
+    return this.form.controls;
   }
 
   ngOnInit() {}
 
   validateForm() {
-    this.questionForm.markAllAsTouched();
-    if (this.questionForm.valid) {
-      this.answers.emit(this.questionForm.value);
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      this.answers.emit(this.form.value);
     }
   }
 }
