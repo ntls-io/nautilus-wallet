@@ -39,7 +39,8 @@ export class SecurityQuestionsComponent implements OnInit {
   validateForm() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      this.answers.emit(this.form.value);
+      const qMap = new Map(Object.entries(this.form.getRawValue()));
+      this.answers.emit(qMap);
     }
   }
 }

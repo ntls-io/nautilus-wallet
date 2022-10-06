@@ -86,7 +86,7 @@ export class RegisterPage implements OnDestroy {
     }
   }
 
-  async onSubmit(answers?: any): Promise<void> {
+  async onSubmit(answers: Map<string, string>): Promise<void> {
     /* istanbul ignore next TODO */
     console.log(answers);
 
@@ -102,6 +102,7 @@ export class RegisterPage implements OnDestroy {
         await this.sessionService.createWallet(
           firstName + ' ' + lastName,
           pin,
+          answers,
           phoneNumber
         );
         this.router.navigate(['/print-wallet']);
