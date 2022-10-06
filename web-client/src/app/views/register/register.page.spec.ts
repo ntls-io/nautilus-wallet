@@ -43,7 +43,7 @@ describe('RegisterPage', () => {
       'get'
     ).and.returnValue(false);
 
-    component.onSubmit();
+    component.onSubmit(new Map(Object.entries({})));
 
     expect(getValidSpy).toHaveBeenCalled();
   });
