@@ -7,16 +7,8 @@
             >Balances
           </ion-text>
         </ion-label>
-        <ion-button
-          [disabled]="isLoading"
-          color="white"
-          shape="round"
-          (click)="refresh()"
-        >
-          <ion-spinner
-            color="white"
-            *ngIf="isLoading; else notLoading"
-          ></ion-spinner>
+        <ion-button [disabled]="isLoading" shape="round" (click)="refresh()">
+          <ion-spinner *ngIf="isLoading; else notLoading"></ion-spinner>
           <ng-template #notLoading>
             <ion-icon slot="icon-only" name="sync"></ion-icon>
           </ng-template>
@@ -26,7 +18,7 @@
         <ion-item-group *ngIf="balances?.length; else empty">
           <ion-item *ngFor="let balance of balances">
             <ion-label class="ion-text-right">
-              <ion-text color="white" class="font-audiowide">
+              <ion-text class="font-audiowide">
                 {{ balance | assetAmount }}
               </ion-text>
             </ion-label>

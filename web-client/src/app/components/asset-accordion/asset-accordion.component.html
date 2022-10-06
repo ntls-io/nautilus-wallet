@@ -1,13 +1,13 @@
 <ion-accordion-group>
   <ion-accordion value="shapes">
-    <ion-item slot="header" color="white">
+    <ion-item slot="header">
       <ion-label>
         <p>Show Assets</p>
       </ion-label>
     </ion-item>
 
     <ion-list slot="content" lines="full" class="py-0 asset-list">
-      <ion-item color="white" *ngFor="let token of ['FOO']">
+      <ion-item *ngFor="let token of ['FOO']">
         <ion-icon slot="start" name="cash-outline"></ion-icon>
         <ion-label>
           <h2 class="!font-bold">{{ token }}</h2>
