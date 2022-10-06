@@ -8,16 +8,18 @@ describe('TransactionFeesComponent', () => {
   let component: TransactionFeesComponent;
   let fixture: ComponentFixture<TransactionFeesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [TransactionFeesComponent, TransactionFeePipe],
-      imports: [IonicModule.forRoot(), AssetPipesModule],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TransactionFeesComponent, TransactionFeePipe],
+        imports: [IonicModule.forRoot(), AssetPipesModule],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(TransactionFeesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(TransactionFeesComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

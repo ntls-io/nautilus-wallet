@@ -12,26 +12,28 @@ describe('DeleteUserPage', () => {
   let fixture: ComponentFixture<DeleteUserPage>;
   let sessionStore: SessionStore;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [DeleteUserPage],
-      imports: [
-        IonicModule.forRoot(),
-        RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule,
-      ],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DeleteUserPage],
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule.withRoutes(routes),
+          HttpClientTestingModule,
+        ],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(DeleteUserPage);
-    sessionStore = TestBed.inject(SessionStore);
-    stubActiveSession(sessionStore, {
-      wallet: { owner_name: 'Wallet Owner' },
-    });
+      fixture = TestBed.createComponent(DeleteUserPage);
+      sessionStore = TestBed.inject(SessionStore);
+      stubActiveSession(sessionStore, {
+        wallet: { owner_name: 'Wallet Owner' },
+      });
 
-    component = fixture.componentInstance;
+      component = fixture.componentInstance;
 
-    fixture.detectChanges();
-  }));
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

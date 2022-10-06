@@ -6,16 +6,18 @@ describe('ProfileCardHorizontalComponent', () => {
   let component: ProfileCardHorizontalComponent;
   let fixture: ComponentFixture<ProfileCardHorizontalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ProfileCardHorizontalComponent],
-      imports: [IonicModule.forRoot()],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ProfileCardHorizontalComponent],
+        imports: [IonicModule.forRoot()],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(ProfileCardHorizontalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(ProfileCardHorizontalComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

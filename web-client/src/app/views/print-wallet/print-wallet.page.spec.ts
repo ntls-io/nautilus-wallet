@@ -18,18 +18,20 @@ describe('PrintWalletPage', () => {
   let sessionStore: SessionStore;
   let toastCtrl: ToastController;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [PrintWalletPage],
-      imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PrintWalletPage],
+        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(PrintWalletPage);
-    component = fixture.componentInstance;
-    sessionStore = TestBed.inject(SessionStore);
-    toastCtrl = TestBed.inject(ToastController);
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(PrintWalletPage);
+      component = fixture.componentInstance;
+      sessionStore = TestBed.inject(SessionStore);
+      toastCtrl = TestBed.inject(ToastController);
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

@@ -12,23 +12,25 @@ describe('RegisterPage', () => {
   let component: RegisterPage;
   let fixture: ComponentFixture<RegisterPage>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        IonicModule.forRoot(),
-        RouterTestingModule.withRoutes(routes),
-        ReactiveFormsModule,
-        FormsModule,
-        HttpClientTestingModule,
-      ],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          IonicModule.forRoot(),
+          RouterTestingModule.withRoutes(routes),
+          ReactiveFormsModule,
+          FormsModule,
+          HttpClientTestingModule,
+        ],
+      }).compileComponents();
 
-    router = TestBed.inject(Router);
-    router.navigate(['register']);
-    fixture = TestBed.createComponent(RegisterPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      router = TestBed.inject(Router);
+      router.navigate(['register']);
+      fixture = TestBed.createComponent(RegisterPage);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

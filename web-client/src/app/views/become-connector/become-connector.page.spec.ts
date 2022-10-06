@@ -7,16 +7,18 @@ describe('BecomeConnectorPage', () => {
   let component: BecomeConnectorPage;
   let fixture: ComponentFixture<BecomeConnectorPage>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [BecomeConnectorPage],
-      imports: [IonicModule.forRoot(), RouterTestingModule],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [BecomeConnectorPage],
+        imports: [IonicModule.forRoot(), RouterTestingModule],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(BecomeConnectorPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(BecomeConnectorPage);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();

@@ -10,15 +10,17 @@ describe('PinEntryComponent', () => {
   let component: PinEntryComponent;
   let fixture: ComponentFixture<PinEntryComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [PinEntryComponentModule],
-    }).compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [PinEntryComponentModule],
+      }).compileComponents();
 
-    fixture = TestBed.createComponent(PinEntryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(PinEntryComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create', () => {
     expect(component).toBeTruthy();
