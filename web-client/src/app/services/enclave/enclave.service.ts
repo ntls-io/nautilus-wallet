@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OpenWallet,
@@ -57,6 +59,16 @@ export class EnclaveService {
       { OpenWallet: OpenWalletResult }
     >(walletRequest);
     const { OpenWallet: result } = response;
+    return result;
+  }
+
+  async getXrplWallet(request: GetXrplWallet): Promise<GetXrplWalletResult> {
+    const walletRequest = { GetXrplWallet: request };
+    const response = await this.postSealedExchange<
+      { GetXrplWallet: GetXrplWallet },
+      { GetXrplWallet: GetXrplWalletResult }
+    >(walletRequest);
+    const { GetXrplWallet: result } = response;
     return result;
   }
 

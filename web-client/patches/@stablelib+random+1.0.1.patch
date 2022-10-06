@@ -1,0 +1,29 @@
+diff --git a/node_modules/@stablelib/random/source/browser.ts b/node_modules/@stablelib/random/source/browser.ts
+index b25887b..a016ebb 100644
+--- a/node_modules/@stablelib/random/source/browser.ts
++++ b/node_modules/@stablelib/random/source/browser.ts
+@@ -16,7 +16,7 @@ export class BrowserRandomSource implements RandomSource {
+             ? (self.crypto || (self as { msCrypto?: any }).msCrypto) // IE11 has msCrypto
+             : null;
+ 
+-        if (browserCrypto && browserCrypto.getRandomValues !== undefined) {
++        if (browserCrypto && browserCrypto.getRandomValues) {
+             this._crypto = browserCrypto;
+             this.isAvailable = true;
+             this.isInstantiated = true;
+diff --git a/node_modules/@stablelib/random/tsconfig.json b/node_modules/@stablelib/random/tsconfig.json
+index 5d5a801..4082f16 100644
+--- a/node_modules/@stablelib/random/tsconfig.json
++++ b/node_modules/@stablelib/random/tsconfig.json
+@@ -1,10 +1,3 @@
+ {
+-    "extends": "../../configs/tsconfig.json",
+-    "compilerOptions": {
+-        "outDir": "lib",
+-    },
+-    "exclude": [
+-        "node_modules",
+-        "lib"
+-    ]
++  "extends": "../../tsconfig.json"
+ }

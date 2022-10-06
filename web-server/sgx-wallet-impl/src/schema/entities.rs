@@ -1,5 +1,6 @@
 //! Structures representing various entities.
 
+use std::borrow::Borrow;
 use std::prelude::v1::{String, ToOwned, ToString};
 
 use algonaut::transaction::account::Account as AlgonautAccount;
@@ -12,6 +13,7 @@ use crate::schema::types::{
     AlgorandAccountSeedBytes,
     AlgorandAddressBase32,
     AlgorandAddressBytes,
+    WalletAuthMap,
     WalletId,
     WalletPin,
     XrplAddressBase58,
@@ -48,6 +50,31 @@ impl From<WalletStorable> for WalletDisplay {
     }
 }
 
+/// A secret value such as a response to a security challenge
+#[derive(Clone, Debug, Eq, PartialEq)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct WalletSecret(String);
+
+impl WalletSecret {
+    pub fn new(secret: &str) -> Self {
+        Self(String::from(secret))
+    }
+    pub fn as_bytes(&self) -> &[u8] {
+        let WalletSecret(secret) = self;
+        secret.as_bytes()
+    }
+}
+
+/*
+ *  Implement ['From<T>'] whenever ['T'] is ['Borrow<str>']
+ */
+impl<T: Borrow<str>> From<T> for WalletSecret {
+    fn from(secret: T) -> Self {
+        WalletSecret::new(secret.borrow())
+    }
+}
+
 /// A Nautilus wallet's full details.
 ///
 /// This is everything that gets persisted in the wallet store.
@@ -57,6 +84,9 @@ impl From<WalletStorable> for WalletDisplay {
 pub struct WalletStorable {
     pub wallet_id: WalletId,
     pub auth_pin: WalletPin,
+
+    #[zeroize(skip)]
+    pub auth_map: WalletAuthMap,
 
     pub owner_name: String,
     pub phone_number: Option<String>,

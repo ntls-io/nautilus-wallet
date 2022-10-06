@@ -42,14 +42,6 @@
   //
   color-scheme: dark !important;
 
-  // Use ion-grid for our responsive layout, and limit our content width to size sm.
-  // Docs: https://ionicframework.com/docs/layout/grid#grid-width
-  --ion-grid-width-xs: 100%;
-  --ion-grid-width-sm: 540px;
-  --ion-grid-width-md: var(--ion-grid-width-sm);
-  --ion-grid-width-lg: var(--ion-grid-width-sm);
-  --ion-grid-width-xl: var(--ion-grid-width-sm);
-
   // Docs: https://ionicframework.com/docs/theming/themes#application-colors
   --ion-background-color: var(--ion-color-primary-background);
   --ion-background-color-rgb: var(--ion-color-primary-background-rgb);

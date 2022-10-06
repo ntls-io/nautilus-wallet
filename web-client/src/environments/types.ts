@@ -1,7 +1,7 @@
 import {
   AlgodTokenHeader,
   CustomTokenHeader,
-} from 'algosdk/dist/types/src/client/client';
+} from 'algosdk/dist/types/src/client/urlTokenBaseHTTPClient';
 import { AssetConfigs } from 'src/app/utils/assets/assets.config';
 import * as xrpl from 'xrpl';
 
@@ -72,6 +72,8 @@ export type Environment = {
   };
 
   commissionPercentage: number;
+
+  tokenIssuer: string;
 
   /**
    * Require a clear Onfido check status before enabling sending payments.

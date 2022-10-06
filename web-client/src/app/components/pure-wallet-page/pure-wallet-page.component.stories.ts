@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Story } from '@storybook/angular';
 import { assetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
@@ -11,7 +12,7 @@ export default ionicStoryMeta<PureWalletPageComponent>(
     component: PureWalletPageComponent,
   },
   {
-    imports: [PureWalletPageComponentModule],
+    imports: [PureWalletPageComponentModule, HttpClientTestingModule],
     controls: {
       shown: [
         'name',

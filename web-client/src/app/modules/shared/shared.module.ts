@@ -8,14 +8,19 @@ import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
+import { AssetAccordionComponent } from 'src/app/components/asset-accordion/asset-accordion.component';
+import { BalanceSummaryCardComponent } from 'src/app/components/balance-summary-card/balance-summary-card.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
 import { SecurityQuestionsComponent } from 'src/app/components/security-questions/security-questions.component';
+import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
 
 @NgModule({
   declarations: [
     ActionItemComponent,
     ProfileCardHorizontalComponent,
     SecurityQuestionsComponent,
+    BalanceSummaryCardComponent,
+    AssetAccordionComponent,
   ],
   imports: [
     IonicModule,
@@ -26,6 +31,7 @@ import { SecurityQuestionsComponent } from 'src/app/components/security-question
     // XXX: The build doesn't actually fail when this FontAwesomeModule import is missing,
     //      but removing it silently breaks fa-icon rendering in production builds (but not development).
     FontAwesomeModule,
+    AssetPipesModule,
   ],
   exports: [
     FontAwesomeModule,
@@ -36,6 +42,8 @@ import { SecurityQuestionsComponent } from 'src/app/components/security-question
     ProfileCardHorizontalComponent,
     ActionItemComponent,
     SecurityQuestionsComponent,
+    BalanceSummaryCardComponent,
+    AssetAccordionComponent,
   ],
   providers: [Printer],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -9,22 +9,20 @@ describe('ManualAddressPage', () => {
   let component: ManualAddressPage;
   let fixture: ComponentFixture<ManualAddressPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule,
-          ReactiveFormsModule,
-          SharedModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule,
+        ReactiveFormsModule,
+        SharedModule,
+      ],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(ManualAddressPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(ManualAddressPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

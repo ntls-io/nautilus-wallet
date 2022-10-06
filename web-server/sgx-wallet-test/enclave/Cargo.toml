@@ -23,7 +23,9 @@ sodalite = { version = "0.4.0", default-features = false }
 # SGX SDK
 sgx_rand = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 sgx_tcrypto = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = [
+  "backtrace",
+], rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 sgx_tunittest = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 
@@ -39,7 +41,10 @@ sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 
 # Test-only
 # Docs: https://altsysrq.github.io/proptest-book/proptest/no-std.html
-proptest = { version = "1.0.0", default-features = false, features = ["alloc", "hardware-rng"] }
+proptest = { version = "1.0.0", default-features = false, features = [
+  "alloc",
+  "hardware-rng",
+] }
 
 [patch.'https://github.com/apache/teaclave-sgx-sdk.git']
 sgx_libc = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }

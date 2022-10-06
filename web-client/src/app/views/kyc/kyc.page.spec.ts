@@ -18,24 +18,22 @@ describe('KycPage', () => {
   let component: KycPage;
   let fixture: ComponentFixture<KycPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [KycPage],
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule,
-          HttpClientTestingModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [KycPage],
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule,
+        HttpClientTestingModule,
+      ],
+    }).compileComponents();
 
-      onfidoService = TestBed.inject(OnfidoService);
+    onfidoService = TestBed.inject(OnfidoService);
 
-      fixture = TestBed.createComponent(KycPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(KycPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
