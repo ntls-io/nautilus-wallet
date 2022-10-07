@@ -88,8 +88,6 @@ export class RegisterPage implements OnDestroy {
 
   async onSubmit(answers: Map<string, string>): Promise<void> {
     /* istanbul ignore next TODO */
-    console.log(answers);
-
     if (this.registrationForm.valid) {
       const phoneNumber =
         this.registrationForm.controls.mobile.value.internationalNumber
