@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 import { defined } from 'src/app/utils/errors/panic';
 import {
   MaxLengthValidationError,
@@ -7,6 +8,7 @@ import {
   PatternValidationError,
   RequiredValidationError,
 } from 'src/app/utils/validation.errors';
+import { PinResetPage } from 'src/app/views/pin-reset/pin-reset.page';
 import { checkClass } from 'src/helpers/helpers';
 
 @Component({
@@ -32,7 +34,7 @@ export class PinEntryComponent implements OnInit {
 
   #pinForm?: FormGroup;
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -66,6 +68,13 @@ export class PinEntryComponent implements OnInit {
       const { pin }: PinFormValue = pinForm.value;
       this.pinConfirmed.emit(pin);
     }
+  }
+
+  async goToReset() {
+    await this.modalCtrl.dismiss();
+    const modal = await this.modalCtrl.create({ component: PinResetPage });
+
+    await modal.present();
   }
 
   private initForm(): void {

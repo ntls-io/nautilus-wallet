@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,6 +9,10 @@ import {
 import { Router } from '@angular/router';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionService } from 'src/app/state/session.service';
+import SwiperCore, { Pagination } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
+
+SwiperCore.use([Pagination]);
 
 @Component({
   selector: 'app-register',
@@ -16,6 +20,7 @@ import { SessionService } from 'src/app/state/session.service';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnDestroy {
+  @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
   registrationForm: FormGroup;
   numInputMask = '9999999999';
   isOpening = false;
@@ -74,10 +79,15 @@ export class RegisterPage implements OnDestroy {
     });
   }
 
-  async onSubmit(): Promise<void> {
-    /* istanbul ignore next TODO */
+  validateForm() {
     this.registrationForm.markAllAsTouched();
+    if (this.registrationForm.valid) {
+      this.swiper?.swiperRef?.slideNext();
+    }
+  }
 
+  async onSubmit(answers: Map<string, string>): Promise<void> {
+    /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       const phoneNumber =
         this.registrationForm.controls.mobile.value.internationalNumber
@@ -90,6 +100,7 @@ export class RegisterPage implements OnDestroy {
         await this.sessionService.createWallet(
           firstName + ' ' + lastName,
           pin,
+          answers,
           phoneNumber
         );
         this.router.navigate(['/print-wallet']);
