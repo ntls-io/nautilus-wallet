@@ -25,6 +25,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import "~swiper/scss";
+@import "~@ionic/angular/css/ionic-swiper";
+@import "~swiper/scss/pagination";
+
 :root {
   // Declare that our app prefers a dark scheme, by default.
   // This makes various browser UI elements render better by default.
@@ -145,4 +149,20 @@ ion-header {
   &.header-md:after {
     background: none;
   }
+}
+
+.form-item ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  ion-text {
+    padding-top: 0px;
+    p {
+      margin: 0px !important;
+      font-weight: bold;
+    }
+  }
+}
+
+.swiper-slide {
+  display: block !important;
 }
