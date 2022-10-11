@@ -26,12 +26,12 @@
         <ion-item-group *ngIf="balances?.length; else empty">
           <ion-item *ngFor="let balance of balances">
             <ion-label class="ion-text-right">
-              <ion-text color="white" class="font-audiowide">
+              <ion-text *ngIf="balance.assetDisplay.assetSymbol !== hideXRP" color="white" class="font-audiowide">
                 {{ balance | assetAmount }}
               </ion-text>
             </ion-label>
             <div slot="end" class="w-12">
-              <ion-text slot="end" color="secondary" class="font-bold">
+              <ion-text *ngIf="balance.assetDisplay.assetSymbol !== hideXRP" slot="end" color="secondary" class="font-bold">
                 {{ balance | assetSymbol }}
               </ion-text>
             </div>

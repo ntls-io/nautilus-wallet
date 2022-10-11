@@ -13,6 +13,7 @@ import {
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { showToast } from 'src/app/utils/toast.helpers';
+import { environment } from 'src/environments/environment';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -23,6 +24,7 @@ import { showToast } from 'src/app/utils/toast.helpers';
 export class BalanceSummaryCardComponent implements OnInit {
   isLoading = false;
   showAsset = false;
+  hideXRP: string | undefined;
 
   constructor(
     private sessionXrplService: SessionXrplService,
@@ -44,6 +46,12 @@ export class BalanceSummaryCardComponent implements OnInit {
         );
       }
     });
+
+    if(environment.hideXrpBalance){
+      this.hideXRP = 'XRP'
+    } else {
+      this.hideXRP = ''
+    };
   }
 
   async ngOnInit() {
