@@ -82,6 +82,7 @@ describe('EnclaveService', () => {
     const requestCreate: CreateWallet = {
       owner_name: 'Test Owner',
       auth_pin: '1234',
+      auth_map: Object(Object.entries({ city: 'Cape Town' })),
     };
 
     it('Created', async () => {
