@@ -43,6 +43,7 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   paymentOptions?: PaymentOption[];
 
   assetConfigs = environment.assetConfigs;
+  hideXrpBalance = environment.hideXrpBalance;
 
   constructor() {}
 
@@ -65,6 +66,13 @@ export class PurePayPageComponent implements OnInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     this.paymentOptions = this.getPaymentOptions();
+    let filteredPaymentOptions: PaymentOption[] | undefined;
+    if (this.hideXrpBalance) {
+      filteredPaymentOptions = this.paymentOptions?.filter(paymentOption => {
+        return paymentOption.senderBalance.assetDisplay.assetSymbol != 'XRP'
+      });
+      this.paymentOptions = filteredPaymentOptions;
+    };
   }
 
   private getPaymentOptions(): PaymentOption[] | undefined {
