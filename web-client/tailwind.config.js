@@ -17,6 +17,7 @@ module.exports = {
         dark: "var(--ion-color-dark)",
         medium: "var(--ion-color-medium)",
         light: "var(--ion-color-light)",
+        background: "var(--ion-color-background)",
       },
       fontFamily: {
         nasalization: "nasalization",
