@@ -9,7 +9,6 @@ export class ProfileCardHorizontalComponent implements OnInit {
   @Input() owner_name?: string;
   @Input() phone_number?: string;
   @Input() isVerified?: boolean | null;
-  @Input() avatar = 'assets/img/logo.svg';
 
   constructor() {}
 

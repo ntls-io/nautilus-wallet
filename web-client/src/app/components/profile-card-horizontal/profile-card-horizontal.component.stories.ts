@@ -18,5 +18,4 @@ Default.args = {
   isVerified: true,
   owner_name: 'Nautilus Wallet',
   phone_number: '+27 (12) 456-7890',
-  avatar: 'assets/img/logo.svg',
 };
