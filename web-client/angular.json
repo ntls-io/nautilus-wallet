@@ -69,7 +69,7 @@
                 }
               ]
             },
-            "bhutan-demo": {
+            "bhutan-prod": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
