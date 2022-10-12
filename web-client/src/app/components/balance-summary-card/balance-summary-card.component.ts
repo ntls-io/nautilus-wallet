@@ -48,9 +48,9 @@ export class BalanceSummaryCardComponent implements OnInit {
     });
 
     if(environment.hideXrpBalance){
-      this.hideXRP = 'XRP'
+      this.hideXRP = 'XRP';
     } else {
-      this.hideXRP = ''
+      this.hideXRP = '';
     };
   }
 

@@ -68,9 +68,7 @@ export class PurePayPageComponent implements OnInit, OnChanges {
     this.paymentOptions = this.getPaymentOptions();
     let filteredPaymentOptions: PaymentOption[] | undefined;
     if (this.hideXrpBalance) {
-      filteredPaymentOptions = this.paymentOptions?.filter(paymentOption => {
-        return paymentOption.senderBalance.assetDisplay.assetSymbol != 'XRP'
-      });
+      filteredPaymentOptions = this.paymentOptions?.filter(paymentOption => paymentOption.senderBalance.assetDisplay.assetSymbol !== 'XRP');
       this.paymentOptions = filteredPaymentOptions;
     };
   }
