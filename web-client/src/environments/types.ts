@@ -75,6 +75,10 @@ export type Environment = {
 
   tokenIssuer: string;
 
+  tokenCurrency: string;
+
+  xrpIssuer: string;
+
   hideXrpBalance: boolean;
 
   /**
