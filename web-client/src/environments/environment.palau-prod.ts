@@ -2,6 +2,7 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: true,
+  organization: 'palau',
 
   // Enable persistence for demo purposes.
   persistAkitaState: true,

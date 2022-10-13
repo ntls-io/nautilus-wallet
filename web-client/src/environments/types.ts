@@ -9,11 +9,15 @@ import * as xrpl from 'xrpl';
  * Common type declaration for environment files.
  */
 export type Environment = {
-  themeUrl: string;
   /**
    * Toggle Angular and libraries between production and development modes.
    */
   production: boolean;
+
+  /**
+   * Name of the organization.
+   */
+  organization: boolean;
 
   /**
    * Whether to persist Akita state.
