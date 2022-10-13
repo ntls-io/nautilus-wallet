@@ -13,6 +13,7 @@ import {
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { showToast } from 'src/app/utils/toast.helpers';
+import { environment } from 'src/environments/environment';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -40,7 +41,8 @@ export class BalanceSummaryCardComponent implements OnInit {
 
       if (hasXRP) {
         this.showAsset = !balances?.some(
-          (e: AssetAmount) => e?.assetDisplay.assetSymbol === 'FOO'
+          (e: AssetAmount) =>
+            e?.assetDisplay.assetSymbol === environment.tokenSymbol
         );
       }
     });
