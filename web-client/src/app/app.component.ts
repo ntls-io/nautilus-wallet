@@ -24,7 +24,9 @@ export class AppComponent {
   }
 
   async loadTheme() {
-    const url = environment?.themeUrl;
+    const firebasestorage =
+      'https://firebasestorage.googleapis.com/v0/b/wallet-setup.appspot.com/o';
+    const url = `${firebasestorage}/${environment.organization}%2Fassets%2Ftheme.json?alt=media`;
     if (url) {
       await CapacitorHttp.get({ url }).then(({ data, status }) => {
         if (status === 200) {
