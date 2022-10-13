@@ -5,8 +5,8 @@ export const environment: Environment = {
 
   // Enable persistence for demo purposes.
   persistAkitaState: true,
-  nautilusWalletServer: 'https://wallet-demo-api.ntls.io/',
-  nautilusAssetServices: 'https://wallet-demo-services.ntls.io/',
+  nautilusWalletServer: 'https://wallet-bhutan-staging-api.ntls.io/',
+  nautilusAssetServices: 'https://wallet-bhutan-staging-services.ntls.io/',
   algod: {
     baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
     port: '',
@@ -16,7 +16,7 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s.altnet.rippletest.net/',
+    server: 'wss://s1.cbdc-sandbox.rippletest.net',
     options: {
       connectionTimeout: 20000,
     },
