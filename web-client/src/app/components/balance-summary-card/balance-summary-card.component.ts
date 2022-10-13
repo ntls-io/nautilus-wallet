@@ -47,11 +47,11 @@ export class BalanceSummaryCardComponent implements OnInit {
       }
     });
 
-    if(environment.hideXrpBalance){
+    if (environment.hideXrpBalance) {
       this.hideXRP = 'XRP';
     } else {
       this.hideXRP = '';
-    };
+    }
   }
 
   async ngOnInit() {
