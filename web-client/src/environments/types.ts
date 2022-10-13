@@ -76,6 +76,8 @@ export type Environment = {
 
   tokenIssuer: string;
 
+  tokenSymbol: string;
+
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */
