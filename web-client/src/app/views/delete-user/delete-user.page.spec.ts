@@ -6,6 +6,8 @@ import { SessionStore } from 'src/app/state/session.store';
 import { stubActiveSession } from 'src/tests/state.helpers';
 import { routes } from '../send-funds/send-funds-routing.module';
 import { DeleteUserPage } from './delete-user.page';
+import {DeleteUserService} from '../../services/delete-user.service';
+import {PurePayPageComponent} from '../../components/pure-pay-page/pure-pay-page.component';
 
 describe('DeleteUserPage', () => {
   let component: DeleteUserPage;
@@ -20,6 +22,7 @@ describe('DeleteUserPage', () => {
         RouterTestingModule.withRoutes(routes),
         HttpClientTestingModule,
       ],
+      providers: [DeleteUserService, PurePayPageComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DeleteUserPage);
