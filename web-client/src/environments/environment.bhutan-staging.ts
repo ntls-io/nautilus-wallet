@@ -22,5 +22,6 @@ export const environment: Environment = {
     },
   },
   commissionPercentage: 0.01,
-  tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+  tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
+  tokenSymbol: 'BTN',
 };
