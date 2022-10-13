@@ -199,6 +199,12 @@
             "production": {
               "browserTarget": "app:build:production"
             },
+            "palau": {
+              "browserTarget": "app:build:palau-prod"
+            },
+            "bhutan": {
+              "browserTarget": "app:build:bhutan-prod"
+            },
             "ci": {}
           }
         },
