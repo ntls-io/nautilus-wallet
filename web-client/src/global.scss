@@ -29,9 +29,13 @@
 @import "~swiper/scss/pagination";
 
 .app-item {
-  @apply border border-solid rounded-lg m-3;
+  @apply border border-solid border-primary rounded-lg m-3 overflow-auto;
   --min-height: 72px;
   --detail-icon-opacity: 1;
+  ion-icon,
+  ion-text {
+    color: var(--ion-color-background-contrast);
+  }
 }
 
 ion-searchbar {
@@ -46,7 +50,9 @@ ion-input,
 .ion-intl-tel-input-code {
   --border-radius: 9999px;
   --padding-start: 10px !important;
-  @apply bg-transparent  rounded-full border-2 my-1.5 border-solid #{!important};
+  border-color: var(--ion-color-background-contrast) !important;
+  @apply bg-transparent
+    rounded-full border-2 my-1.5 border-solid #{!important};
 
   ionic-selectable {
     padding-left: 15px;
