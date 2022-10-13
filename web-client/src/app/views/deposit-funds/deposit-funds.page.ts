@@ -144,7 +144,7 @@ export class DepositFundsPage implements OnInit {
       .fire({
         icon: 'success',
         titleText: 'Money sent!',
-        text: 'Your remaining xrpl balance was sent successfully.',
+        text: 'Your remaining XRP balance was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">Account Deleted!</h2>
               <p class="text-xs"><b>Receiver of remaining balance:</b> ${address}</p>
