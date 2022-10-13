@@ -17,7 +17,7 @@ export type Environment = {
   /**
    * Name of the organization.
    */
-  organization: boolean;
+  organization: string;
 
   /**
    * Whether to persist Akita state.
