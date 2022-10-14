@@ -6,6 +6,7 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: false,
+  organization: 'nautilus',
 
   // Enable persistence for easier development.
   persistAkitaState: true,

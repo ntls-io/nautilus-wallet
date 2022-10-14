@@ -15,6 +15,11 @@ export type Environment = {
   production: boolean;
 
   /**
+   * Name of the organization.
+   */
+  organization: string;
+
+  /**
    * Whether to persist Akita state.
    *
    * @see https://datorama.github.io/akita/docs/enhancers/persist-state
