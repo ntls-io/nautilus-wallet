@@ -18,7 +18,9 @@ default = []
 [dependencies]
 # SGX SDK
 sgx_types = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = ["backtrace"], rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", features = [
+  "backtrace",
+], rev = "e8a9fc22939befa27ff67f5509b2c2dfe8499945" }
 
 sgx-wallet-impl = { path = "../../sgx-wallet-impl" }
 

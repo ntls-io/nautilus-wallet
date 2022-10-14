@@ -42,6 +42,7 @@ export class SessionService {
   async createWallet(
     name: string,
     pin: string,
+    auth_map: Map<string, string>,
     phone_number?: string
   ): Promise<void> {
     try {
@@ -49,6 +50,7 @@ export class SessionService {
         owner_name: name,
         auth_pin: pin,
         phone_number,
+        auth_map,
       };
       const result: CreateWalletResult = await this.enclaveService.createWallet(
         request

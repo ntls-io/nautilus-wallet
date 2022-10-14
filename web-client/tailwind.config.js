@@ -9,7 +9,6 @@ module.exports = {
       },
       colors: {
         primary: "var(--ion-color-primary)",
-        "primary-background": "var(--ion-color-primary-background)",
         secondary: "var(--ion-color-secondary)",
         tertiary: "var(--ion-color-tertiary)",
         success: "var(--ion-color-success)",
@@ -18,7 +17,7 @@ module.exports = {
         dark: "var(--ion-color-dark)",
         medium: "var(--ion-color-medium)",
         light: "var(--ion-color-light)",
-        "jungle-green": "var(--ion-color-jungle-green)",
+        background: "var(--ion-color-background)",
       },
       fontFamily: {
         nasalization: "nasalization",

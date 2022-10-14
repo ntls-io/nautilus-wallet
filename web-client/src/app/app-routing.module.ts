@@ -106,6 +106,13 @@ export const routes: Routes = [
         (m) => m.SettingsPageModule
       ),
   },
+  {
+    path: 'pin-reset',
+    loadChildren: () =>
+      import('./views/pin-reset/pin-reset.module').then(
+        (m) => m.PinResetPageModule
+      ),
+  },
 ];
 
 @NgModule({

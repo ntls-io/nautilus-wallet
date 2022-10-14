@@ -2,12 +2,13 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: true,
+  organization: 'nautilus',
 
-  // TODO: Production endpoint
+  // Enable persistence for demo purposes.
+  persistAkitaState: true,
   nautilusWalletServer: 'https://wallet-demo-api.ntls.io/',
   nautilusAssetServices: 'https://wallet-demo-services.ntls.io/',
   algod: {
-    // TODO: Mainnet endpoint
     baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
     port: '',
     // FIXME: Development key
@@ -15,7 +16,6 @@ export const environment: Environment = {
   },
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
-  // TODO: Mainnet endpoint
   xrplClient: {
     server: 'wss://s.altnet.rippletest.net/',
     options: {
@@ -24,4 +24,5 @@ export const environment: Environment = {
   },
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+  tokenSymbol: 'FOO',
 };

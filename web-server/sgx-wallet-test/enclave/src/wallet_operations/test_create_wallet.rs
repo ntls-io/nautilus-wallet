@@ -10,6 +10,7 @@ pub(crate) fn create_wallet_works() {
     let request = &actions::CreateWallet {
         owner_name: "New Owner".to_string(),
         auth_pin: "123456".to_string(),
+        auth_map: crate::helpers::wallet_store::create_test_auth_map(),
         phone_number: None,
     };
     let display = &match create_wallet(request) {

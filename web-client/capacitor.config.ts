@@ -5,6 +5,15 @@ const config: CapacitorConfig = {
   appName: 'Nautilus wallet',
   webDir: 'www',
   bundledWebRuntime: false,
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+      androidScaleType: 'CENTER_CROP',
+    },
+    Keyboard: {
+      resize: 'ionic',
+    },
+  },
 };
 
 export default config;

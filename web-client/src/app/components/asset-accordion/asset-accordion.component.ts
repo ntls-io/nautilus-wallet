@@ -11,6 +11,7 @@ import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 export class AssetAccordionComponent implements OnInit {
   @Output() refreshBalances = new EventEmitter<boolean>();
   isOpting = false;
+  tokenSymbol = environment.tokenSymbol;
 
   constructor(private sessionXrplService: SessionXrplService) {}
 

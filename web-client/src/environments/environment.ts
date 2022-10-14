@@ -6,6 +6,7 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: false,
+  organization: 'nautilus',
 
   // Enable persistence for easier development.
   persistAkitaState: true,
@@ -30,6 +31,7 @@ export const environment: Environment = {
   },
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+  tokenSymbol: 'FOO',
 };
 
 /*

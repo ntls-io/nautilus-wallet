@@ -1,11 +1,12 @@
 /** Core request / response message types. */
 
-import { WalletDisplay } from './entities';
+import { WalletDisplay, XrplAccountDisplay } from './entities';
 import { Bytes, WalletId, WalletPin } from './types';
 
 export type CreateWallet = {
   owner_name: string;
   auth_pin: WalletPin;
+  auth_map: Map<string, string>;
   phone_number?: string;
 };
 
@@ -21,6 +22,14 @@ export type OpenWallet = {
 export type OpenWalletResult =
   | { Opened: WalletDisplay }
   | { InvalidAuth: null }
+  | { Failed: string };
+
+export type GetXrplWallet = {
+  wallet_id: WalletId;
+};
+
+export type GetXrplWalletResult =
+  | { Opened: XrplAccountDisplay }
   | { Failed: string };
 
 export type SignTransaction = {
@@ -98,6 +107,7 @@ export type OnfidoCheckResult = {
 export type WalletRequest =
   | { CreateWallet: CreateWallet }
   | { OpenWallet: OpenWallet }
+  | { GetXrplWallet: GetXrplWallet }
   | { SignTransaction: SignTransaction }
   | { SaveOnfidoCheck: SaveOnfidoCheck }
   | { LoadOnfidoCheck: LoadOnfidoCheck };
@@ -106,6 +116,7 @@ export type WalletRequest =
 export type WalletResponse =
   | { CreateWallet: CreateWalletResult }
   | { OpenWallet: OpenWalletResult }
+  | { GetXrplWallet: GetXrplWalletResult }
   | { SignTransaction: SignTransactionResult }
   | { SaveOnfidoCheck: SaveOnfidoCheckResult }
   | { LoadOnfidoCheck: LoadOnfidoCheckResult };

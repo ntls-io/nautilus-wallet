@@ -15,6 +15,8 @@ export class WalletPage implements OnInit {
   @Input() requireKycBeforeSendPayment =
     environment?.requireOnfidoCheckBeforeSendPayment;
 
+  organization = environment.organization;
+
   /**
    * Enable the "Send Money" action if both:
    * - KYC status is either cleared or not required

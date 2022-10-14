@@ -37,6 +37,8 @@ pub extern "C" fn run_tests_ecall() -> usize {
         wallet_operations::test_load_onfido_check::load_onfido_check_malformed_wallet_id,
         wallet_operations::test_load_onfido_check::load_onfido_check_not_found,
         wallet_operations::test_load_onfido_check::load_onfido_check_works,
+        wallet_operations::test_get_xrpl_wallet::get_xrpl_wallet_works,
+        wallet_operations::test_get_xrpl_wallet::get_xrpl_wallet_malformed_wallet_id,
         wallet_operations::test_open_wallet::open_wallet_bad_pin,
         wallet_operations::test_open_wallet::open_wallet_malformed_wallet_id,
         wallet_operations::test_open_wallet::open_wallet_works,
