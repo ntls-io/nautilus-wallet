@@ -246,10 +246,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
         "e2e": {
@@ -271,11 +268,7 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "browserTarget": "app:build",
-            "compodocArgs": [
-              "-e",
-              "json",
-              "--silent"
-            ]
+            "compodocArgs": ["-e", "json", "--silent"]
           }
         },
         "build-storybook": {
