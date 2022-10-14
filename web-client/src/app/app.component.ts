@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 
@@ -17,9 +18,13 @@ export class AppComponent {
     this.platform
       .ready()
       .then(async () => {
-        this.loadTheme(environment.organization);
+        await this.loadTheme(environment.organization);
       })
-      .finally(() => {});
+      .finally(() => {
+        if (this.platform.is('capacitor')) {
+          SplashScreen.hide({ fadeOutDuration: 500 });
+        }
+      });
   }
 
   async loadTheme(organization: string) {
@@ -27,7 +32,7 @@ export class AppComponent {
       'https://firebasestorage.googleapis.com/v0/b/wallet-setup.appspot.com/o';
     const url = `${firebasestorage}/${organization}%2Fassets%2Ftheme.json?alt=media`;
     if (url) {
-      await CapacitorHttp.get({ url }).then(({ data, status }) => {
+      return await CapacitorHttp.get({ url }).then(({ data, status }) => {
         if (status === 200) {
           Object.keys(data.vars).forEach((k) => {
             document.body.style.setProperty(k, data.vars[k]);

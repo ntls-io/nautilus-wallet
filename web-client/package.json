@@ -47,6 +47,7 @@
     "@capacitor/core": "^4.3.0",
     "@capacitor/haptics": "^4.0.1",
     "@capacitor/keyboard": "^4.0.1",
+    "@capacitor/splash-screen": "^4.1.0",
     "@capacitor/status-bar": "^4.0.1",
     "@datorama/akita": "^7.0.1",
     "@datorama/akita-ng-entity-service": "^7.0.0",
