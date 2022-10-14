@@ -2,12 +2,12 @@
   <ion-accordion value="shapes">
     <ion-item slot="header">
       <ion-label>
-        <p>Show Assets</p>
+        <ion-text>Show Assets</ion-text>
       </ion-label>
     </ion-item>
 
     <ion-list slot="content" lines="none" class="py-0">
-      <ion-item color="white" *ngFor="let token of [tokenSymbol]">
+      <ion-item *ngFor="let token of [tokenSymbol]">
         <ion-icon slot="start" name="cash-outline"></ion-icon>
         <ion-label>
           <h2 class="!font-bold">{{ token }}</h2>
@@ -20,7 +20,8 @@
           ></ion-spinner>
           <ng-template #isNotOpting>
             <ion-button (click)="optin(token)">
-              opt in <ion-icon name="arrow-forward-outline"></ion-icon>
+              opt in
+              <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
             </ion-button>
           </ng-template>
         </ng-container>
