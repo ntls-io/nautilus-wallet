@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'io.ntls.connect',
   appName: 'Nautilus wallet',
   webDir: 'www',
   bundledWebRuntime: false,
