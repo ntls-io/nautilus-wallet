@@ -66,6 +66,7 @@
     "@stablelib/hkdf": "^1.0.1",
     "@stablelib/sha256": "^1.0.1",
     "@stablelib/x25519": "^1.0.3",
+    "@trapezedev/configure": "^5.0.7",
     "@zxing/browser": "^0.1.1",
     "@zxing/library": "^0.19.1",
     "@zxing/ngx-scanner": "~3.5.0",
