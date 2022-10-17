@@ -9,10 +9,16 @@
 
 <ion-content *ngIf="hideXrpBalance; else Default">
   <div class="ion-text-center p-2">
-    <p>
+    <p *ngIf="checkAmountIsZero; else AmountIsZero">
       You will need to send your remaining {{tokenSign}} balance before you can
       delete your account.
     </p>
+    <ng-template #AmountIsZero>
+      <p>
+        If you delete your wallet, you will not be able to send or receive
+        funds.
+      </p>
+    </ng-template>
   </div>
   <app-balance-summary-card></app-balance-summary-card>
 

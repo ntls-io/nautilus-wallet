@@ -24,7 +24,7 @@ import { environment } from 'src/environments/environment';
 export class BalanceSummaryCardComponent implements OnInit {
   isLoading = false;
   showAsset = false;
-  hideXRP: string | undefined;
+  hideXRP = environment.hideXrpBalance ? 'XRP' : '';
 
   constructor(
     private sessionXrplService: SessionXrplService,
@@ -47,12 +47,6 @@ export class BalanceSummaryCardComponent implements OnInit {
         );
       }
     });
-
-    if (environment.hideXrpBalance) {
-      this.hideXRP = 'XRP';
-    } else {
-      this.hideXRP = '';
-    }
   }
 
   async ngOnInit() {

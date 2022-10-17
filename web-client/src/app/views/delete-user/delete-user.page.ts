@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
-import { PaymentOption } from 'src/app/components/pay/pay.component';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -11,7 +10,6 @@ import { SessionService } from 'src/app/state/session.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { checkClass } from 'src/helpers/helpers';
 import { environment } from '../../../environments/environment';
-import { PurePayPageComponent } from '../../components/pure-pay-page/pure-pay-page.component';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
@@ -44,18 +42,11 @@ export class DeleteUserPage implements OnInit {
   /** @see validatedAddress */
   address?: string;
 
-  hideXrpBalance = environment.hideXrpBalance;
-
-  tokenIssuer = environment.tokenIssuer;
-
   tokenSign: string | undefined;
 
-  /** A balance held by the current user. */
-  balances = this.sessionQuery.allBalances;
-
-  paymentOptions?: PaymentOption[];
-
   checkAmountIsZero?: boolean;
+
+  hideXrpBalance = environment.hideXrpBalance;
 
   constructor(
     private navCtrl: NavController,
@@ -65,14 +56,13 @@ export class DeleteUserPage implements OnInit {
     public notification: SwalHelper,
     public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService,
-    public deleteUserSrvice: DeleteUserService,
-    public purePayPageComponent: PurePayPageComponent
+    public deleteUserSrvice: DeleteUserService
   ) {
     this.addressForm = new FormGroup({
       address: new FormControl('', [Validators.required, addressValidator]),
     });
 
-    if (this.hideXrpBalance) {
+    if (environment.hideXrpBalance) {
       this.tokenSign = environment.tokenSymbol;
     } else {
       this.tokenSign = 'XRP';
@@ -81,9 +71,9 @@ export class DeleteUserPage implements OnInit {
     this.sessionQuery.allBalances.subscribe((balances) => {
       this.checkAmountIsZero = balances.some(
         (amount) =>
-          amount.assetDisplay.assetSymbol === 'FOO' && amount.amount !== 0
+          amount.assetDisplay.assetSymbol === environment.tokenSymbol &&
+          amount.amount !== 0
       );
-      console.log(this.checkAmountIsZero);
     });
   }
 
@@ -175,7 +165,7 @@ export class DeleteUserPage implements OnInit {
   }
 
   deleteWalletAccount() {
-    this.deleteUserSrvice.deleteWallet(this.tokenIssuer);
+    this.deleteUserSrvice.deleteWallet(environment.tokenIssuer);
   }
 }
 
