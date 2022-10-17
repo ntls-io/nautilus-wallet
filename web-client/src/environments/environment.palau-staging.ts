@@ -25,6 +25,6 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
   tokenSymbol: 'PSC',
-  hideXrpBalance: true,
   xrpIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
+  hideXrpBalance: true,
 };

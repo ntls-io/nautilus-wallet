@@ -25,6 +25,6 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
   tokenSymbol: 'BTN',
-  hideXrpBalance: true,
   xrpIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
+  hideXrpBalance: true,
 };
