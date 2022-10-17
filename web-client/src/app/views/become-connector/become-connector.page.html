@@ -15,7 +15,7 @@
         <p>0.1% of each transaction will be paid into your wallet.</p>
       </ion-col>
       <ion-col size="auto" *ngIf="sessionQuery.walletId | async as walletId">
-        <ion-item lines="none" color="primary-background">
+        <ion-item lines="none">
           <ion-checkbox slot="start" [(ngModel)]="isConfirmed"></ion-checkbox>
           <ion-label class="ion-text-wrap">
             <p>I confirm that I am the owner of this device.</p>

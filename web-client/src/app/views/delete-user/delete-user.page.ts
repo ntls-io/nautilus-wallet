@@ -73,7 +73,7 @@ export class DeleteUserPage implements OnInit {
     });
 
     if (this.hideXrpBalance) {
-      this.tokenSign = environment.tokenCurrency;
+      this.tokenSign = environment.tokenSymbol;
     } else {
       this.tokenSign = 'XRP';
     }

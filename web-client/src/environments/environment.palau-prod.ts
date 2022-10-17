@@ -2,11 +2,12 @@ import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
   production: true,
+  organization: 'palau',
 
   // Enable persistence for demo purposes.
   persistAkitaState: true,
-  nautilusWalletServer: 'https://wallet-bhutan-api.ntls.io/',
-  nautilusAssetServices: 'https://wallet-bhutan-services.ntls.io/',
+  nautilusWalletServer: 'https://wallet-palau-api.ntls.io/',
+  nautilusAssetServices: 'https://wallet-palau-services.ntls.io/',
   algod: {
     baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
     port: '',
@@ -22,8 +23,8 @@ export const environment: Environment = {
     },
   },
   commissionPercentage: 0.01,
-  tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
-  tokenCurrency: 'FOO',
+  tokenIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
+  tokenSymbol: 'PSC',
   xrpIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
-  hideXrpBalance: true,
+  hideXrpBalance: false,
 };

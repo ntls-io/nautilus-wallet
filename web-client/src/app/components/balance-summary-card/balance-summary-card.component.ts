@@ -42,7 +42,8 @@ export class BalanceSummaryCardComponent implements OnInit {
 
       if (hasXRP) {
         this.showAsset = !balances?.some(
-          (e: AssetAmount) => e?.assetDisplay.assetSymbol === 'FOO'
+          (e: AssetAmount) =>
+            e?.assetDisplay.assetSymbol === environment.tokenSymbol
         );
       }
     });

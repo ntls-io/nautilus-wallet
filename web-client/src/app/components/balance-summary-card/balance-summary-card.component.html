@@ -1,4 +1,4 @@
-<ion-card class="app-item">
+<div class="app-item">
   <ng-container>
     <ion-list lines="none">
       <ion-list-header>
@@ -7,16 +7,8 @@
             >Balances
           </ion-text>
         </ion-label>
-        <ion-button
-          [disabled]="isLoading"
-          color="white"
-          shape="round"
-          (click)="refresh()"
-        >
-          <ion-spinner
-            color="white"
-            *ngIf="isLoading; else notLoading"
-          ></ion-spinner>
+        <ion-button [disabled]="isLoading" shape="round" (click)="refresh()">
+          <ion-spinner *ngIf="isLoading; else notLoading"></ion-spinner>
           <ng-template #notLoading>
             <ion-icon slot="icon-only" name="sync"></ion-icon>
           </ng-template>
@@ -26,7 +18,7 @@
         <ion-item-group *ngIf="balances?.length; else empty">
           <ion-item *ngFor="let balance of balances">
             <ion-label class="ion-text-right">
-              <ion-text
+              <ion-text class="font-audiowide"
                 *ngIf="balance.assetDisplay.assetSymbol !== hideXRP"
                 color="white"
                 class="font-audiowide"
@@ -60,4 +52,4 @@
       <p>There are currently no assets in your wallet.</p>
     </div>
   </ng-template>
-</ion-card>
+</div>
