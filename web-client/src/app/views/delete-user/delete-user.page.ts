@@ -56,7 +56,7 @@ export class DeleteUserPage implements OnInit {
     public notification: SwalHelper,
     public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService,
-    public deleteUserSrvice: DeleteUserService
+    public deleteUserService: DeleteUserService
   ) {
     this.addressForm = new FormGroup({
       address: new FormControl('', [Validators.required, addressValidator]),
@@ -165,7 +165,7 @@ export class DeleteUserPage implements OnInit {
   }
 
   deleteWalletAccount() {
-    this.deleteUserSrvice.deleteWallet(environment.tokenIssuer);
+    this.deleteUserService.deleteWallet(environment.tokenIssuer);
   }
 }
 
