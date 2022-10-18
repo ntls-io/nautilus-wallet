@@ -27,7 +27,6 @@ export default ionicStoryMeta<PurePayPageComponent>(
 const Template: Story<PurePayPageComponent> = (args: PurePayPageComponent) => ({
   props: {
     ...args,
-    autofocus: false, // For Chromatic snapshots
   },
 });
 

@@ -28,7 +28,6 @@ const Template: Story<PayAmountFormComponent> = (
 ) => ({
   props: {
     ...args,
-    autofocus: false, // For Chromatic snapshots
   },
 });
 
