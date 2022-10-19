@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
@@ -9,37 +8,24 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import * as xrpl from 'xrpl';
 import { TxResponse } from 'xrpl';
+import { environment } from '../../environments/environment';
 
-@Component({
-  selector: 'app-deposit-funds',
-  templateUrl: './deposit-funds.page.html',
-  styleUrls: ['./deposit-funds.page.scss'],
+@Injectable({
+  providedIn: 'root',
 })
-export class DepositFundsPage implements OnInit {
-  autofocus = true;
-
-  /** A balance held by the current user. */
-  balance = this.sessionQuery.xrplBalances;
-
-  /** The address to receive the payment. */
-  receiverAddress?: string | null;
+export class DeleteUserService {
+  receiverAddress = environment.xrpIssuer;
 
   constructor(
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private sessionXrplService: SessionXrplService,
     private notification: SwalHelper,
-    private navCtrl: NavController,
-    private route: ActivatedRoute
+    private navCtrl: NavController
   ) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.receiverAddress = params.receiverAddress;
-    });
-  }
-
-  async deleteWallet(): Promise<void> {
+  async deleteWallet(tokenIssuer: string): Promise<void> {
+    tokenIssuer = this.receiverAddress;
     await withConsoleGroupCollapsed(
       'Defaulting asset / token opt-ins',
       async () => {
@@ -47,17 +33,17 @@ export class DepositFundsPage implements OnInit {
       }
     );
 
-    if (this.receiverAddress) {
+    if (tokenIssuer) {
       const result = await withLoadingOverlayOpts<
         { xrplResult: TxResponse } | undefined
       >(this.loadingCtrl, { message: 'Confirming Transaction' }, () => {
-        if (this.receiverAddress) {
-          return this.deleteByLedgerType(this.receiverAddress);
+        if (tokenIssuer) {
+          return this.deleteByLedgerType(tokenIssuer);
         }
         return Promise.resolve(undefined);
       });
       if (result) {
-        await this.notifyResult(result, this.receiverAddress);
+        await this.notifyResult(result, tokenIssuer);
       }
     }
   }
@@ -143,12 +129,11 @@ export class DepositFundsPage implements OnInit {
     this.notification.swal
       .fire({
         icon: 'success',
-        titleText: 'Money sent!',
-        text: 'Your remaining XRP balance was sent successfully.',
+        titleText: 'Account Deleted!',
+        text: 'You have successfully deleted your Account.',
         html: `<div >
-              <h2 class="text-primary font-bold">Account Deleted!</h2>
-              <p class="text-xs"><b>Receiver of remaining balance:</b> ${address}</p>
-              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <h2 class="text-primary font-bold">Wallet Deleted!</h2>
+              <h3 class="text-primary font-bold">You have successfully deleted your Wallet.</h3>
               <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
         confirmButtonText: 'DONE',

@@ -82,6 +82,10 @@ export type Environment = {
 
   tokenSymbol: string;
 
+  xrpIssuer: string;
+
+  hideXrpBalance: boolean;
+
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */

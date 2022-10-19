@@ -24,6 +24,7 @@ import { environment } from 'src/environments/environment';
 export class BalanceSummaryCardComponent implements OnInit {
   isLoading = false;
   showAsset = false;
+  hideXRP = environment.hideXrpBalance ? 'XRP' : '';
 
   constructor(
     private sessionXrplService: SessionXrplService,
