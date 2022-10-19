@@ -9,6 +9,8 @@ import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { checkClass } from 'src/helpers/helpers';
+import { environment } from '../../../environments/environment';
+import { DeleteUserService } from '../../services/delete-user.service';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
 
@@ -40,6 +42,12 @@ export class DeleteUserPage implements OnInit {
   /** @see validatedAddress */
   address?: string;
 
+  tokenSign: string | undefined;
+
+  checkAmountIsZero?: boolean;
+
+  hideXrpBalance = environment.hideXrpBalance;
+
   constructor(
     private navCtrl: NavController,
     private modalCtrl: ModalController,
@@ -47,10 +55,25 @@ export class DeleteUserPage implements OnInit {
     public sessionQuery: SessionQuery,
     public notification: SwalHelper,
     public sessionAlgorandService: SessionAlgorandService,
-    public sessionXrplService: SessionXrplService
+    public sessionXrplService: SessionXrplService,
+    public deleteUserService: DeleteUserService
   ) {
     this.addressForm = new FormGroup({
       address: new FormControl('', [Validators.required, addressValidator]),
+    });
+
+    if (environment.hideXrpBalance) {
+      this.tokenSign = environment.tokenSymbol;
+    } else {
+      this.tokenSign = 'XRP';
+    }
+
+    this.sessionQuery.allBalances.subscribe((balances) => {
+      this.checkAmountIsZero = balances.some(
+        (amount) =>
+          amount.assetDisplay.assetSymbol === environment.tokenSymbol &&
+          amount.amount !== 0
+      );
     });
   }
 
@@ -139,6 +162,10 @@ export class DeleteUserPage implements OnInit {
         queryParams: { receiverAddress: data?.address },
       });
     }
+  }
+
+  deleteWalletAccount() {
+    this.deleteUserService.deleteWallet(environment.tokenIssuer);
   }
 }
 

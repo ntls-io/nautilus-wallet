@@ -65,6 +65,14 @@ export class PurePayPageComponent implements OnInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     this.paymentOptions = this.getPaymentOptions();
+    let filteredPaymentOptions: PaymentOption[] | undefined;
+    if (environment.hideXrpBalance) {
+      filteredPaymentOptions = this.paymentOptions?.filter(
+        (paymentOption) =>
+          paymentOption.senderBalance.assetDisplay.assetSymbol !== 'XRP'
+      );
+      this.paymentOptions = filteredPaymentOptions;
+    }
   }
 
   private getPaymentOptions(): PaymentOption[] | undefined {

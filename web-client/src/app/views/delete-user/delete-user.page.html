@@ -7,24 +7,53 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="hideXrpBalance; else Default">
   <div class="ion-text-center p-2">
-    <p>
-      You will need to enter a wallet address to send your remaining XRP balance
-      to.
+    <p *ngIf="checkAmountIsZero; else AmountIsZero">
+      You will need to send your remaining {{tokenSign}} balance before you can
+      delete your account.
     </p>
+    <ng-template #AmountIsZero>
+      <p>
+        If you delete your wallet, you will not be able to send or receive
+        funds.
+      </p>
+    </ng-template>
   </div>
   <app-balance-summary-card></app-balance-summary-card>
 
-  <p class="ion-text-center p-2">Where should the funds be deposited?</p>
-  <ion-list>
-    <ion-item-group *ngFor="let item of actionItems">
-      <app-action-item
-        [title]="item.title"
-        [icon]="item.icon"
-        [disabled]="item.disabled"
-        (click)="execItemAction(item.action)"
-      ></app-action-item>
-    </ion-item-group>
-  </ion-list>
+  <div class="ion-text-center p-2" *ngIf="sessionQuery.allBalances">
+    <ion-button
+      shape="round"
+      fill="solid"
+      (click)="deleteWalletAccount()"
+      [disabled]="checkAmountIsZero"
+    >
+      Delete My wallet
+    </ion-button>
+  </div>
 </ion-content>
+
+<ng-template #Default>
+  <ion-content>
+    <div class="ion-text-center p-2">
+      <p>
+        You will need to enter a wallet address to send your remaining XRP
+        balance to.
+      </p>
+    </div>
+    <app-balance-summary-card></app-balance-summary-card>
+
+    <p class="ion-text-center p-2">Where should the funds be deposited?</p>
+    <ion-list>
+      <ion-item-group *ngFor="let item of actionItems">
+        <app-action-item
+          [title]="item.title"
+          [icon]="item.icon"
+          [disabled]="item.disabled"
+          (click)="execItemAction(item.action)"
+        ></app-action-item>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+</ng-template>
