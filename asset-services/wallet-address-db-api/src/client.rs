@@ -50,7 +50,6 @@ impl CosmosDBMongo {
             phone_number,
         };
 
-        // Convert `captain_marvel` to a Bson instance:
         let serialized_wallet_document = bson::to_bson(&wallet_document)?;
         let document = serialized_wallet_document.as_document().unwrap();
 
@@ -86,9 +85,6 @@ impl CosmosDBMongo {
             },
             Err(e) => Err(e),
         }
-
-        // Deserialize the document into a WalletDocument instance
-        //         let loaded_movie_struct: Movie = bson::from_bson(Bson::Document(loaded_movie))?;
     }
 }
 
