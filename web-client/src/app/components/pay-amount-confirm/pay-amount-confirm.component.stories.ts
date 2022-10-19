@@ -33,7 +33,6 @@ const Template: Story<PayAmountConfirmComponent> = (
 ) => ({
   props: {
     ...args,
-    autofocus: false, // For Chromatic snapshots
   },
 });
 
