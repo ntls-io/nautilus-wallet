@@ -287,19 +287,6 @@
               "devServerTarget": "app:serve:production"
             }
           }
-        },
-        "storybook": {
-          "builder": "@storybook/angular:start-storybook",
-          "options": {
-            "browserTarget": "app:build",
-            "compodocArgs": ["-e", "json", "--silent"]
-          }
-        },
-        "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
-          "options": {
-            "browserTarget": "app:build"
-          }
         }
       }
     }
