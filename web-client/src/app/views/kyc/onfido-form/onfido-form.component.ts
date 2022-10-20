@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -29,7 +29,7 @@ export class OnfidoFormComponent implements OnInit {
   //
   @Output() submitted = new EventEmitter<OnfidoFormValue>();
 
-  nameForm = new FormGroup({
+  nameForm = new UntypedFormGroup({
     firstName: nameControl(),
     lastName: nameControl(),
   });
@@ -59,7 +59,7 @@ export class OnfidoFormComponent implements OnInit {
 }
 
 // FormControl for names: non-blank strings.
-const nameControl = () => new FormControl('', [Validators.required, notBlank]);
+const nameControl = () => new UntypedFormControl('', [Validators.required, notBlank]);
 
 // Validator: Reject blank, whitespace-only strings.
 const notBlank: ValidatorFn = (control) =>

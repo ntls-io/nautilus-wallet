@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-security-questions',
@@ -13,7 +13,7 @@ export class SecurityQuestionsComponent implements OnInit {
     { field: 'city', text: 'What city were you born in?' },
     { field: 'pet', text: 'What is your pet name?' },
   ];
-  form: FormGroup = this.formBuilder.group({
+  form: UntypedFormGroup = this.formBuilder.group({
     mother: [
       '',
       Validators.compose([Validators.minLength(2), Validators.required]),
@@ -28,7 +28,7 @@ export class SecurityQuestionsComponent implements OnInit {
     ],
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   get f() {
     return this.form.controls;

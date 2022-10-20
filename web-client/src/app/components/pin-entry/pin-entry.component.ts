@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { defined } from 'src/app/utils/errors/panic';
 import {
@@ -32,12 +32,12 @@ export class PinEntryComponent implements OnInit {
   /** Optional hook: set an initial PIN value, if defined. */
   @Input() setInitialPinValue?: string;
 
-  #pinForm?: FormGroup;
+  #pinForm?: UntypedFormGroup;
 
   constructor(private modalCtrl: ModalController) {}
 
   /** Safe accessor. */
-  get pinForm(): FormGroup {
+  get pinForm(): UntypedFormGroup {
     return defined(
       this.#pinForm,
       'PinEntryComponent.pinForm accessed before ngOnInit'
@@ -45,8 +45,8 @@ export class PinEntryComponent implements OnInit {
   }
 
   /** Safe accessor. */
-  get pinControl(): FormControl {
-    return checkClass(this.pinForm.controls.pin, FormControl);
+  get pinControl(): UntypedFormControl {
+    return checkClass(this.pinForm.controls.pin, UntypedFormControl);
   }
 
   /** Safe accessor. */
@@ -85,9 +85,9 @@ export class PinEntryComponent implements OnInit {
     }
   }
 
-  private createPinForm(): FormGroup {
-    return new FormGroup({
-      pin: new FormControl('', {
+  private createPinForm(): UntypedFormGroup {
+    return new UntypedFormGroup({
+      pin: new UntypedFormControl('', {
         validators: [
           Validators.required,
           Validators.minLength(this.minLength),

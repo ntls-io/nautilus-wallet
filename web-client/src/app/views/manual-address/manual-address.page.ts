@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 
@@ -9,11 +9,11 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./manual-address.page.scss'],
 })
 export class ManualAddressPage implements OnInit {
-  addressForm: FormGroup;
+  addressForm: UntypedFormGroup;
 
   constructor(private modalCtrl: ModalController) {
-    this.addressForm = new FormGroup({
-      address: new FormControl('', [Validators.required, addressValidator]),
+    this.addressForm = new UntypedFormGroup({
+      address: new UntypedFormControl('', [Validators.required, addressValidator]),
     });
   }
 
@@ -31,7 +31,7 @@ export class ManualAddressPage implements OnInit {
     if (this.addressForm.valid) {
       const formControl = checkClass(
         this.addressForm.controls.address,
-        FormControl
+        UntypedFormControl
       );
       const address = trimmedValue(formControl);
       this.dismiss(true, address);
@@ -39,12 +39,12 @@ export class ManualAddressPage implements OnInit {
   }
 }
 
-const addressValidator = (formGroup: FormControl) => {
+const addressValidator = (formGroup: UntypedFormControl) => {
   const address = trimmedValue(formGroup);
   return address ? null : { invalidAddress: true };
 };
 
-const trimmedValue = (formControl: FormControl) => {
+const trimmedValue = (formControl: UntypedFormControl) => {
   const value = formControl.value;
   if (typeof value === 'string') {
     return value.trim();

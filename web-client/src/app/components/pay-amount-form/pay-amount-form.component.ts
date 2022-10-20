@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { defined } from 'src/app/utils/errors/panic';
 import {
@@ -48,7 +48,7 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
   /** (Optional) Hook to set an initial amount value, if defined. */
   @Input() setInitialAmountValue?: string;
 
-  #paymentForm?: FormGroup;
+  #paymentForm?: UntypedFormGroup;
 
   constructor() {}
 
@@ -61,8 +61,8 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
   }
 
   /** Convenience accessor. */
-  get amountControl(): FormControl {
-    return checkClass(this.paymentForm.controls.amount, FormControl);
+  get amountControl(): UntypedFormControl {
+    return checkClass(this.paymentForm.controls.amount, UntypedFormControl);
   }
 
   /** Convenience accessor for validation errors, if they should be displayed. */
@@ -93,9 +93,9 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
     }
   }
 
-  private initPaymentForm(): FormGroup {
-    return new FormGroup({
-      amount: new FormControl('', [
+  private initPaymentForm(): UntypedFormGroup {
+    return new UntypedFormGroup({
+      amount: new UntypedFormControl('', [
         Validators.required,
         numericValidator,
         // XXX: Delay evaluation of this.minAmount and this.maxAmount,

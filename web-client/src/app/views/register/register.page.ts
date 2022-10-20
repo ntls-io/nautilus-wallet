@@ -1,8 +1,8 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -21,13 +21,13 @@ SwiperCore.use([Pagination]);
 })
 export class RegisterPage implements OnDestroy {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
-  registrationForm: FormGroup;
+  registrationForm: UntypedFormGroup;
   numInputMask = '9999999999';
   isOpening = false;
   subscription$;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private sessionService: SessionService,
     private router: Router
   ) {
@@ -42,7 +42,7 @@ export class RegisterPage implements OnDestroy {
     return this.registrationForm.controls;
   }
 
-  generateFormGroup(): FormGroup {
+  generateFormGroup(): UntypedFormGroup {
     return this.formBuilder.group({
       firstName: [
         '',

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
@@ -35,7 +35,7 @@ export class DeleteUserPage implements OnInit {
     },
   ];
 
-  addressForm: FormGroup;
+  addressForm: UntypedFormGroup;
 
   hasCamera?: boolean;
 
@@ -58,8 +58,8 @@ export class DeleteUserPage implements OnInit {
     public sessionXrplService: SessionXrplService,
     public deleteUserService: DeleteUserService
   ) {
-    this.addressForm = new FormGroup({
-      address: new FormControl('', [Validators.required, addressValidator]),
+    this.addressForm = new UntypedFormGroup({
+      address: new UntypedFormControl('', [Validators.required, addressValidator]),
     });
 
     if (environment.hideXrpBalance) {
@@ -122,7 +122,7 @@ export class DeleteUserPage implements OnInit {
     if (this.addressForm.valid) {
       const formControl = checkClass(
         this.addressForm.controls.address,
-        FormControl
+        UntypedFormControl
       );
       const address = trimmedValue(formControl);
       this.dismiss(true, address);
@@ -169,12 +169,12 @@ export class DeleteUserPage implements OnInit {
   }
 }
 
-const addressValidator = (formGroup: FormControl) => {
+const addressValidator = (formGroup: UntypedFormControl) => {
   const address = trimmedValue(formGroup);
   return address ? null : { invalidAddress: true };
 };
 
-const trimmedValue = (formControl: FormControl) => {
+const trimmedValue = (formControl: UntypedFormControl) => {
   const value = formControl.value;
   if (typeof value === 'string') {
     return value.trim();
