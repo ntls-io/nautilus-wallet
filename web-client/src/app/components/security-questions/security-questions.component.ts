@@ -11,7 +11,7 @@ export class SecurityQuestionsComponent implements OnInit {
   questions = [
     { field: 'mother', text: 'What is your mothers maiden name?' },
     { field: 'city', text: 'What city were you born in?' },
-    { field: 'pet', text: 'What is your pet name?' },
+    { field: 'pet', text: "What is your pet's name?" },
   ];
   form: FormGroup = this.formBuilder.group({
     mother: [
