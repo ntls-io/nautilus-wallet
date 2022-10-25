@@ -6,8 +6,8 @@
     <ion-title>Sign Up</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding-horizontal">
-  <swiper #swiper [allowTouchMove]="false" [pagination]="true" class="h-full">
+<ion-content class="ion-padding-horizontal" [forceOverscroll]="false">
+  <swiper #swiper [allowTouchMove]="false" class="h-full !overflow-y-auto">
     <ng-template swiperSlide>
       <form
         [formGroup]="registrationForm"
@@ -134,7 +134,7 @@
                 actionButton
                 (click)="swiper?.swiperRef?.slidePrev()"
                 shape="round"
-                color="medium"
+                fill="outline"
                 >Previous
               </ion-button>
             </app-security-questions>
