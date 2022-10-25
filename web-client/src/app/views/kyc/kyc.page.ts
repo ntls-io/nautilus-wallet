@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
+import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
+import { LoadingController, NavController, Platform } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
 import {
   Check,
@@ -39,7 +40,8 @@ export class KycPage {
     private navController: NavController,
     private loadingController: LoadingController,
     private sessionService: SessionService,
-    private onfidoService: OnfidoService
+    private onfidoService: OnfidoService,
+    private platform: Platform
   ) {}
 
   get checkIsComplete() {
@@ -57,10 +59,18 @@ export class KycPage {
       this.token = this.onfidoStarted.sdk_token;
     });
     this.viewState = 'step2_widget';
+
+    if (this.platform.is('ios')) {
+      Keyboard.setResizeMode({ mode: KeyboardResize.None });
+    }
   }
 
   // In Step 2: Onfido widget completed: save response and hand off to `createCheck`.
   async onSdkComplete(sdkResponse: SdkResponse): Promise<void> {
+    if (this.platform.is('ios')) {
+      Keyboard.setResizeMode({ mode: KeyboardResize.Native });
+    }
+
     console.log('KycPage: Onfido SDK response:', sdkResponse);
     this.sdkResponse = sdkResponse;
     await this.createCheck();
@@ -124,6 +134,12 @@ export class KycPage {
       if (saved) {
         await this.navController.navigateRoot('/wallet');
       }
+    }
+  }
+
+  ionViewDidLeave() {
+    if (this.platform.is('ios')) {
+      Keyboard.setResizeMode({ mode: KeyboardResize.Native });
     }
   }
 }
