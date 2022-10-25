@@ -27,7 +27,7 @@
 
   <ion-list lines="none">
     <ion-item
-      *ngIf="(sessionQuery.onfidoCheckIsClear | async) !== true"
+      *ngIf="sessionQuery.showKYC && (sessionQuery.onfidoCheckIsClear | async) !== true"
       class="app-item"
       button
       detail
