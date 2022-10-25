@@ -25,4 +25,6 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
   tokenSymbol: 'FOO',
+  xrpIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+  hideXrpBalance: false,
 };

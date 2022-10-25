@@ -26,7 +26,6 @@ export default ionicStoryMeta<PinEntryComponent>(
 const Template: Story<PinEntryComponent> = (args: PinEntryComponent) => ({
   props: {
     ...args,
-    autofocus: false, // For Chromatic snapshots
   },
 });
 

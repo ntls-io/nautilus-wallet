@@ -18,10 +18,6 @@ export default ionicStoryMeta<PayComponent>(
   {
     title: 'Components/Pay/Pay',
     component: PayComponent,
-    parameters: {
-      // https://www.chromatic.com/docs/delay
-      chromatic: { delay: LOAD_TIMEOUT },
-    },
   },
   {
     imports: [PayComponentModule],
@@ -47,7 +43,6 @@ const xrpOption: PaymentOption = {
 const Template: Story<PayComponent> = (args: PayComponent) => ({
   props: {
     ...args,
-    autofocus: false, // For Chromatic snapshots
   },
 });
 

@@ -15,6 +15,7 @@ import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { assetAmountXrplToken } from 'src/app/utils/assets/assets.xrp.token';
 import { defined } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
+import { environment } from 'src/environments/environment';
 import { allDefinedOrNone, ifDefined, ignoreZero } from 'src/helpers/helpers';
 import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
@@ -145,6 +146,8 @@ export class SessionQuery extends Query<SessionState> {
     ),
     distinctUntilChanged()
   );
+
+  showKYC = !['bhutan'].includes(environment.organization);
 
   onfidoCheck: Observable<SessionState['onfidoCheck']> =
     this.select('onfidoCheck');

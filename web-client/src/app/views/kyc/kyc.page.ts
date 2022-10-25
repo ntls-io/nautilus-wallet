@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, Platform } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
 import {
   Check,
@@ -41,7 +40,8 @@ export class KycPage {
     private navController: NavController,
     private loadingController: LoadingController,
     private sessionService: SessionService,
-    private onfidoService: OnfidoService
+    private onfidoService: OnfidoService,
+    private platform: Platform
   ) {}
 
   get checkIsComplete() {
@@ -60,14 +60,14 @@ export class KycPage {
     });
     this.viewState = 'step2_widget';
 
-    if (Capacitor.isNativePlatform()) {
+    if (this.platform.is('ios')) {
       Keyboard.setResizeMode({ mode: KeyboardResize.None });
     }
   }
 
   // In Step 2: Onfido widget completed: save response and hand off to `createCheck`.
   async onSdkComplete(sdkResponse: SdkResponse): Promise<void> {
-    if (Capacitor.isNativePlatform()) {
+    if (this.platform.is('ios')) {
       Keyboard.setResizeMode({ mode: KeyboardResize.Native });
     }
 
@@ -138,7 +138,7 @@ export class KycPage {
   }
 
   ionViewDidLeave() {
-    if (Capacitor.isNativePlatform()) {
+    if (this.platform.is('ios')) {
       Keyboard.setResizeMode({ mode: KeyboardResize.Native });
     }
   }
