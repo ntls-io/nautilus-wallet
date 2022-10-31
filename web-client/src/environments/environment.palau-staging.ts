@@ -22,7 +22,7 @@ export const environment: Environment = {
       connectionTimeout: 20000,
     },
   },
-  commissionPercentage: 0.01,
+  commissionPercentage: 0.0,
   tokenIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
   tokenSymbol: 'PSC',
   xrpIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',

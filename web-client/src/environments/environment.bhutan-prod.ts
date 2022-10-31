@@ -22,7 +22,7 @@ export const environment: Environment = {
       connectionTimeout: 20000,
     },
   },
-  commissionPercentage: 0.01,
+  commissionPercentage: 0.0,
   tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
   tokenSymbol: 'BTN',
   xrpIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
