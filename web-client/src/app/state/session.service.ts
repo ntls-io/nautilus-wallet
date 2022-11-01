@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { MessagingService } from 'src/app/services/messaging.service';
+import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
@@ -31,7 +32,8 @@ export class SessionService {
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private searchService: SearchService
   ) {}
 
   /**
@@ -58,6 +60,15 @@ export class SessionService {
       if ('Created' in result) {
         const wallet = result.Created;
         this.sessionStore.update({ wallet, pin });
+        try {
+          await this.searchService.insertWalletAddress({
+            wallet_id: wallet.wallet_id,
+            phone_number: wallet.phone_number,
+            owner_name: wallet.owner_name,
+          });
+        } catch (err) {
+          console.log(err);
+        }
       } else if ('Failed' in result) {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);
