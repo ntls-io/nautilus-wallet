@@ -8,14 +8,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import algosdk from 'algosdk';
+import { map } from 'rxjs';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
+import { SessionQuery } from 'src/app/state/session.query';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { getAssetConfigForLedgerInfo } from 'src/app/utils/assets/assets.config';
 import { environment } from 'src/environments/environment';
 import { ifDefined } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
-import { SessionQuery } from 'src/app/state/session.query';
-import {filter, map, Subscription} from 'rxjs';
 
 /**
  * @see PayPage
@@ -48,17 +48,18 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   availableAccounts?: number;
 
-  constructor(
-    public sessionQuery: SessionQuery
-  ) {
+  constructor(public sessionQuery: SessionQuery) {
     let balances = sessionQuery.allBalances;
-    if(environment.hideXrpBalance){
-     balances = balances.pipe(
-      map(balance => balance.filter(bal => bal.assetDisplay.assetSymbol !=='XRP'))
-    );
-    };
-    balances.subscribe((balance) => this.availableAccounts = balance.length);
-    console.log(this.availableAccounts);
+    if (environment.hideXrpBalance) {
+      balances = balances.pipe(
+        map((balance) =>
+          balance.filter(
+            (currency) => currency.assetDisplay.assetSymbol !== 'XRP'
+          )
+        )
+      );
+    }
+    balances.subscribe((balance) => (this.availableAccounts = balance.length));
   }
 
   get receiverAddressType(): AddressType | undefined {

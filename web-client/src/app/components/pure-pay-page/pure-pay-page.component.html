@@ -2,45 +2,40 @@
   <h1 class="font-semibold font-nasalization mt-0">Pay</h1>
 </div>
 
-<ng-container *ngIf="availableAccounts === 0 else balanceAvailable">
+<ng-container *ngIf="availableAccounts === 0; else balanceAvailable">
   <ion-content>
     <div class="ion-text-center p-2">
-
       <p>Opt into a currency and fund your account to start making payments.</p>
       <app-balance-summary-card></app-balance-summary-card>
-
     </div>
   </ion-content>
 </ng-container>
 
 <ng-template #balanceAvailable>
-
   <ng-container *ngIf="hasPaymentOptions; else noPaymentOptions">
-  <app-pay
-    [paymentOptions]="paymentOptions"
-    (paymentSubmitted)="paymentSubmitted.emit($event)"
-    [autofocus]="autofocus"
-  ></app-pay>
-</ng-container>
+    <app-pay
+      [paymentOptions]="paymentOptions"
+      (paymentSubmitted)="paymentSubmitted.emit($event)"
+      [autofocus]="autofocus"
+    ></app-pay>
+  </ng-container>
 
-<ng-template #noPaymentOptions>
-  <div class="ion-text-center p-2">
-    <ng-container *ngIf="!receiverAddressType">
-      <h2 class="font-semibold font-nasalization">Unsupported address</h2>
-      <p>Address not recognised:</p>
-      <pre class="whitespace-pre-wrap overflow-wrap-anywhere">{{
-        receiverAddress | json
-      }}</pre>
-    </ng-container>
+  <ng-template #noPaymentOptions>
+    <div class="ion-text-center p-2">
+      <ng-container *ngIf="!receiverAddressType">
+        <h2 class="font-semibold font-nasalization">Unsupported address</h2>
+        <p>Address not recognised:</p>
+        <pre class="whitespace-pre-wrap overflow-wrap-anywhere">{{
+          receiverAddress | json
+        }}</pre>
+      </ng-container>
 
-    <ng-container
-      *ngIf="receiverAddressType === 'Algorand' && !hasAlgorandBalances"
-    >
-      <h2 class="font-semibold font-nasalization">No Algorand account</h2>
-      <p>You do not have an Algorand account</p>
-    </ng-container>
-  </div>
-</ng-template>
-
-
+      <ng-container
+        *ngIf="receiverAddressType === 'Algorand' && !hasAlgorandBalances"
+      >
+        <h2 class="font-semibold font-nasalization">No Algorand account</h2>
+        <p>You do not have an Algorand account</p>
+      </ng-container>
+    </div>
+  </ng-template>
 </ng-template>
