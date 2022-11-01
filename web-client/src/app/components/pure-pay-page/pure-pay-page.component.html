@@ -2,7 +2,20 @@
   <h1 class="font-semibold font-nasalization mt-0">Pay</h1>
 </div>
 
-<ng-container *ngIf="hasPaymentOptions; else noPaymentOptions">
+<ng-container *ngIf="availableAccounts === 0 else balanceAvailable">
+  <ion-content>
+    <div class="ion-text-center p-2">
+
+      <p>Opt into a currency and fund your account to start making payments.</p>
+      <app-balance-summary-card></app-balance-summary-card>
+
+    </div>
+  </ion-content>
+</ng-container>
+
+<ng-template #balanceAvailable>
+
+  <ng-container *ngIf="hasPaymentOptions; else noPaymentOptions">
   <app-pay
     [paymentOptions]="paymentOptions"
     (paymentSubmitted)="paymentSubmitted.emit($event)"
@@ -27,4 +40,7 @@
       <p>You do not have an Algorand account</p>
     </ng-container>
   </div>
+</ng-template>
+
+
 </ng-template>

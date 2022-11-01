@@ -14,6 +14,8 @@ import { getAssetConfigForLedgerInfo } from 'src/app/utils/assets/assets.config'
 import { environment } from 'src/environments/environment';
 import { ifDefined } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
+import { SessionQuery } from 'src/app/state/session.query';
+import {filter, map, Subscription} from 'rxjs';
 
 /**
  * @see PayPage
@@ -44,7 +46,20 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   assetConfigs = environment.assetConfigs;
 
-  constructor() {}
+  availableAccounts?: number;
+
+  constructor(
+    public sessionQuery: SessionQuery
+  ) {
+    let balances = sessionQuery.allBalances;
+    if(environment.hideXrpBalance){
+     balances = balances.pipe(
+      map(balance => balance.filter(bal => bal.assetDisplay.assetSymbol !=='XRP'))
+    );
+    };
+    balances.subscribe((balance) => this.availableAccounts = balance.length);
+    console.log(this.availableAccounts);
+  }
 
   get receiverAddressType(): AddressType | undefined {
     return this.receiverAddress ? addressType(this.receiverAddress) : undefined;
