@@ -21,6 +21,8 @@ import {
   TransactionToSign,
 } from 'src/schema/actions';
 import { SessionStore } from './session.store';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { environment } from 'src/environments/environment';
 
 /**
  * This service manages session state and operations associated with the wallet enclave.
@@ -31,7 +33,8 @@ export class SessionService {
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private sessionXrplService: SessionXrplService
   ) {}
 
   /**
@@ -58,6 +61,23 @@ export class SessionService {
       if ('Created' in result) {
         const wallet = result.Created;
         this.sessionStore.update({ wallet, pin });
+        console.log("Attempting autofund");
+        
+        // Autofund the account on creation
+        const autoFundBool = environment.autofundXrp;
+        const autoFundAmount = environment.autofundXrpAmount;
+        console.log("Inside autofund block", autoFundBool, autoFundAmount);
+
+
+        if (autoFundBool) {
+          console.log("Inside autofund block");
+
+          xrplResult: await this.sessionXrplService.autoSendFunds(
+            autoFundAmount
+          );
+
+        }
+
       } else if ('Failed' in result) {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);

@@ -21,6 +21,8 @@ import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
+import { environment } from 'src/environments/environment';
+
 
 /**
  * This service manages session state and operations related to the XRP ledger.
@@ -118,6 +120,41 @@ export class SessionXrplService {
     await this.loadAccountData();
     return txResponse;
   }
+
+
+  protected async prepareTransactionReceiver(
+    amount: xrpl.Payment['Amount']
+  ): Promise<xrpl.Payment> {
+    const { wallet } = this.sessionQuery.assumeActiveSession();
+
+    console.log("Inside autofund function ", environment.xrpIssuer, wallet.xrpl_account.address_base58, amount);
+
+    return withLoggedExchange(
+      'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
+      async () =>
+        await this.xrplService.createUnsignedPaymentTransaction(
+          environment.xrpIssuer,
+          wallet.xrpl_account.address_base58,
+          amount
+        ),
+      { from: environment.xrpIssuer, to: wallet.xrpl_account.address_base58, amount }
+    );
+  }
+
+
+  // Prepare transaction to autoload a new wallet with funds
+  async autoSendFunds(
+    amount: xrpl.Payment['Amount']
+  ): Promise<xrpl.TxResponse> {
+    const preparedTx: xrpl.Payment = await this.prepareTransactionReceiver(
+      amount
+    );
+
+    const txResponse = await this.sendTransaction(preparedTx);
+    await this.loadAccountData();
+    return txResponse;
+  }
+
 
   async sendFundsCommissioned(
     receiverId: string,
@@ -420,6 +457,9 @@ export class SessionXrplService {
       );
     }
   }
+
+
+
 
   protected async prepareUnsignedTransaction(
     receiverId: string,
