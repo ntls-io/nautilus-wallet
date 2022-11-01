@@ -17,7 +17,7 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s.altnet.rippletest.net/',
+    server: 'wss://s.altnet.rippletest.net:51233',
     options: {
       connectionTimeout: 20000,
     },
