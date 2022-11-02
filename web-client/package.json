@@ -63,7 +63,7 @@
     "@ngneat/input-mask": "^5.0.1",
     "@ngneat/transloco": "^3.1.1",
     "@ngneat/until-destroy": "^9.2.2",
-    "@sentry/angular": "^7.13.0",
+    "@sentry/angular": "~7.13.0",
     "@sentry/capacitor": "^0.10.1",
     "@stablelib/hkdf": "^1.0.1",
     "@stablelib/sha256": "^1.0.1",
