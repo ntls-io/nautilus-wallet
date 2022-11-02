@@ -17,12 +17,12 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s1.cbdc-sandbox.rippletest.net',
+    server: 'wss://s1.cbdc-sandbox.rippletest.net:51233',
     options: {
       connectionTimeout: 20000,
     },
   },
-  commissionPercentage: 0.01,
+  commissionPercentage: 0.0,
   tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
   tokenSymbol: 'BTN',
   xrpIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
