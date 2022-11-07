@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CapacitorHttp } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
@@ -10,7 +11,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private afs: AngularFirestore) {
     this.initializeApp();
   }
 
@@ -19,6 +20,7 @@ export class AppComponent {
       .ready()
       .then(async () => {
         await this.loadTheme(environment.organization);
+        await this.loadSettings(environment.organization);
       })
       .finally(() => {
         if (this.platform.is('capacitor')) {
@@ -40,5 +42,13 @@ export class AppComponent {
         }
       });
     }
+  }
+
+  loadSettings(org: string) {
+    const orgDoc = this.afs.doc(`organisations/${org}`);
+    const orgData = orgDoc.valueChanges();
+    orgData.subscribe((data: any) => {
+      console.log(data);
+    });
   }
 }
