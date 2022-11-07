@@ -134,7 +134,7 @@ USER user
 RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/registry \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     . ~/.cargo/env && \
-    cargo install bindgen
+    cargo install bindgen-cli
 
 # Cargo make
 USER root

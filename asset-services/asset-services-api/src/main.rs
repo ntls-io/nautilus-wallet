@@ -35,6 +35,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
             "/messages/create",
             post(handlers::messaging::create_message),
         )
+        .route(
+            "/search/insert",
+            post(handlers::search::insert_wallet_address),
+        )
+        .route("/search/find", post(handlers::search::find_wallet_address))
         .layer(AddExtensionLayer::new(celery.clone()))
         // The CORS layer must come after the wrapped resources, for correct response headers.
         .layer(cors_layer);

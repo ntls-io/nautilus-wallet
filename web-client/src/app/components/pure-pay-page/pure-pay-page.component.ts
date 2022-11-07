@@ -8,7 +8,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import algosdk from 'algosdk';
+import { map } from 'rxjs';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
+import { SessionQuery } from 'src/app/state/session.query';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { getAssetConfigForLedgerInfo } from 'src/app/utils/assets/assets.config';
 import { environment } from 'src/environments/environment';
@@ -44,7 +46,21 @@ export class PurePayPageComponent implements OnInit, OnChanges {
 
   assetConfigs = environment.assetConfigs;
 
-  constructor() {}
+  availableAccounts?: number;
+
+  constructor(public sessionQuery: SessionQuery) {
+    let balances = sessionQuery.allBalances;
+    if (environment.hideXrpBalance) {
+      balances = balances.pipe(
+        map((balance) =>
+          balance.filter(
+            (currency) => currency.assetDisplay.assetSymbol !== 'XRP'
+          )
+        )
+      );
+    }
+    balances.subscribe((balance) => (this.availableAccounts = balance.length));
+  }
 
   get receiverAddressType(): AddressType | undefined {
     return this.receiverAddress ? addressType(this.receiverAddress) : undefined;
