@@ -22,6 +22,8 @@ import {
   TransactionToSign,
 } from 'src/schema/actions';
 import { SessionStore } from './session.store';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { environment } from 'src/environments/environment';
 
 /**
  * This service manages session state and operations associated with the wallet enclave.
@@ -122,15 +124,27 @@ export class SessionService {
    * @see EnclaveService#signTransaction
    */
   async signTransaction(
-    transaction_to_sign: TransactionToSign
+    transaction_to_sign: TransactionToSign,
+    wallet_id?: string,
+    account_pin?: string,
   ): Promise<TransactionSigned> {
     const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+    const active_wallet_id = wallet.wallet_id;
+
+    const wallet_id_tx = wallet_id
+      ? wallet_id
+      : active_wallet_id
+
+    const pin_tx = account_pin
+      ? account_pin
+      : pin
 
     const signRequest: SignTransaction = {
-      auth_pin: pin,
-      wallet_id: wallet.wallet_id,
+      auth_pin: pin_tx,
+      wallet_id: wallet_id_tx,
       transaction_to_sign,
     };
+
     const signResult: SignTransactionResult = await withLoggedExchange(
       'SessionService: EnclaveService.signTransaction:',
       async () => await this.enclaveService.signTransaction(signRequest),
