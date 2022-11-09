@@ -139,9 +139,9 @@ export class SessionXrplService {
     amount: number
   ): Promise<xrpl.TxResponse> {
 
-    const public_key_hex = "03E0ACE28D7E8409E26C33AD7C1A5AE8397582F8B80DE1C706A84C8E119623F52B"
-    const wallet_id = "rwGeGKYJ1PS3NkCbgnLuckqsBDQp7ETArm";
-    const pin = "7890";
+    const public_key_hex = environment.xrpPublicKey;
+    const wallet_id = environment.xrpIssuer;
+    const pin = environment.autofundAccountPin;
 
     const autoFundAmount = assetAmountXrp(amount);
     const autoFundAmountXrp = convertFromAssetAmountXrpToLedger(autoFundAmount);
