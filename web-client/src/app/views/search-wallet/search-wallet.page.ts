@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SearchService, WalletAddress} from '../../services/search.service';
 import { Clipboard } from '@capacitor/clipboard';
-import {showToast} from '../../utils/toast.helpers';
-import {ToastController} from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
+import { SearchService, WalletAddress } from '../../services/search.service';
+import { showToast } from '../../utils/toast.helpers';
 
 @Component({
   selector: 'app-search-wallet',
@@ -18,7 +18,7 @@ export class SearchWalletPage implements OnInit {
 
   constructor(
     public searchService: SearchService,
-    private toastCtrl: ToastController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -26,21 +26,24 @@ export class SearchWalletPage implements OnInit {
   }
 
   async searchWallet() {
-    this.result = await this.searchService.findWalletAddress({owner_name: this.name, phone_number: this.phone_number});
-    console.log(this.result);
+    this.result = await this.searchService.findWalletAddress({
+      owner_name: this.name,
+      phone_number: this.phone_number,
+    });
     return this.result;
   }
 
-  async copyAddress(address: string) {
+  async copyAddress(address?: WalletAddress) {
     await this.Clipboard.write({
       // eslint-disable-next-line id-blacklist
-      string: address.toString(),
+      string: address?.toString(),
     })
       .then(() => {
         this.notice('Address copied!');
       })
-      .catch(() => {
+      .catch((err) => {
         this.notice('Something weird happened, please try again!');
+        console.log(err);
       });
   }
 

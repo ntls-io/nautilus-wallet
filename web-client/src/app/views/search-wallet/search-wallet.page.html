@@ -40,22 +40,29 @@
     <hr class="bg-white" />
     <ion-list lines="full" *ngIf="result !== null; else noResult">
       <ion-item>
-        <ion-icon slot="start" name="wallet" class="bg-white"></ion-icon>
-        <ion-label class="ion-text-wrap font-bold" id="wallet_address"> {{result}} </ion-label>
+        <ion-label
+          class="ion-text-wrap font-bold ion-text-center"
+          id="wallet_address"
+        >
+          {{result}}
+        </ion-label>
       </ion-item>
       <ion-button
         shape="round"
         expand="block"
         color="primary"
-          >Copy Address
-        </ion-button>
+        (click)="copyAddress(result)"
+        >Copy Address
+      </ion-button>
     </ion-list>
     <ng-template #noResult>
       <ion-list lines="full">
         <ion-item>
-          <ion-label class="ion-text-wrap font-bold"> No Wallet Address found. </ion-label>
+          <ion-label class="ion-text-wrap font-bold ion-text-center">
+            No Wallet Address found.
+          </ion-label>
         </ion-item>
       </ion-list>
-      </ng-template>
+    </ng-template>
   </ng-container>
 </ion-content>
