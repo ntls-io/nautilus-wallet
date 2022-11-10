@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="ion-text-center p-2">
+      <h1 class="font-semibold font-nasalization">Search wallet address</h1>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none" class="form-item">
+          <ion-item>
+            <ion-input placeholder="Name" [(ngModel)]="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              placeholder="Phone Number"
+              [(ngModel)]="phone_number"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button
+          shape="round"
+          expand="block"
+          color="primary"
+          (click)="searchWallet()"
+          >Search
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ng-container>
+    <hr class="bg-white" />
+    <ion-list lines="full">
+      <ion-item *ngFor="let res of result">
+        <ion-icon slot="start" name="wallet"></ion-icon>
+        <ion-label class="ion-text-wrap font-bold"> {{res}} </ion-label>
+        <ion-button shape="round" expand="block" color="primary"
+          >Copy Address
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ion-content>
