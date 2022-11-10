@@ -38,6 +38,6 @@ type FindWalletAddress = {
   phone_number: string;
 };
 
-type WalletAddress = {
+export type WalletAddress = {
   wallet_id?: string;
 };
