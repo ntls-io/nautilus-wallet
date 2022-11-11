@@ -90,7 +90,7 @@ export type Environment = {
 
   autofundXrpAmount: number;
 
-  autofundAccountPin: number;
+  autofundAccountPin: string;
 
   xrpPublicKey: string;
 

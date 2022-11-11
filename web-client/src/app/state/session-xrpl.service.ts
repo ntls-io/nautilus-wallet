@@ -139,24 +139,31 @@ export class SessionXrplService {
     amount: number
   ): Promise<xrpl.TxResponse> {
 
+    console.log("marker 2.5", amount, receiverId)
     const public_key_hex = environment.xrpPublicKey;
     const wallet_id = environment.xrpIssuer;
-    const pin = environment.autofundAccountPin;
+    // const pin = environment.autofundAccountPin;
+    const pin = process.env.ISSUER_ENCLAVE_ACCESS;
 
     const autoFundAmount = assetAmountXrp(amount);
     const autoFundAmountXrp = convertFromAssetAmountXrpToLedger(autoFundAmount);
 
+    console.log("marker 3", receiverId, autoFundAmountXrp)
     const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
       autoFundAmountXrp,
       environment.xrpIssuer
     );
+    console.log("marker 4")
 
     // const txResponse = await this.sendTransaction(preparedTx);
     const txnSignedEncoded = await this.signXrplTransaction(preparedTx, public_key_hex, wallet_id, pin);
+    console.log("marker 5")
 
     const txResponse = await this.submitTransaction(txnSignedEncoded);
+    console.log("marker 6")
     const txSucceeded = checkTxResponseSucceeded(txResponse);
+    console.log("marker 7")
 
     return txResponse;
   }
@@ -504,11 +511,13 @@ export class SessionXrplService {
       // wallet.xrpl_account.public_key_hex
     );
 
+    console.log("marker 9", wallet_hex_key, wallet_id, account_pin)
     const transactionToSign: TransactionToSign = {
       XrplTransaction: {
         transaction_bytes: hexToUint8Array(bytesToSignEncoded),
       },
     };
+    console.log("marker 10")
 
     const signed: TransactionSigned = await this.signTransaction(
       transactionToSign,
