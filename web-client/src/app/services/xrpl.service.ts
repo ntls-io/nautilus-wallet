@@ -194,6 +194,7 @@ export class XrplService {
           );
         }
       }
+      console.log("Error in callback", err);
       throw err;
     }
   }
