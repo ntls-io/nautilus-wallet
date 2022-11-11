@@ -32,8 +32,12 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
   tokenSymbol: 'FOO',
-  xrpIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+  xrpIssuer: 'rf9vKLZVsozsaUgU533W4BUj87TgzTqyQE',
   hideXrpBalance: false,
+  autofundXrp: true,
+  autofundXrpAmount: 11,
+  autofundAccountPin: "K3VG-M@YQF9gzjq.DGW!",
+  xrpPublicKey: "028E00428D3EC7633234CF1047913524D03CE1FD122227DFD9CDD0967429758FE3"
 };
 
 /*
@@ -44,3 +48,4 @@ export const environment: Environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+
