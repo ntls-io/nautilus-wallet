@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-
 import { PullPage } from './pull.page';
 
 describe('PullPage', () => {
@@ -9,8 +8,8 @@ describe('PullPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PullPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [PullPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PullPage);

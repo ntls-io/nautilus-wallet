@@ -9,6 +9,8 @@ import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OnfidoCheckResult,
@@ -107,6 +109,27 @@ export class SessionService {
       return undefined; // Success
     } else if ('InvalidAuth' in result) {
       return 'Authentication failed, please ensure that the address and password provided is correct.';
+    } else if ('Failed' in result) {
+      console.error(result);
+      throw new Error(result.Failed);
+    } else {
+      throw never(result);
+    }
+  }
+
+  /**
+   * Get public key of an existing wallet address.
+   *
+   * @see EnclaveService#getXrplWallet
+   */
+  async getXrplWalletPublicKey(walletId: string): Promise<string> {
+    const request: GetXrplWallet = { wallet_id: walletId };
+    const result: GetXrplWalletResult = await this.enclaveService.getXrplWallet(
+      request
+    );
+
+    if ('Opened' in result) {
+      return result.Opened.public_key_hex;
     } else if ('Failed' in result) {
       console.error(result);
       throw new Error(result.Failed);
