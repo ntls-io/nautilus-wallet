@@ -6,6 +6,7 @@
   </ion-toolbar>
   <ion-toolbar>
     <div class="ion-text-center p-2">
+      <ion-icon slot="start" name="wallet" size="large"></ion-icon>
       <h1 class="font-semibold font-nasalization">Search wallet address</h1>
     </div>
   </ion-toolbar>
@@ -17,11 +18,15 @@
       <ion-col>
         <ion-list lines="none" class="form-item">
           <ion-item>
-            <ion-input placeholder="Name" [(ngModel)]="name"></ion-input>
+            <ion-label position="stacked" for="firstName">Full Name</ion-label>
+            <ion-input placeholder="John Doe" [(ngModel)]="name"></ion-input>
           </ion-item>
           <ion-item>
+            <ion-label position="stacked" for="firstName"
+              >Phone Number</ion-label
+            >
             <ion-input
-              placeholder="Phone Number"
+              placeholder="+27721234567"
               [(ngModel)]="phone_number"
             ></ion-input>
           </ion-item>
