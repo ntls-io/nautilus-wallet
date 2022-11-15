@@ -5,12 +5,11 @@ import { SetupStore } from './setup.store';
 
 @Injectable({ providedIn: 'root' })
 export class SetupService {
-
-  constructor(private setupStore: SetupStore, private http: HttpClient) {
-  }
+  constructor(private setupStore: SetupStore, private http: HttpClient) {}
 
   get() {
-    return this.http.get('').pipe(tap(entities => this.setupStore.update(entities)));
+    return this.http
+      .get('')
+      .pipe(tap((entities) => this.setupStore.update(entities)));
   }
-
 }
