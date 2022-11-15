@@ -113,6 +113,13 @@ export const routes: Routes = [
         (m) => m.PinResetPageModule
       ),
   },
+  {
+    path: 'search-wallet',
+    loadChildren: () =>
+      import('./views/search-wallet/search-wallet.module').then(
+        (m) => m.SearchWalletPageModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -152,3 +152,15 @@ ion-list,
   background: inherit;
   color: inherit;
 }
+
+.form-item ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  ion-text {
+    padding-top: 0px;
+    p {
+      margin: 0px !important;
+      font-weight: bold;
+    }
+  }
+}
