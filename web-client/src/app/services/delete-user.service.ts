@@ -8,24 +8,23 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import * as xrpl from 'xrpl';
 import { TxResponse } from 'xrpl';
-import { environment } from '../../environments/environment';
+import { SetupQuery } from '../state/setup';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeleteUserService {
-  receiverAddress = environment.xrpIssuer;
-
   constructor(
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private sessionXrplService: SessionXrplService,
     private notification: SwalHelper,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private setupQuery: SetupQuery
   ) {}
 
-  async deleteWallet(tokenIssuer: string): Promise<void> {
-    tokenIssuer = this.receiverAddress;
+  async deleteWallet(): Promise<void> {
+    const { xrpIssuer } = this.setupQuery;
     await withConsoleGroupCollapsed(
       'Defaulting asset / token opt-ins',
       async () => {
@@ -33,17 +32,17 @@ export class DeleteUserService {
       }
     );
 
-    if (tokenIssuer) {
+    if (xrpIssuer) {
       const result = await withLoadingOverlayOpts<
         { xrplResult: TxResponse } | undefined
       >(this.loadingCtrl, { message: 'Confirming Transaction' }, () => {
-        if (tokenIssuer) {
-          return this.deleteByLedgerType(tokenIssuer);
+        if (xrpIssuer) {
+          return this.deleteByLedgerType(xrpIssuer);
         }
         return Promise.resolve(undefined);
       });
       if (result) {
-        await this.notifyResult(result, tokenIssuer);
+        await this.notifyResult(result, xrpIssuer);
       }
     }
   }

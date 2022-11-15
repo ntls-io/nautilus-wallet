@@ -4,6 +4,7 @@ import { CapacitorHttp } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { SetupStore } from './state/setup';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,11 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private platform: Platform, private afs: AngularFirestore) {
+  constructor(
+    private platform: Platform,
+    private afs: AngularFirestore,
+    private setupStore: SetupStore
+  ) {
     this.initializeApp();
   }
 
@@ -48,7 +53,7 @@ export class AppComponent {
     const orgDoc = this.afs.doc(`organisations/${org}`);
     const orgData = orgDoc.valueChanges();
     orgData.subscribe((data: any) => {
-      console.log(data);
+      this.setupStore.update(data);
     });
   }
 }
