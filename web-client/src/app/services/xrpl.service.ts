@@ -176,27 +176,9 @@ export class XrplService {
   async submitAndWaitForSigned(
     signedTxEncoded: string
   ): Promise<xrpl.TxResponse> {
-    try {
-      return await this.withConnection(
-        async (client) => await client.submitAndWait(signedTxEncoded)
-      );
-    } catch (err) {
-      const errorResponse: xrpl.ErrorResponse | undefined =
-        checkRippledErrorResponse(err);
-      if (errorResponse !== undefined) {
-        // Docs: https://xrpl.org/account_info.html#possible-errors
-        if (errorResponse.error === 'actNotFound') {
-          console.log("Error: submitAndWaitForSigned, actNotFound")
-        } else {
-          console.log(
-            'XrplService.submitAndWaitForSigned: unrecognised ErrorResponse:',
-            { errorResponse }
-          );
-        }
-      }
-      console.log("Error in callback", err);
-      throw err;
-    }
+    return await this.withConnection(
+      async (client) => await client.submitAndWait(signedTxEncoded)
+    );
   }
 
   // For Reference: https://github.com/XRPLF/xrpl.js/blob/6e4868e6c7a03f0d48de1ddee5d9a88700ab5a7c/src/transaction/sign.ts#L54
