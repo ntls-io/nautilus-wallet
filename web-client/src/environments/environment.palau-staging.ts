@@ -26,9 +26,10 @@ export const environment: Environment = {
   tokenIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
   tokenSymbol: 'PSC',
   xrpIssuer: 'rL6H7GSU2BaNmyxbJRbUdVhSNCT1FD3Z7a',
-  hideXrpBalance: false,
+  hideXrpBalance: true,
   autofundXrp: true,
   autofundXrpAmount: 11,
-  autofundAccountPin: "@CsmRxaR9UDXWfwy.rMv",
-  xrpPublicKey: "03E25AA05BC7F5BD0025C4622826426E0804DF1A7DA16CDE793AC1C7CC17275DD4"
+  autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
+  xrpPublicKey:
+    '03E25AA05BC7F5BD0025C4622826426E0804DF1A7DA16CDE793AC1C7CC17275DD4',
 };

@@ -29,6 +29,7 @@ export const environment: Environment = {
   hideXrpBalance: false,
   autofundXrp: true,
   autofundXrpAmount: 11,
-  autofundAccountPin: "K3VG-M@YQF9gzjq.DGW!",
-  xrpPublicKey: "028E00428D3EC7633234CF1047913524D03CE1FD122227DFD9CDD0967429758FE3"
+  autofundAccountPin: 'K3VG-M@YQF9gzjq.DGW!',
+  xrpPublicKey:
+    '028E00428D3EC7633234CF1047913524D03CE1FD122227DFD9CDD0967429758FE3',
 };

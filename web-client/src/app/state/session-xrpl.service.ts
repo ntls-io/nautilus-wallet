@@ -10,15 +10,20 @@ import {
   uint8ArrayToHex,
 } from 'src/app/services/xrpl.utils';
 import { SessionService } from 'src/app/state/session.service';
+import {
+  assetAmountXrp,
+  convertFromAssetAmountXrpToLedger,
+} from 'src/app/utils/assets/assets.xrp';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
-import { ifDefined } from 'src/helpers/helpers';
-import { 
-  TransactionSigned, 
-  TransactionToSign, 
-  SignTransactionResult, 
-  SignTransaction, 
+import { environment } from 'src/environments/environment';
+import { ifDefined, never } from 'src/helpers/helpers';
+import {
+  SignTransaction,
+  SignTransactionResult,
+  TransactionSigned,
+  TransactionToSign,
 } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
@@ -26,14 +31,6 @@ import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
-import { environment } from 'src/environments/environment';
-import { never } from 'src/helpers/helpers';
-
-
-import { 
-  assetAmountXrp, 
-  convertFromAssetAmountXrpToLedger 
-} from 'src/app/utils/assets/assets.xrp';
 
 /**
  * This service manages session state and operations related to the XRP ledger.
@@ -132,15 +129,13 @@ export class SessionXrplService {
     return txResponse;
   }
 
-
   // Prepare transaction to autoload a new wallet with funds
   async sendAutoFunds(
     receiverId: string,
     amount: number
   ): Promise<xrpl.TxResponse> {
-
     const public_key_hex = environment.xrpPublicKey;
-    const wallet_id = environment.xrpIssuer;
+    const issuer_id = environment.xrpIssuer;
     const pin = environment.autofundAccountPin;
     // const pin = process.env.ISSUER_ENCLAVE_ACCESS;
 
@@ -154,14 +149,18 @@ export class SessionXrplService {
     );
 
     // const txResponse = await this.sendTransaction(preparedTx);
-    const txnSignedEncoded = await this.signXrplTransaction(preparedTx, public_key_hex, wallet_id, pin);
+    const txnSignedEncoded = await this.signXrplTransaction(
+      preparedTx,
+      public_key_hex,
+      issuer_id,
+      pin
+    );
 
     const txResponse = await this.submitTransaction(txnSignedEncoded);
     const txSucceeded = checkTxResponseSucceeded(txResponse);
 
     return txResponse;
   }
-
 
   async sendFundsCommissioned(
     receiverId: string,
@@ -471,9 +470,7 @@ export class SessionXrplService {
     sender?: string
   ): Promise<xrpl.Payment> {
     const { wallet } = this.sessionQuery.assumeActiveSession();
-    const senderId = sender
-      ? sender
-      : this.sessionQuery.assumeActiveSession().wallet.xrpl_account.address_base58;
+    const senderId = sender ? sender : wallet.xrpl_account.address_base58;
 
     return withLoggedExchange(
       'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
@@ -497,7 +494,7 @@ export class SessionXrplService {
 
     const wallet_hex_key = public_key_hex
       ? public_key_hex
-      : wallet.xrpl_account.public_key_hex
+      : wallet.xrpl_account.public_key_hex;
 
     const { txnBeingSigned, bytesToSignEncoded } = txnBeforeSign(
       txnUnsigned,
@@ -511,42 +508,42 @@ export class SessionXrplService {
       },
     };
 
-    const signed: TransactionSigned = await this.signTransaction(
-      transactionToSign,
-      wallet_id,
-      account_pin
-    );
+    try {
+      const signed: TransactionSigned =
+        await this.signTransaction(
+          transactionToSign,
+          wallet_id,
+          account_pin
+        );
 
-    if ('XrplTransactionSigned' in signed) {
-      const { signature_bytes } = signed.XrplTransactionSigned;
+      if ('XrplTransactionSigned' in signed) {
+        const { signature_bytes } = signed.XrplTransactionSigned;
 
-      return txnAfterSign(txnBeingSigned, uint8ArrayToHex(signature_bytes))
-        .txnSignedEncoded;
-    } else {
-
-      throw panic(
-        'SessionXrplService.sendTransaction: expected XrplTransactionSigned, got:',
-        signed
-      );
+        return txnAfterSign(txnBeingSigned, uint8ArrayToHex(signature_bytes))
+          .txnSignedEncoded;
+      } else {
+        throw panic(
+          'SessionXrplService.sendTransaction: expected XrplTransactionSigned, got:',
+          signed
+        );
+      }
+    } catch (err) {
+      console.log('Error in sessionService.signTransaction', err);
+      throw err;
     }
   }
 
-
-  async signTransaction(
+  protected async signTransaction(
     transaction_to_sign: TransactionToSign,
     wallet_id?: string,
-    account_pin?: string,
+    account_pin?: string
   ): Promise<TransactionSigned> {
     const { wallet, pin } = this.sessionQuery.assumeActiveSession();
     const active_wallet_id = wallet.wallet_id;
 
-    const wallet_id_tx = wallet_id
-      ? wallet_id
-      : active_wallet_id
+    const wallet_id_tx = wallet_id ? wallet_id : active_wallet_id;
 
-    const pin_tx = account_pin
-      ? account_pin
-      : pin
+    const pin_tx = account_pin ? account_pin : pin;
 
     const signRequest: SignTransaction = {
       auth_pin: pin_tx,
@@ -575,7 +572,6 @@ export class SessionXrplService {
     }
   }
 
-
   protected async submitTransaction(
     signedTransaction: string
   ): Promise<xrpl.TxResponse> {
@@ -586,7 +582,6 @@ export class SessionXrplService {
       signedTransaction
     );
   }
-
 
   /**
    * Helper: Sign, submit, and confirm the given transaction.
