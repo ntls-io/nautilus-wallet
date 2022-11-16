@@ -9,7 +9,6 @@ import {
   txnBeforeSign,
   uint8ArrayToHex,
 } from 'src/app/services/xrpl.utils';
-import { SessionService } from 'src/app/state/session.service';
 import {
   assetAmountXrp,
   convertFromAssetAmountXrpToLedger,
@@ -62,12 +61,12 @@ export type CommissionedTxResponse =
       mainTx: TransactionSuccess;
       commissionedTx: TransactionFailure;
     };
+
 @Injectable({ providedIn: 'root' })
 export class SessionXrplService {
   constructor(
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
-    private sessionService: SessionService,
     private enclaveService: EnclaveService,
     private xrplService: XrplService,
     private connectorQuery: ConnectorQuery
@@ -509,12 +508,11 @@ export class SessionXrplService {
     };
 
     try {
-      const signed: TransactionSigned =
-        await this.signTransaction(
-          transactionToSign,
-          wallet_id,
-          account_pin
-        );
+      const signed: TransactionSigned = await this.signTransaction(
+        transactionToSign,
+        wallet_id,
+        account_pin
+      );
 
       if ('XrplTransactionSigned' in signed) {
         const { signature_bytes } = signed.XrplTransactionSigned;
@@ -528,7 +526,7 @@ export class SessionXrplService {
         );
       }
     } catch (err) {
-      console.log('Error in sessionService.signTransaction', err);
+      console.log('Error in sessionXrplService.signTransaction', err);
       throw err;
     }
   }
@@ -552,7 +550,7 @@ export class SessionXrplService {
     };
 
     const signResult: SignTransactionResult = await withLoggedExchange(
-      'SessionService: EnclaveService.signTransaction:',
+      'SessionXrplService: EnclaveService.signTransaction:',
       async () => await this.enclaveService.signTransaction(signRequest),
       signRequest
     );
@@ -560,11 +558,14 @@ export class SessionXrplService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransaction: invalid auth', signResult);
+      throw panic(
+        'SessionXrplService.signTransaction: invalid auth',
+        signResult
+      );
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(
-        `SessionService.signTransaction failed: ${signResult.Failed}`,
+        `SessionXrplService.signTransaction failed: ${signResult.Failed}`,
         signResult
       );
     } else {
