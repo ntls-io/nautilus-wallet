@@ -1,0 +1,19 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "nautilus-wallet"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^11.1.0",
+    "cypress-cucumber-preprocessor": "^4.3.1"
+  }
+}
