@@ -8,12 +8,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
-import { SessionService } from 'src/app/state/session.service';
-import { SessionQuery } from 'src/app/state/session.query';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { SessionQuery } from 'src/app/state/session.query';
+import { SessionService } from 'src/app/state/session.service';
+import { environment } from 'src/environments/environment';
 import SwiperCore, { Pagination } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
-import { environment } from 'src/environments/environment';
 
 SwiperCore.use([Pagination]);
 
@@ -34,7 +34,7 @@ export class RegisterPage implements OnDestroy {
     private sessionService: SessionService,
     private router: Router,
     private sessionQuery: SessionQuery,
-    private sessionXrplService: SessionXrplService,
+    private sessionXrplService: SessionXrplService
   ) {
     this.registrationForm = this.generateFormGroup();
 
@@ -121,12 +121,10 @@ export class RegisterPage implements OnDestroy {
             autoFundAmount
           );
         }
-
       } catch (err) {
         // TODO: error handling
         console.log(err);
       }
-
     }
   }
 

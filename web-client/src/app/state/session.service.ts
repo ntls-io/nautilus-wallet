@@ -5,9 +5,7 @@ import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
-import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
-import { WalletDisplay } from 'src/schema/entities';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -80,7 +78,7 @@ export class SessionService {
       }
     } catch (err) {
       this.sessionStore.setError(err);
-      return 'error'
+      return 'error';
     }
   }
 
@@ -117,7 +115,6 @@ export class SessionService {
     }
   }
 
-
   /**
    * Sign a transaction using the active session's wallet.
    *
@@ -153,10 +150,7 @@ export class SessionService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic(
-        'SessionService.signTransaction: invalid auth',
-        signResult
-      );
+      throw panic('SessionService.signTransaction: invalid auth', signResult);
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(
@@ -167,7 +161,6 @@ export class SessionService {
       throw never(signResult);
     }
   }
-
 
   /**
    * Save the given Onfido check result to the active session's wallet.

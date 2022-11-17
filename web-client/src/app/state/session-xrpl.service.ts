@@ -9,6 +9,7 @@ import {
   txnBeforeSign,
   uint8ArrayToHex,
 } from 'src/app/services/xrpl.utils';
+import { SessionService } from 'src/app/state/session.service';
 import {
   assetAmountXrp,
   convertFromAssetAmountXrpToLedger,
@@ -17,20 +18,14 @@ import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { parseNumber } from 'src/app/utils/validators';
 import { environment } from 'src/environments/environment';
-import { ifDefined, never } from 'src/helpers/helpers';
-import {
-  SignTransaction,
-  SignTransactionResult,
-  TransactionSigned,
-  TransactionToSign,
-} from 'src/schema/actions';
+import { ifDefined } from 'src/helpers/helpers';
+import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
-import { SessionService } from 'src/app/state/session.service';
 
 /**
  * This service manages session state and operations related to the XRP ledger.
@@ -510,11 +505,12 @@ export class SessionXrplService {
     };
 
     try {
-      const signed: TransactionSigned = await this.sessionService.signTransaction(
-        transactionToSign,
-        wallet_id,
-        account_pin
-      );
+      const signed: TransactionSigned =
+        await this.sessionService.signTransaction(
+          transactionToSign,
+          wallet_id,
+          account_pin
+        );
 
       if ('XrplTransactionSigned' in signed) {
         const { signature_bytes } = signed.XrplTransactionSigned;
@@ -532,8 +528,6 @@ export class SessionXrplService {
       throw err;
     }
   }
-
-
 
   protected async submitTransaction(
     signedTransaction: string
