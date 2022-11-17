@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
 
 export interface SetupState {
-  code: string;
+  tokenSymbol: string;
   tokenIssuer: string;
   xrpIssuer: string;
   ledger: string;
@@ -10,7 +10,7 @@ export interface SetupState {
 }
 
 export const createInitialState = (): SetupState => ({
-  code: '',
+  tokenSymbol: '',
   tokenIssuer: '',
   xrpIssuer: '',
   ledger: '',
