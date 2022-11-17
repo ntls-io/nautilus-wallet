@@ -133,8 +133,6 @@ export class SessionXrplService {
     const public_key_hex = environment.autofundXrpPublicKey;
     const issuer_id = environment.xrpIssuer;
     const pin = environment.autofundAccountPin;
-    // const pin = process.env.ISSUER_ENCLAVE_ACCESS;
-
     const autoFundAmount = assetAmountXrp(amount);
     const autoFundAmountXrp = convertFromAssetAmountXrpToLedger(autoFundAmount);
 
@@ -465,8 +463,7 @@ export class SessionXrplService {
     amount: xrpl.Payment['Amount'],
     sender?: string
   ): Promise<xrpl.Payment> {
-    const { wallet } = this.sessionQuery.assumeActiveSession();
-    const senderId = sender ? sender : wallet.xrpl_account.address_base58;
+    const senderId = sender ? sender : this.sessionQuery.assumeActiveSession().xrpl_account.address_base58;
 
     return withLoggedExchange(
       'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
