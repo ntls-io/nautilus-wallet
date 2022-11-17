@@ -92,7 +92,7 @@ export type Environment = {
 
   autofundAccountPin: string;
 
-  xrpPublicKey: string;
+  autofundXrpPublicKey: string;
 
   /**
    * Require a clear Onfido check status before enabling sending payments.

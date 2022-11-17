@@ -27,9 +27,9 @@ export const environment: Environment = {
   tokenSymbol: 'BTN',
   xrpIssuer: 'rpd17stoaELtzuhxEn4eAQcipXy2w8DEXQ',
   hideXrpBalance: true,
-  autofundXrp: true,
+  autofundXrp: false,
   autofundXrpAmount: 11,
   autofundAccountPin: 'L4b@Rr.ei7UAV26ZR!r6',
-  xrpPublicKey:
+  autofundXrpPublicKey:
     '03EE5AA3E95486138DFAD5C389E5A3E98A25DFC5BD331588C73EB30657BF7701E5',
 };

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { SearchService } from 'src/app/services/search.service';
-import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
 import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
+import { WalletDisplay } from 'src/schema/entities';
 import {
   CreateWallet,
   CreateWalletResult,
@@ -18,6 +18,10 @@ import {
   OpenWalletResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
+  SignTransaction,
+  SignTransactionResult,
+  TransactionSigned,
+  TransactionToSign,
 } from 'src/schema/actions';
 import { SessionStore } from './session.store';
 
@@ -44,7 +48,7 @@ export class SessionService {
     pin: string,
     auth_map: Map<string, string>,
     phone_number?: string
-  ): Promise<void> {
+  ): Promise<string> {
     try {
       const request: CreateWallet = {
         owner_name: name,
@@ -67,6 +71,7 @@ export class SessionService {
         } catch (err) {
           console.log(err);
         }
+        return wallet.wallet_id;
       } else if ('Failed' in result) {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);
@@ -75,6 +80,7 @@ export class SessionService {
       }
     } catch (err) {
       this.sessionStore.setError(err);
+      return 'error'
     }
   }
 
@@ -110,6 +116,58 @@ export class SessionService {
       throw never(result);
     }
   }
+
+
+  /**
+   * Sign a transaction using the active session's wallet.
+   *
+   * This takes care of wrapping {@link SignTransaction}
+   * and unwrapping {@link SignTransactionResult}.
+   *
+   * @see EnclaveService#signTransaction
+   */
+  async signTransaction(
+    transaction_to_sign: TransactionToSign,
+    wallet_id?: string,
+    account_pin?: string
+  ): Promise<TransactionSigned> {
+    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+    const active_wallet_id = wallet.wallet_id;
+
+    const wallet_id_tx = wallet_id ? wallet_id : active_wallet_id;
+
+    const pin_tx = account_pin ? account_pin : pin;
+
+    const signRequest: SignTransaction = {
+      auth_pin: pin_tx,
+      wallet_id: wallet_id_tx,
+      transaction_to_sign,
+    };
+
+    const signResult: SignTransactionResult = await withLoggedExchange(
+      'SessionService: EnclaveService.signTransaction:',
+      async () => await this.enclaveService.signTransaction(signRequest),
+      signRequest
+    );
+    if ('Signed' in signResult) {
+      return signResult.Signed;
+    } else if ('InvalidAuth' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic(
+        'SessionService.signTransaction: invalid auth',
+        signResult
+      );
+    } else if ('Failed' in signResult) {
+      this.sessionStore.setError({ signResult });
+      throw panic(
+        `SessionService.signTransaction failed: ${signResult.Failed}`,
+        signResult
+      );
+    } else {
+      throw never(signResult);
+    }
+  }
+
 
   /**
    * Save the given Onfido check result to the active session's wallet.

@@ -30,6 +30,7 @@ import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
+import { SessionService } from 'src/app/state/session.service';
 
 /**
  * This service manages session state and operations related to the XRP ledger.
@@ -67,6 +68,7 @@ export class SessionXrplService {
   constructor(
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
+    private sessionService: SessionService,
     private enclaveService: EnclaveService,
     private xrplService: XrplService,
     private connectorQuery: ConnectorQuery
@@ -133,7 +135,7 @@ export class SessionXrplService {
     receiverId: string,
     amount: number
   ): Promise<xrpl.TxResponse> {
-    const public_key_hex = environment.xrpPublicKey;
+    const public_key_hex = environment.autofundXrpPublicKey;
     const issuer_id = environment.xrpIssuer;
     const pin = environment.autofundAccountPin;
     // const pin = process.env.ISSUER_ENCLAVE_ACCESS;
@@ -144,7 +146,7 @@ export class SessionXrplService {
     const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
       autoFundAmountXrp,
-      environment.xrpIssuer
+      issuer_id
     );
 
     // const txResponse = await this.sendTransaction(preparedTx);
@@ -508,7 +510,7 @@ export class SessionXrplService {
     };
 
     try {
-      const signed: TransactionSigned = await this.signTransaction(
+      const signed: TransactionSigned = await this.sessionService.signTransaction(
         transactionToSign,
         wallet_id,
         account_pin
@@ -531,47 +533,7 @@ export class SessionXrplService {
     }
   }
 
-  protected async signTransaction(
-    transaction_to_sign: TransactionToSign,
-    wallet_id?: string,
-    account_pin?: string
-  ): Promise<TransactionSigned> {
-    const { wallet, pin } = this.sessionQuery.assumeActiveSession();
-    const active_wallet_id = wallet.wallet_id;
 
-    const wallet_id_tx = wallet_id ? wallet_id : active_wallet_id;
-
-    const pin_tx = account_pin ? account_pin : pin;
-
-    const signRequest: SignTransaction = {
-      auth_pin: pin_tx,
-      wallet_id: wallet_id_tx,
-      transaction_to_sign,
-    };
-
-    const signResult: SignTransactionResult = await withLoggedExchange(
-      'SessionXrplService: EnclaveService.signTransaction:',
-      async () => await this.enclaveService.signTransaction(signRequest),
-      signRequest
-    );
-    if ('Signed' in signResult) {
-      return signResult.Signed;
-    } else if ('InvalidAuth' in signResult) {
-      this.sessionStore.setError({ signResult });
-      throw panic(
-        'SessionXrplService.signTransaction: invalid auth',
-        signResult
-      );
-    } else if ('Failed' in signResult) {
-      this.sessionStore.setError({ signResult });
-      throw panic(
-        `SessionXrplService.signTransaction failed: ${signResult.Failed}`,
-        signResult
-      );
-    } else {
-      throw never(signResult);
-    }
-  }
 
   protected async submitTransaction(
     signedTransaction: string
