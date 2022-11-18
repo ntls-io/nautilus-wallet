@@ -25,11 +25,11 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
   tokenSymbol: 'FOO',
-  xrpIssuer: 'rf9vKLZVsozsaUgU533W4BUj87TgzTqyQE',
+  xrpIssuer: 'rGqPqDW7PDNtRPyjFQ7fR47ojc3nUA5uBY',
   hideXrpBalance: false,
-  autofundXrp: false,
+  autofundXrp: true,
   autofundXrpAmount: 11,
   autofundAccountPin: 'K3VG-M@YQF9gzjq.DGW!',
   autofundXrpPublicKey:
-    '028E00428D3EC7633234CF1047913524D03CE1FD122227DFD9CDD0967429758FE3',
+    '03D7A051D2562DE6C581BC923971F7665346432EB3FDA34E8569726973276B5F3F',
 };

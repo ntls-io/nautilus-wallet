@@ -463,7 +463,10 @@ export class SessionXrplService {
     amount: xrpl.Payment['Amount'],
     sender?: string
   ): Promise<xrpl.Payment> {
-    const senderId = sender ? sender : this.sessionQuery.assumeActiveSession().wallet.xrpl_account.address_base58;
+    const senderId = sender
+      ? sender
+      : this.sessionQuery.assumeActiveSession().wallet.xrpl_account
+          .address_base58;
 
     return withLoggedExchange(
       'SessionXrplService.sendFunds: XrplService.createUnsignedPaymentTransaction:',
