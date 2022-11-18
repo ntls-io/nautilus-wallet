@@ -19,7 +19,6 @@ export class AppComponent {
     this.platform
       .ready()
       .then(async () => {
-        await this.setupService.iniFirebase();
         await this.setupService.runSetup(environment.organization);
       })
       .finally(() => {

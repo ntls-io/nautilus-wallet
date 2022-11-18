@@ -54,6 +54,7 @@ export class SetupService {
   }
 
   async runSetup(org: any) {
+    await this.iniFirebase();
     await this.loadSettings(org);
     await this.loadTheme(org);
     await this.loadLogo(org);
