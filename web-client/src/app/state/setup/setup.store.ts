@@ -7,6 +7,7 @@ export interface SetupState {
   xrpIssuer: string;
   ledger: string;
   name: string;
+  logo: string | undefined;
 }
 
 export const createInitialState = (): SetupState => ({
@@ -15,6 +16,7 @@ export const createInitialState = (): SetupState => ({
   xrpIssuer: '',
   ledger: '',
   name: '',
+  logo: undefined,
 });
 
 @Injectable({ providedIn: 'root' })

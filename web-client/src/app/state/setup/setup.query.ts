@@ -10,6 +10,7 @@ export class SetupQuery extends Query<SetupState> {
   ledger = this.getValue().ledger.trim()
     ? { ...environment.xrplClient, server: this.getValue().ledger }
     : environment.xrplClient;
+  logo = this.select('logo');
 
   constructor(protected store: SetupStore) {
     super(store);

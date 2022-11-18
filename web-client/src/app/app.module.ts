@@ -1,9 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { FIREBASE_OPTIONS } from '@angular/fire/compat';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getStorage, provideStorage } from '@angular/fire/storage';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { Printer } from '@awesome-cordova-plugins/printer/ngx';
@@ -31,13 +27,9 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     AkitaNgRouterStoreModule,
     NgxPrinterModule.forRoot({ printOpenWindow: false }),
     ErrorHandlerModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     Printer,
   ],
   bootstrap: [AppComponent],
