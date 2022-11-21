@@ -13,8 +13,9 @@ export class SetupService {
 
   async iniFirebase() {
     if (this.platform.is('capacitor')) {
-      const option = await FirebaseApp.getOptions();
-      initializeApp(option);
+      await FirebaseApp.getOptions().then((options) => {
+        initializeApp(options);
+      });
       return;
     }
     initializeApp(environment.firebase);
@@ -23,18 +24,20 @@ export class SetupService {
   async loadSettings(org: string) {
     const store = getFirestore();
     const orgDoc = doc(store, 'organisations', org);
-    const docSnap = await getDoc(orgDoc);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      this.setupStore.update(data);
-    }
+    await getDoc(orgDoc).then((document) => {
+      if (document.exists()) {
+        this.setupStore.update(document.data());
+      } else {
+        console.log('No such document!');
+      }
+    });
   }
 
   async loadLogo(org: string) {
     const storage = getStorage();
     const logoRef = ref(storage, `${org}/assets/logo.png`);
 
-    getDownloadURL(logoRef).then((logo) => {
+    await getDownloadURL(logoRef).then((logo) => {
       this.setupStore.update({ logo });
     });
   }
@@ -43,8 +46,8 @@ export class SetupService {
     const storage = getStorage();
     const themeRef = ref(storage, `${org}/assets/theme.json`);
 
-    getBlob(themeRef).then((blob) => {
-      blob.text().then((text) => {
+    await getBlob(themeRef).then(async (blob) => {
+      await blob.text().then((text) => {
         const theme = JSON.parse(text);
         Object.keys(theme?.vars).forEach((k) => {
           document.body.style.setProperty(k, theme.vars[k]);
