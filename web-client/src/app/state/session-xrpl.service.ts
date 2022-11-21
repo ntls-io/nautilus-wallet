@@ -114,7 +114,8 @@ export class SessionXrplService {
   async sendFunds(
     receiverId: string,
     amount: xrpl.Payment['Amount'],
-    senderId?: string
+    senderId?: string,
+    senderPin?: string,
   ): Promise<xrpl.TxResponse> {
     const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
@@ -122,7 +123,7 @@ export class SessionXrplService {
       senderId
     );
 
-    const txResponse = await this.sendTransaction(preparedTx);
+    const txResponse = await this.sendTransaction(preparedTx, senderId, senderPin);
     await this.loadAccountData();
     return txResponse;
   }
@@ -162,7 +163,8 @@ export class SessionXrplService {
     receiverId: string,
     mainAmount: xrpl.Payment['Amount'],
     commissionAmount: xrpl.Payment['Amount'],
-    senderId?: string
+    senderId?: string,
+    senderPin?: string,
   ): Promise<CommissionedTxResponse> {
     const connectorWalletId = this.connectorQuery.getValue().walletId;
 
@@ -177,8 +179,11 @@ export class SessionXrplService {
       mainAmount,
       senderId
     );
-
-    const signedMainTxn = await this.signXrplTransaction(mainTxnUnsigned);
+    let wallet_hex_key;
+    if (senderId) {
+      wallet_hex_key = await this.sessionService.getXrplWalletPublicKey(senderId);
+    }
+    const signedMainTxn = await this.signXrplTransaction(mainTxnUnsigned, wallet_hex_key, senderId, senderPin);
 
     // Only submit commission transaction once the main transaction have succeeded.
     // There is currently no way to submit 2 transactions as an atomic unit with XRPL
@@ -198,11 +203,12 @@ export class SessionXrplService {
     const commissionTxnUnsigned: xrpl.Payment =
       await this.prepareUnsignedTransaction(
         connectorWalletId,
-        commissionAmount
+        commissionAmount,
+        senderId
       );
 
     const signedCommissionTxn = await this.signXrplTransaction(
-      commissionTxnUnsigned
+      commissionTxnUnsigned, wallet_hex_key, senderId, senderPin
     );
 
     const commissionTxResponse = await this.submitTransaction(
@@ -550,11 +556,22 @@ export class SessionXrplService {
    * NOTE: This does not check for success: the caller is responsible for that.
    */
   protected async sendTransaction(
-    txnUnsigned: xrpl.Transaction
+    txnUnsigned: xrpl.Transaction,
+    sender?: string,
+    account_pin?: string,
   ): Promise<xrpl.TxResponse> {
-    const txnSignedEncoded = await this.signXrplTransaction(txnUnsigned);
-    const txResponse = await this.submitTransaction(txnSignedEncoded);
+    if (sender) {
+      const public_key_hex = await this.sessionService.getXrplWalletPublicKey(sender);
+      const txnSignedEncoded = await this.signXrplTransaction(txnUnsigned, public_key_hex, sender, account_pin);
+      const txResponse = await this.submitTransaction(txnSignedEncoded);
+      const txSucceeded = checkTxResponseSucceeded(txResponse);
+      return txResponse;
+    } else {
+      const txnSignedEncoded = await this.signXrplTransaction(txnUnsigned, sender);
+      const txResponse = await this.submitTransaction(txnSignedEncoded);
+      const txSucceeded = checkTxResponseSucceeded(txResponse);
+      return txResponse;
+    }
 
-    return txResponse;
   }
 }

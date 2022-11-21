@@ -24,6 +24,7 @@ import {
   TransactionToSign,
 } from 'src/schema/actions';
 import { SessionStore } from './session.store';
+import {XrplPublicKeyHex} from '../../schema/types';
 
 /**
  * This service manages session state and operations associated with the wallet enclave.
@@ -122,7 +123,7 @@ export class SessionService {
    *
    * @see EnclaveService#getXrplWallet
    */
-  async getXrplWalletPublicKey(walletId: string): Promise<string> {
+  async getXrplWalletPublicKey(walletId: string): Promise<XrplPublicKeyHex> {
     const request: GetXrplWallet = { wallet_id: walletId };
     const result: GetXrplWalletResult = await this.enclaveService.getXrplWallet(
       request
