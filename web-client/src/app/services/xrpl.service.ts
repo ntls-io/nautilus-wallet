@@ -126,6 +126,7 @@ export class XrplService {
       TransactionType: 'Payment',
       Amount: amount,
       Destination: toAddress,
+      DestinationTag: 0,
     };
     return await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
