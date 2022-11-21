@@ -8,7 +8,10 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
+import { environment } from 'src/environments/environment';
 import SwiperCore, { Pagination } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 
@@ -29,7 +32,9 @@ export class RegisterPage implements OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private sessionService: SessionService,
-    private router: Router
+    private router: Router,
+    private sessionQuery: SessionQuery,
+    private sessionXrplService: SessionXrplService
   ) {
     this.registrationForm = this.generateFormGroup();
 
@@ -97,13 +102,25 @@ export class RegisterPage implements OnDestroy {
       const { firstName, lastName, pin } = this.registrationForm.value;
 
       try {
-        await this.sessionService.createWallet(
+        const wallet_id: string = await this.sessionService.createWallet(
           firstName + ' ' + lastName,
           pin,
           answers,
           phoneNumber
         );
         this.router.navigate(['/print-wallet']);
+
+        // Autofund the account on creation
+        const autoFundBool = environment.autofundXrp;
+        const autoFundAmount = environment.autofundXrpAmount;
+
+        if (autoFundBool) {
+          await this.sessionXrplService.sendAutoFunds(
+            // wallet.xrpl_account.address_base58,
+            wallet_id,
+            autoFundAmount
+          );
+        }
       } catch (err) {
         // TODO: error handling
         console.log(err);
