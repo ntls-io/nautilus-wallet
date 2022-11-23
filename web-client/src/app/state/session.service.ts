@@ -23,8 +23,8 @@ import {
   TransactionSigned,
   TransactionToSign,
 } from 'src/schema/actions';
+import { XrplPublicKeyHex } from '../../schema/types';
 import { SessionStore } from './session.store';
-import {XrplPublicKeyHex} from '../../schema/types';
 
 /**
  * This service manages session state and operations associated with the wallet enclave.

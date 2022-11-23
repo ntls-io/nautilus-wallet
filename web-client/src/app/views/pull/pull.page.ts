@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {LoadingController, NavController} from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
@@ -11,7 +11,9 @@ import { SessionQuery } from 'src/app/state/session.query';
 import { SessionStore } from 'src/app/state/session.store';
 import {
   AssetAmount,
-  assetAmountFromBase, formatAssetAmount, formatAssetSymbol,
+  assetAmountFromBase,
+  formatAssetAmount,
+  formatAssetSymbol,
   getAssetCommission,
 } from 'src/app/utils/assets/assets.common';
 import {
@@ -26,15 +28,15 @@ import {
   convertFromAssetAmountXrplTokenToLedger,
   isAssetAmountXrplToken,
 } from 'src/app/utils/assets/assets.xrp.token';
-import { never } from 'src/helpers/helpers';
-import { Payment, TxResponse } from 'xrpl';
-import {TransactionConfirmation} from '../../services/algosdk.utils';
 import { environment } from 'src/environments/environment';
-import {checkTxResponseSucceeded} from '../../services/xrpl.utils';
-import {panic} from '../../utils/errors/panic';
+import { never } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
-import {withLoadingOverlayOpts} from '../../utils/loading.helpers';
-import {SwalHelper} from '../../utils/notification/swal-helper';
+import { Payment, TxResponse } from 'xrpl';
+import { TransactionConfirmation } from '../../services/algosdk.utils';
+import { checkTxResponseSucceeded } from '../../services/xrpl.utils';
+import { panic } from '../../utils/errors/panic';
+import { withLoadingOverlayOpts } from '../../utils/loading.helpers';
+import { SwalHelper } from '../../utils/notification/swal-helper';
 
 @Component({
   selector: 'app-pull',
@@ -59,7 +61,7 @@ export class PullPage implements OnInit {
     private connectorQuery: ConnectorQuery,
     private sessionXrplService: SessionXrplService,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper,
+    private notification: SwalHelper
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state?.address) {
@@ -102,7 +104,7 @@ export class PullPage implements OnInit {
     } else {
       const currency = environment.tokenSymbol;
       const issuer = environment.tokenIssuer;
-      this.amount = assetAmountXrplToken(amount, { currency, issuer});
+      this.amount = assetAmountXrplToken(amount, { currency, issuer });
     }
     // add case where selected currency is token
     this.isPinEntryOpen = true;
@@ -145,7 +147,7 @@ export class PullPage implements OnInit {
         amountMinusCommision,
         commissionAmount,
         senderAddress,
-        senderPin,
+        senderPin
       );
     } else {
       return {
@@ -153,7 +155,7 @@ export class PullPage implements OnInit {
           receiverAddress,
           mainAmount,
           senderAddress,
-          senderPin,
+          senderPin
         ),
       };
     }
@@ -232,12 +234,12 @@ export class PullPage implements OnInit {
   }
 
   protected notifySuccess({
-                            amount,
-                            address,
-                            txId,
-                            timestamp,
-                            txUrlPrefix,
-                          }: {
+    amount,
+    address,
+    txId,
+    timestamp,
+    txUrlPrefix,
+  }: {
     amount: string;
     address: string;
     txId: string;
@@ -268,8 +270,8 @@ export class PullPage implements OnInit {
   }
 
   protected async notifyXrplFailure({
-                                      resultCode,
-                                    }: {
+    resultCode,
+  }: {
     resultCode: xrpl.TransactionMetadata['TransactionResult'];
   }): Promise<void> {
     const categoryLocalError = resultCode.startsWith('tel');
@@ -288,5 +290,3 @@ export class PullPage implements OnInit {
     });
   }
 }
-
-
