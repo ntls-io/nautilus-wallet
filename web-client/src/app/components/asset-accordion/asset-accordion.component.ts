@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
-import { SetupQuery } from 'src/app/state/setup';
 import { environment } from 'src/environments/environment';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 
@@ -14,19 +13,14 @@ export class AssetAccordionComponent implements OnInit {
   isOpting = false;
   tokenSymbol = environment.tokenSymbol;
 
-  constructor(
-    private sessionXrplService: SessionXrplService,
-    private setupQuery: SetupQuery
-  ) {}
+  constructor(private sessionXrplService: SessionXrplService) {}
 
   ngOnInit() {}
 
   async optin(currency: string) {
-    const issuer = this.setupQuery.tokenIssuer;
-
     const limitAmount: IssuedCurrencyAmount = {
       currency,
-      issuer,
+      issuer: environment.tokenIssuer,
       value: '10000',
     };
 

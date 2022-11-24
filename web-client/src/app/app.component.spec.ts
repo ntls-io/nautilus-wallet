@@ -1,7 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import { FIREBASE_OPTIONS } from '@angular/fire/compat';
-import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -9,9 +7,6 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
-      ],
     }).compileComponents();
   }));
 
