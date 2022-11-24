@@ -38,7 +38,7 @@ export class TransferFundsPage implements OnInit {
     if (state) {
       this.transferType = state?.transferType;
     } else {
-      this.navCtrl.navigateRoot('wallet');
+      this.navCtrl.navigateRoot('');
     }
   }
 
