@@ -28,7 +28,7 @@ export const environment: Environment = {
   xrpIssuer: 'rL6H7GSU2BaNmyxbJRbUdVhSNCT1FD3Z7a',
   hideXrpBalance: true,
   autofundXrp: false,
-  autofundXrpAmount: 11,
+  autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:
     '03E25AA05BC7F5BD0025C4622826426E0804DF1A7DA16CDE793AC1C7CC17275DD4',
