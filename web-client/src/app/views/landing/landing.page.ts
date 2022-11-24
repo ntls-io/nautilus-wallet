@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { resetStores } from '@datorama/akita';
 import { ModalController, ViewDidEnter } from '@ionic/angular';
-import { SetupQuery } from 'src/app/state/setup';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -12,11 +11,9 @@ import { environment } from 'src/environments/environment';
 export class LandingPage implements OnInit, ViewDidEnter {
   firebasestorage =
     'https://firebasestorage.googleapis.com/v0/b/wallet-setup.appspot.com/o';
+  logo = `${this.firebasestorage}/${environment.organization}%2Fassets%2Flogo.png?alt=media`;
 
-  constructor(
-    private modalCtrl: ModalController,
-    public setupQuery: SetupQuery
-  ) {
+  constructor(private modalCtrl: ModalController) {
     checkResetStores();
   }
 

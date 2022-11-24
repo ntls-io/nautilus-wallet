@@ -35,8 +35,3 @@ npm-debug.log*
 /plugins
 /storybook-static
 /www
-
-# Firebase
-.firebase
-*-debug.log
-.runtimeconfig.json
