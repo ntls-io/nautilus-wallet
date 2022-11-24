@@ -32,7 +32,7 @@ export class AssetAccordionComponent implements OnInit {
 
     this.isOpting = true;
     await this.sessionXrplService
-      .createTrustline(limitAmount, false)
+      .createTrustline(limitAmount, true)
       .then((result) => {
         console.log(result);
       })

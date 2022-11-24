@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import {
+  faKeyboard,
+  faQrcode,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
 import {
   AlertController,
   ModalController,
@@ -26,6 +30,11 @@ export class SendFundsPage implements OnInit {
       title: 'Enter address manually',
       icon: faKeyboard,
       action: 'presentAddressModal',
+    },
+    {
+      title: 'Search for a wallet',
+      icon: faSearch,
+      action: 'presentSearchWallet',
     },
     // {
     //   title: 'Share my wallet address',
@@ -65,6 +74,10 @@ export class SendFundsPage implements OnInit {
     }
   }
 
+  async presentSearchWallet() {
+    await this.navCtrl.navigateForward('search-wallet');
+  }
+
   async execItemAction(action: ItemAction): Promise<void> {
     switch (action) {
       case 'presentScanner':
@@ -72,6 +85,9 @@ export class SendFundsPage implements OnInit {
         break;
       case 'presentAddressModal':
         await this.presentAddressModal();
+        break;
+      case 'presentSearchWallet':
+        await this.presentSearchWallet();
         break;
       default:
         break;
@@ -82,4 +98,7 @@ export class SendFundsPage implements OnInit {
 // Customise ActionItem for this page with an 'action' field:
 
 type SendFundsActionItem = ActionItem & { action: ItemAction };
-type ItemAction = 'presentScanner' | 'presentAddressModal';
+type ItemAction =
+  | 'presentScanner'
+  | 'presentAddressModal'
+  | 'presentSearchWallet';
