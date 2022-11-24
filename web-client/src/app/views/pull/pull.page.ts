@@ -34,7 +34,7 @@ import * as xrpl from 'xrpl';
 import { Payment, TxResponse } from 'xrpl';
 import { TransactionConfirmation } from '../../services/algosdk.utils';
 import { checkTxResponseSucceeded } from '../../services/xrpl.utils';
-import { panic } from '../../utils/errors/panic';
+import { defined, panic } from '../../utils/errors/panic';
 import { withLoadingOverlayOpts } from '../../utils/loading.helpers';
 import { SwalHelper } from '../../utils/notification/swal-helper';
 
@@ -45,10 +45,10 @@ import { SwalHelper } from '../../utils/notification/swal-helper';
 })
 export class PullPage implements OnInit {
   isPinEntryOpen = false;
-  senderAddress = '';
+  senderAddress: string | undefined;
   selectedCurrency = 'XRP';
 
-  amount!: AssetAmountXrp | AssetAmountXrplToken;
+  amount: AssetAmountXrp | AssetAmountXrplToken | undefined;
 
   balance: AssetAmount | undefined;
   maxAmount = 1000000000;
@@ -106,19 +106,19 @@ export class PullPage implements OnInit {
       const issuer = environment.tokenIssuer;
       this.amount = assetAmountXrplToken(amount, { currency, issuer });
     }
-    // add case where selected currency is token
     this.isPinEntryOpen = true;
   }
 
   async onPinConfirmed(pin: any) {
-    console.log(pin);
-    if (isAssetAmountXrp(this.amount) || isAssetAmountXrplToken(this.amount)) {
+    const amount = defined(this.amount);
+    const sender = defined(this.senderAddress);
+    if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
       const result = await withLoadingOverlayOpts(
         this.loadingCtrl,
         { message: 'Confirming Transaction' },
-        () => this.receiveXrpl(this.amount, this.senderAddress, pin)
+        () => this.receiveXrpl(amount, sender, pin)
       );
-      await this.notifyResult(result, this.amount, this.senderAddress);
+      await this.notifyResult(result, amount, sender);
     }
   }
 
