@@ -5,17 +5,15 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
-  firebase: {
-    projectId: '',
-    appId: '',
-    databaseURL: '',
-    storageBucket: '',
-    locationId: '',
-    apiKey: '',
-    authDomain: '',
-    messagingSenderId: '',
-    measurementId: '',
-  },
+  projectId: '',
+  appId: '',
+  databaseURL: '',
+  storageBucket: '',
+  apiKey: '',
+  authDomain: '',
+  messagingSenderId: '',
+  measurementId: '',
+
   production: false,
   organization: 'nautilus',
 

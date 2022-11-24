@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@capacitor-firebase/app';
 import { Platform } from '@ionic/angular';
-import { initializeApp } from 'firebase/app';
+import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { getBlob, getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { environment } from 'src/environments/environment';
@@ -18,7 +18,18 @@ export class SetupService {
       });
       return;
     }
-    initializeApp(environment.firebase);
+    const config: FirebaseOptions = {
+      projectId: environment.projectId,
+      appId: environment.appId,
+      databaseURL: environment.databaseURL,
+      storageBucket: environment.storageBucket,
+      apiKey: environment.apiKey,
+      authDomain: environment.authDomain,
+      messagingSenderId: environment.messagingSenderId,
+      measurementId: environment.measurementId,
+    };
+
+    initializeApp(config);
   }
 
   async loadSettings(org: string) {
