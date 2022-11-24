@@ -86,6 +86,14 @@ export type Environment = {
 
   hideXrpBalance: boolean;
 
+  autofundXrp: boolean;
+
+  autofundXrpAmount: number;
+
+  autofundAccountPin: string;
+
+  autofundXrpPublicKey: string;
+
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */

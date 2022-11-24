@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="ion-text-center p-2">
+      <ion-icon slot="start" name="wallet" size="large"></ion-icon>
+      <h1 class="font-semibold font-nasalization">Search wallet address</h1>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none" class="form-item">
+          <ion-item>
+            <ion-label position="stacked" for="firstName">Full Name</ion-label>
+            <ion-input placeholder="John Doe" [(ngModel)]="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked" for="firstName"
+              >Phone Number</ion-label
+            >
+            <ion-input
+              placeholder="+27721234567"
+              [(ngModel)]="phone_number"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button
+          shape="round"
+          expand="block"
+          color="primary"
+          (click)="searchWallet()"
+          >Search
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ng-container>
+    <hr class="bg-white" />
+    <ion-list lines="full" *ngIf="result !== null; else noResult">
+      <ion-item>
+        <ion-label
+          class="ion-text-wrap font-bold ion-text-center"
+          id="wallet_address"
+        >
+          {{result}}
+        </ion-label>
+      </ion-item>
+      <ion-button
+        shape="round"
+        expand="block"
+        color="primary"
+        (click)="copyAddress(result)"
+        >Copy Address
+      </ion-button>
+    </ion-list>
+    <ng-template #noResult>
+      <ion-list lines="full">
+        <ion-item>
+          <ion-label class="ion-text-wrap font-bold ion-text-center">
+            No Wallet Address found.
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </ng-container>
+</ion-content>

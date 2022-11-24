@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { MessagingService } from 'src/app/services/messaging.service';
+import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
@@ -31,7 +32,8 @@ export class SessionService {
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private searchService: SearchService
   ) {}
 
   /**
@@ -44,7 +46,7 @@ export class SessionService {
     pin: string,
     auth_map: Map<string, string>,
     phone_number?: string
-  ): Promise<void> {
+  ): Promise<string> {
     try {
       const request: CreateWallet = {
         owner_name: name,
@@ -58,6 +60,16 @@ export class SessionService {
       if ('Created' in result) {
         const wallet = result.Created;
         this.sessionStore.update({ wallet, pin });
+        try {
+          await this.searchService.insertWalletAddress({
+            wallet_id: wallet.wallet_id,
+            phone_number: wallet.phone_number,
+            owner_name: wallet.owner_name,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+        return wallet.wallet_id;
       } else if ('Failed' in result) {
         this.sessionStore.setError(result);
         throw panic('SessionService: createWallet failed', result);
@@ -66,6 +78,7 @@ export class SessionService {
       }
     } catch (err) {
       this.sessionStore.setError(err);
+      return 'error';
     }
   }
 
@@ -111,21 +124,28 @@ export class SessionService {
    * @see EnclaveService#signTransaction
    */
   async signTransaction(
-    transaction_to_sign: TransactionToSign
+    transaction_to_sign: TransactionToSign,
+    wallet_id?: string,
+    account_pin?: string
   ): Promise<TransactionSigned> {
     const { wallet, pin } = this.sessionQuery.assumeActiveSession();
+    const active_wallet_id = wallet.wallet_id;
+
+    const wallet_id_tx = wallet_id ? wallet_id : active_wallet_id;
+
+    const pin_tx = account_pin ? account_pin : pin;
 
     const signRequest: SignTransaction = {
-      auth_pin: pin,
-      wallet_id: wallet.wallet_id,
+      auth_pin: pin_tx,
+      wallet_id: wallet_id_tx,
       transaction_to_sign,
     };
+
     const signResult: SignTransactionResult = await withLoggedExchange(
       'SessionService: EnclaveService.signTransaction:',
       async () => await this.enclaveService.signTransaction(signRequest),
       signRequest
     );
-
     if ('Signed' in signResult) {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {

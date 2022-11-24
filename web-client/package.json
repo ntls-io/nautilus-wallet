@@ -80,6 +80,7 @@
     "inputmask": "^5.0.7",
     "ion-intl-tel-input": "^1.0.5",
     "ionic-selectable": "^4.9.0",
+    "mongoose": "6.6.3",
     "ngx-ion-simple-mask": "^0.9.0",
     "ngx-printer": "~1.1.0",
     "onfido-sdk-ui": "^6.20.1",
