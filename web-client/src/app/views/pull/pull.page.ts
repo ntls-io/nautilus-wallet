@@ -46,7 +46,9 @@ import { SwalHelper } from '../../utils/notification/swal-helper';
 export class PullPage implements OnInit {
   isPinEntryOpen = false;
   senderAddress: string | undefined;
-  selectedCurrency = 'XRP';
+  selectedCurrency = environment.hideXrpBalance
+    ? environment.tokenSymbol
+    : 'XRP';
 
   amount: AssetAmountXrp | AssetAmountXrplToken | undefined;
 
