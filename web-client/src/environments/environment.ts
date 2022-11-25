@@ -5,15 +5,17 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
-  projectId: '',
-  appId: '',
-  databaseURL: '',
-  storageBucket: '',
-  apiKey: '',
-  authDomain: '',
-  messagingSenderId: '',
-  measurementId: '',
-
+  firebase: {
+    projectId: 'wallet-setup',
+    appId: '1:907972056790:web:18c0095eccf21eedf15b77',
+    databaseURL:
+      'https://wallet-setup-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'wallet-setup.appspot.com',
+    apiKey: 'AIzaSyDPq5JcM2dVVYisvvqANjJipKInkMdy_zc',
+    authDomain: 'wallet-setup.firebaseapp.com',
+    messagingSenderId: '907972056790',
+    measurementId: 'G-TW4DGPTJ62',
+  },
   production: false,
   organization: 'nautilus',
 

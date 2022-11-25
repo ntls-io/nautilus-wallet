@@ -9,17 +9,16 @@ import * as xrpl from 'xrpl';
  * Common type declaration for environment files.
  */
 export type Environment = {
-  /**
-   * Firebase config.
-   */
-  projectId: string;
-  appId: string;
-  databaseURL: string;
-  storageBucket: string;
-  apiKey: string;
-  authDomain: string;
-  messagingSenderId: string;
-  measurementId: string;
+  firebase: {
+    projectId: string;
+    appId: string;
+    databaseURL: string;
+    storageBucket: string;
+    apiKey: string;
+    authDomain: string;
+    messagingSenderId: string;
+    measurementId: string;
+  };
   /**
    * Toggle Angular and libraries between production and development modes.
    */
