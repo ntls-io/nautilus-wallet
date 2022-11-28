@@ -7,7 +7,7 @@ import { OpenWalletGuard } from './open-wallet.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'landing',
+    redirectTo: 'bookmarks',
     pathMatch: 'full',
   },
   {
@@ -118,6 +118,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/search-wallet/search-wallet.module').then(
         (m) => m.SearchWalletPageModule
+      ),
+  },
+  {
+    path: 'bookmarks',
+    loadChildren: () =>
+      import('./views/bookmarks/bookmarks.module').then(
+        (m) => m.BookmarksPageModule
       ),
   },
 ];
