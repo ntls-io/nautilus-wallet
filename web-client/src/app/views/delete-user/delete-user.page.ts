@@ -165,7 +165,7 @@ export class DeleteUserPage implements OnInit {
   }
 
   deleteWalletAccount() {
-    this.deleteUserService.deleteWallet(environment.tokenIssuer);
+    this.deleteUserService.deleteWallet();
   }
 }
 
