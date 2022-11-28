@@ -10,6 +10,7 @@ import { NgxPrinterModule } from 'ngx-printer';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { AssetAccordionComponent } from 'src/app/components/asset-accordion/asset-accordion.component';
 import { BalanceSummaryCardComponent } from 'src/app/components/balance-summary-card/balance-summary-card.component';
+import { LogoutButtonComponent } from 'src/app/components/logout-button/logout-button.component';
 import { ProfileCardHorizontalComponent } from 'src/app/components/profile-card-horizontal/profile-card-horizontal.component';
 import { SecurityQuestionsComponent } from 'src/app/components/security-questions/security-questions.component';
 import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
@@ -21,6 +22,7 @@ import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
     SecurityQuestionsComponent,
     BalanceSummaryCardComponent,
     AssetAccordionComponent,
+    LogoutButtonComponent,
   ],
   imports: [
     IonicModule,
@@ -44,6 +46,7 @@ import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
     SecurityQuestionsComponent,
     BalanceSummaryCardComponent,
     AssetAccordionComponent,
+    LogoutButtonComponent,
   ],
   providers: [Printer],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
