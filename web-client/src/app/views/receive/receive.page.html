@@ -10,29 +10,36 @@
   <div class="ion-text-center">
     <h1 class="font-semibold font-nasalization">Receive</h1>
   </div>
-  <ion-card class="mx-3 my-0">
-    <ion-card-header class="ion-text-center">
-      <ion-text class="text-2xl font-bold" color="tertiary"
-        >Scan to pay me
-      </ion-text>
-    </ion-card-header>
-    <ion-card-content *ngIf="sessionQuery.walletId | async as walletId">
-      <qrcode
-        [qrdata]="walletId"
-        errorCorrectionLevel="H"
-        elementType="svg"
-        cssClass="children:w-full children:h-auto"
-        [margin]="2"
-      ></qrcode>
-    </ion-card-content>
-  </ion-card>
-  <ion-list>
-    <app-action-item
-      *ngFor="let item of actionItems"
-      [preTitle]="item.preTitle"
-      [title]="item.title"
-      [icon]="item.icon"
-      [disabled]="item.disabled"
-    ></app-action-item>
-  </ion-list>
+  <ion-grid *ngIf="sessionQuery.walletId | async as walletId">
+    <ion-row id="wallet-address-section">
+      <ion-col size="12">
+        <qrcode
+          [qrdata]="walletId"
+          errorCorrectionLevel="H"
+          elementType="svg"
+          cssClass="children:w-full children:h-auto"
+          [margin]="2"
+        ></qrcode>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <h2 class="font-nasalization">Your Wallet Address</h2>
+        <div class="border-dashed border-2 rounded p-3 my-2">
+          <ion-text class="font-bold">{{walletId}}</ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="wallet-address-copy">
+      <ion-col>
+        <ion-button
+          id="copy-button"
+          expand="block"
+          fill="outline"
+          shape="round"
+          (click)="copyAddress(walletId)"
+        >
+          <ion-icon name="copy-outline"></ion-icon> Copy address
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
