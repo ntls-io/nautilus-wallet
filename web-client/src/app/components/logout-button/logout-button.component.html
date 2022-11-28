@@ -1,0 +1,11 @@
+<ion-button
+  (click)="signOut()"
+  [fill]="title ? 'outline' : undefined"
+  [shape]="title ? 'round' : undefined"
+>
+  <ng-container *ngIf="title; else iconOnly"> Logout </ng-container>
+
+  <ng-template #iconOnly>
+    <ion-icon slot="icon-only" name="log-out"></ion-icon>
+  </ng-template>
+</ion-button>

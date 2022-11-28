@@ -48,7 +48,13 @@
 
   <ng-template #empty>
     <div class="px-2 ion-text-center">
-      <p>There are currently no assets in your wallet.</p>
+      <p>
+        {{
+          isLoading
+            ? "Retrieving Balances..."
+            : "There are currently no assets in your wallet."
+        }}
+      </p>
     </div>
   </ng-template>
 </div>

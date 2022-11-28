@@ -75,6 +75,7 @@
     "algosdk": "^1.19.0",
     "angularx-qrcode": "^13.0.1",
     "cordova-plugin-printer": "github:QuinnChrest/cordova-plugin-printer",
+    "firebase": "^9.14.0",
     "flag-icon-css": "^4.1.7",
     "google-libphonenumber": "^3.2.31",
     "inputmask": "^5.0.7",

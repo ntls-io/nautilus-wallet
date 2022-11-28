@@ -1,6 +1,17 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
+  firebase: {
+    projectId: 'wallet-setup',
+    appId: '1:907972056790:web:18c0095eccf21eedf15b77',
+    databaseURL:
+      'https://wallet-setup-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'wallet-setup.appspot.com',
+    apiKey: 'AIzaSyDPq5JcM2dVVYisvvqANjJipKInkMdy_zc',
+    authDomain: 'wallet-setup.firebaseapp.com',
+    messagingSenderId: '907972056790',
+    measurementId: 'G-TW4DGPTJ62',
+  },
   production: true,
   organization: 'palau',
 
@@ -27,7 +38,7 @@ export const environment: Environment = {
   tokenSymbol: 'PSC',
   xrpIssuer: 'rL6H7GSU2BaNmyxbJRbUdVhSNCT1FD3Z7a',
   hideXrpBalance: true,
-  autofundXrp: false,
+  autofundXrp: true,
   autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:

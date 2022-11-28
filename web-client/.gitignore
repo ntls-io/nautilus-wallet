@@ -40,3 +40,7 @@ resources/ios/**/*
 resources/android/**/*
 /resources/ios/**/*
 /resources/android/**/*
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
