@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { checkRippledErrorResponse } from 'src/app/services/xrpl.utils';
 import { defined } from 'src/app/utils/errors/panic';
-import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
+import { SetupQuery } from '../state/setup';
 
 /**
  * This service wraps an instance of the algosdk {@link xrpl.Client},
@@ -18,7 +18,7 @@ import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
   providedIn: 'root',
 })
 export class XrplService {
-  constructor() {
+  constructor(private setupQuery: SetupQuery) {
     // Call this once on construction as a smoke test.
     this.getClient();
   }
@@ -223,7 +223,12 @@ export class XrplService {
   }
 
   protected getClient(): xrpl.Client {
-    return getXrplClientFromEnvironment();
+    const xrplClient = this.setupQuery.ledger;
+    const { server, options } = defined(
+      xrplClient,
+      'environment.xrplClient not configured'
+    );
+    return new xrpl.Client(server, options);
   }
 }
 
@@ -231,12 +236,4 @@ export type Balance = {
   value: string;
   currency: string;
   issuer?: string;
-};
-
-const getXrplClientFromEnvironment = (): xrpl.Client => {
-  const { server, options } = defined(
-    environment.xrplClient,
-    'environment.xrplClient not configured'
-  );
-  return new xrpl.Client(server, options);
 };
