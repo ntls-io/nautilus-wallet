@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { BookmarksPageRoutingModule } from './bookmarks-routing.module';
-
 import { BookmarksPage } from './bookmarks.page';
 
 @NgModule({
@@ -13,8 +11,9 @@ import { BookmarksPage } from './bookmarks.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    BookmarksPageRoutingModule
+    BookmarksPageRoutingModule,
+    SharedModule,
   ],
-  declarations: [BookmarksPage]
+  declarations: [BookmarksPage],
 })
 export class BookmarksPageModule {}
