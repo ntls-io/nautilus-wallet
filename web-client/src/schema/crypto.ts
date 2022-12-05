@@ -84,7 +84,7 @@ export class DiffieHellman {
   protected ourPk?: PublicKey;
   protected x25519: X25519KeyAgreement = new X25519KeyAgreement();
 
-  protected constructor(context: Bytes = new Uint8Array(0), seed?: Seed) {
+  constructor(context: Bytes = new Uint8Array(0), seed?: Seed) {
     this.hkdfSalt = hashWhenTooLong(context);
     this.x25519 = new X25519KeyAgreement(seed);
   }
