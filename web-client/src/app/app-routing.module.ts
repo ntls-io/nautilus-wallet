@@ -7,7 +7,7 @@ import { OpenWalletGuard } from './open-wallet.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'bookmarks',
+    redirectTo: 'landing',
     pathMatch: 'full',
   },
   {
