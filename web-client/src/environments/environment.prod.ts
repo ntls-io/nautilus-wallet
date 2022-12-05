@@ -38,7 +38,7 @@ export const environment: Environment = {
   tokenSymbol: 'FOO',
   xrpIssuer: 'rGqPqDW7PDNtRPyjFQ7fR47ojc3nUA5uBY',
   hideXrpBalance: false,
-  autofundXrp: false,
+  autofundXrp: true,
   autofundXrpAmount: 50,
   autofundAccountPin: 'K3VG-M@YQF9gzjq.DGW!',
   autofundXrpPublicKey:

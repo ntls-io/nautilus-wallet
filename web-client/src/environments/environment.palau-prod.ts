@@ -38,7 +38,7 @@ export const environment: Environment = {
   tokenSymbol: 'PSC',
   xrpIssuer: 'rL6H7GSU2BaNmyxbJRbUdVhSNCT1FD3Z7a',
   hideXrpBalance: true,
-  autofundXrp: false,
+  autofundXrp: true,
   autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:
