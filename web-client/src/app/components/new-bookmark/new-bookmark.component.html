@@ -4,7 +4,7 @@
       <ion-icon slot="start" name="add-circle"></ion-icon>
       <ion-label>Add a recipient</ion-label>
     </ion-item>
-    <div slot="content">
+    <ion-list lines="none" slot="content">
       <ion-item-group>
         <ion-item>
           <ion-label position="stacked">Name</ion-label>
@@ -22,6 +22,6 @@
       <ion-button expand="full" class="m-0" (click)="createBookmark()">
         Click to add new bookmark
       </ion-button>
-    </div>
+    </ion-list>
   </ion-accordion>
 </ion-accordion-group>
