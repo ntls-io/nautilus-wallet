@@ -13,28 +13,41 @@ import { Bytes, Bytes32, WalletId } from './types';
 
 export class StartSgxSession {
   protected context: Bytes;
+  protected x25519: DiffieHellman;
 
-  protected constructor(wallet_id: WalletId, ctx: Bytes = new Uint8Array(0)) {
+  protected constructor(wallet_id: WalletId) {
     /*
      * Concatenate wallet id and supplied context into a combined context
      */
-    const wallet_id_bytes = new TextEncoder().encode(wallet_id);
-    this.context = new Uint8Array(wallet_id_bytes.length + ctx.length);
-    this.context.set(wallet_id_bytes);
-    this.context.set(ctx, ctx.length);
+    this.context = new TextEncoder().encode(wallet_id);
+    this.x25519 = DiffieHellman.new(this.context);
   }
 
-  static new = (wallet_id: WalletId, context?: Bytes): StartSgxSession =>
-    new StartSgxSession(wallet_id, context);
+  static new = (wallet_id: WalletId): StartSgxSession =>
+    new StartSgxSession(wallet_id);
+
+  /**
+   * Add on additional context
+   */
+  add_context = (ctx: Bytes): StartSgxSession => {
+    const oldCtx = this.context;
+    this.context = new Uint8Array(oldCtx.length + ctx.length);
+    this.context.set(oldCtx);
+    this.context.set(ctx, ctx.length);
+    return this;
+  };
+
+  /**
+   * The client public key.
+   */
+  our_public_key = (): Bytes32 => this.x25519.x25519_public_key();
 
   /**
    * Configure the session with a public key received from the enclave. This
    * method needs to be called before computing any MACs.
    */
-  start_session = (their_pk: PublicKey): SgxSession => {
-    const dh = DiffieHellman.new(this.context);
-    return new SgxSession(dh, their_pk);
-  };
+  start_session = (their_pk: PublicKey): SgxSession =>
+    new SgxSession(this.x25519, their_pk);
 }
 
 export class SgxSession {
