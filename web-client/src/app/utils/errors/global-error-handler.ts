@@ -19,6 +19,25 @@ export class GlobalErrorHandler implements ErrorHandler {
       return;
     }
 
+    if (
+      error.message.includes('SessionService.signTransaction: invalid auth')
+    ) {
+      console.warn('GlobalErrorHandler:', error);
+      this.zone.run(
+        async () =>
+          await this.notification.swal
+            .fire({
+              icon: 'error',
+              text: 'Incorrect PIN',
+            })
+            .then(() => {
+              // XXX: See also modal closing code in LandingPage
+              this.navCtrl.navigateRoot('/pull');
+            })
+      );
+      return;
+    }
+
     console.error('GlobalErrorHandler:', error);
     Sentry.captureException(error);
     this.zone.run(
