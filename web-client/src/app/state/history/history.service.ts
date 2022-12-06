@@ -1,16 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { XrplService } from 'src/app/services/xrpl.service';
 import { HistoryStore } from './history.store';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryService {
+  constructor(
+    private historyStore: HistoryStore,
+    private xrplService: XrplService
+  ) {}
 
-  constructor(private historyStore: HistoryStore, private http: HttpClient) {
+  async getTxList() {
+    await this.xrplService.getAccountTx().then(({ result }) => {
+      const { transactions } = result;
+      console.log(transactions);
+      this.historyStore.upsertMany(transactions);
+    });
   }
-
-  get() {
-    return this.http.get('').pipe(tap(entities => this.historyStore.set(entities)));
-  }
-
 }

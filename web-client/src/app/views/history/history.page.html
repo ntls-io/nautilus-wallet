@@ -5,5 +5,15 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item
+      *ngFor="let item of historyQuery.transactions| async"
+      class="app-item"
+    >
+      <ion-label>
+        <h2>{{item?.tx?.Account}}</h2>
+        <p>{{item?.tx?.date}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

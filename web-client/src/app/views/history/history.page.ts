@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CapacitorHttp, HttpResponse } from '@capacitor/core';
+import { HistoryQuery, HistoryService } from 'src/app/state/history';
 
 @Component({
   selector: 'app-history',
@@ -7,7 +7,10 @@ import { CapacitorHttp, HttpResponse } from '@capacitor/core';
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit {
-  constructor() {}
+  constructor(
+    private historyService: HistoryService,
+    public historyQuery: HistoryQuery
+  ) {}
 
   ngOnInit() {}
 
@@ -16,12 +19,6 @@ export class HistoryPage implements OnInit {
   }
 
   async getHistory() {
-    const options = {
-      url: 'https://dev.explorer.cbdc.xpring.dev/accounts/rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
-    };
-
-    const response: HttpResponse = await CapacitorHttp.get(options);
-
-    console.log(response);
+    await this.historyService.getTxList();
   }
 }

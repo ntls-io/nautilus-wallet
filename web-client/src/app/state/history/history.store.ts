@@ -6,12 +6,22 @@ export interface HistoryState extends EntityState<History> {}
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'history'
+  name: 'history',
+  idKey: 'seq',
+  resettable: true,
 })
 export class HistoryStore extends EntityStore<HistoryState> {
-
   constructor() {
     super();
   }
 
+  akitaPreUpdateEntity(
+    oldEntity: History,
+    newEntity: History
+  ): History & { seq: number | undefined } {
+    return {
+      ...newEntity,
+      seq: newEntity?.tx?.Sequence ?? oldEntity?.tx?.date,
+    };
+  }
 }

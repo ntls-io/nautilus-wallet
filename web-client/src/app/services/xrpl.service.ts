@@ -181,6 +181,21 @@ export class XrplService {
     );
   }
 
+  /**
+   * Retrieves a list of transactions that involved the specified account
+   *
+   * @see https://js.xrpl.org/interfaces/AccountTxRequest.html
+   */
+  async getAccountTx() {
+    return await this.withConnection(
+      async (client) =>
+        await client.request({
+          command: 'account_tx',
+          account: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+        })
+    );
+  }
+
   // For Reference: https://github.com/XRPLF/xrpl.js/blob/6e4868e6c7a03f0d48de1ddee5d9a88700ab5a7c/src/transaction/sign.ts#L54
   /*
   async submitTransaction(
