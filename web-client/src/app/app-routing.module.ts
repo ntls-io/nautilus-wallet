@@ -120,6 +120,10 @@ export const routes: Routes = [
         (m) => m.SearchWalletPageModule
       ),
   },
+  {
+    path: 'history',
+    loadChildren: () => import('./views/history/history.module').then( m => m.HistoryPageModule)
+  },
 ];
 
 @NgModule({
