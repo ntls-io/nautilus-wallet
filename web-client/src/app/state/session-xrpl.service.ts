@@ -23,6 +23,7 @@ import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
+import { SwalHelper } from '../utils/notification/swal-helper';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
@@ -66,7 +67,9 @@ export class SessionXrplService {
     private sessionService: SessionService,
     private enclaveService: EnclaveService,
     private xrplService: XrplService,
-    private connectorQuery: ConnectorQuery
+    private connectorQuery: ConnectorQuery,
+
+    private notification: SwalHelper
   ) {}
 
   /**
@@ -548,8 +551,18 @@ export class SessionXrplService {
         );
       }
     } catch (err) {
-      console.log('Error in sessionXrplService.signTransaction', err);
-      throw err;
+      if (
+        err instanceof Error &&
+        err.message.includes('SessionService.signTransaction: invalid auth')
+      ) {
+        await this.notification.swal.fire({
+          icon: 'error',
+          text: 'Invalid PIN',
+        });
+        throw new Error('Local error:');
+      } else {
+        throw err;
+      }
     }
   }
 

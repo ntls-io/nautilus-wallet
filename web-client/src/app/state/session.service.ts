@@ -5,6 +5,7 @@ import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
@@ -36,7 +37,9 @@ export class SessionService {
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
     private messagingService: MessagingService,
-    private searchService: SearchService
+    private searchService: SearchService,
+
+    private notification: SwalHelper
   ) {}
 
   /**
@@ -174,7 +177,7 @@ export class SessionService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransaction: invalid auth', signResult);
+      throw new Error('SessionService.signTransaction: invalid auth');
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(
