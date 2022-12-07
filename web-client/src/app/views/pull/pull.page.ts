@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
+import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
   CommissionedTxResponse,
@@ -28,15 +30,13 @@ import {
   convertFromAssetAmountXrplTokenToLedger,
   isAssetAmountXrplToken,
 } from 'src/app/utils/assets/assets.xrp.token';
+import { defined, panic } from 'src/app/utils/errors/panic';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
 import { Payment, TxResponse } from 'xrpl';
-import { TransactionConfirmation } from '../../services/algosdk.utils';
-import { checkTxResponseSucceeded } from '../../services/xrpl.utils';
-import { defined, panic } from '../../utils/errors/panic';
-import { withLoadingOverlayOpts } from '../../utils/loading.helpers';
-import { SwalHelper } from '../../utils/notification/swal-helper';
 
 @Component({
   selector: 'app-pull',
@@ -52,6 +52,15 @@ export class PullPage implements OnInit {
 
   amount: AssetAmountXrp | AssetAmountXrplToken | undefined;
 
+  balances = environment.hideXrpBalance
+    ? this.sessionQuery.xrplBalances.pipe(
+        map((balance) =>
+          balance?.filter(
+            (currency) => currency.assetDisplay.assetSymbol !== 'XRP'
+          )
+        )
+      )
+    : this.sessionQuery.xrplBalances;
   balance: AssetAmount | undefined;
   maxAmount = 1000000000;
 

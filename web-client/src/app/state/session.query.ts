@@ -110,27 +110,21 @@ export class SessionQuery extends Query<SessionState> {
   xrplBalances: Observable<AssetAmount[] | undefined> = this.select(
     ({ xrplBalances }) =>
       ifDefined(xrplBalances, (balances) =>
-        balances
-          .filter(
-            (balance) =>
-              (environment.hideXrpBalance && balance.currency !== 'XRP') ||
-              !environment.hideXrpBalance
-          )
-          .map(({ value, currency, issuer }): AssetAmount => {
-            const amount = defined(
-              parseNumber(value),
-              `SessionQuery.xrplBalances: bad number: ${value}`
-            );
-            return currency === 'XRP'
-              ? assetAmountXrp(amount)
-              : assetAmountXrplToken(amount, {
-                  currency,
-                  issuer: defined(
-                    issuer,
-                    `SessionQuery.xrplBalances: unexpected undefined issuer for XRPL token currency ${currency}`
-                  ),
-                });
-          })
+        balances.map(({ value, currency, issuer }): AssetAmount => {
+          const amount = defined(
+            parseNumber(value),
+            `SessionQuery.xrplBalances: bad number: ${value}`
+          );
+          return currency === 'XRP'
+            ? assetAmountXrp(amount)
+            : assetAmountXrplToken(amount, {
+                currency,
+                issuer: defined(
+                  issuer,
+                  `SessionQuery.xrplBalances: unexpected undefined issuer for XRPL token currency ${currency}`
+                ),
+              });
+        })
       )
   );
 
