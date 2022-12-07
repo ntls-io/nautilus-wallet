@@ -5,15 +5,15 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item
-      *ngFor="let item of historyQuery.transactions| async"
-      class="app-item"
-    >
+  <ion-list lines="inset">
+    <ion-item *ngFor="let item of historyQuery.transactions| async">
       <ion-label>
         <h2>{{item?.tx?.Account}}</h2>
-        <p>{{item?.tx?.date}}</p>
+        <p>{{item?.tx?.date | date : 'short'}}</p>
       </ion-label>
+      <ion-note slot="end" color="primary">
+        {{item?.tx?.Amount?.value | currency: 'FOO'}}
+      </ion-note>
     </ion-item>
   </ion-list>
 </ion-content>

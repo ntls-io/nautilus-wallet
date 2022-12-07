@@ -191,7 +191,7 @@ export class XrplService {
       async (client) =>
         await client.request({
           command: 'account_tx',
-          account: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
+          account: 'r3akVmwDcDjqPtsjbFbNkGH5dEAmMLn6EW',
         })
     );
   }

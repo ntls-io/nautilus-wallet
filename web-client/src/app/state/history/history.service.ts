@@ -12,8 +12,7 @@ export class HistoryService {
   async getTxList() {
     await this.xrplService.getAccountTx().then(({ result }) => {
       const { transactions } = result;
-      console.log(transactions);
-      this.historyStore.upsertMany(transactions);
+      this.historyStore.set(transactions);
     });
   }
 }

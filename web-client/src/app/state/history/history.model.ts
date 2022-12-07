@@ -1,9 +1,16 @@
 import { Transaction, TransactionMetadata } from 'xrpl';
-import { ResponseOnlyTxInfo } from 'xrpl/dist/npm/models/common';
 
 export interface History {
   meta: string | TransactionMetadata;
-  tx?: Transaction & ResponseOnlyTxInfo;
+  tx?: Transaction & {
+    Amount?: {
+      currency?: string;
+      value?: string;
+    };
+    date?: number;
+    hash?: string;
+    ledger_index?: number;
+  };
   validated: boolean;
 }
 
