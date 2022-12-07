@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Bookmark, BookmarkService } from 'src/app/state/bookmark';
 
 @Component({
   selector: 'app-new-bookmark',
@@ -6,15 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-bookmark.component.scss'],
 })
 export class NewBookmarkComponent implements OnInit {
-  bookmark = {
+  bookmark: Bookmark = {
     name: '',
     address: '',
   };
-  constructor() {}
+  constructor(private bookmarkService: BookmarkService) {}
 
   ngOnInit() {}
 
-  createBookmark() {
-    console.log('createBookmark');
+  async createBookmark() {
+    await this.bookmarkService.createBookmark(this.bookmark).then((result) => {
+      console.log(result);
+    });
   }
 }
