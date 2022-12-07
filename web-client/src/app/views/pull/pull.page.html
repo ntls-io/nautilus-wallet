@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pull Payment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-list lines="full" class="!p-0">
+            <ion-item-group>
+              <ion-item color="white" lines="none">
+                <ion-label>
+                  <h2 class="!font-bold">From:</h2>
+                </ion-label>
+
+                <ng-container
+                  *ngIf="sessionQuery.xrplBalances | async as balances"
+                >
+                  <ion-select
+                    [value]="selectedCurrency"
+                    (ionChange)="setCurrency($event)"
+                    slot="end"
+                    *ngIf="balances.length > 1"
+                    class="font-nasalization text-primary"
+                  >
+                    <ion-select-option
+                      [value]="option.assetDisplay.assetSymbol"
+                      *ngFor="let option of balances"
+                      class="font-bold font-nasalization"
+                    >
+                      {{option | assetSymbol}}
+                    </ion-select-option>
+                  </ion-select>
+                </ng-container>
+              </ion-item>
+              <ion-item color="white">
+                <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+                <ion-label class="ion-text-wrap">
+                  <p class="font-mono font-bold">{{senderAddress}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-item-group>
+            <ion-item-group *ngIf="sessionQuery.wallet | async as wallet">
+              <ion-item color="white" lines="none">
+                <ion-label>
+                  <h2 class="!font-bold">To:</h2>
+                </ion-label>
+              </ion-item>
+              <ion-item color="white" lines="none">
+                <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+                <ion-label class="ion-text-wrap">
+                  <h2 class="font-mono !font-bold">{{wallet.owner_name}}</h2>
+                  <p>{{wallet.wallet_id}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <app-pay-amount-form
+          (amountSubmitted)="onAmountSubmitted($event)"
+          [autofocus]="true"
+          [balance]="balance"
+          [maxAmount]="maxAmount"
+        ></app-pay-amount-form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
+        (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+      ></app-pin-entry>
+    </ion-content>
+  </ng-template>
+</ion-modal>

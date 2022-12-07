@@ -82,6 +82,10 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
     if (this.#paymentForm && (changes?.minAmount || changes?.maxAmount)) {
       this.amountControl.updateValueAndValidity();
     }
+    if (changes?.balance.previousValue) {
+      this.#paymentForm = this.initPaymentForm();
+      this.setInitialValues();
+    }
   }
 
   /** Check and emit submission. */

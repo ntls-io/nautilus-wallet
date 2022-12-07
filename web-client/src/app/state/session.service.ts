@@ -5,10 +5,13 @@ import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OnfidoCheckResult,
@@ -21,6 +24,7 @@ import {
   TransactionSigned,
   TransactionToSign,
 } from 'src/schema/actions';
+import { XrplPublicKeyHex } from '../../schema/types';
 import { SessionStore } from './session.store';
 
 /**
@@ -33,7 +37,9 @@ export class SessionService {
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
     private messagingService: MessagingService,
-    private searchService: SearchService
+    private searchService: SearchService,
+
+    private notification: SwalHelper
   ) {}
 
   /**
@@ -116,6 +122,27 @@ export class SessionService {
   }
 
   /**
+   * Get public key of an existing wallet address.
+   *
+   * @see EnclaveService#getXrplWallet
+   */
+  async getXrplWalletPublicKey(walletId: string): Promise<XrplPublicKeyHex> {
+    const request: GetXrplWallet = { wallet_id: walletId };
+    const result: GetXrplWalletResult = await this.enclaveService.getXrplWallet(
+      request
+    );
+
+    if ('Opened' in result) {
+      return result.Opened.public_key_hex;
+    } else if ('Failed' in result) {
+      console.error(result);
+      throw new Error(result.Failed);
+    } else {
+      throw never(result);
+    }
+  }
+
+  /**
    * Sign a transaction using the active session's wallet.
    *
    * This takes care of wrapping {@link SignTransaction}
@@ -150,7 +177,7 @@ export class SessionService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransaction: invalid auth', signResult);
+      throw new Error('SessionService.signTransaction: invalid auth');
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(
