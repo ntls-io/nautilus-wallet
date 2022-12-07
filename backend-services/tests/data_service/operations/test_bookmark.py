@@ -32,7 +32,7 @@ async def test_create_bookmark_success(mocker: MockerFixture) -> None:
         bookmark=Bookmark(name="test_name", address=WalletAddress("test_address")),
     )
     assert await create_bookmark(params) == CreateBookmarkResult(success=True)
-    mock_insert_one.assert_awaited_once_with(params.dict())
+    mock_insert_one.assert_awaited_once_with(params)
 
 
 @pytest.mark.asyncio
@@ -50,7 +50,7 @@ async def test_delete_bookmark_success(mocker: MockerFixture) -> None:
         bookmark=Bookmark(name="test_name", address=WalletAddress("test_address")),
     )
     assert await delete_bookmark(params) == DeleteBookmarkResult(success=True)
-    mock_delete_one.assert_awaited_once_with(filter=params.dict())
+    mock_delete_one.assert_awaited_once_with(filter=params)
 
 
 @pytest.mark.asyncio
