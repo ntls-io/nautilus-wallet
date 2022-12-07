@@ -120,6 +120,11 @@ export const routes: Routes = [
         (m) => m.SearchWalletPageModule
       ),
   },
+  {
+    path: 'pull',
+    loadChildren: () =>
+      import('./views/pull/pull.module').then((m) => m.PullPageModule),
+  },
 ];
 
 @NgModule({

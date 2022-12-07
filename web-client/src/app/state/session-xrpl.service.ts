@@ -23,6 +23,7 @@ import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
+import { SwalHelper } from '../utils/notification/swal-helper';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
@@ -66,7 +67,9 @@ export class SessionXrplService {
     private sessionService: SessionService,
     private enclaveService: EnclaveService,
     private xrplService: XrplService,
-    private connectorQuery: ConnectorQuery
+    private connectorQuery: ConnectorQuery,
+
+    private notification: SwalHelper
   ) {}
 
   /**
@@ -113,14 +116,21 @@ export class SessionXrplService {
 
   async sendFunds(
     receiverId: string,
-    amount: xrpl.Payment['Amount']
+    amount: xrpl.Payment['Amount'],
+    senderId?: string,
+    senderPin?: string
   ): Promise<xrpl.TxResponse> {
     const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
-      amount
+      amount,
+      senderId
     );
 
-    const txResponse = await this.sendTransaction(preparedTx);
+    const txResponse = await this.sendTransaction(
+      preparedTx,
+      senderId,
+      senderPin
+    );
     await this.loadAccountData();
     return txResponse;
   }
@@ -159,7 +169,9 @@ export class SessionXrplService {
   async sendFundsCommissioned(
     receiverId: string,
     mainAmount: xrpl.Payment['Amount'],
-    commissionAmount: xrpl.Payment['Amount']
+    commissionAmount: xrpl.Payment['Amount'],
+    senderId?: string,
+    senderPin?: string
   ): Promise<CommissionedTxResponse> {
     const connectorWalletId = this.connectorQuery.getValue().walletId;
 
@@ -171,10 +183,21 @@ export class SessionXrplService {
     }
     const mainTxnUnsigned: xrpl.Payment = await this.prepareUnsignedTransaction(
       receiverId,
-      mainAmount
+      mainAmount,
+      senderId
     );
-
-    const signedMainTxn = await this.signXrplTransaction(mainTxnUnsigned);
+    let wallet_hex_key;
+    if (senderId) {
+      wallet_hex_key = await this.sessionService.getXrplWalletPublicKey(
+        senderId
+      );
+    }
+    const signedMainTxn = await this.signXrplTransaction(
+      mainTxnUnsigned,
+      wallet_hex_key,
+      senderId,
+      senderPin
+    );
 
     // Only submit commission transaction once the main transaction have succeeded.
     // There is currently no way to submit 2 transactions as an atomic unit with XRPL
@@ -194,11 +217,15 @@ export class SessionXrplService {
     const commissionTxnUnsigned: xrpl.Payment =
       await this.prepareUnsignedTransaction(
         connectorWalletId,
-        commissionAmount
+        commissionAmount,
+        senderId
       );
 
     const signedCommissionTxn = await this.signXrplTransaction(
-      commissionTxnUnsigned
+      commissionTxnUnsigned,
+      wallet_hex_key,
+      senderId,
+      senderPin
     );
 
     const commissionTxResponse = await this.submitTransaction(
@@ -524,8 +551,18 @@ export class SessionXrplService {
         );
       }
     } catch (err) {
-      console.log('Error in sessionXrplService.signTransaction', err);
-      throw err;
+      if (
+        err instanceof Error &&
+        err.message.includes('SessionService.signTransaction: invalid auth')
+      ) {
+        await this.notification.swal.fire({
+          icon: 'error',
+          text: 'Invalid PIN',
+        });
+        throw new Error('Local error:');
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -546,11 +583,31 @@ export class SessionXrplService {
    * NOTE: This does not check for success: the caller is responsible for that.
    */
   protected async sendTransaction(
-    txnUnsigned: xrpl.Transaction
+    txnUnsigned: xrpl.Transaction,
+    sender?: string,
+    account_pin?: string
   ): Promise<xrpl.TxResponse> {
-    const txnSignedEncoded = await this.signXrplTransaction(txnUnsigned);
-    const txResponse = await this.submitTransaction(txnSignedEncoded);
-
-    return txResponse;
+    if (sender) {
+      const public_key_hex = await this.sessionService.getXrplWalletPublicKey(
+        sender
+      );
+      const txnSignedEncoded = await this.signXrplTransaction(
+        txnUnsigned,
+        public_key_hex,
+        sender,
+        account_pin
+      );
+      const txResponse = await this.submitTransaction(txnSignedEncoded);
+      const txSucceeded = checkTxResponseSucceeded(txResponse);
+      return txResponse;
+    } else {
+      const txnSignedEncoded = await this.signXrplTransaction(
+        txnUnsigned,
+        sender
+      );
+      const txResponse = await this.submitTransaction(txnSignedEncoded);
+      const txSucceeded = checkTxResponseSucceeded(txResponse);
+      return txResponse;
+    }
   }
 }

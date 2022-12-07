@@ -1,165 +1,139 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
-import { Observable, pluck } from 'rxjs';
-import { Payment } from 'src/app/components/pay/pay.component';
-import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
-import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
+import { firstValueFrom } from 'rxjs';
 import { ConnectorQuery } from 'src/app/state/connector';
-import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import {
   CommissionedTxResponse,
   SessionXrplService,
 } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
-import {
-  convertFromAssetAmountAsaToLedger,
-  isAssetAmountAsa,
-} from 'src/app/utils/assets/assets.algo.asa';
+import { SessionStore } from 'src/app/state/session.store';
 import {
   AssetAmount,
+  assetAmountFromBase,
   formatAssetAmount,
   formatAssetSymbol,
   getAssetCommission,
 } from 'src/app/utils/assets/assets.common';
 import {
+  assetAmountXrp,
   AssetAmountXrp,
   convertFromAssetAmountXrpToLedger,
   isAssetAmountXrp,
 } from 'src/app/utils/assets/assets.xrp';
 import {
+  assetAmountXrplToken,
   AssetAmountXrplToken,
   convertFromAssetAmountXrplTokenToLedger,
   isAssetAmountXrplToken,
 } from 'src/app/utils/assets/assets.xrp.token';
-import { panic } from 'src/app/utils/errors/panic';
-import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
-import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
-import { WalletId } from 'src/schema/types';
 import * as xrpl from 'xrpl';
-import { TxResponse } from 'xrpl';
+import { Payment, TxResponse } from 'xrpl';
+import { TransactionConfirmation } from '../../services/algosdk.utils';
+import { checkTxResponseSucceeded } from '../../services/xrpl.utils';
+import { defined, panic } from '../../utils/errors/panic';
+import { withLoadingOverlayOpts } from '../../utils/loading.helpers';
+import { SwalHelper } from '../../utils/notification/swal-helper';
 
 @Component({
-  selector: 'app-pay-page',
-  templateUrl: './pay.page.html',
-  styleUrls: ['./pay.page.scss'],
+  selector: 'app-pull',
+  templateUrl: './pull.page.html',
+  styleUrls: ['./pull.page.scss'],
 })
-export class PayPage implements OnInit {
-  /** @see PayAmountFormComponent.autofocus */
-  @Input() autofocus = true;
+export class PullPage implements OnInit {
+  isPinEntryOpen = false;
+  senderAddress: string | undefined;
+  selectedCurrency = environment.hideXrpBalance
+    ? environment.tokenSymbol
+    : 'XRP';
 
-  senderName: Observable<string> = this.sessionQuery.wallet.pipe(
-    filterNilValue(),
-    pluck('owner_name')
-  );
+  amount: AssetAmountXrp | AssetAmountXrplToken | undefined;
 
-  receiverAddress: WalletId | undefined;
-
-  algorandBalances: Observable<AssetAmount[]> =
-    this.sessionQuery.algorandBalances;
-
-  xrplBalances: Observable<AssetAmount[] | undefined> =
-    this.sessionQuery.xrplBalances;
-
-  onfidoCheckIsClear: Observable<boolean> =
-    this.sessionQuery.onfidoCheckIsClear;
+  balance: AssetAmount | undefined;
+  maxAmount = 1000000000;
 
   constructor(
+    public sessionQuery: SessionQuery,
+    private sessionStore: SessionStore,
     private router: Router,
     private navCtrl: NavController,
-    private sessionAlgorandService: SessionAlgorandService,
+    private connectorQuery: ConnectorQuery,
     private sessionXrplService: SessionXrplService,
-    public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper,
-    private connectorQuery: ConnectorQuery
+    private notification: SwalHelper
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state) {
-      this.receiverAddress = state.address;
+    if (state?.address) {
+      this.senderAddress = state.address;
     } else {
+      // this.navCtrl.navigateRoot('wallet/transfer-funds');
       this.navCtrl.pop();
     }
   }
 
-  ngOnInit() {}
-
-  async onPaymentSubmitted({
-    amount,
-    option: { receiverAddress },
-  }: Payment): Promise<void> {
-    const result = await withLoadingOverlayOpts(
-      this.loadingCtrl,
-      { message: 'Confirming Transaction' },
-      () => this.sendByLedgerType(amount, receiverAddress)
+  async getXrplBalance(currency: string): Promise<AssetAmount | undefined> {
+    const xrplBalances = await firstValueFrom(this.sessionQuery.xrplBalances);
+    const balance = xrplBalances?.find(
+      ({ assetDisplay }) => assetDisplay.assetSymbol === currency
     );
-    await this.notifyResult(result, amount, receiverAddress);
+    return balance;
   }
 
-  /**
-   * Send an amount to `receiverAddress` using the amount's ledger type and asset info.
-   *
-   * This currently handles:
-   *
-   * - Algorand: Algo & ASA
-   * - XRPL: XRP & tokens
-   *
-   * @todo Move this into an appropriate aggregated payment service somewhere?
-   */
-  protected async sendByLedgerType(
-    amount: AssetAmount,
-    receiverAddress: string
-  ): Promise<
-    | { algorandResult: TransactionConfirmation }
-    | { xrplResult: TxResponse }
-    | CommissionedTxResponse
-  > {
-    if (isAssetAmountAlgo(amount)) {
-      return {
-        algorandResult: await this.sessionAlgorandService.sendAlgos(
-          receiverAddress,
-          amount.amount
-        ),
-      };
-    } else if (isAssetAmountAsa(amount)) {
-      const { amount: amountInLedgerUnits, assetId } =
-        convertFromAssetAmountAsaToLedger(amount);
-      return {
-        algorandResult: await this.sessionAlgorandService.sendAssetFunds(
-          assetId,
-          receiverAddress,
-          amountInLedgerUnits
-        ),
-      };
-    } else if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
-      return this.sendXrpl(amount, receiverAddress);
-    } else {
-      throw panic('PayPage.sendAmount: unexpected amount', { amount });
+  ngOnInit() {
+    this.setBalanceLimit(this.selectedCurrency);
+  }
+
+  setCurrency(event: any) {
+    const { value } = event.target;
+    this.setBalanceLimit(value);
+    this.selectedCurrency = value;
+  }
+
+  async setBalanceLimit(currency: string) {
+    const balance = await this.getXrplBalance(currency);
+
+    if (balance) {
+      this.balance = assetAmountFromBase(this.maxAmount, balance);
     }
   }
 
-  protected convertXrpAmount(
-    amount: AssetAmountXrp | AssetAmountXrplToken
-  ): xrpl.Payment['Amount'] {
-    if (isAssetAmountXrp(amount)) {
-      return convertFromAssetAmountXrpToLedger(amount);
-    } else if (isAssetAmountXrplToken(amount)) {
-      return convertFromAssetAmountXrplTokenToLedger(amount);
+  async onAmountSubmitted(amount: number): Promise<void> {
+    if (this.selectedCurrency === 'XRP') {
+      this.amount = assetAmountXrp(amount);
     } else {
-      throw never(amount);
+      const currency = environment.tokenSymbol;
+      const issuer = environment.tokenIssuer;
+      this.amount = assetAmountXrplToken(amount, { currency, issuer });
+    }
+    this.isPinEntryOpen = true;
+  }
+
+  async onPinConfirmed(pin: any) {
+    const amount = defined(this.amount);
+    const sender = defined(this.senderAddress);
+    if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
+      const result = await withLoadingOverlayOpts(
+        this.loadingCtrl,
+        { message: 'Confirming Transaction' },
+        () => this.receiveXrpl(amount, sender, pin)
+      );
+      await this.notifyResult(result, amount, sender);
     }
   }
 
-  protected async sendXrpl(
+  protected async receiveXrpl(
     amount: AssetAmountXrp | AssetAmountXrplToken,
-    receiverAddress: string
+    senderAddress: string,
+    senderPin: string
   ): Promise<CommissionedTxResponse | { xrplResult: TxResponse }> {
     const mainAmount = this.convertXrpAmount(amount);
     const isConnector = !!this.connectorQuery.getValue().walletId;
+    const receiverAddress =
+      this.sessionQuery.assumeActiveSession().wallet.xrpl_account
+        .address_base58;
 
     if (isConnector) {
       const assetCommission = getAssetCommission(amount, isConnector) as
@@ -173,15 +147,31 @@ export class PayPage implements OnInit {
       return this.sessionXrplService.sendFundsCommissioned(
         receiverAddress,
         amountMinusCommision,
-        commissionAmount
+        commissionAmount,
+        senderAddress,
+        senderPin
       );
     } else {
       return {
         xrplResult: await this.sessionXrplService.sendFunds(
           receiverAddress,
-          mainAmount
+          mainAmount,
+          senderAddress,
+          senderPin
         ),
       };
+    }
+  }
+
+  protected convertXrpAmount(
+    amount: AssetAmountXrp | AssetAmountXrplToken
+  ): Payment['Amount'] {
+    if (isAssetAmountXrp(amount)) {
+      return convertFromAssetAmountXrpToLedger(amount);
+    } else if (isAssetAmountXrplToken(amount)) {
+      return convertFromAssetAmountXrplTokenToLedger(amount);
+    } else {
+      throw never(amount);
     }
   }
 
@@ -268,7 +258,7 @@ export class PayPage implements OnInit {
         text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
-              <p class="text-xs"><b>Receiver:</b> ${address}</p>
+              <p class="text-xs"><b>Sender:</b> ${address}</p>
               <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
               <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
             </div>`,
