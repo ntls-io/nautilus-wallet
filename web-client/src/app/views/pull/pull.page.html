@@ -19,9 +19,7 @@
                   <h2 class="!font-bold">From:</h2>
                 </ion-label>
 
-                <ng-container
-                  *ngIf="sessionQuery.xrplBalances | async as balances"
-                >
+                <ng-container *ngIf="this.balances | async as balances">
                   <ion-select
                     [value]="selectedCurrency"
                     (ionChange)="setCurrency($event)"
