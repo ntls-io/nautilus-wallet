@@ -19,6 +19,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       return;
     }
 
+    // ToDo (refactor): Do not skip specific errors in the global error handler.
     if (error.message.includes('Local error:')) {
       return;
     }
