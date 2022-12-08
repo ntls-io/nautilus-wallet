@@ -50,6 +50,7 @@
         detailIcon="chevron-forward-circle"
         class="app-item"
         [routerLink]="item.path"
+        [state]="item?.state"
         [disabled]="item.disabled"
       >
         <ion-icon slot="start" [name]="item.icon"></ion-icon>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { filterNilValue } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
@@ -39,6 +39,7 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
+import { WalletId } from 'src/schema/types';
 import * as xrpl from 'xrpl';
 import { TxResponse } from 'xrpl';
 
@@ -56,9 +57,7 @@ export class PayPage implements OnInit {
     pluck('owner_name')
   );
 
-  receiverAddress: Observable<string> = this.route.queryParams.pipe(
-    pluck('receiverAddress')
-  );
+  receiverAddress: WalletId | undefined;
 
   algorandBalances: Observable<AssetAmount[]> =
     this.sessionQuery.algorandBalances;
@@ -70,7 +69,7 @@ export class PayPage implements OnInit {
     this.sessionQuery.onfidoCheckIsClear;
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
     private navCtrl: NavController,
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
@@ -78,7 +77,14 @@ export class PayPage implements OnInit {
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
     private connectorQuery: ConnectorQuery
-  ) {}
+  ) {
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state) {
+      this.receiverAddress = state.address;
+    } else {
+      this.navCtrl.pop();
+    }
+  }
 
   ngOnInit() {}
 
