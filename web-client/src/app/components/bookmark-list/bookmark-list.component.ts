@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BookmarkQuery } from 'src/app/state/bookmark';
 
 @Component({
   selector: 'app-bookmark-list',
@@ -8,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BookmarkListComponent implements OnInit {
   @Input() bookmarks = [];
 
-  constructor() {}
+  constructor(public bookmarkQuery: BookmarkQuery) {}
 
   ngOnInit() {}
 

@@ -16,15 +16,12 @@ export class BookmarkService {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
 
     const data = {
-      method: 'CreateBookmark',
-      params: {
-        wallet_id,
-        bookmark,
-      },
+      wallet_id,
+      bookmark,
     };
 
     return await CapacitorHttp.post({
-      url: createUrlWith('data'),
+      url: createUrlWith('bookmark/create'),
       data,
     }).catch((error) => {
       console.log(error);
@@ -34,18 +31,13 @@ export class BookmarkService {
   async getBookmarks() {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
 
-    const data = {
-      method: 'GetBookmarks',
-      params: {
-        wallet_id,
-      },
-    };
-
-    return await CapacitorHttp.post({
-      url: createUrlWith('data'),
-      data,
-    }).catch((error) => {
-      console.log(error);
-    });
+    if (wallet_id) {
+      return await CapacitorHttp.get({
+        url: createUrlWith('bookmarks'),
+        params: { wallet_id },
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
   }
 }

@@ -4,11 +4,14 @@
       <h1 class="font-nasalization">Recipients list</h1>
     </ion-label>
   </ion-list-header>
-  <ion-item class="app-item">
+  <ion-item
+    class="app-item"
+    *ngFor="let bookmark of bookmarkQuery.selectAll() | async"
+  >
     <ion-icon slot="start" name="bookmark"></ion-icon>
     <ion-label>
-      <h2>bookmark?.name</h2>
-      <p>bookmark?.address</p>
+      <h2>{{ bookmark.name }}</h2>
+      <p>{{ bookmark?.address }}</p>
     </ion-label>
     <ion-buttons>
       <ion-button (click)="sendFund()">
