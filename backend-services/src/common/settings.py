@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 from pydantic.env_settings import SettingsSourceCallable
 
 
-class AppSettings(BaseSettings):
+class Settings(BaseSettings):
     """
     Application configuration settings.
 
