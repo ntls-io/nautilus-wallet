@@ -48,16 +48,16 @@ export class WalletPage implements OnInit {
       disabled: false,
     },
     {
-      title: 'Receive',
-      icon: 'qr-code',
-      path: '/wallet/receive',
-      disabled: false,
-    },
-    {
       title: 'Pull Payment',
       icon: 'cash',
       path: '/wallet/transfer-funds',
       state: { transferType: 'pull' },
+      disabled: false,
+    },
+    {
+      title: 'My Wallet Address',
+      icon: 'qr-code',
+      path: '/wallet/receive',
       disabled: false,
     },
   ];
