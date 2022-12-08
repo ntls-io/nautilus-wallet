@@ -1,11 +1,11 @@
-from common.settings import AppSettings
+from common.settings import Settings
 
 
-class MongoSettings(AppSettings):
+class MongoSettings(Settings):
     """
     MongoDB configuration settings.
     """
 
-    wallet_db_connection_string: str | None
+    max_list_length: int | None
     wallet_db_name: str | None
     wallet_db_bookmark_collection: str | None

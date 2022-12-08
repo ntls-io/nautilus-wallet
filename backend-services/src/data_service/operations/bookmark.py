@@ -11,10 +11,10 @@ from data_service.schema.actions import (
     GetBookmarksResult,
 )
 from data_service.schema.entities import Bookmark, BookmarkDocument
+from data_service.schema.types import Client
 from data_service.settings import MongoSettings
 
 mongo_settings = MongoSettings()
-client = AsyncIOMotorClient(mongo_settings.wallet_db_connection_string)
 
 
 def bookmark_collection(
@@ -24,7 +24,9 @@ def bookmark_collection(
     return db[settings.wallet_db_bookmark_collection]
 
 
-async def create_bookmark(params: CreateBookmark) -> CreateBookmarkResult:
+async def create_bookmark(
+    client: Client, params: CreateBookmark
+) -> CreateBookmarkResult:
     """
     Create a new bookmark.
     """
@@ -36,7 +38,9 @@ async def create_bookmark(params: CreateBookmark) -> CreateBookmarkResult:
     return CreateBookmarkResult(success=True)
 
 
-async def delete_bookmark(params: DeleteBookmark) -> DeleteBookmarkResult:
+async def delete_bookmark(
+    client: Client, params: DeleteBookmark
+) -> DeleteBookmarkResult:
     """
     Delete a specified bookmark.
     """
@@ -48,17 +52,18 @@ async def delete_bookmark(params: DeleteBookmark) -> DeleteBookmarkResult:
     return DeleteBookmarkResult(success=True)
 
 
-async def bookmarks(params: GetBookmarks) -> GetBookmarksResult:
+async def bookmarks(client: Client, params: GetBookmarks) -> GetBookmarksResult:
     """
     Retrieve a list of all bookmarks for a given user from the database.
     """
     collection = bookmark_collection(client, mongo_settings)
-    cursor = collection.find(filter=params.dict(exclude={"wallet_id"}))
+    cursor = collection.find(filter=params.dict())
     bookmark_list = []
 
     try:
         bookmark_list = [
-            Bookmark.parse_obj(doc["bookmark"]) for doc in await cursor.to_list()
+            Bookmark.parse_obj(doc["bookmark"])
+            for doc in await cursor.to_list(mongo_settings.max_list_length)
         ]
     # TODO(JP): more granular exception handling
     except Exception:  # noqa: BLE001
