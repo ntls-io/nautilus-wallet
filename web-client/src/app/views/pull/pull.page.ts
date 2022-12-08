@@ -50,6 +50,8 @@ export class PullPage implements OnInit {
     ? environment.tokenSymbol
     : 'XRP';
 
+  tokenSymbol = environment.tokenSymbol;
+  availableAccounts?: number;
   amount: AssetAmountXrp | AssetAmountXrplToken | undefined;
 
   balances = environment.hideXrpBalance
@@ -81,6 +83,9 @@ export class PullPage implements OnInit {
       // this.navCtrl.navigateRoot('wallet/transfer-funds');
       this.navCtrl.pop();
     }
+    this.balances.subscribe(
+      (balance) => (this.availableAccounts = balance?.length)
+    );
   }
 
   async getXrplBalance(currency: string): Promise<AssetAmount | undefined> {
