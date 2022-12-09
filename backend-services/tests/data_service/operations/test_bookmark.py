@@ -27,7 +27,6 @@ async def test_create_bookmark_success(mocker: MockerFixture) -> None:
         motor_asyncio.AsyncIOMotorCollection, "insert_one", new=mock_insert_one
     )
     client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
-    mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
 
     params = CreateBookmark(
         wallet_id=WalletAddress("test_id"),
@@ -48,7 +47,6 @@ async def test_delete_bookmark_success(mocker: MockerFixture) -> None:
         new=mock_delete_one,
     )
     client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
-    mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
 
     params = DeleteBookmark(
         wallet_id=WalletAddress("test_id"),
@@ -79,7 +77,6 @@ async def test_get_bookmarks_success(mocker: MockerFixture) -> None:
         new=mock_to_list,
     )
     client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
-    mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
 
     params = GetBookmarks(wallet_id=WalletAddress("test_id"))
     expected_bookmarks = [Bookmark.parse_obj(doc["bookmark"]) for doc in stored_docs]
