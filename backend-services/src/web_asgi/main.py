@@ -5,6 +5,7 @@ Entry point for the Nautilus Wallet web server.
 from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from common.types import WalletAddress
 from data_service.operations.bookmark import bookmarks, create_bookmark
 from data_service.operations.bookmark import delete_bookmark as data_delete_bookmark
 from data_service.schema.actions import (
@@ -12,7 +13,6 @@ from data_service.schema.actions import (
     CreateBookmarkResult,
     DeleteBookmark,
     DeleteBookmarkResult,
-    GetBookmarks,
     GetBookmarksResult,
 )
 from web_asgi.settings import AppSettings
@@ -23,8 +23,8 @@ app = FastAPI()
 
 
 @app.get("/bookmarks", response_model=GetBookmarksResult)
-async def get_bookmarks(request: GetBookmarks) -> GetBookmarksResult:
-    return await bookmarks(mongo_client, request)
+async def get_bookmarks(wallet_id: WalletAddress) -> GetBookmarksResult:
+    return await bookmarks(mongo_client, wallet_id)
 
 
 @app.post("/bookmark/create", response_model=CreateBookmarkResult)

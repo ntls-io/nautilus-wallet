@@ -2,12 +2,12 @@ import logging
 
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
+from common.types import WalletAddress
 from data_service.schema.actions import (
     CreateBookmark,
     CreateBookmarkResult,
     DeleteBookmark,
     DeleteBookmarkResult,
-    GetBookmarks,
     GetBookmarksResult,
 )
 from data_service.schema.entities import Bookmark, BookmarkDocument
@@ -52,17 +52,23 @@ async def delete_bookmark(
     return DeleteBookmarkResult(success=True)
 
 
-async def bookmarks(client: Client, params: GetBookmarks) -> GetBookmarksResult:
+async def bookmarks(client: Client, wallet_id: WalletAddress) -> GetBookmarksResult:
     """
     Retrieve a list of all bookmarks for a given user from the database.
     """
     collection = bookmark_collection(client, mongo_settings)
-    cursor = collection.find(filter=params.dict())
+    cursor = collection.find(filter={"wallet_id": wallet_id})
     bookmark_list = []
 
     try:
         bookmark_list = [
-            Bookmark.parse_obj(doc["bookmark"])
+            Bookmark.parse_obj(
+                {
+                    "id_": doc["_id"],
+                    "name": doc["bookmark"]["name"],
+                    "address": doc["bookmark"]["address"],
+                }
+            )
             for doc in await cursor.to_list(mongo_settings.max_bookmark_list_length)
         ]
     # TODO(JP): more granular exception handling

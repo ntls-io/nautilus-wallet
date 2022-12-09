@@ -12,7 +12,6 @@ from data_service.schema.actions import (
     CreateBookmarkResult,
     DeleteBookmark,
     DeleteBookmarkResult,
-    GetBookmarks,
     GetBookmarksResult,
 )
 from data_service.schema.entities import Bookmark
@@ -61,11 +60,13 @@ async def test_delete_bookmark_success(mocker: MockerFixture) -> None:
 async def test_get_bookmarks_success(mocker: MockerFixture) -> None:
     stored_docs = [
         {
-            "wallet_id": "test_id1",
+            "_id": "test_id1",
+            "wallet_id": "test_wallet_id",
             "bookmark": {"name": "test_name1", "address": "test_address1"},
         },
         {
-            "wallet_id": "test_id2",
+            "_id": "test_id2",
+            "wallet_id": "test_wallet_id",
             "bookmark": {"name": "test_name2", "address": "test_address2"},
         },
     ]
@@ -78,9 +79,18 @@ async def test_get_bookmarks_success(mocker: MockerFixture) -> None:
     )
     client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
 
-    params = GetBookmarks(wallet_id=WalletAddress("test_id"))
-    expected_bookmarks = [Bookmark.parse_obj(doc["bookmark"]) for doc in stored_docs]
-    assert await bookmarks(client, params) == GetBookmarksResult(
+    wallet_id = WalletAddress("test_id")
+    expected_bookmarks = [
+        Bookmark.parse_obj(
+            {
+                "id_": doc["_id"],
+                "name": doc["bookmark"]["name"],
+                "address": doc["bookmark"]["address"],
+            }
+        )
+        for doc in stored_docs
+    ]
+    assert await bookmarks(client, wallet_id) == GetBookmarksResult(
         bookmarks=expected_bookmarks
     )
     mock_to_list.assert_awaited_once_with(mock_settings.max_bookmark_list_length)
