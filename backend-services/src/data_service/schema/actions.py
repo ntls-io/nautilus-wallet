@@ -26,8 +26,9 @@ class DeleteBookmark(BaseModel):
     Bookmark deletion parameters.
     """
 
-    wallet_id: WalletAddress
-    bookmark: Bookmark
+    id_: str = Field(
+        title="Internal database id",
+    )
 
 
 class DeleteBookmarkResult(BaseModel):
@@ -35,7 +36,7 @@ class DeleteBookmarkResult(BaseModel):
     Bookmark deletion result.
     """
 
-    success: bool
+    success: bool = Field(title="Successful acknowledgement of delete request")
 
 
 class GetBookmarksResult(BaseModel):

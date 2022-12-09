@@ -45,9 +45,8 @@ async def delete_bookmark(
     Delete a specified bookmark.
     """
     collection = bookmark_collection(client, mongo_settings)
-    bookmark_to_delete = BookmarkDocument.parse_obj(params)
 
-    if not (await collection.delete_one(filter=bookmark_to_delete.dict())).acknowledged:
+    if not (await collection.delete_one(filter={"_id": params.id_})).acknowledged:
         return DeleteBookmarkResult(success=False)
     return DeleteBookmarkResult(success=True)
 

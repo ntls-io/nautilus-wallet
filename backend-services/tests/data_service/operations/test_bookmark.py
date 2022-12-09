@@ -47,13 +47,10 @@ async def test_delete_bookmark_success(mocker: MockerFixture) -> None:
     )
     client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
 
-    params = DeleteBookmark(
-        wallet_id=WalletAddress("test_id"),
-        bookmark=Bookmark(name="test_name", address=WalletAddress("test_address")),
-    )
+    params = DeleteBookmark(id_="test_id")
 
     assert await delete_bookmark(client, params) == DeleteBookmarkResult(success=True)
-    mock_delete_one.assert_awaited_once_with(filter=params)
+    mock_delete_one.assert_awaited_once_with(filter={"_id": params.id_})
 
 
 @pytest.mark.asyncio
