@@ -6,6 +6,6 @@ class MongoSettings(Settings):
     MongoDB configuration settings.
     """
 
-    max_list_length: int | None
+    max_bookmark_list_length: int | None
     wallet_db_name: str | None
     wallet_db_bookmark_collection: str | None

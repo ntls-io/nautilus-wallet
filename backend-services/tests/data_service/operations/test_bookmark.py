@@ -83,4 +83,4 @@ async def test_get_bookmarks_success(mocker: MockerFixture) -> None:
     assert await bookmarks(client, params) == GetBookmarksResult(
         bookmarks=expected_bookmarks
     )
-    mock_to_list.assert_awaited_once_with(mock_settings.max_list_length)
+    mock_to_list.assert_awaited_once_with(mock_settings.max_bookmark_list_length)

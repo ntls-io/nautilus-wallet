@@ -63,7 +63,7 @@ async def bookmarks(client: Client, params: GetBookmarks) -> GetBookmarksResult:
     try:
         bookmark_list = [
             Bookmark.parse_obj(doc["bookmark"])
-            for doc in await cursor.to_list(mongo_settings.max_list_length)
+            for doc in await cursor.to_list(mongo_settings.max_bookmark_list_length)
         ]
     # TODO(JP): more granular exception handling
     except Exception:  # noqa: BLE001
