@@ -1,16 +1,17 @@
 from typing import TypeAlias
 
-from pydantic import BaseModel, Field
+from odmantic import Model
+from pydantic import BaseModel
 
 from common.types import WalletAddress
 
 
-class Bookmark(BaseModel):
+class Bookmark(Model):
     """
     An address on the ledger bookmarked by the user.
     """
 
-    id_: str | None = Field(title="Internal database id")
+    wallet_id: WalletAddress
     name: str
     address: WalletAddress
 
