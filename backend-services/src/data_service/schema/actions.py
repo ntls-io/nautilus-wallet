@@ -1,20 +1,6 @@
-from enum import Enum
-from typing import TypeAlias
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, validator
 
 from common.types import WalletAddress
-from data_service.schema.entities import Bookmark, BookmarkList
-
-
-class ActionMethod(str, Enum):
-    """
-    Names of the various available methods.
-    """
-
-    CREATE_BOOKMARK = "CreateBookmark"
-    DELETE_BOOKMARK = "DeleteBookmark"
-    GET_BOOKMARKS = "GetBookmarks"
 
 
 class CreateBookmark(BaseModel):
@@ -23,15 +9,8 @@ class CreateBookmark(BaseModel):
     """
 
     wallet_id: WalletAddress
-    bookmark: Bookmark
-
-
-class CreateBookmarkResult(BaseModel):
-    """
-    Bookmark creation outcome.
-    """
-
-    success: bool
+    name: str
+    address: WalletAddress
 
 
 class DeleteBookmark(BaseModel):
@@ -39,42 +18,14 @@ class DeleteBookmark(BaseModel):
     Bookmark deletion parameters.
     """
 
-    wallet_id: WalletAddress
-    bookmark: Bookmark
+    delete_id: str
 
-
-class DeleteBookmarkResult(BaseModel):
-    """
-    Bookmark deletion result.
-    """
-
-    success: bool
-
-
-class GetBookmarks(BaseModel):
-    """
-    Bookmark retrieval parameters.
-    """
-
-    wallet_id: WalletAddress
-
-
-class GetBookmarksResult(BaseModel):
-    """
-    Contains a list of bookmarks when successful or `None` otherwise.
-    """
-
-    bookmarks: BookmarkList | None = Field(...)
-
-
-Response: TypeAlias = CreateBookmarkResult | DeleteBookmarkResult | GetBookmarksResult
-RequestParams: TypeAlias = CreateBookmark | DeleteBookmark | GetBookmarks
-
-
-class Action(BaseModel):
-    """
-    Representation of a method call to the data service.
-    """
-
-    method: ActionMethod
-    params: RequestParams
+    @validator("delete_id")
+    @classmethod
+    def valid_object_id_hex_representation(cls: type, v: str) -> str:
+        int(v, 16)
+        if len(v) != 24:
+            raise AssertionError(
+                f"expected a 24 character hexadecimal string but '{v}' has length {len(v)}"
+            )
+        return v

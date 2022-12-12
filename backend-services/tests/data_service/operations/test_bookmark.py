@@ -2,88 +2,83 @@ from unittest.mock import AsyncMock
 
 import pytest
 from motor import motor_asyncio
-from pymongo.results import DeleteResult, InsertOneResult
+from odmantic import AIOEngine, ObjectId
 from pytest_mock import MockerFixture
 
 from common.types import WalletAddress
 from data_service.operations.bookmark import bookmarks, create_bookmark, delete_bookmark
-from data_service.schema.actions import (
-    CreateBookmark,
-    CreateBookmarkResult,
-    DeleteBookmark,
-    DeleteBookmarkResult,
-    GetBookmarks,
-    GetBookmarksResult,
-)
+from data_service.schema.actions import CreateBookmark, DeleteBookmark
 from data_service.schema.entities import Bookmark
-from tests.data_service.operations.helpers import mock_settings
 
 
 @pytest.mark.asyncio
 async def test_create_bookmark_success(mocker: MockerFixture) -> None:
-    mock_insert_one = AsyncMock(return_value=InsertOneResult(None, acknowledged=True))
-    mocker.patch("data_service.operations.bookmark.mongo_settings", mock_settings)
-    mocker.patch.object(
-        motor_asyncio.AsyncIOMotorCollection, "insert_one", new=mock_insert_one
-    )
-    client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
     mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
-
-    params = CreateBookmark(
-        wallet_id=WalletAddress("test_id"),
-        bookmark=Bookmark(name="test_name", address=WalletAddress("test_address")),
+    test_create_bookmark = CreateBookmark(
+        wallet_id=WalletAddress("test_wallet_id"),
+        name="test_name",
+        address=WalletAddress("test_address"),
     )
 
-    assert await create_bookmark(client, params) == CreateBookmarkResult(success=True)
-    mock_insert_one.assert_awaited_once_with(params)
+    mock_save = AsyncMock(return_value=test_create_bookmark)
+    mocker.patch.object(AIOEngine, "save", mock_save)
+    engine = AIOEngine(client=motor_asyncio.AsyncIOMotorClient())
+
+    returned_bookmark = await create_bookmark(engine, test_create_bookmark)
+    mock_save.assert_awaited_once_with(returned_bookmark)
 
 
 @pytest.mark.asyncio
 async def test_delete_bookmark_success(mocker: MockerFixture) -> None:
-    mock_delete_one = AsyncMock(return_value=DeleteResult({}, acknowledged=True))
-    mocker.patch("data_service.operations.bookmark.mongo_settings", mock_settings)
-    mocker.patch.object(
-        motor_asyncio.AsyncIOMotorCollection,
-        "delete_one",
-        new=mock_delete_one,
+    hex_string_id = "a" * 24
+    bookmark_to_delete = Bookmark.parse_obj(
+        {
+            "id": ObjectId(hex_string_id),
+            "wallet_id": "test_wallet_id",
+            "name": "test_name1",
+            "address": "test_address1",
+        }
     )
-    client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
     mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
 
-    params = DeleteBookmark(
-        wallet_id=WalletAddress("test_id"),
-        bookmark=Bookmark(name="test_name", address=WalletAddress("test_address")),
-    )
+    mock_find_one = AsyncMock(return_value=bookmark_to_delete)
+    mock_delete = AsyncMock(return_value=None)
+    mocker.patch.object(AIOEngine, "find_one", mock_find_one)
+    mocker.patch.object(AIOEngine, "delete", mock_delete)
 
-    assert await delete_bookmark(client, params) == DeleteBookmarkResult(success=True)
-    mock_delete_one.assert_awaited_once_with(filter=params)
+    engine = AIOEngine(client=motor_asyncio.AsyncIOMotorClient())
+
+    params = DeleteBookmark(delete_id=hex_string_id)
+
+    assert await delete_bookmark(engine, params) is None
+    mock_find_one.assert_awaited_once_with(
+        Bookmark, Bookmark.id == ObjectId(params.delete_id)
+    )
+    mock_delete.assert_awaited_once_with(bookmark_to_delete)
 
 
 @pytest.mark.asyncio
 async def test_get_bookmarks_success(mocker: MockerFixture) -> None:
     stored_docs = [
         {
-            "wallet_id": "test_id1",
-            "bookmark": {"name": "test_name1", "address": "test_address1"},
+            "id": ObjectId(b"a" * 12),
+            "wallet_id": "test_wallet_id",
+            "name": "test_name1",
+            "address": "test_address1",
         },
         {
-            "wallet_id": "test_id2",
-            "bookmark": {"name": "test_name2", "address": "test_address2"},
+            "id": ObjectId(b"b" * 12),
+            "wallet_id": "test_wallet_id",
+            "name": "test_name2",
+            "address": "test_address2",
         },
     ]
-    mock_to_list = AsyncMock(return_value=stored_docs)
-    mocker.patch("data_service.operations.bookmark.mongo_settings", mock_settings)
-    mocker.patch.object(
-        motor_asyncio.AsyncIOMotorCursor,
-        "to_list",
-        new=mock_to_list,
-    )
-    client = motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
+    mock_find = AsyncMock(return_value=stored_docs)
     mocker.patch("motor.motor_asyncio.AsyncIOMotorClient")
+    mocker.patch.object(AIOEngine, "find", mock_find)
+    engine = AIOEngine(client=motor_asyncio.AsyncIOMotorClient())
 
-    params = GetBookmarks(wallet_id=WalletAddress("test_id"))
-    expected_bookmarks = [Bookmark.parse_obj(doc["bookmark"]) for doc in stored_docs]
-    assert await bookmarks(client, params) == GetBookmarksResult(
-        bookmarks=expected_bookmarks
-    )
-    mock_to_list.assert_awaited_once_with(mock_settings.max_list_length)
+    wallet_id = WalletAddress("test_wallet_id")
+    expected_bookmarks = [Bookmark.parse_obj(doc) for doc in stored_docs]
+    assert await bookmarks(engine, wallet_id) == expected_bookmarks
+    mock_find.assert_awaited_once_with(Bookmark, Bookmark.wallet_id == wallet_id)
