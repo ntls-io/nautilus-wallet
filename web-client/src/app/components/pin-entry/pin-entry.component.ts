@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
@@ -45,6 +46,7 @@ export class PinEntryComponent implements OnInit {
   hideRememberWalletAddress = environment.enableQuickAccess;
 
   constructor(
+    private router: Router,
     private modalCtrl: ModalController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
@@ -77,6 +79,10 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  pinResetPage() {
+    this.router.navigate(['/print-wallet']);
   }
 
   onSubmit(): void {
