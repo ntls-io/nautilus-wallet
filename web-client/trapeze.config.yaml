@@ -1,0 +1,26 @@
+vars:
+  APP_ID:
+    default: io.nlts.connect
+  DISPLAY_NAME:
+  VERSION:
+    default: 1.0.0
+  BUILD_NUMBER:
+
+platforms:
+  ios:
+    targets:
+      App:
+        bundleId: $APP_ID
+        version: $VERSION
+        displayName: $DISPLAY_NAME
+        productName: $DISPLAY_NAME
+        buildNumber: $BUILD_NUMBER
+        buildSettings:
+          ENABLE_BITCODE: true
+          STRIP_SWIFT_SYMBOLS: true
+
+  android:
+    packageName: $APP_ID
+    versionName: $VERSION
+    appName: $DISPLAY_NAME
+    versionCode: $BUILD_NUMBER
