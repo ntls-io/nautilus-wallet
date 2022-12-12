@@ -5,6 +5,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
@@ -13,6 +14,7 @@ import {
   SessionXrplService,
 } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { SessionStore } from 'src/app/state/session.store';
 import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import {
   convertFromAssetAmountAsaToLedger,
@@ -73,10 +75,12 @@ export class PayPage implements OnInit {
     private navCtrl: NavController,
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
+    private sessionStore: SessionStore,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
-    private connectorQuery: ConnectorQuery
+    private connectorQuery: ConnectorQuery,
+    private autoLogoutService: AutoLogoutService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state) {
@@ -98,6 +102,9 @@ export class PayPage implements OnInit {
       () => this.sendByLedgerType(amount, receiverAddress)
     );
     await this.notifyResult(result, amount, receiverAddress);
+    if (this.connectorQuery.getValue().walletId) {
+      this.autoLogoutService.cleanUp(false);
+    }
   }
 
   /**
