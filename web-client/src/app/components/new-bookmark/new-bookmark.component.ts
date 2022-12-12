@@ -32,7 +32,13 @@ export class NewBookmarkComponent implements OnInit {
     form.markAllAsTouched();
     if (form.valid) {
       const { name, address } = form.value;
-      await this.bookmarkService.createBookmark({ name, address });
+      await this.bookmarkService
+        .createBookmark({ name, address })
+        .then((success) => {
+          if (success) {
+            form.reset();
+          }
+        });
     }
   }
 }

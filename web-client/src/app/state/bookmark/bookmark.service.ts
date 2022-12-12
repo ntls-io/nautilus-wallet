@@ -35,6 +35,7 @@ export class BookmarkService {
         if (status === 201) {
           this.getBookmarks();
           this.showSuccess('Bookmark created');
+          return true;
         }
       })
       .catch((error) => {
