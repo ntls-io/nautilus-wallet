@@ -3,5 +3,8 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "hooks": {
+    "capacitor:sync:after": "scripts/generate-assets.js"
+  }
 }
