@@ -19,6 +19,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('../receive/receive.module').then((m) => m.ReceivePageModule),
   },
+  {
+    path: 'transfer-funds',
+    loadChildren: () =>
+      import('../transfer-funds/transfer-funds.module').then(
+        (m) => m.TransferFundsPageModule
+      ),
+  },
 ];
 
 @NgModule({

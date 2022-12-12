@@ -127,6 +127,11 @@ export const routes: Routes = [
         (m) => m.BookmarksPageModule
       ),
   },
+  {
+    path: 'pull',
+    loadChildren: () =>
+      import('./views/pull/pull.module').then((m) => m.PullPageModule),
+  },
 ];
 
 @NgModule({
