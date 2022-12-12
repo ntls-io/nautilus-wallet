@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
@@ -74,7 +75,8 @@ export class PullPage implements OnInit {
     private connectorQuery: ConnectorQuery,
     private sessionXrplService: SessionXrplService,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private autoLogoutService: AutoLogoutService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state?.address) {
@@ -135,6 +137,9 @@ export class PullPage implements OnInit {
         () => this.receiveXrpl(amount, sender, pin)
       );
       await this.notifyResult(result, amount, sender);
+      if (this.connectorQuery.getValue().walletId) {
+        this.autoLogoutService.cleanUp(false);
+      }
     }
   }
 

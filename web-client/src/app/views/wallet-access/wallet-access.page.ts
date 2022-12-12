@@ -5,6 +5,7 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -31,7 +32,8 @@ export class WalletAccessPage implements OnInit {
     private sessionService: SessionService,
     private notification: SwalHelper,
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private autoLogoutService: AutoLogoutService
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
@@ -91,5 +93,6 @@ export class WalletAccessPage implements OnInit {
     } else {
       await this.navCtrl.navigateRoot(['/wallet']);
     }
+    this.autoLogoutService.isLogin = true;
   }
 }
