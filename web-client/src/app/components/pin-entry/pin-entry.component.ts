@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { defined } from 'src/app/utils/errors/panic';
 import {
@@ -34,7 +35,8 @@ export class PinEntryComponent implements OnInit {
 
   #pinForm?: FormGroup;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private modalCtrl: ModalController,
+    private router: Router) {}
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -58,6 +60,10 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  pinResetPage() {
+    this.router.navigate(['/print-wallet']);
   }
 
   onSubmit(): void {

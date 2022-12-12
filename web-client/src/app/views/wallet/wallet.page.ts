@@ -43,8 +43,7 @@ export class WalletPage implements OnInit {
     {
       title: 'Send Money',
       icon: 'card',
-      path: '/wallet/transfer-funds',
-      state: { transferType: 'pay' },
+      path: '/wallet/send-funds',
       disabled: false,
     },
     {
@@ -58,6 +57,12 @@ export class WalletPage implements OnInit {
       title: 'My Wallet Address',
       icon: 'qr-code',
       path: '/wallet/receive',
+      disabled: false,
+    },
+    {
+      title: 'Pin Reset',
+      icon: 'unlock',
+      path: '/pin-reset',
       disabled: false,
     },
   ];
