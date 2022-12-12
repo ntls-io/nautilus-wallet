@@ -5,6 +5,4 @@ export interface Bookmark {
   address: string;
 }
 
-export function createBookmark(params: Partial<Bookmark>) {
-  return {} as Bookmark;
-}
+export const createBookmark = (params: Partial<Bookmark>) => ({} as Bookmark);
