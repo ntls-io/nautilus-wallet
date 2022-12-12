@@ -6,12 +6,11 @@ export interface BookmarkState extends EntityState<Bookmark> {}
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'bookmark'
+  name: 'bookmark',
+  resettable: true,
 })
 export class BookmarkStore extends EntityStore<BookmarkState> {
-
   constructor() {
     super();
   }
-
 }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BookmarkQuery } from 'src/app/state/bookmark';
+import { NavController } from '@ionic/angular';
+import { BookmarkQuery, BookmarkService } from 'src/app/state/bookmark';
 
 @Component({
   selector: 'app-bookmark-list',
@@ -9,15 +10,21 @@ import { BookmarkQuery } from 'src/app/state/bookmark';
 export class BookmarkListComponent implements OnInit {
   @Input() bookmarks = [];
 
-  constructor(public bookmarkQuery: BookmarkQuery) {}
+  constructor(
+    public bookmarkQuery: BookmarkQuery,
+    private bookmarkService: BookmarkService,
+    private navCtrl: NavController
+  ) {}
 
   ngOnInit() {}
 
-  sendFund() {
-    console.log('sendFund');
+  sendFund(receiverAddress: string) {
+    this.navCtrl.navigateForward('pay', {
+      queryParams: { receiverAddress },
+    });
   }
 
-  deleteBookmark() {
-    console.log('deleteBookmark');
+  deleteBookmark(id: string) {
+    this.bookmarkService.deleteBookmark(id);
   }
 }

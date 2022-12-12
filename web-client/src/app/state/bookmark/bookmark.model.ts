@@ -1,11 +1,8 @@
 export interface Bookmark {
+  id: string;
+  wallet_id: string;
   name: string;
   address: string;
-}
-
-export interface CreateBookmark {
-  wallet_id: string;
-  bookmark: Bookmark;
 }
 
 export function createBookmark(params: Partial<Bookmark>) {

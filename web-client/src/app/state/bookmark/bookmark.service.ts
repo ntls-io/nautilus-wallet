@@ -3,8 +3,12 @@ import { CapacitorHttp } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
 import { SessionQuery } from '../session.query';
-import { Bookmark } from './bookmark.model';
 import { BookmarkStore } from './bookmark.store';
+
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+};
 
 @Injectable({ providedIn: 'root' })
 export class BookmarkService {
@@ -14,22 +18,23 @@ export class BookmarkService {
     private toastCtrl: ToastController
   ) {}
 
-  async createBookmark(bookmark: Bookmark) {
+  async createBookmark(bookmark: { name: any; address: any }) {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
 
     const data = {
       wallet_id,
-      bookmark,
+      ...bookmark,
     };
 
     return await CapacitorHttp.post({
+      headers,
       url: createUrlWith('bookmark/create'),
       data,
     })
-      .then((result) => {
-        if (result.data?.success) {
+      .then(({ status }) => {
+        if (status === 201) {
           this.getBookmarks();
-          this.showSuccess();
+          this.showSuccess('Bookmark created');
         }
       })
       .catch((error) => {
@@ -43,17 +48,47 @@ export class BookmarkService {
 
     if (wallet_id) {
       return await CapacitorHttp.get({
+        headers,
         url: createUrlWith('bookmarks'),
         params: { wallet_id },
-      }).catch((error) => {
-        console.log(error);
-      });
+      })
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.bookmarkStore.upsertMany(data);
+            this.bookmarkStore.remove(
+              (entity: { id: string }) =>
+                !data.some(
+                  (newEntity: { id: string }) => newEntity.id === entity?.id
+                )
+            );
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
-  async showSuccess() {
+  async deleteBookmark(delete_id: string) {
+    return await CapacitorHttp.delete({
+      headers,
+      url: createUrlWith('bookmark'),
+      data: { delete_id },
+    })
+      .then(({ status }) => {
+        if (status === 204) {
+          this.showSuccess('Bookmark deleted');
+          this.bookmarkStore.remove(delete_id);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async showSuccess(message: string) {
     const toast = await this.toastCtrl.create({
-      message: 'Bookmark created',
+      message,
       duration: 2000,
       color: 'success',
     });
