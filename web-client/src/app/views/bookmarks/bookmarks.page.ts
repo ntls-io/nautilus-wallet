@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { BookmarkService } from 'src/app/state/bookmark';
 
 @Component({
@@ -7,7 +8,10 @@ import { BookmarkService } from 'src/app/state/bookmark';
   styleUrls: ['./bookmarks.page.scss'],
 })
 export class BookmarksPage implements OnInit {
-  constructor(private bookmarkService: BookmarkService) {}
+  constructor(
+    private bookmarkService: BookmarkService,
+    private toastCtrl: ToastController
+  ) {}
 
   async ionViewWillEnter() {
     await this.bookmarkService.getBookmarks();

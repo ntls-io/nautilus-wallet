@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Bookmark, BookmarkService } from 'src/app/state/bookmark';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BookmarkService } from 'src/app/state/bookmark';
 
 @Component({
   selector: 'app-new-bookmark',
@@ -7,17 +8,31 @@ import { Bookmark, BookmarkService } from 'src/app/state/bookmark';
   styleUrls: ['./new-bookmark.component.scss'],
 })
 export class NewBookmarkComponent implements OnInit {
-  bookmark: Bookmark = {
-    name: '',
-    address: '',
-  };
-  constructor(private bookmarkService: BookmarkService) {}
+  bookmarkForm: FormGroup;
+
+  constructor(
+    private bookmarkService: BookmarkService,
+    private formBuilder: FormBuilder
+  ) {
+    this.bookmarkForm = this.formBuilder.group({
+      name: [
+        '',
+        Validators.compose([Validators.minLength(2), Validators.required]),
+      ],
+      address: [
+        '',
+        Validators.compose([Validators.minLength(10), Validators.required]),
+      ],
+    });
+  }
 
   ngOnInit() {}
 
-  async createBookmark() {
-    await this.bookmarkService.createBookmark(this.bookmark).then((result) => {
-      console.log(result);
-    });
+  async createBookmark(form: FormGroup) {
+    form.markAllAsTouched();
+    if (form.valid) {
+      const { name, address } = form.value;
+      await this.bookmarkService.createBookmark({ name, address });
+    }
   }
 }
