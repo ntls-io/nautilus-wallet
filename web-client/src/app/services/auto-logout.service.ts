@@ -12,7 +12,6 @@ const STORE_KEY = 'lastAction';
   providedIn: 'root',
 })
 export class AutoLogoutService {
-  isLogin = false;
   constructor(
     private navCtrl: NavController,
     private sessionStore: SessionStore,
@@ -20,9 +19,6 @@ export class AutoLogoutService {
     private notification: SwalHelper,
     private ngZone: NgZone
   ) {
-    if (this.sessionQuery.isActiveSession()) {
-      this.isLogin = true;
-    }
     this.check();
     this.initListener();
     this.initInterval();
@@ -58,7 +54,7 @@ export class AutoLogoutService {
 
   check() {
     this.ngZone.run(() => {
-      if (this.isLogin) {
+      if (this.sessionQuery.isActiveSession()) {
         const now = Date.now();
         const timeLeft =
           this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
@@ -87,6 +83,5 @@ export class AutoLogoutService {
       });
     }
     this.navCtrl.navigateRoot('/');
-    this.isLogin = false;
   }
 }
