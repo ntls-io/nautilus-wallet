@@ -1,8 +1,8 @@
 from typing import TypeAlias
 
-from motor.motor_asyncio import AsyncIOMotorClient
+from odmantic import AIOEngine
 
 """
-A database client instance.
+A database engine instance.
 """
-Client: TypeAlias = AsyncIOMotorClient
+Engine: TypeAlias = AIOEngine
