@@ -2,9 +2,9 @@ vars:
   APP_ID:
     default: io.nlts.connect
   DISPLAY_NAME:
+    default: Nautilus Wallet
   VERSION:
     default: 1.0.0
-  BUILD_NUMBER:
 
 platforms:
   ios:
@@ -14,7 +14,6 @@ platforms:
         version: $VERSION
         displayName: $DISPLAY_NAME
         productName: $DISPLAY_NAME
-        buildNumber: $BUILD_NUMBER
         buildSettings:
           ENABLE_BITCODE: true
           STRIP_SWIFT_SYMBOLS: true
@@ -23,4 +22,3 @@ platforms:
     packageName: $APP_ID
     versionName: $VERSION
     appName: $DISPLAY_NAME
-    versionCode: $BUILD_NUMBER

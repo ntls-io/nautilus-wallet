@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'io.ntls.connect',
   appName: 'Nautilus wallet',
   webDir: 'www',
   bundledWebRuntime: false,

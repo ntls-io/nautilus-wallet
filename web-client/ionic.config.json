@@ -5,6 +5,6 @@
   },
   "type": "angular",
   "hooks": {
-    "capacitor:sync:after": "scripts/generate-assets.js"
+    "capacitor:sync:after": "scripts/after-sync.js"
   }
 }
