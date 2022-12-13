@@ -53,19 +53,20 @@ export class AutoLogoutService {
   }
 
   check() {
-    this.ngZone.run(() => {
-      if (this.sessionQuery.isActiveSession()) {
-        const now = Date.now();
-        const timeLeft =
-          this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
-        const diff = timeLeft - now;
-        const isTimeout = diff < 0;
+    if (this.sessionQuery.isActiveSession()) {
+      const now = Date.now();
+      const timeLeft =
+        this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
+      const diff = timeLeft - now;
+      console.log('difference: ', diff);
+      const isTimeout = diff < 0;
 
+      this.ngZone.run(() => {
         if (isTimeout) {
           this.cleanUp(true);
         }
-      }
-    });
+      });
+    }
   }
 
   public cleanUp(notification: boolean) {
