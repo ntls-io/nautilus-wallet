@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
-import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
@@ -75,8 +75,7 @@ export class PullPage implements OnInit {
     private connectorQuery: ConnectorQuery,
     private sessionXrplService: SessionXrplService,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper,
-    private autoLogoutService: AutoLogoutService
+    private notification: SwalHelper
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state?.address) {
@@ -138,7 +137,8 @@ export class PullPage implements OnInit {
       );
       await this.notifyResult(result, amount, sender);
       if (this.connectorQuery.getValue().walletId) {
-        this.autoLogoutService.cleanUp(false);
+        resetStores({ exclude: ['connector'] });
+        await this.navCtrl.navigateRoot('/');
       }
     }
   }

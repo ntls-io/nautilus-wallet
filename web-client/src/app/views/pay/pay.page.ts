@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { filterNilValue } from '@datorama/akita';
+import { filterNilValue, resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
-import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
@@ -79,8 +78,7 @@ export class PayPage implements OnInit {
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
-    private connectorQuery: ConnectorQuery,
-    private autoLogoutService: AutoLogoutService
+    private connectorQuery: ConnectorQuery
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state) {
@@ -103,7 +101,8 @@ export class PayPage implements OnInit {
     );
     await this.notifyResult(result, amount, receiverAddress);
     if (this.connectorQuery.getValue().walletId) {
-      this.autoLogoutService.cleanUp(false);
+      resetStores({ exclude: ['connector'] });
+      await this.navCtrl.navigateRoot('/');
     }
   }
 
