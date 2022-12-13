@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { resetStores } from '@datorama/akita';
 import { NavController } from '@ionic/angular';
-import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 
 @Component({
   selector: 'app-logout-button',
@@ -9,14 +9,12 @@ import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 })
 export class LogoutButtonComponent implements OnInit {
   @Input() title: boolean | undefined;
-  constructor(
-    private navCtrl: NavController,
-    private autoLogoutService: AutoLogoutService
-  ) {}
+  constructor(private navCtrl: NavController) {}
 
   ngOnInit() {}
 
   signOut() {
-    this.autoLogoutService.cleanUp(false);
+    resetStores({ exclude: ['connector'] });
+    this.navCtrl.navigateRoot('/');
   }
 }
