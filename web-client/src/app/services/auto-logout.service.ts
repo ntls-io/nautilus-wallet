@@ -58,7 +58,6 @@ export class AutoLogoutService {
       const timeLeft =
         this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
       const diff = timeLeft - now;
-      console.log('difference: ', diff);
       const isTimeout = diff < 0;
 
       this.ngZone.run(() => {
