@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { resetStores } from '@datorama/akita';
 import { NavController } from '@ionic/angular';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionStore } from 'src/app/state/session.store';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { removeAllListeners } from 'superagent';
 
 const MINUTES_UNTIL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 5000; // in ms
@@ -18,15 +17,16 @@ export class AutoLogoutService {
     private navCtrl: NavController,
     private sessionStore: SessionStore,
     public sessionQuery: SessionQuery,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private ngZone: NgZone
   ) {
+    if (this.sessionQuery.isActiveSession()) {
+      this.isLogin = true;
+    }
     this.check();
     this.initListener();
     this.initInterval();
     localStorage.setItem(STORE_KEY, Date.now().toString());
-    if (this.sessionQuery.isActiveSession()) {
-      this.isLogin = true;
-    }
   }
   public getLastAction() {
     return parseInt(localStorage.getItem(STORE_KEY) || '', 10);
@@ -36,10 +36,12 @@ export class AutoLogoutService {
   }
 
   initListener() {
-    addEventListener('click', () => this.reset());
-    addEventListener('mousemove', () => this.reset());
-    addEventListener('keydown', () => this.reset());
-    addEventListener('touchmove', () => this.reset());
+    this.ngZone.runOutsideAngular(() => {
+      addEventListener('click', () => this.reset());
+      addEventListener('mousemove', () => this.reset());
+      addEventListener('keydown', () => this.reset());
+      addEventListener('touchmove', () => this.reset());
+    });
   }
 
   reset() {
@@ -47,28 +49,35 @@ export class AutoLogoutService {
   }
 
   initInterval() {
-    setInterval(() => {
-      this.check();
-    }, CHECK_INTERVAL);
+    this.ngZone.runOutsideAngular(() => {
+      setInterval(() => {
+        this.check();
+      }, CHECK_INTERVAL);
+    });
   }
 
   check() {
-    if (this.isLogin) {
-      const now = Date.now();
-      const timeLeft =
-        this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
-      const diff = timeLeft - now;
-      const isTimeout = diff < 0;
+    this.ngZone.run(() => {
+      if (this.isLogin) {
+        const now = Date.now();
+        const timeLeft =
+          this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
+        const diff = timeLeft - now;
+        const isTimeout = diff < 0;
 
-      if (isTimeout) {
-        this.cleanUp(true);
+        if (isTimeout) {
+          this.cleanUp(true);
+        }
       }
-    }
+    });
   }
 
   public cleanUp(notification: boolean) {
     localStorage.removeItem(STORE_KEY);
-    removeAllListeners();
+    removeEventListener('click', () => this.reset());
+    removeEventListener('mousemove', () => this.reset());
+    removeEventListener('keydown', () => this.reset());
+    removeEventListener('touchmove', () => this.reset());
     resetStores({ exclude: ['connector'] });
     if (notification) {
       this.notification.swal.fire({
