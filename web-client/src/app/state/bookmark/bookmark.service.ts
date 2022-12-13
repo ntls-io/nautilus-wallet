@@ -18,7 +18,7 @@ export class BookmarkService {
     private toastCtrl: ToastController
   ) {}
 
-  async createBookmark(bookmark: { name: any; address: any }) {
+  async createBookmark(bookmark: { name: string; address: string }) {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
 
     const data = {
