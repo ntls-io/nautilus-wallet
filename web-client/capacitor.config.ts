@@ -14,9 +14,6 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: KeyboardResize.Ionic,
     },
-    CapacitorHttp: {
-      enabled: true,
-    },
   },
 };
 
