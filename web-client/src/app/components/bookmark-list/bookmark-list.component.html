@@ -5,7 +5,7 @@
     </ion-label>
   </ion-list-header>
 
-  <div *ngIf="bookmarkQuery.selectCount(); else empty">
+  <div *ngIf="bookmarkQuery.selectCount() | async; else empty">
     <ng-container *ngFor="let bookmark of bookmarkQuery.selectAll() | async">
       <ion-item class="app-item" *ngIf="bookmark?.id">
         <ion-icon slot="start" name="bookmark"></ion-icon>
@@ -27,7 +27,7 @@
 
   <ng-template #empty>
     <div class="ion-padding-horizontal ion-text-center">
-      <p>You have not added a recipient yet</p>
+      <p>Your recipient list is empty</p>
     </div>
   </ng-template>
 </ion-list>
