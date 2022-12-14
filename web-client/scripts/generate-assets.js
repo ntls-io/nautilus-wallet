@@ -2,17 +2,19 @@ var exec = require("child_process").exec;
 
 module.exports = function (ctx) {
   var configuration = ctx.build.configuration;
-  var organisation = configuration.split("-")[0];
-  var path = ["bhutan", "palau"].includes(organisation)
-    ? "--assetPath assets/" + organisation
-    : "";
+  if (configuration) {
+    var organisation = configuration.split("-")[0];
+    var path = ["bhutan", "palau"].includes(organisation)
+      ? "--assetPath assets/" + organisation
+      : "";
 
-  var command = "npx capacitor-assets generate " + path;
+    var command = "npx capacitor-assets generate " + path;
 
-  console.log(">", command);
+    console.log(">", command);
 
-  var logs = exec(command);
-  logs.stdout.on("data", function (data) {
-    console.log(data);
-  });
+    var logs = exec(command);
+    logs.stdout.on("data", function (data) {
+      console.log(data);
+    });
+  }
 };
