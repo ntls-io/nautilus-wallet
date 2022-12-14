@@ -62,7 +62,13 @@ export class WalletPage implements OnInit {
     },
   ];
 
-  constructor(public sessionQuery: SessionQuery) {}
+  constructor(public sessionQuery: SessionQuery) {
+    if (environment.hidePullPayment) {
+      this.actionItems = this.actionItems.filter(
+        (action) => action.title !== 'Pull Payment'
+      );
+    }
+  }
 
   ngOnInit() {}
 }
