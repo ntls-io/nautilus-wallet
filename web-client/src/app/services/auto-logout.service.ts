@@ -21,10 +21,10 @@ export class AutoLogoutService {
     private ngZone: NgZone
   ) {
     if (environment.autoLogout) {
+      localStorage.setItem(STORE_KEY, Date.now().toString());
       this.check();
       this.initListener();
       this.initInterval();
-      localStorage.setItem(STORE_KEY, Date.now().toString());
     }
   }
   public getLastAction() {
