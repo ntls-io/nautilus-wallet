@@ -4,6 +4,7 @@ import { NavController } from '@ionic/angular';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionStore } from 'src/app/state/session.store';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
 
 const MINUTES_UNTIL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 5000; // in ms
@@ -19,10 +20,12 @@ export class AutoLogoutService {
     private notification: SwalHelper,
     private ngZone: NgZone
   ) {
-    this.check();
-    this.initListener();
-    this.initInterval();
-    localStorage.setItem(STORE_KEY, Date.now().toString());
+    if (environment.autoLogout) {
+      this.check();
+      this.initListener();
+      this.initInterval();
+      localStorage.setItem(STORE_KEY, Date.now().toString());
+    }
   }
   public getLastAction() {
     return parseInt(localStorage.getItem(STORE_KEY) || '', 10);

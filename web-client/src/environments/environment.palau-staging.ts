@@ -40,6 +40,7 @@ export const environment: Environment = {
   hideXrpBalance: true,
   autofundXrp: true,
   hidePullPayment: false,
+  autoLogout: false,
   autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:
