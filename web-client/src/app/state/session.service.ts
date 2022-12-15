@@ -58,7 +58,7 @@ export class SessionService {
         owner_name: name,
         auth_pin: pin,
         phone_number,
-        auth_map,
+        auth_map: Object.fromEntries(auth_map),
       };
       const result: CreateWalletResult = await this.enclaveService.createWallet(
         request
