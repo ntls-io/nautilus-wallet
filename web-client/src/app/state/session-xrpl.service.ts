@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
 import { EnclaveService } from 'src/app/services/enclave';
 import { XrplService } from 'src/app/services/xrpl.service';
@@ -21,13 +22,13 @@ import { environment } from 'src/environments/environment';
 import { ifDefined } from 'src/helpers/helpers';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
+import { TxResponse } from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { SwalHelper } from '../utils/notification/swal-helper';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
-
 /**
  * This service manages session state and operations related to the XRP ledger.
  */
@@ -68,7 +69,7 @@ export class SessionXrplService {
     private enclaveService: EnclaveService,
     private xrplService: XrplService,
     private connectorQuery: ConnectorQuery,
-
+    private navCtrl: NavController,
     private notification: SwalHelper
   ) {}
 
@@ -139,7 +140,7 @@ export class SessionXrplService {
   async sendAutoFunds(
     receiverId: string,
     amount: number
-  ): Promise<xrpl.TxResponse> {
+  ): Promise<{ xrplResult: TxResponse }> {
     const public_key_hex = environment.autofundXrpPublicKey;
     const issuer_id = environment.xrpIssuer;
     const pin = environment.autofundAccountPin;
@@ -161,9 +162,10 @@ export class SessionXrplService {
     );
 
     const txResponse = await this.submitTransaction(txnSignedEncoded);
-    const txSucceeded = checkTxResponseSucceeded(txResponse);
+    await this.loadAccountData();
+    //const txSucceeded = checkTxResponseSucceeded(txResponse);
 
-    return txResponse;
+    return { xrplResult: txResponse };
   }
 
   async sendFundsCommissioned(
@@ -555,10 +557,16 @@ export class SessionXrplService {
         err instanceof Error &&
         err.message.includes('SessionService.signTransaction: invalid auth')
       ) {
-        await this.notification.swal.fire({
-          icon: 'error',
-          text: 'Invalid PIN',
-        });
+        await this.notification.swal
+          .fire({
+            icon: 'error',
+            text: 'Invalid PIN',
+          })
+          .then(({ isConfirmed }) => {
+            if (isConfirmed) {
+              this.navCtrl.navigateRoot('/');
+            }
+          });
         throw new Error('Local error:');
       } else {
         throw err;

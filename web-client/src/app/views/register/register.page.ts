@@ -7,13 +7,25 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
+import {
+  AssetAmount,
+  formatAssetAmount,
+  formatAssetSymbol,
+} from 'src/app/utils/assets/assets.common';
+import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import SwiperCore, { Pagination } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
+import * as xrpl from 'xrpl';
+import { TxResponse } from 'xrpl';
 
 SwiperCore.use([Pagination]);
 
@@ -34,7 +46,9 @@ export class RegisterPage implements OnDestroy {
     private sessionService: SessionService,
     private router: Router,
     private sessionQuery: SessionQuery,
-    private sessionXrplService: SessionXrplService
+    private sessionXrplService: SessionXrplService,
+    private loadingCtrl: LoadingController,
+    private notification: SwalHelper
   ) {
     this.registrationForm = this.generateFormGroup();
 
@@ -108,22 +122,36 @@ export class RegisterPage implements OnDestroy {
           answers,
           phoneNumber
         );
-        this.router.navigate(['/print-wallet']);
 
         // Autofund the account on creation
         const autoFundBool = environment.autofundXrp;
         const autoFundAmount = environment.autofundXrpAmount;
 
         if (autoFundBool) {
-          await this.sessionXrplService.sendAutoFunds(
-            // wallet.xrpl_account.address_base58,
-            wallet_id,
-            autoFundAmount
+          const result = await withLoadingOverlayOpts(
+            this.loadingCtrl,
+            { message: 'Creating Wallet' },
+            () =>
+              this.sessionXrplService.sendAutoFunds(
+                // wallet.xrpl_account.address_base58,
+                wallet_id,
+                autoFundAmount
+              )
           );
+          const amount = assetAmountXrp(autoFundAmount);
+          //const amount = convertFromLedgerToAssetAmountXrp(autoFundAmount);
+          await this.notifyResult(result, amount, wallet_id);
         }
+        this.router.navigate(['/print-wallet']);
       } catch (err) {
-        // TODO: error handling
-        console.log(err);
+        this.notification.swal.fire({
+          icon: 'error',
+          titleText: 'Wallet Not Created!',
+          text: 'There was a problem creating your wallet, please try again.',
+          html: '<div >There was a problem creating your wallet, please try again.</div>',
+          confirmButtonText: 'DONE',
+        });
+        this.router.navigate(['/']);
       }
     }
   }
@@ -148,5 +176,76 @@ export class RegisterPage implements OnDestroy {
 
   ngOnDestroy() {
     this.subscription$.unsubscribe();
+  }
+
+  protected async notifyResult(
+    result: { xrplResult: TxResponse },
+    amount: AssetAmount,
+    receiverAddress: string
+  ): Promise<void> {
+    if ('xrplResult' in result) {
+      const { xrplResult: txResponse } = result;
+      const { succeeded, resultCode } = checkTxResponseSucceeded(txResponse);
+      if (succeeded) {
+        this.notifySuccess({
+          amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
+          address: receiverAddress,
+          txId: txResponse.id.toString(),
+          timestamp: new Date(),
+        });
+      } else {
+        await this.notifyXrplFailure({ resultCode });
+      }
+    }
+  }
+
+  protected notifySuccess({
+    amount,
+    address,
+    txId,
+    timestamp,
+    txUrlPrefix,
+  }: {
+    amount: string;
+    address: string;
+    txId: string;
+    timestamp: Date;
+    txUrlPrefix?: string;
+  }): void {
+    const txIdHtml = txUrlPrefix
+      ? `<a href="${txUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
+    this.notification.swal.fire({
+      icon: 'success',
+      titleText: 'Wallet Created!',
+      text: 'Your wallet was successfully created.',
+      html: `<div >
+              <p class="text-xs"><b>Address:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
+            </div>`,
+      confirmButtonText: 'DONE',
+    });
+  }
+
+  protected async notifyXrplFailure({
+    resultCode,
+  }: {
+    resultCode: xrpl.TransactionMetadata['TransactionResult'];
+  }): Promise<void> {
+    const categoryLocalError = resultCode.startsWith('tel');
+    const categoryRetry = resultCode.startsWith('ter');
+    const retryable = categoryLocalError || categoryRetry;
+
+    await this.notification.swal.fire({
+      icon: retryable ? 'warning' : 'error',
+      titleText: 'Transaction failed',
+      html: [
+        ...(categoryLocalError ? ['<p>(Local error)</p>'] : []),
+        ...(categoryRetry ? ['<p>(Retry possible)</p>'] : []),
+        `<p>Result code: ${resultCode}</p>`,
+        '<p>See <a href="https://xrpl.org/transaction-results.html" target="_blank">Transaction Results</a> for more details.</p>',
+      ].join('\n'),
+    });
   }
 }
