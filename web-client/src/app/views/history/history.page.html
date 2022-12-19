@@ -1,18 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>history</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>History</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list lines="inset">
+  <div class="ion-padding">
+    <h2 class="font-bold">Recent transactions</h2>
+  </div>
+  <ion-list lines="full">
     <ion-item *ngFor="let item of historyQuery.transactions| async">
+      <ion-icon slot="start" name="arrow-forward-circle-outline"></ion-icon>
       <ion-label>
+        <small>
+          {{(item?.tx?.Destination | isMe) ? 'Send To' : 'Received From'}}
+        </small>
         <h2>{{item?.tx?.Account}}</h2>
-        <p>{{item?.tx?.date | date : 'short'}}</p>
+        <h6>{{item?.tx?.date | xrpDate}}</h6>
       </ion-label>
       <ion-note slot="end" color="primary">
-        {{item?.tx?.Amount?.value | currency: 'FOO'}}
+        <small class="font-bold">
+          {{item?.tx?.Amount?.value | currency: 'FOO'}}
+        </small>
       </ion-note>
     </ion-item>
   </ion-list>
