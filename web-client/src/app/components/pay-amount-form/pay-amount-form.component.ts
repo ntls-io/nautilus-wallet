@@ -48,6 +48,8 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
   /** (Optional) Hook to set an initial amount value, if defined. */
   @Input() setInitialAmountValue?: string;
 
+  @Input() buttonHeading = 'PAY';
+
   #paymentForm?: FormGroup;
 
   constructor() {}

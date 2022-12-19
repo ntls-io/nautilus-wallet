@@ -273,7 +273,7 @@ export class PullPage implements OnInit {
     this.notification.swal
       .fire({
         icon: 'success',
-        titleText: 'Money sent!',
+        titleText: 'Payment Received!',
         text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
