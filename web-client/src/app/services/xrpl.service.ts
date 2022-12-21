@@ -186,12 +186,12 @@ export class XrplService {
    *
    * @see https://js.xrpl.org/interfaces/AccountTxRequest.html
    */
-  async getAccountTx() {
+  async getAccountTx(account: string): Promise<xrpl.AccountTxResponse> {
     return await this.withConnection(
       async (client) =>
         await client.request({
           command: 'account_tx',
-          account: 'r3akVmwDcDjqPtsjbFbNkGH5dEAmMLn6EW',
+          account,
         })
     );
   }
