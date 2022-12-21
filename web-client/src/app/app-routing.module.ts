@@ -123,6 +123,12 @@ export const routes: Routes = [
   {
     path: 'history',
     loadChildren: () => import('./views/history/history.module').then( m => m.HistoryPageModule)
+
+  },
+  {
+    path: 'pull',
+    loadChildren: () =>
+      import('./views/pull/pull.module').then((m) => m.PullPageModule),
   },
 ];
 

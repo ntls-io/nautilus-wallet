@@ -28,19 +28,21 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s1.cbdc-sandbox.rippletest.net:51233',
+    server: 'wss://uuvvvai.com:51233',
     options: {
       connectionTimeout: 20000,
     },
   },
   commissionPercentage: 0.0,
-  tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
+  tokenIssuer: 'rDzwrgetpdAwSU226dTbk6BQye1tJthCMa',
   tokenSymbol: 'BTN',
-  xrpIssuer: 'rpd17stoaELtzuhxEn4eAQcipXy2w8DEXQ',
+  xrpIssuer: 'rfgasaRgZYJMxPEuAWUPH2ShSBhQJQFHCh',
   hideXrpBalance: true,
   autofundXrp: true,
+  hidePullPayment: true,
+  autoLogout: false,
   autofundXrpAmount: 50,
-  autofundAccountPin: 'L4b@Rr.ei7UAV26ZR!r6',
+  autofundAccountPin: 'uzD3Y8idq6*x8vGwWxRC',
   autofundXrpPublicKey:
-    '03EE5AA3E95486138DFAD5C389E5A3E98A25DFC5BD331588C73EB30657BF7701E5',
+    '0208A1EE854F42E720F700CE4687D75838A92EA7F630F2964F1457D61623CA6E1D',
 };
