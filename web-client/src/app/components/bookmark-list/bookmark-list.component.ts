@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { BookmarkQuery, BookmarkService } from 'src/app/state/bookmark';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
 @Component({
   selector: 'app-bookmark-list',
@@ -13,18 +14,32 @@ export class BookmarkListComponent implements OnInit {
   constructor(
     public bookmarkQuery: BookmarkQuery,
     private bookmarkService: BookmarkService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private notification: SwalHelper
   ) {}
 
   ngOnInit() {}
 
-  sendFund(receiverAddress: string) {
+  sendFund(address: string) {
     this.navCtrl.navigateForward('pay', {
-      queryParams: { receiverAddress },
+      state: { address },
     });
   }
 
   deleteBookmark(id: string) {
-    this.bookmarkService.deleteBookmark(id);
+    this.notification.swal.fire({
+      icon: 'warning',
+      titleText: 'Delete bookmark',
+      text: 'Are you sure you want to delete this bookmark?',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      showLoaderOnConfirm: true,
+      confirmButtonColor: 'var(--ion-color-primary)',
+      cancelButtonColor: 'var(--ion-color-medium)',
+      reverseButtons: true,
+      preConfirm: async () => {
+        await this.bookmarkService.deleteBookmark(id);
+      },
+    });
   }
 }

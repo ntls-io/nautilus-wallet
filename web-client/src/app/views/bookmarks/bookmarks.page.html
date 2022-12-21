@@ -11,16 +11,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <app-new-bookmark></app-new-bookmark>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <app-bookmark-list></app-bookmark-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ng-container>
+    <app-new-bookmark></app-new-bookmark>
+  </ng-container>
+  <ng-container>
+    <app-bookmark-list></app-bookmark-list>
+  </ng-container>
 </ion-content>
