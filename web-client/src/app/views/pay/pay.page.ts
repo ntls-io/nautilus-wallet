@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { filterNilValue } from '@datorama/akita';
+import { filterNilValue, resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
@@ -13,6 +13,7 @@ import {
   SessionXrplService,
 } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
+import { SessionStore } from 'src/app/state/session.store';
 import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
 import {
   convertFromAssetAmountAsaToLedger,
@@ -73,6 +74,7 @@ export class PayPage implements OnInit {
     private navCtrl: NavController,
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
+    private sessionStore: SessionStore,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
@@ -98,6 +100,10 @@ export class PayPage implements OnInit {
       () => this.sendByLedgerType(amount, receiverAddress)
     );
     await this.notifyResult(result, amount, receiverAddress);
+    if (this.connectorQuery.getValue().walletId) {
+      resetStores({ exclude: ['connector'] });
+      await this.navCtrl.navigateRoot('/');
+    }
   }
 
   /**

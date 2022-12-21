@@ -98,6 +98,10 @@ export type Environment = {
 
   autofundXrp: boolean;
 
+  hidePullPayment: boolean;
+
+  autoLogout: boolean;
+
   autofundXrpAmount: number;
 
   autofundAccountPin: string;
