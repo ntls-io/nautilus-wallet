@@ -14,21 +14,38 @@
   <div class="ion-padding">
     <h2 class="font-bold">Recent transactions</h2>
   </div>
-  <ion-list lines="full">
-    <ion-item *ngFor="let item of historyQuery.transactions| async">
-      <ion-icon slot="start" name="arrow-forward-circle-outline"></ion-icon>
-      <ion-label>
-        <small>
-          {{(item?.tx?.Destination | isMe) ? 'Send To' : 'Received From'}}
-        </small>
-        <h2>{{item?.tx?.Account}}</h2>
-        <h6>{{item?.tx?.date | xrpDate}}</h6>
-      </ion-label>
-      <ion-note slot="end" color="primary">
-        <small class="font-bold">
-          {{item?.tx?.Amount?.value | currency: 'FOO'}}
-        </small>
-      </ion-note>
-    </ion-item>
-  </ion-list>
+
+  <ng-container *ngIf="(historyQuery.transactions| async)?.length; else empty">
+    <ion-list lines="full" *ngIf="historyQuery.transactions| async">
+      <ion-item *ngFor="let item of historyQuery.transactions| async">
+        <ion-icon
+          slot="start"
+          [name]="(item?.tx?.Account | isMe) ? 'arrow-forward' : 'arrow-back'"
+        ></ion-icon>
+        <ion-label>
+          <ion-text class="font-bold" color="primary">
+            <small>
+              {{(item?.tx?.Account | isMe) ? 'Sent To' : 'Received From'}}
+            </small>
+          </ion-text>
+          <h2>
+            {{(item?.tx?.Account | isMe) ? item?.tx?.Destination :
+            item?.tx?.Account}}
+          </h2>
+          <h6>{{item?.tx?.date | xrpDate}}</h6>
+        </ion-label>
+        <ion-note slot="end" color="primary">
+          <small class="font-bold">
+            {{item?.tx?.Amount?.value | currency: 'FOO'}}
+          </small>
+        </ion-note>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="ion-padding-horizontal ion-text-center">
+      <p>Your transactions list is empty</p>
+    </div>
+  </ng-template>
 </ion-content>
