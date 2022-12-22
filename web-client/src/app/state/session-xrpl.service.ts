@@ -162,8 +162,6 @@ export class SessionXrplService {
     );
 
     const txResponse = await this.submitTransaction(txnSignedEncoded);
-    await this.loadAccountData();
-    //const txSucceeded = checkTxResponseSucceeded(txResponse);
 
     return { xrplResult: txResponse };
   }

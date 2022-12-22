@@ -139,7 +139,6 @@ export class RegisterPage implements OnDestroy {
               )
           );
           const amount = assetAmountXrp(autoFundAmount);
-          //const amount = convertFromLedgerToAssetAmountXrp(autoFundAmount);
           await this.notifyResult(result, amount, wallet_id);
         }
         this.router.navigate(['/print-wallet']);
