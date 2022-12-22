@@ -60,6 +60,12 @@ export class WalletPage implements OnInit {
       path: '/wallet/receive',
       disabled: false,
     },
+    {
+      title: 'Bookmark Recipient',
+      icon: 'bookmark',
+      path: '/bookmarks',
+      disabled: false,
+    },
   ];
 
   constructor(public sessionQuery: SessionQuery) {
