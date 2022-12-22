@@ -15,6 +15,4 @@ export interface History {
   validated: boolean;
 }
 
-export function createHistory(params: Partial<History>) {
-  return {} as History;
-}
+export const createHistory = (params: Partial<History>) => ({} as History);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { History } from './history.model';
 
-export interface HistoryState extends EntityState<History> {}
+export type HistoryState = EntityState<History>;
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
