@@ -1,0 +1,30 @@
+<ion-list lines="none">
+  <ion-list-header>
+    <ion-label color="primary">
+      <h3 class="font-nasalization">Saved Addresses</h3>
+    </ion-label>
+  </ion-list-header>
+
+  <div *ngIf="savedAddress.length!==0; else empty">
+    <ng-container *ngFor="let address of savedAddress">
+      <ion-item class="app-item" *ngIf="address?.walletAddress">
+        <ion-icon slot="start" name="bookmark"></ion-icon>
+        <ion-label>
+          <h2 class="!font-black">{{ address?.name }}</h2>
+          <h6>{{ address?.walletAddress }}</h6>
+        </ion-label>
+        <ion-buttons>
+          <ion-button (click)="deleteAddress()">
+            <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ng-container>
+  </div>
+
+  <ng-template #empty>
+    <div class="ion-padding-horizontal ion-text-center">
+      <p>Your recipient list is empty</p>
+    </div>
+  </ng-template>
+</ion-list>
