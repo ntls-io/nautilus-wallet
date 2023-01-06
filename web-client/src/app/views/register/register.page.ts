@@ -25,7 +25,6 @@ import { environment } from 'src/environments/environment';
 import SwiperCore, { Pagination } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 import * as xrpl from 'xrpl';
-import { TxResponse } from 'xrpl';
 
 SwiperCore.use([Pagination]);
 
@@ -147,7 +146,6 @@ export class RegisterPage implements OnDestroy {
           icon: 'error',
           titleText: 'Wallet Not Created!',
           text: 'There was a problem creating your wallet, please try again.',
-          html: '<div >There was a problem creating your wallet, please try again.</div>',
           confirmButtonText: 'DONE',
         });
         this.router.navigate(['/']);
@@ -178,7 +176,7 @@ export class RegisterPage implements OnDestroy {
   }
 
   protected async notifyResult(
-    result: { xrplResult: TxResponse },
+    result: { xrplResult: xrpl.TxResponse },
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<void> {
@@ -217,8 +215,8 @@ export class RegisterPage implements OnDestroy {
     this.notification.swal.fire({
       icon: 'success',
       titleText: 'Wallet Created!',
-      text: 'Your wallet was successfully created.',
       html: `<div >
+              Your wallet was successfully created.
               <p class="text-xs"><b>Address:</b> ${address}</p>
               <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
               <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>

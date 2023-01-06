@@ -22,7 +22,6 @@ import { environment } from 'src/environments/environment';
 import { ifDefined } from 'src/helpers/helpers';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
-import { TxResponse } from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common';
 import { Trustline } from 'xrpl/dist/npm/models/methods/accountLines';
 import { SwalHelper } from '../utils/notification/swal-helper';
@@ -140,7 +139,7 @@ export class SessionXrplService {
   async sendAutoFunds(
     receiverId: string,
     amount: number
-  ): Promise<{ xrplResult: TxResponse }> {
+  ): Promise<{ xrplResult: xrpl.TxResponse }> {
     const public_key_hex = environment.autofundXrpPublicKey;
     const issuer_id = environment.xrpIssuer;
     const pin = environment.autofundAccountPin;
