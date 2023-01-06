@@ -10,6 +10,7 @@ export class SwalHelper {
     customClass: {
       actions: '!w-full',
       confirmButton: 'w-1/2 !rounded-full',
+      cancelButton: 'w-1/3 !rounded-full',
       title: 'font-nasalization',
     },
     backdrop: true,
