@@ -1,8 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { AssetAccordionComponent } from './asset-accordion.component';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AssetAccordionComponent', () => {
   let component: AssetAccordionComponent;
@@ -11,7 +11,11 @@ describe('AssetAccordionComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AssetAccordionComponent],
-      imports: [IonicModule.forRoot(), HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        IonicModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AssetAccordionComponent);
