@@ -7,6 +7,7 @@ import { SetupState, SetupStore } from './setup.store';
 export class SetupQuery extends Query<SetupState> {
   tokenIssuer = this.getValue().tokenIssuer.trim() || environment.tokenIssuer;
   xrpIssuer = this.getValue().xrpIssuer.trim() || environment.xrpIssuer;
+  tokenSymbol = this.getValue().tokenSymbol.trim() || environment.tokenSymbol;
   ledger = this.getValue().ledger.trim()
     ? { ...environment.xrplClient, server: this.getValue().ledger }
     : environment.xrplClient;

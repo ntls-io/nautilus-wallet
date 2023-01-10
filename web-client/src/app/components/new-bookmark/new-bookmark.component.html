@@ -1,0 +1,33 @@
+<ion-accordion-group class="app-item">
+  <ion-accordion value="new">
+    <ion-item slot="header" lines="none">
+      <ion-icon slot="start" name="add-circle"></ion-icon>
+      <ion-label>Add a recipient</ion-label>
+    </ion-item>
+    <div slot="content">
+      <ion-list lines="none" class="p-0">
+        <form
+          id="form-bookmark"
+          [formGroup]="bookmarkForm"
+          (ngSubmit)="createBookmark(bookmarkForm)"
+        >
+          <ion-item>
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Address</ion-label>
+            <ion-textarea
+              class="px-0"
+              type="text"
+              formControlName="address"
+            ></ion-textarea>
+          </ion-item>
+        </form>
+      </ion-list>
+      <ion-button expand="full" class="m-0" type="submit" form="form-bookmark">
+        Click to add new bookmark
+      </ion-button>
+    </div>
+  </ion-accordion>
+</ion-accordion-group>
