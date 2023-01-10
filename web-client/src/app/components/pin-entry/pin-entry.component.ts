@@ -17,6 +17,8 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./pin-entry.component.scss'],
 })
 export class PinEntryComponent implements OnInit {
+  @Input() titleHeading = '';
+
   /** Emit the PIN confirmed by the user. */
   @Output() pinConfirmed = new EventEmitter<PinValue>();
 
