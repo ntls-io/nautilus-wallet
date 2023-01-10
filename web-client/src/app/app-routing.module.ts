@@ -121,6 +121,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'history',
+    loadChildren: () =>
+      import('./views/history/history.module').then((m) => m.HistoryPageModule),
+  },
+  {
     path: 'bookmarks',
     loadChildren: () =>
       import('./views/bookmarks/bookmarks.module').then(
