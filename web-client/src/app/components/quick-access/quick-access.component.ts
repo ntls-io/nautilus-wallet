@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { QuickAccessService } from 'src/app/state/quickAccess';
+import { saveAddress } from 'src/schema/entities';
+import { QuickAccessStore } from 'src/app/state/quickAccess';
 
 @Component({
   selector: 'app-quick-access',
@@ -7,19 +10,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuickAccessComponent implements OnInit {
 
-  savedAddress = [
-    {name: 'Isco', walletAddress: 'rhDanuXviGtZB7Zo3NNN5Qozx7ssY4nVCe'},
-    {name: 'Don', walletAddress: 'rhDanuXviGtZB7Zo3NNN5Qozx7ssY4nVCe'},
-    {name: 'John', walletAddress: 'rhDanuXviGtZB7Zo3NNN5Qozx7ssY4nVCe'},
-    {name: 'Jane', walletAddress: 'rhDanuXviGtZB7Zo3NNN5Qozx7ssY4nVCe'},
-  ];
+  displayWalletAddress: saveAddress[] = [];
+  savedWalletAddresses: saveAddress[] = [];
 
-  constructor() { }
+  constructor(
+    private quickAccessService: QuickAccessService,
+    private quickAccessStore: QuickAccessStore) {}
 
   ngOnInit() {}
 
-  deleteAddress(){
-    console.log('Delete Adress!');
-  }
+  displayWalletAdress = this.fetchWalletAddresses().then(
+    (data) => {return this.savedWalletAddresses = data}
+  );
+
+  async fetchPreferedName(walletAddress: string){
+    const preferedName = this.quickAccessService.loadPreferedName(walletAddress);
+    const data = await preferedName.then((data) => {return data});
+    return data;
+  };
+
+  async fetchWalletAddresses(){
+    let fetchWalletAddresses = await this.quickAccessService.loadWalletAddresses();
+    let QuickAcess: saveAddress[] = [];
+    for (let walletAddress of fetchWalletAddresses) {
+      let getPreferedName = await this.fetchPreferedName(walletAddress)
+      QuickAcess.push({
+        address: walletAddress,
+        preferedName: getPreferedName
+      })
+    };
+    return QuickAcess
+};
+
+  async deleteAddress(walletAddress: string){
+    await this.quickAccessService.deleteAddress(walletAddress);
+    console.log('Adress Deleted!');
+  };
 
 }

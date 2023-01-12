@@ -10,6 +10,9 @@ import {
 } from 'src/app/utils/validation.errors';
 import { PinResetPage } from 'src/app/views/pin-reset/pin-reset.page';
 import { checkClass } from 'src/helpers/helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
+import { QuickAccessService } from 'src/app/state/quickAccess';
 
 @Component({
   selector: 'app-pin-entry',
@@ -34,7 +37,17 @@ export class PinEntryComponent implements OnInit {
 
   #pinForm?: FormGroup;
 
-  constructor(private modalCtrl: ModalController) {}
+  rememberWalletAddress = false;
+
+  constructor(
+    private modalCtrl: ModalController,
+    private notification: SwalHelper,
+    private walletAccessPage: WalletAccessPage,
+    private quickAccessService: QuickAccessService) {}
+
+  onChangeRememberWalletAddress(){
+    this.rememberWalletAddress = !this.rememberWalletAddress;
+  }
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -60,7 +73,26 @@ export class PinEntryComponent implements OnInit {
     this.initForm();
   }
 
-  onSubmit(): void {
+     onSubmit(): void {
+    if(this.rememberWalletAddress){
+      console.log('Wallet Address saved');
+      const saveWalletAddress: string = this.walletAccessPage.address !== undefined ? this.walletAccessPage.address : '';
+      console.log(saveWalletAddress);
+
+      this.notification.swal.fire({
+        titleText: 'Save Wallet Address',
+        text: 'Plese enter a preferred name below',
+        input: 'text',
+        confirmButtonText: 'Confirm',
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        reverseButtons: true,
+      }).then((result) => {
+        const preferedName = result.value;
+        console.log(preferedName);
+          this.quickAccessService.addWalletAddress(saveWalletAddress,preferedName);
+      });
+      };
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
     console.log('PinEntryComponent.onSubmit: ', { valid: pinForm.valid });
@@ -68,6 +100,12 @@ export class PinEntryComponent implements OnInit {
       const { pin }: PinFormValue = pinForm.value;
       this.pinConfirmed.emit(pin);
     }
+  }
+
+  async saveAdress(){
+    await this.notification.swal.fire(
+
+    )
   }
 
   async goToReset() {
