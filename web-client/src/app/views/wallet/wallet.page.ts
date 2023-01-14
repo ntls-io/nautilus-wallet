@@ -61,6 +61,12 @@ export class WalletPage implements OnInit {
       disabled: false,
     },
     {
+      title: 'Transactions History',
+      icon: 'list',
+      path: '/history',
+      disabled: false,
+    },
+    {
       title: 'Bookmark Recipient',
       icon: 'bookmark',
       path: '/bookmarks',
