@@ -1,47 +1,46 @@
 import { Injectable } from '@angular/core';
-import { QAccessStore } from './q-access.store';
-import { Preferences} from '@capacitor/preferences';
+import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
 import { QAccess } from './q-access.model';
+import { QAccessStore } from './q-access.store';
 
 @Injectable({ providedIn: 'root' })
 export class QAccessService {
+  constructor(private quickAccessStore: QAccessStore) {}
 
-  constructor(private quickAccessStore: QAccessStore) { }
-
-  addWalletAddress(address: string, preferedName: string){
+  addWalletAddress(address: string, preferedName: string) {
     Preferences.set({
       key: address,
-      value: preferedName
+      value: preferedName,
     });
     this.fetchWalletAddresses();
-  };
+  }
 
-  async loadPreferedName(walletAddress: string){
+  async loadPreferedName(walletAddress: string) {
     const result = await Preferences.get({
       key: walletAddress,
     });
     return result.value;
-  };
+  }
 
-  async loadWalletAddresses(): Promise<string[]>{
+  async loadWalletAddresses(): Promise<string[]> {
     let fetchedwalletAdresses: string[] = [];
-    try{
+    try {
       const walletAddresses = (await Preferences.keys()).keys;
       fetchedwalletAdresses = walletAddresses;
-    } catch (err){
+    } catch (err) {
       console.log(err);
     }
     return fetchedwalletAdresses;
-  };
+  }
 
-  async fetchPreferedName(walletAddress: string){
+  async fetchPreferedName(walletAddress: string) {
     const preferedName = this.loadPreferedName(walletAddress);
     const data = await preferedName.then((result) => result);
     return data;
-  };
+  }
 
-  async fetchWalletAddresses(){
+  async fetchWalletAddresses() {
     const fetchWalletAddresses = await this.loadWalletAddresses();
     let quickAcess: QAccess;
     for (const walletAddress of fetchWalletAddresses) {
@@ -50,20 +49,19 @@ export class QAccessService {
       quickAcess = {
         id,
         walletAddress,
-        preferedName: getPreferedName
+        preferedName: getPreferedName,
       };
       this.quickAccessStore.add({
         id,
         walletAddress,
-        preferedName: getPreferedName
+        preferedName: getPreferedName,
       });
-    };
-  };
+    }
+  }
 
-  deleteAddress(walletAddress: string){
+  deleteAddress(walletAddress: string) {
     return Preferences.remove({
       key: walletAddress,
     });
-  };
-
+  }
 }

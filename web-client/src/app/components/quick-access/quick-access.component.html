@@ -5,7 +5,7 @@
     </ion-label>
   </ion-list-header>
 
-  <div *ngIf="quickAccessQuery.selectCount() | async ; else empty">
+  <div *ngIf="quickAccessQuery.selectCount() | async; else empty">
     <ng-container *ngFor="let address of quickAccessQuery.selectAll() | async">
       <ion-item class="app-item" *ngIf="address">
         <ion-icon slot="start" name="key"></ion-icon>

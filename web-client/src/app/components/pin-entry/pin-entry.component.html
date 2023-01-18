@@ -1,7 +1,9 @@
 <div class="text-center">
-
   <div *ngIf="hideRememberWalletAddress">
-    <ion-input (change)="onChangeRememberWalletAddress()" type="checkbox"></ion-input>
+    <ion-input
+      (change)="onChangeRememberWalletAddress()"
+      type="checkbox"
+    ></ion-input>
     <ion-label> Remember Wallet Address?</ion-label>
   </div>
 

@@ -1,14 +1,14 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { routes } from 'src/app/app-routing.module';
 import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.module';
 import { defined } from 'src/app/utils/errors/panic';
 import { AngularValidationErrors } from 'src/app/utils/validation.errors';
+import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
 import { componentDebugEvent, eventsEmitted } from 'src/tests/test.helpers';
 import { PinEntryComponent } from './pin-entry.component';
-import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { routes } from 'src/app/app-routing.module';
 
 describe('PinEntryComponent', () => {
   let component: PinEntryComponent;
@@ -19,8 +19,9 @@ describe('PinEntryComponent', () => {
       imports: [
         PinEntryComponentModule,
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes(routes),],
-      providers: [WalletAccessPage]
+        RouterTestingModule.withRoutes(routes),
+      ],
+      providers: [WalletAccessPage],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PinEntryComponent);

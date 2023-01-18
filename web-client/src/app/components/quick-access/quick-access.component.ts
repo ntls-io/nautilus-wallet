@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { QAccessService, QAccessStore, QAccessQuery, QAccess } from 'src/app/state/qAccess';
-import { ToastController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
-import { showToast } from '../../utils/toast.helpers';
+import { ToastController } from '@ionic/angular';
+import {
+  QAccess,
+  QAccessQuery,
+  QAccessService,
+  QAccessStore,
+} from 'src/app/state/qAccess';
 import { environment } from 'src/environments/environment';
+import { showToast } from '../../utils/toast.helpers';
 
 @Component({
   selector: 'app-quick-access',
@@ -11,7 +16,6 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./quick-access.component.scss'],
 })
 export class QuickAccessComponent implements OnInit {
-
   hideSavedWalletAddress = environment.enableQuickAccess;
 
   public Clipboard = Clipboard;
@@ -20,19 +24,20 @@ export class QuickAccessComponent implements OnInit {
     private quickAccessService: QAccessService,
     private quickAccessStore: QAccessStore,
     private toastCtrl: ToastController,
-    public quickAccessQuery: QAccessQuery) {}
+    public quickAccessQuery: QAccessQuery
+  ) {}
 
-    async ionViewWillEnter() {
-      await this.quickAccessService.fetchWalletAddresses();
-    }
+  async ionViewWillEnter() {
+    await this.quickAccessService.fetchWalletAddresses();
+  }
 
-    ngOnInit() {}
+  ngOnInit() {}
 
-  async deleteAddress(address: QAccess){
+  async deleteAddress(address: QAccess) {
     await this.quickAccessService.deleteAddress(address.walletAddress);
     this.quickAccessStore.remove(address.id);
     this.showSuccess('Wallet Address deleted');
-  };
+  }
 
   async showSuccess(message: string) {
     const toast = await this.toastCtrl.create({
@@ -64,5 +69,4 @@ export class QuickAccessComponent implements OnInit {
       duration: 2000,
     });
   }
-
 }

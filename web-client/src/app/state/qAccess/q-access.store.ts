@@ -6,12 +6,10 @@ export type QAccessState = EntityState<QAccess>;
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'qAccess'
+  name: 'qAccess',
 })
 export class QAccessStore extends EntityStore<QAccessState> {
-
   constructor() {
     super();
   }
-
 }

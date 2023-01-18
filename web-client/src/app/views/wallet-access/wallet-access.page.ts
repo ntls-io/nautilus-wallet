@@ -9,8 +9,8 @@ import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { handleScan } from '../scanner.helpers';
 import { environment } from 'src/environments/environment';
+import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-wallet-access',
