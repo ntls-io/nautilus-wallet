@@ -25,7 +25,6 @@ origins = [str(app_settings.primary_origin)]
 if app_settings.staging_mode:
     origins.append("http://localhost:4200")
 
-
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
