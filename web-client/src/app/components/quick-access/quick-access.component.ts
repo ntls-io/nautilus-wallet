@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { QuickAccessService } from 'src/app/state/quickAccess';
-import { saveAddress } from 'src/schema/entities';
-import { QuickAccessStore } from 'src/app/state/quickAccess';
+import { Component, OnInit } from '@angular/core'
+import { QAccessService, QAccessStore, QAccessQuery, QAccess } from 'src/app/state/qAccess';
+import { ToastController } from '@ionic/angular';
+import { Clipboard } from '@capacitor/clipboard';
+import { showToast } from '../../utils/toast.helpers';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-quick-access',
@@ -10,41 +12,57 @@ import { QuickAccessStore } from 'src/app/state/quickAccess';
 })
 export class QuickAccessComponent implements OnInit {
 
-  displayWalletAddress: saveAddress[] = [];
-  savedWalletAddresses: saveAddress[] = [];
+  hideSavedWalletAddress = environment.enableQuickAccess
+
+  public Clipboard = Clipboard;
 
   constructor(
-    private quickAccessService: QuickAccessService,
-    private quickAccessStore: QuickAccessStore) {}
+    private quickAccessService: QAccessService,
+    private quickAccessStore: QAccessStore,
+    private toastCtrl: ToastController,
+    public quickAccessQuery:QAccessQuery) {}
 
-  ngOnInit() {}
+    async ionViewWillEnter() {
+      await this.quickAccessService.fetchWalletAddresses();
+    }
 
-  displayWalletAdress = this.fetchWalletAddresses().then(
-    (data) => {return this.savedWalletAddresses = data}
-  );
+    ngOnInit() {}
 
-  async fetchPreferedName(walletAddress: string){
-    const preferedName = this.quickAccessService.loadPreferedName(walletAddress);
-    const data = await preferedName.then((data) => {return data});
-    return data;
+  async deleteAddress(address: QAccess){
+    await this.quickAccessService.deleteAddress(address.walletAddress);
+    this.quickAccessStore.remove(address.id);
+    this.showSuccess('Wallet Address deleted');
   };
 
-  async fetchWalletAddresses(){
-    let fetchWalletAddresses = await this.quickAccessService.loadWalletAddresses();
-    let QuickAcess: saveAddress[] = [];
-    for (let walletAddress of fetchWalletAddresses) {
-      let getPreferedName = await this.fetchPreferedName(walletAddress)
-      QuickAcess.push({
-        address: walletAddress,
-        preferedName: getPreferedName
+  async showSuccess(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color: 'success',
+    });
+
+    return toast.present();
+  }
+
+  async copyAddress(address: string) {
+    await this.Clipboard.write({
+      // eslint-disable-next-line id-blacklist
+      string: address?.toString(),
+    })
+      .then(() => {
+        this.notice('Address copied!');
       })
-    };
-    return QuickAcess
-};
+      .catch((err) => {
+        this.notice('Something weird happened, please try again!');
+        console.log(err);
+      });
+  }
 
-  async deleteAddress(walletAddress: string){
-    await this.quickAccessService.deleteAddress(walletAddress);
-    console.log('Adress Deleted!');
-  };
+  async notice(message: string): Promise<HTMLIonToastElement> {
+    return showToast(this.toastCtrl, message, {
+      color: 'success',
+      duration: 2000,
+    });
+  }
 
 }

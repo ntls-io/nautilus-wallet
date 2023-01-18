@@ -100,6 +100,8 @@ export type Environment = {
 
   hidePullPayment: boolean;
 
+  enableQuickAccess: boolean;
+
   autoLogout: boolean;
 
   autofundXrpAmount: number;

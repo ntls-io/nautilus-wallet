@@ -12,7 +12,8 @@ import { PinResetPage } from 'src/app/views/pin-reset/pin-reset.page';
 import { checkClass } from 'src/helpers/helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
-import { QuickAccessService } from 'src/app/state/quickAccess';
+import { QAccessService } from 'src/app/state/qAccess';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pin-entry',
@@ -39,11 +40,13 @@ export class PinEntryComponent implements OnInit {
 
   rememberWalletAddress = false;
 
+  hideRememberWalletAddress = environment.enableQuickAccess
+
   constructor(
     private modalCtrl: ModalController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
-    private quickAccessService: QuickAccessService) {}
+    private quickAccessService: QAccessService) {}
 
   onChangeRememberWalletAddress(){
     this.rememberWalletAddress = !this.rememberWalletAddress;
@@ -75,23 +78,7 @@ export class PinEntryComponent implements OnInit {
 
      onSubmit(): void {
     if(this.rememberWalletAddress){
-      console.log('Wallet Address saved');
-      const saveWalletAddress: string = this.walletAccessPage.address !== undefined ? this.walletAccessPage.address : '';
-      console.log(saveWalletAddress);
-
-      this.notification.swal.fire({
-        titleText: 'Save Wallet Address',
-        text: 'Plese enter a preferred name below',
-        input: 'text',
-        confirmButtonText: 'Confirm',
-        showCancelButton: true,
-        showLoaderOnConfirm: true,
-        reverseButtons: true,
-      }).then((result) => {
-        const preferedName = result.value;
-        console.log(preferedName);
-          this.quickAccessService.addWalletAddress(saveWalletAddress,preferedName);
-      });
+      this.saveQuickAccess()
       };
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
@@ -102,10 +89,30 @@ export class PinEntryComponent implements OnInit {
     }
   }
 
-  async saveAdress(){
-    await this.notification.swal.fire(
-
-    )
+  async saveQuickAccess(){
+    const saveWalletAddress: string = this.walletAccessPage.address !== undefined ? this.walletAccessPage.address : '';
+    console.log(saveWalletAddress);
+    try {
+      await this.notification.swal.fire({
+        titleText: 'Save Wallet Address',
+        text: 'Plese enter a preferred name below',
+        input: 'text',
+        confirmButtonText: 'Confirm',
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        reverseButtons: true,
+      }).then((result) => {
+        const preferedName = result.value;
+          this.quickAccessService.addWalletAddress(saveWalletAddress,preferedName);
+      }).then(async ()=>{
+        await this.notification.swal.fire({
+          icon: 'success',
+          text: 'Your Wallet Address has been saved!',
+        })
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async goToReset() {
