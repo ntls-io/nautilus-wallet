@@ -40,17 +40,13 @@ export class PinEntryComponent implements OnInit {
 
   rememberWalletAddress = false;
 
-  hideRememberWalletAddress = environment.enableQuickAccess
+  hideRememberWalletAddress = environment.enableQuickAccess;
 
   constructor(
     private modalCtrl: ModalController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
     private quickAccessService: QAccessService) {}
-
-  onChangeRememberWalletAddress(){
-    this.rememberWalletAddress = !this.rememberWalletAddress;
-  }
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -72,13 +68,17 @@ export class PinEntryComponent implements OnInit {
       : null;
   }
 
+  onChangeRememberWalletAddress(){
+    this.rememberWalletAddress = !this.rememberWalletAddress;
+  }
+
   ngOnInit(): void {
     this.initForm();
   }
 
      onSubmit(): void {
     if(this.rememberWalletAddress){
-      this.saveQuickAccess()
+      this.saveQuickAccess();
       };
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
@@ -108,7 +108,7 @@ export class PinEntryComponent implements OnInit {
         await this.notification.swal.fire({
           icon: 'success',
           text: 'Your Wallet Address has been saved!',
-        })
+        });
       });
     } catch (error) {
       console.log(error);

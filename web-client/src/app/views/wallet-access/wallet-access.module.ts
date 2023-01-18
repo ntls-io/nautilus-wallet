@@ -6,7 +6,7 @@ import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { WalletAccessPageRoutingModule } from './wallet-access-routing.module';
 import { WalletAccessPage } from './wallet-access.page';
-import { QuickAccessComponent } from "../../components/quick-access/quick-access.component";
+import { QuickAccessComponent } from '../../components/quick-access/quick-access.component';
 
 @NgModule({
     declarations: [WalletAccessPage, QuickAccessComponent],

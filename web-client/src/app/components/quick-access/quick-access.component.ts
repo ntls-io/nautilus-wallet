@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { QAccessService, QAccessStore, QAccessQuery, QAccess } from 'src/app/state/qAccess';
 import { ToastController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class QuickAccessComponent implements OnInit {
 
-  hideSavedWalletAddress = environment.enableQuickAccess
+  hideSavedWalletAddress = environment.enableQuickAccess;
 
   public Clipboard = Clipboard;
 
@@ -20,7 +20,7 @@ export class QuickAccessComponent implements OnInit {
     private quickAccessService: QAccessService,
     private quickAccessStore: QAccessStore,
     private toastCtrl: ToastController,
-    public quickAccessQuery:QAccessQuery) {}
+    public quickAccessQuery: QAccessQuery) {}
 
     async ionViewWillEnter() {
       await this.quickAccessService.fetchWalletAddresses();

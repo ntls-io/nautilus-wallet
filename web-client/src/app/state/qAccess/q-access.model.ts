@@ -4,8 +4,4 @@ export interface QAccess {
   preferedName: string | null;
 }
 
-export function createQAccess(params: Partial<QAccess>) {
-  return {
-
-  } as QAccess;
-}
+export const createQAccess = (params: Partial<QAccess>) => ({} as QAccess);

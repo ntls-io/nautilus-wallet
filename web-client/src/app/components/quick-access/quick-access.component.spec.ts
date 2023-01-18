@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { QuickAccessComponent } from './quick-access.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { routes } from 'src/app/app-routing.module';
 
 describe('QuickAccessComponent', () => {
   let component: QuickAccessComponent;
@@ -10,7 +13,10 @@ describe('QuickAccessComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ QuickAccessComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        RouterTestingModule,
+        HttpClientTestingModule,]
     }).compileComponents();
 
     fixture = TestBed.createComponent(QuickAccessComponent);

@@ -34,8 +34,3 @@ export type XrplAccountDisplay = {
   public_key_hex: XrplPublicKeyHex;
   address_base58: XrplAddressBase58;
 };
-
-export type saveAddress = {
-  address: string;
-  preferedName: string | null;
-};

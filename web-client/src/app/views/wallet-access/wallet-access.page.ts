@@ -26,7 +26,7 @@ export class WalletAccessPage implements OnInit {
   /** @see validatedAddress */
   address?: string;
 
-  hideSavedWalletAddress = environment.enableQuickAccess
+  hideSavedWalletAddress = environment.enableQuickAccess;
 
   constructor(
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.

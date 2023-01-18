@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs/operators';
 import { QAccessStore } from './q-access.store';
 import { Preferences} from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
@@ -15,8 +13,8 @@ export class QAccessService {
     Preferences.set({
       key: address,
       value: preferedName
-    })
-    this.fetchWalletAddresses()
+    });
+    this.fetchWalletAddresses();
   };
 
   async loadPreferedName(walletAddress: string){
@@ -34,29 +32,29 @@ export class QAccessService {
     } catch (err){
       console.log(err);
     }
-    return fetchedwalletAdresses
+    return fetchedwalletAdresses;
   };
 
   async fetchPreferedName(walletAddress: string){
     const preferedName = this.loadPreferedName(walletAddress);
-    const data = await preferedName.then((data) => {return data});
+    const data = await preferedName.then((result) => result);
     return data;
   };
 
   async fetchWalletAddresses(){
-    let fetchWalletAddresses = await this.loadWalletAddresses();
-    let QuickAcess: QAccess;
-    for (let walletAddress of fetchWalletAddresses) {
-      let getPreferedName = await this.fetchPreferedName(walletAddress);
-      const id = guid()
-      QuickAcess = {
+    const fetchWalletAddresses = await this.loadWalletAddresses();
+    let quickAcess: QAccess;
+    for (const walletAddress of fetchWalletAddresses) {
+      const getPreferedName = await this.fetchPreferedName(walletAddress);
+      const id = guid();
+      quickAcess = {
         id,
-        walletAddress: walletAddress,
+        walletAddress,
         preferedName: getPreferedName
       };
       this.quickAccessStore.add({
         id,
-        walletAddress: walletAddress,
+        walletAddress,
         preferedName: getPreferedName
       });
     };
