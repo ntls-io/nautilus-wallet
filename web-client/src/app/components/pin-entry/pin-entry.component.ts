@@ -101,8 +101,7 @@ export class PinEntryComponent implements OnInit {
     try {
       await this.notification.swal
         .fire({
-          titleText: 'Save Wallet Address',
-          text: 'Plese enter a preferred name below',
+          titleText: 'Enter Wallet Nickname.',
           input: 'text',
           confirmButtonText: 'Confirm',
           showCancelButton: true,
