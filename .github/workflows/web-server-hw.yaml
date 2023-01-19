@@ -23,7 +23,7 @@ jobs:
 
   build-stage-web-server-builder:
     name: "Builder"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     steps:
       -
         uses: docker/setup-buildx-action@v1
@@ -44,7 +44,7 @@ jobs:
 
   build-stage-run-sgx-wallet-server-hw:
     name: "Build server (HW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs: build-stage-web-server-builder
     steps:
       -
@@ -77,7 +77,7 @@ jobs:
 
   build-stage-run-sgx-wallet-test-hw:
     name: "Build tests (HW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs: build-stage-web-server-builder
     steps:
       -

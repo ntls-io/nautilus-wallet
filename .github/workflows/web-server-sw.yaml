@@ -23,7 +23,7 @@ jobs:
 
   build-stage-web-server-builder:
     name: "Builder"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     steps:
       -
         uses: docker/setup-buildx-action@v1
@@ -44,7 +44,7 @@ jobs:
 
   build-stage-run-sgx-wallet-server-sw:
     name: "Build server (SW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs: build-stage-web-server-builder
     steps:
       -
@@ -67,7 +67,7 @@ jobs:
           context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:web-server"
           build-args: 'SGX_MODE=SW'
           secrets: |
-            "sgx-signing-key=${{ secrets.SGX_SIGNING_KEY }}"
+            sgx-signing-key=${{ secrets.SGX_SIGNING_KEY }}
           target: run-sgx-wallet-server-sw
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -77,7 +77,7 @@ jobs:
 
   build-stage-run-sgx-wallet-test-sw:
     name: "Build tests (SW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs: build-stage-web-server-builder
     steps:
       -
@@ -109,7 +109,7 @@ jobs:
 
   build-stage-cargo-make-ci:
     name: "cargo make (SW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs:
       - build-stage-run-sgx-wallet-server-sw
       - build-stage-run-sgx-wallet-test-sw
@@ -134,7 +134,7 @@ jobs:
 
   run-stage-sgx-wallet-test-sw:
     name: "Run tests (SW)"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-20.04"
     needs: build-stage-run-sgx-wallet-test-sw
     steps:
       -
