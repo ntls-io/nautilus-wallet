@@ -23,6 +23,7 @@ export type Environment = {
    * Toggle Angular and libraries between production and development modes.
    */
   production: boolean;
+  staging?: boolean;
 
   /**
    * Name of the organization.

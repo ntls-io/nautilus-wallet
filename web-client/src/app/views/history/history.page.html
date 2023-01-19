@@ -16,7 +16,7 @@
   </div>
 
   <ng-container *ngIf="(historyQuery.transactions| async)?.length; else empty">
-    <ion-list lines="full" *ngIf="historyQuery.transactions| async">
+    <ion-list lines="full" mode="ios" *ngIf="historyQuery.transactions| async">
       <ion-item *ngFor="let item of historyQuery.transactions| async">
         <ion-icon
           slot="start"

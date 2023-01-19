@@ -6,7 +6,6 @@ export interface SetupState {
   tokenIssuer: string;
   xrpIssuer: string;
   ledger: string;
-  name: string;
   logo: string | undefined;
 }
 
@@ -15,7 +14,6 @@ export const createInitialState = (): SetupState => ({
   tokenIssuer: '',
   xrpIssuer: '',
   ledger: '',
-  name: '',
   logo: undefined,
 });
 

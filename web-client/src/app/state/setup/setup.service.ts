@@ -24,7 +24,15 @@ export class SetupService {
     const orgDoc = doc(store, 'organisations', org);
     await getDoc(orgDoc).then((document: DocumentSnapshot) => {
       if (document.exists()) {
-        this.setupStore.update(document.data());
+        const dataData = document.data();
+        if (dataData) {
+          const data = environment?.staging
+            ? dataData?.staging
+            : dataData?.production;
+          if (data) {
+            this.setupStore.update(data);
+          }
+        }
       } else {
         console.log('No such document');
       }

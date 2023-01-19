@@ -17,6 +17,7 @@ export const environment: Environment = {
     measurementId: 'G-TW4DGPTJ62',
   },
   production: false,
+  staging: true,
   organization: 'nautilus',
 
   // Enable persistence for easier development.

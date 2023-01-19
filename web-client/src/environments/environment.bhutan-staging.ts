@@ -13,6 +13,7 @@ export const environment: Environment = {
     measurementId: 'G-TW4DGPTJ62',
   },
   production: true,
+  staging: true,
   organization: 'bhutan',
 
   // Enable persistence for demo purposes.
