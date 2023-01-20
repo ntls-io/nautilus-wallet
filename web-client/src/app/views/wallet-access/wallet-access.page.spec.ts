@@ -26,6 +26,7 @@ describe('WalletAccessPage', () => {
         IonicModule.forRoot(),
         WalletAccessPageModule,
         RouterTestingModule.withRoutes(routes),
+        RouterTestingModule,
         HttpClientTestingModule,
       ],
     }).compileComponents();
