@@ -3,5 +3,9 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "hooks": {
+    "build:before": "scripts/update-native-config.js",
+    "capacitor:sync:after": "scripts/generate-assets.js"
+  }
 }

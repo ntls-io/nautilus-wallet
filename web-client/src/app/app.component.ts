@@ -28,7 +28,7 @@ export class AppComponent {
       })
       .finally(() => {
         if (this.platform.is('capacitor')) {
-          SplashScreen.hide({ fadeOutDuration: 500 });
+          SplashScreen.hide({ fadeOutDuration: 1000 });
         }
       });
   }
