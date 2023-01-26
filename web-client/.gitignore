@@ -33,7 +33,6 @@ npm-debug.log*
 /ios
 /android
 /plugins
-/storybook-static
 /www
 
 # Firebase
