@@ -1,0 +1,33 @@
+<ion-list lines="none">
+  <ion-list-header>
+    <ion-label color="primary">
+      <h1 class="font-nasalization">Recipients list</h1>
+    </ion-label>
+  </ion-list-header>
+
+  <div *ngIf="bookmarkQuery.selectCount() | async; else empty">
+    <ng-container *ngFor="let bookmark of bookmarkQuery.selectAll() | async">
+      <ion-item class="app-item" *ngIf="bookmark?.id">
+        <ion-icon slot="start" name="bookmark"></ion-icon>
+        <ion-label>
+          <h2 class="!font-black">{{ bookmark?.name }}</h2>
+          <h6>{{ bookmark?.address }}</h6>
+        </ion-label>
+        <ion-buttons>
+          <ion-button (click)="sendFund(bookmark.address)">
+            <ion-icon slot="icon-only" name="cash"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteBookmark(bookmark.id)">
+            <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ng-container>
+  </div>
+
+  <ng-template #empty>
+    <div class="ion-padding-horizontal ion-text-center">
+      <p>Your recipient list is empty</p>
+    </div>
+  </ng-template>
+</ion-list>
