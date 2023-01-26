@@ -19,14 +19,6 @@ export const environment: Environment = {
   persistAkitaState: true,
   nautilusWalletServer: 'https://wallet-demo-api.ntls.io/',
   nautilusAssetServices: 'https://wallet-demo-services.ntls.io/',
-  algod: {
-    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
-    port: '',
-    // FIXME: Development key
-    token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
-  },
-  // USDC from https://testnet.folks.finance/faucet
-  defaultAlgorandAssetId: 67395862,
   xrplClient: {
     server: 'wss://s.altnet.rippletest.net:51233',
     options: {

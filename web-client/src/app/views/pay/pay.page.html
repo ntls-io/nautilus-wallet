@@ -10,7 +10,6 @@
   <app-pure-pay-page
     [senderName]="senderName | async"
     [receiverAddress]="receiverAddress"
-    [algorandBalances]="algorandBalances | async"
     [xrplBalances]="xrplBalances | async"
     [flagOnfidoCheckIsClear]="onfidoCheckIsClear | async"
     (paymentSubmitted)="onPaymentSubmitted($event)"

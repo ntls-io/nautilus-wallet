@@ -23,7 +23,6 @@ describe('stubActiveSession', () => {
       wallet: {
         wallet_id: 'stub',
         owner_name: 'stub',
-        algorand_address_base32: 'stub',
         xrpl_account: {
           key_type: 'secp256k1',
           public_key_hex: 'stub',
@@ -38,7 +37,6 @@ describe('stubActiveSession', () => {
     const wallet: WalletDisplay = {
       wallet_id: 'id',
       owner_name: 'name',
-      algorand_address_base32: 'address',
       xrpl_account: {
         key_type: 'ed25519',
         public_key_hex: 'public key',

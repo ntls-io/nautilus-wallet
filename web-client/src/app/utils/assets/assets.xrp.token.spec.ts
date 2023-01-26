@@ -1,5 +1,4 @@
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
-import { assetAmountAlgo, LEDGER_INFO_ALGO } from './assets.algo';
 import {
   assetAmountXrp,
   LEDGER_INFO_XRP,
@@ -64,10 +63,6 @@ describe('isLedgerInfoXrplToken', () => {
   it('rejects XRP', () => {
     expect(isLedgerInfoXrplToken(LEDGER_INFO_XRP)).toBeFalse();
   });
-
-  it('rejects Algorand', () => {
-    expect(isLedgerInfoXrplToken(LEDGER_INFO_ALGO)).toBeFalse();
-  });
 });
 
 describe('isAssetAmountXrplToken', () => {
@@ -77,10 +72,6 @@ describe('isAssetAmountXrplToken', () => {
 
   it('rejects XRP', () => {
     expect(isAssetAmountXrplToken(assetAmountXrp(1))).toBeFalse();
-  });
-
-  it('rejects Algo', () => {
-    expect(isAssetAmountXrplToken(assetAmountAlgo(1))).toBeFalse();
   });
 });
 

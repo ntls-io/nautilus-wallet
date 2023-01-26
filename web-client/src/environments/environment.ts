@@ -27,13 +27,6 @@ export const environment: Environment = {
   nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
   // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
   // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
-  algod: {
-    // XXX: Algodv2's parameter handling is a bit weird: the HTTP port must be passed separately.
-    baseServer: 'http://localhost/api/algorand',
-    port: 4200,
-    // FIXME: Development key
-    token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-  },
 
   xrplClient: {
     server: 'ws://localhost:4200/api/xrpl',

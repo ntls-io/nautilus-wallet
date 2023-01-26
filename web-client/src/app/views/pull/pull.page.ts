@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { firstValueFrom, map } from 'rxjs';
-import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
@@ -195,23 +194,11 @@ export class PullPage implements OnInit {
   }
 
   protected async notifyResult(
-    result:
-      | { algorandResult: TransactionConfirmation }
-      | { xrplResult: TxResponse }
-      | CommissionedTxResponse,
+    result: { xrplResult: TxResponse } | CommissionedTxResponse,
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<void> {
-    if ('algorandResult' in result) {
-      const { algorandResult: confirmation } = result;
-      this.notifySuccess({
-        amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
-        address: receiverAddress,
-        txId: confirmation.txId,
-        timestamp: new Date(),
-        txUrlPrefix: environment.algorandTransactionUrlPrefix,
-      });
-    } else if ('xrplResult' in result) {
+    if ('xrplResult' in result) {
       const { xrplResult: txResponse } = result;
 
       const { succeeded, resultCode } = checkTxResponseSucceeded(txResponse);

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
-import { AccountData, AssetParams } from 'src/app/services/algosdk.utils';
 import { OnfidoCheckResult } from 'src/schema/actions';
 import { WalletDisplay } from 'src/schema/entities';
 import * as xrpl from 'xrpl';
@@ -24,20 +23,6 @@ export interface SessionState {
    * The current session's user-supplied authentication PIN.
    */
   pin?: string;
-
-  /**
-   * The current session's Algorand account details, as loaded from Algod.
-   *
-   * @see import('./session-algorand.service').SessionAlgorandService
-   */
-  algorandAccountData?: AccountData;
-
-  /**
-   * Asset parameters of interest to the current session.
-   *
-   * @see import('./session-algorand.service').SessionAlgorandService.loadAssetParams
-   */
-  algorandAssetParams?: Record<number, AssetParams>;
 
   /**
    * The current session's XRPL account root ledger entry.

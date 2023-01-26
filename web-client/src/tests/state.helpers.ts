@@ -14,7 +14,6 @@ export const stubActiveSession = (
     wallet: {
       wallet_id: state?.wallet?.wallet_id ?? 'stub',
       owner_name: state?.wallet?.owner_name ?? 'stub',
-      algorand_address_base32: state?.wallet?.algorand_address_base32 ?? 'stub',
       xrpl_account: {
         key_type: state?.wallet?.xrpl_account?.key_type ?? 'secp256k1',
         public_key_hex: state?.wallet?.xrpl_account?.public_key_hex ?? 'stub',

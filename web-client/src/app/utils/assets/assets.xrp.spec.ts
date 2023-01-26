@@ -1,5 +1,3 @@
-import { LEDGER_INFO_ALGO } from './assets.algo';
-import { ledgerInfoAsa } from './assets.algo.asa';
 import {
   assetAmountXrp,
   AssetAmountXrp,
@@ -29,14 +27,6 @@ describe('isLedgerInfoXrp', () => {
 
   it('rejects XRPL token', () => {
     expect(isLedgerInfoXrp(ledgerInfoXrplToken('SPAM', 'spammer'))).toBeFalse();
-  });
-
-  it('rejects Algo', () => {
-    expect(isLedgerInfoXrp(LEDGER_INFO_ALGO)).toBeFalse();
-  });
-
-  it('rejects ASA', () => {
-    expect(isLedgerInfoXrp(ledgerInfoAsa(5, 2))).toBeFalse();
   });
 });
 

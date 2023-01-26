@@ -1,5 +1,4 @@
 import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
-import { assetAmountAlgo } from '../utils/assets/assets.algo';
 import { AssetSymbolPipe } from './asset-symbol.pipe';
 
 describe('AssetSymbolPipe', () => {
@@ -14,7 +13,6 @@ describe('AssetSymbolPipe', () => {
   });
 
   it('formats', () => {
-    expect(pipe.transform(assetAmountAlgo(0))).toBe('ALGO');
     expect(pipe.transform(assetAmountXrp(0))).toBe('XRP');
   });
 

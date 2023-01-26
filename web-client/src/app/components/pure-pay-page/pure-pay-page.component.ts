@@ -7,7 +7,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import algosdk from 'algosdk';
 import { map } from 'rxjs';
 import { Payment, PaymentOption } from 'src/app/components/pay/pay.component';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -31,8 +30,6 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   @Input() senderAddress?: string | null;
 
   @Input() receiverAddress?: string | null;
-
-  @Input() algorandBalances?: AssetAmount[] | null;
 
   @Input() xrplBalances?: AssetAmount[] | null;
 
@@ -68,10 +65,6 @@ export class PurePayPageComponent implements OnInit, OnChanges {
     return this.receiverAddress ? addressType(this.receiverAddress) : undefined;
   }
 
-  get hasAlgorandBalances(): boolean {
-    return 0 < (this.algorandBalances ?? []).length;
-  }
-
   get hasPaymentOptions(): boolean {
     return 0 < (this.paymentOptions ?? []).length;
   }
@@ -97,14 +90,7 @@ export class PurePayPageComponent implements OnInit, OnChanges {
     const senderName = this.senderName;
     const receiverAddress = this.receiverAddress;
     if (senderName && receiverAddress) {
-      if (this.receiverAddressType === 'Algorand' && this.algorandBalances) {
-        return this.algorandBalances.map((senderBalance) => ({
-          senderName,
-          senderBalance,
-          receiverAddress,
-          ...this.transactionLimitFor(senderBalance),
-        }));
-      } else if (this.receiverAddressType === 'XRPL' && this.xrplBalances) {
+      if (this.receiverAddressType === 'XRPL' && this.xrplBalances) {
         return this.xrplBalances.map((senderBalance) => ({
           senderName,
           senderBalance,
@@ -135,14 +121,11 @@ export class PurePayPageComponent implements OnInit, OnChanges {
   }
 }
 
-type AddressType = 'Algorand' | 'XRPL';
+type AddressType = 'XRPL';
 
 const addressTypes = (address: string): AddressType[] => {
   const coerce = (t: AddressType[]) => t;
-  return [
-    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
-    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
-  ];
+  return [...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : [])];
 };
 
 const addressType = (address: string): AddressType | undefined => {

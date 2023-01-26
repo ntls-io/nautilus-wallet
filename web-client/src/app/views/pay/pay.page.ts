@@ -4,21 +4,13 @@ import { filterNilValue, resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
-import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
-import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import {
   CommissionedTxResponse,
   SessionXrplService,
 } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { SessionStore } from 'src/app/state/session.store';
-import { isAssetAmountAlgo } from 'src/app/utils/assets/assets.algo';
-import {
-  convertFromAssetAmountAsaToLedger,
-  isAssetAmountAsa,
-} from 'src/app/utils/assets/assets.algo.asa';
 import {
   AssetAmount,
   formatAssetAmount,
@@ -38,7 +30,6 @@ import {
 import { panic } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { environment } from 'src/environments/environment';
 import { never } from 'src/helpers/helpers';
 import { WalletId } from 'src/schema/types';
 import * as xrpl from 'xrpl';
@@ -60,9 +51,6 @@ export class PayPage implements OnInit {
 
   receiverAddress: WalletId | undefined;
 
-  algorandBalances: Observable<AssetAmount[]> =
-    this.sessionQuery.algorandBalances;
-
   xrplBalances: Observable<AssetAmount[] | undefined> =
     this.sessionQuery.xrplBalances;
 
@@ -72,9 +60,7 @@ export class PayPage implements OnInit {
   constructor(
     private router: Router,
     private navCtrl: NavController,
-    private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
-    private sessionStore: SessionStore,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
@@ -111,7 +97,6 @@ export class PayPage implements OnInit {
    *
    * This currently handles:
    *
-   * - Algorand: Algo & ASA
    * - XRPL: XRP & tokens
    *
    * @todo Move this into an appropriate aggregated payment service somewhere?
@@ -119,29 +104,8 @@ export class PayPage implements OnInit {
   protected async sendByLedgerType(
     amount: AssetAmount,
     receiverAddress: string
-  ): Promise<
-    | { algorandResult: TransactionConfirmation }
-    | { xrplResult: TxResponse }
-    | CommissionedTxResponse
-  > {
-    if (isAssetAmountAlgo(amount)) {
-      return {
-        algorandResult: await this.sessionAlgorandService.sendAlgos(
-          receiverAddress,
-          amount.amount
-        ),
-      };
-    } else if (isAssetAmountAsa(amount)) {
-      const { amount: amountInLedgerUnits, assetId } =
-        convertFromAssetAmountAsaToLedger(amount);
-      return {
-        algorandResult: await this.sessionAlgorandService.sendAssetFunds(
-          assetId,
-          receiverAddress,
-          amountInLedgerUnits
-        ),
-      };
-    } else if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
+  ): Promise<{ xrplResult: TxResponse } | CommissionedTxResponse> {
+    if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
       return this.sendXrpl(amount, receiverAddress);
     } else {
       throw panic('PayPage.sendAmount: unexpected amount', { amount });
@@ -192,23 +156,11 @@ export class PayPage implements OnInit {
   }
 
   protected async notifyResult(
-    result:
-      | { algorandResult: TransactionConfirmation }
-      | { xrplResult: TxResponse }
-      | CommissionedTxResponse,
+    result: { xrplResult: TxResponse } | CommissionedTxResponse,
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<void> {
-    if ('algorandResult' in result) {
-      const { algorandResult: confirmation } = result;
-      this.notifySuccess({
-        amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
-        address: receiverAddress,
-        txId: confirmation.txId,
-        timestamp: new Date(),
-        txUrlPrefix: environment.algorandTransactionUrlPrefix,
-      });
-    } else if ('xrplResult' in result) {
+    if ('xrplResult' in result) {
       const { xrplResult: txResponse } = result;
 
       const { succeeded, resultCode } = checkTxResponseSucceeded(txResponse);

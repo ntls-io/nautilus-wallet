@@ -1,7 +1,3 @@
-import {
-  AlgodTokenHeader,
-  CustomTokenHeader,
-} from 'algosdk/dist/types/src/client/urlTokenBaseHTTPClient';
 import { AssetConfigs } from 'src/app/utils/assets/assets.config';
 import * as xrpl from 'xrpl';
 
@@ -55,27 +51,6 @@ export type Environment = {
   assetConfigs?: AssetConfigs;
 
   /**
-   * Algorand Algod client connection details.
-   */
-  algod?: Algodv2Params;
-
-  /**
-   * (Optional) A base URL to use to link transaction IDs.
-   *
-   * This should generally point at an explorer for the configured Algorand network.
-   *
-   * @see import('src/app/views/pay/pay.page').PayPage.notifySuccess
-   */
-  algorandTransactionUrlPrefix?: string;
-
-  /**
-   * (Optional) An Algorand ASA to try to opt in to by default.
-   *
-   * @see import('src/app/views/wallet/wallet.page').WalletPage.checkAlgorandAssetOptIn
-   */
-  defaultAlgorandAssetId?: number;
-
-  /**
    * XRPL.js client configuration.
    *
    * @see https://js.xrpl.org/classes/Client.html#constructor
@@ -115,15 +90,4 @@ export type Environment = {
    * Require a clear Onfido check status before enabling sending payments.
    */
   requireOnfidoCheckBeforeSendPayment?: boolean;
-};
-
-/**
- * Algodv2 constructor parameters.
- *
- * @see https://algorand.github.io/js-algorand-sdk/classes/Algodv2.html#constructor
- */
-type Algodv2Params = {
-  token: string | AlgodTokenHeader | CustomTokenHeader;
-  baseServer?: string;
-  port?: string | number;
 };

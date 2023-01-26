@@ -14,15 +14,6 @@ export type WalletId = string;
 /** A wallet owner's authenticating PIN. */
 export type WalletPin = string;
 
-/** Algorand account seed, as bytes. */
-export type AlgorandAccountSeedBytes = Bytes32;
-
-/** Algorand account address, as bytes. */
-export type AlgorandAddressBytes = Bytes32;
-
-/** Algorand account address, as base32 with checksum. */
-export type AlgorandAddressBase32 = string;
-
 /**
  * XRP key type (signing algorithm).
  *

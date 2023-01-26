@@ -28,13 +28,6 @@
           {{ receiverAddress | json }}
         </pre>
       </ng-container>
-
-      <ng-container
-        *ngIf="receiverAddressType === 'Algorand' && !hasAlgorandBalances"
-      >
-        <h2 class="font-semibold font-nasalization">No Algorand account</h2>
-        <p>You do not have an Algorand account</p>
-      </ng-container>
     </div>
   </ng-template>
 </ng-template>

@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
-import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
@@ -54,7 +53,6 @@ export class DeleteUserPage implements OnInit {
     public sessionService: SessionService,
     public sessionQuery: SessionQuery,
     public notification: SwalHelper,
-    public sessionAlgorandService: SessionAlgorandService,
     public sessionXrplService: SessionXrplService,
     public deleteUserService: DeleteUserService
   ) {

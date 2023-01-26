@@ -11,8 +11,6 @@ import {
   GetXrplWalletResult,
   OpenWallet,
   OpenWalletResult,
-  SignTransaction,
-  SignTransactionResult,
   WalletRequest,
   WalletResponse,
 } from 'src/schema/actions';
@@ -189,71 +187,11 @@ describe('EnclaveService', () => {
       await expect(result).toEqual(stubResultFailed);
     });
   });
-
-  describe('signTransaction', () => {
-    const requestSign: SignTransaction = {
-      wallet_id: 'placeholder wallet id',
-      auth_pin: '1234',
-      transaction_to_sign: {
-        AlgorandTransaction: {
-          transaction_bytes: new TextEncoder().encode(
-            'placeholder unsigned transaction'
-          ),
-        },
-      },
-    };
-
-    it('Signed', async () => {
-      const stubResultSigned: SignTransactionResult = {
-        Signed: {
-          AlgorandTransactionSigned: {
-            signed_transaction_bytes: new TextEncoder().encode(
-              'placeholder signed transaction'
-            ),
-          },
-        },
-      };
-      const result = await simulateWalletOperation(
-        httpTestingController,
-        service.signTransaction(requestSign),
-        { SignTransaction: requestSign },
-        { SignTransaction: stubResultSigned }
-      );
-      await expect(result).toEqual(stubResultSigned);
-    });
-
-    it('InvalidAuth', async () => {
-      const stubResultInvalidAuth: SignTransactionResult = {
-        InvalidAuth: null,
-      };
-      const result = await simulateWalletOperation(
-        httpTestingController,
-        service.signTransaction(requestSign),
-        { SignTransaction: requestSign },
-        { SignTransaction: stubResultInvalidAuth }
-      );
-      await expect(result).toEqual(stubResultInvalidAuth);
-    });
-
-    it('Failed', async () => {
-      const stubResultFailed: SignTransactionResult = {
-        Failed: 'failed to open wallet',
-      };
-      const result = await simulateWalletOperation(
-        httpTestingController,
-        service.signTransaction(requestSign),
-        { SignTransaction: requestSign },
-        { SignTransaction: stubResultFailed }
-      );
-      await expect(result).toEqual(stubResultFailed);
-    });
-  });
 });
 
 const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
   wallet_id: 'placeholder wallet id',
   owner_name,
-  algorand_address_base32: 'placeholder algorand address',
   xrpl_account: {
     key_type: 'secp256k1',
     public_key_hex: 'placeholder public key hex',
