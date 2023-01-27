@@ -15,9 +15,9 @@
     <h2 class="font-bold">Recent transactions</h2>
   </div>
 
-  <ng-container *ngIf="(historyQuery.transactions| async)?.length; else empty">
-    <ion-list lines="full" mode="ios" *ngIf="historyQuery.transactions| async">
-      <ion-item *ngFor="let item of historyQuery.transactions| async">
+  <ng-container *ngIf="(displayTransactions| async)?.length; else empty">
+    <ion-list lines="full" mode="ios" *ngIf="displayTransactions| async">
+      <ion-item *ngFor="let item of displayTransactions| async">
         <ion-icon
           slot="start"
           [name]="(item?.tx?.Account | isMe) ? 'arrow-forward' : 'arrow-back'"
@@ -35,9 +35,14 @@
           <h6>{{item?.tx?.date | xrpDate}}</h6>
         </ion-label>
         <ion-note slot="end" color="primary">
-          <small class="font-bold">
-            {{item?.tx?.Amount?.value | currency: 'FOO'}}
-          </small>
+          <h4 class="font-bold" *ngIf="typeOf(item?.tx?.Amount) === 'string'; else issuedCurrency">
+            {{convertdropToxrp(item?.tx?.Amount) | currency: 'XRP'}}
+          </h4>
+          <ng-template #issuedCurrency>
+            <h4 class="font-bold">
+              {{item?.tx?.Amount?.value | currency: tokenSymbol }}
+            </h4>
+          </ng-template>
         </ion-note>
       </ion-item>
     </ion-list>

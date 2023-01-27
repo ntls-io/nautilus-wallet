@@ -5,10 +5,15 @@ import { HistoryState, HistoryStore } from './history.store';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryQuery extends QueryEntity<HistoryState> {
-  transactions = this.selectAll({
+  issuedCurrencyTransactions = this.selectAll({
     filterBy: ({ tx }: any) =>
       tx?.TransactionType === 'Payment' &&
-      tx.Amount?.currency === this.setupQuery.tokenSymbol,
+      typeof tx.Amount === 'object',
+  });
+
+  allTransactions = this.selectAll({
+    filterBy: ({ tx }: any) =>
+      tx?.TransactionType === 'Payment',
   });
 
   constructor(protected store: HistoryStore, private setupQuery: SetupQuery) {
