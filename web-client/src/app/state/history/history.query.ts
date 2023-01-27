@@ -7,13 +7,11 @@ import { HistoryState, HistoryStore } from './history.store';
 export class HistoryQuery extends QueryEntity<HistoryState> {
   issuedCurrencyTransactions = this.selectAll({
     filterBy: ({ tx }: any) =>
-      tx?.TransactionType === 'Payment' &&
-      typeof tx.Amount === 'object',
+      tx?.TransactionType === 'Payment' && typeof tx.Amount === 'object',
   });
 
   allTransactions = this.selectAll({
-    filterBy: ({ tx }: any) =>
-      tx?.TransactionType === 'Payment',
+    filterBy: ({ tx }: any) => tx?.TransactionType === 'Payment',
   });
 
   constructor(protected store: HistoryStore, private setupQuery: SetupQuery) {

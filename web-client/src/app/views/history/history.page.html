@@ -35,7 +35,10 @@
           <h6>{{item?.tx?.date | xrpDate}}</h6>
         </ion-label>
         <ion-note slot="end" color="primary">
-          <h4 class="font-bold" *ngIf="typeOf(item?.tx?.Amount) === 'string'; else issuedCurrency">
+          <h4
+            class="font-bold"
+            *ngIf="typeOf(item?.tx?.Amount) === 'string'; else issuedCurrency"
+          >
             {{convertdropToxrp(item?.tx?.Amount) | currency: 'XRP'}}
           </h4>
           <ng-template #issuedCurrency>

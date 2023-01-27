@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HistoryQuery, HistoryService, History } from 'src/app/state/history';
+import { History, HistoryQuery, HistoryService } from 'src/app/state/history';
 import { SessionQuery } from 'src/app/state/session.query';
 import { environment } from 'src/environments/environment';
-import {dropsToXrp} from 'xrpl';
+import { dropsToXrp } from 'xrpl';
 
 @Component({
   selector: 'app-history',
@@ -17,7 +17,7 @@ export class HistoryPage implements OnInit {
   constructor(
     private historyService: HistoryService,
     public historyQuery: HistoryQuery,
-    public sessionQuery: SessionQuery,
+    public sessionQuery: SessionQuery
   ) {}
 
   ngOnInit() {}
@@ -36,8 +36,13 @@ export class HistoryPage implements OnInit {
     await this.historyService.getTxList();
   }
 
-  convertdropToxrp(value: string | undefined | { currency?: string | undefined; value?: string | undefined }){
-    if(value !== undefined){
+  convertdropToxrp(
+    value:
+      | string
+      | undefined
+      | { currency?: string | undefined; value?: string | undefined }
+  ) {
+    if (value !== undefined) {
       // eslint-disable-next-line id-blacklist
       const xrp = Number(value);
       return dropsToXrp(xrp);
