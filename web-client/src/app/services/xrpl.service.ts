@@ -127,7 +127,6 @@ export class XrplService {
       Amount: amount,
       Destination: toAddress,
       DestinationTag: 0,
-      LastLedgerSequence: 20,
     };
     return await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
@@ -142,7 +141,6 @@ export class XrplService {
       Account: fromAddress,
       TransactionType: 'AccountDelete',
       Destination: toAddress,
-      LastLedgerSequence: 20,
     };
     const tX = await this.withConnection(
       async (client) => await client.autofill(unpreparedTx)
@@ -159,7 +157,6 @@ export class XrplService {
       Account: fromAddress,
       TransactionType: 'TrustSet',
       LimitAmount: limitAmount,
-      LastLedgerSequence: 20,
     };
     if (typeof flags !== 'undefined') {
       unpreparedTx.Flags = flags;
