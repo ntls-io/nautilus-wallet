@@ -15,7 +15,6 @@
     <h2 class="font-bold">Recent transactions</h2>
   </div>
 
-  <ng-container *ngIf="(historyQuery.transactions| async)?.length; else empty">
     <ion-list lines="full" *ngIf="historyQuery.transactions| async">
       <ion-item *ngFor="let item of historyQuery.transactions| async">
         <ion-icon
@@ -41,7 +40,6 @@
         </ion-note>
       </ion-item>
     </ion-list>
-  </ng-container>
 
   <ng-template #empty>
     <div class="ion-padding-horizontal ion-text-center">
