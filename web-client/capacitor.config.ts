@@ -1,4 +1,5 @@
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
@@ -11,7 +12,7 @@ const config: CapacitorConfig = {
       androidScaleType: 'CENTER_CROP',
     },
     Keyboard: {
-      resize: 'ionic',
+      resize: KeyboardResize.Ionic,
     },
   },
 };

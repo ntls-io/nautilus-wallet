@@ -629,6 +629,26 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "odmantic"
+version = "0.9.1"
+description = "ODMantic, an AsyncIO MongoDB Object Document Mapper for Python using type hints "
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+motor = ">=2.1.0,<3.2.0"
+pydantic = ">=1.6.2,<1.7 || >1.7,<1.7.1 || >1.7.1,<1.7.2 || >1.7.2,<1.7.3 || >1.7.3,<1.8 || >1.8,<1.8.1 || >1.8.1"
+pymongo = ">=3.11.0,<5.0.0"
+typing-extensions = {version = ">=4.2.0", markers = "python_version < \"3.11\""}
+
+[package.extras]
+dev = ["ipython (>=7.16.1,<7.17.0)"]
+doc = ["mkdocs-macros-plugin (>=0.5.0,<0.6.0)", "mkdocs-material (>=8.4.0,<8.5.0)", "mkdocstrings[python] (>=0.19.0,<0.20.0)", "pydocstyle[toml] (>=6.1.1,<6.2.0)"]
+fastapi = ["fastapi (>=0.61.1)"]
+test = ["async-asgi-testclient (>=1.4.4,<1.5.0)", "asyncmock (>=0.4.2,<0.5.0)", "black (>=22.3.0,<22.4.0)", "coverage[toml] (>=6.2,<7.0)", "darglint (>=1.8.1,<1.9.0)", "fastapi (>=0.61.1,<0.69.0)", "isort (>=5.8.0,<5.9.0)", "mypy (>=0.961,<1.0)", "pytest (>=7.0,<8.0)", "pytest-asyncio (>=0.16.0,<0.17.0)", "pytest-sugar (>=0.9.5,<0.10.0)", "pytest-xdist (>=2.1.0,<2.2.0)", "pytz (>=2022.1,<2023.0)", "requests (>=2.24.0,<2.25.0)", "ruff (>=0.0.137,<0.1.0)", "semver (>=2.13.0,<2.14.0)", "typer (>=0.4.1,<0.5.0)", "types-pytz (>=2022.1.1,<2022.2.0)", "uvicorn (>=0.17.0,<0.18.0)"]
+
+[[package]]
 name = "packaging"
 version = "21.3"
 description = "Core utilities for Python packages"
@@ -1270,7 +1290,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "e5c56970657f8e21c9309156cd5ac0102e45b2eabf6190504b74654bfc10de27"
+content-hash = "e9629a660d2ef0ab1fa09a6d279536ba21ae3b7b7126e2f9ef027cbc72f21cac"
 
 [metadata.files]
 anyio = [
@@ -1789,6 +1809,10 @@ mypy = [
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
+]
+odmantic = [
+    {file = "odmantic-0.9.1-py3-none-any.whl", hash = "sha256:fbf7bf6c22591591b7ccb9e789ec0b764927869501e102e28c9842dc9f5b36d2"},
+    {file = "odmantic-0.9.1.tar.gz", hash = "sha256:5ebb40344facedf2ae944ad29c0f4149c26d554c13404e62b0d0e5802722f733"},
 ]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},

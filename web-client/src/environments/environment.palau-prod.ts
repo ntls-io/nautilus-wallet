@@ -28,19 +28,22 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s1.cbdc-sandbox.rippletest.net:51233',
+    server: 'wss://s1.ripple.com:51233',
     options: {
       connectionTimeout: 20000,
     },
   },
   commissionPercentage: 0.0,
-  tokenIssuer: 'rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa',
+  tokenIssuer: 'rwekfW4MiS5yZjXASRBDzzPPWYKuHvKP7E',
   tokenSymbol: 'PSC',
-  xrpIssuer: 'rJsc4o9Kh5xx6ba2pR62FbFpYJoh3xetMk',
+  xrpIssuer: 'r3xUVoiRsww3SpPhkYaPfhNZ52K8KP5rEc',
   hideXrpBalance: true,
   autofundXrp: true,
+  hidePullPayment: true,
+  enableQuickAccess: false,
+  autoLogout: false,
   autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:
-    '026B39FC80ADB465409065CDDA4D03AF33801E305B20ACC303F37601BAA3462AD2',
+    '0283F89740510C965195EC9DD539D612D26DB9A44531B23C4830C066476E25B7F3',
 };

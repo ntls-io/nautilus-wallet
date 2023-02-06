@@ -91,6 +91,7 @@
               [autofocus]="true"
               [balance]="balance"
               [maxAmount]="maxAmount"
+              buttonHeading="PULL"
             ></app-pay-amount-form>
           </ion-col>
         </ion-row>
@@ -114,6 +115,7 @@
       <app-pin-entry
         class="h-full flex ion-justify-content-center ion-align-items-center"
         (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+        titleHeading="Pass device to payer to enter their Pin"
       ></app-pin-entry>
     </ion-content>
   </ng-template>

@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Bookmarks</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container>
+    <app-new-bookmark></app-new-bookmark>
+  </ng-container>
+  <ng-container>
+    <app-bookmark-list></app-bookmark-list>
+  </ng-container>
+</ion-content>

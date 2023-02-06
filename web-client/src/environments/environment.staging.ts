@@ -13,6 +13,7 @@ export const environment: Environment = {
     measurementId: 'G-TW4DGPTJ62',
   },
   production: true,
+  staging: true,
   organization: 'nautilus',
 
   // Enable persistence for demo purposes.
@@ -39,6 +40,9 @@ export const environment: Environment = {
   xrpIssuer: 'rf9vKLZVsozsaUgU533W4BUj87TgzTqyQE',
   hideXrpBalance: false,
   autofundXrp: true,
+  hidePullPayment: false,
+  enableQuickAccess: true,
+  autoLogout: true,
   autofundXrpAmount: 50,
   autofundAccountPin: 'K3VG-M@YQF9gzjq.DGW!',
   autofundXrpPublicKey:

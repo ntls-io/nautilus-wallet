@@ -2,7 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import {
   MaxLengthValidationError,
   MinLengthValidationError,
@@ -10,6 +12,8 @@ import {
   RequiredValidationError,
 } from 'src/app/utils/validation.errors';
 import { PinResetPage } from 'src/app/views/pin-reset/pin-reset.page';
+import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
+import { environment } from 'src/environments/environment';
 import { checkClass } from 'src/helpers/helpers';
 
 @Component({
@@ -18,6 +22,8 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./pin-entry.component.scss'],
 })
 export class PinEntryComponent implements OnInit {
+  @Input() titleHeading = '';
+
   /** Emit the PIN confirmed by the user. */
   @Output() pinConfirmed = new EventEmitter<PinValue>();
 
@@ -35,8 +41,17 @@ export class PinEntryComponent implements OnInit {
 
   #pinForm?: FormGroup;
 
-  constructor(private modalCtrl: ModalController,
-    private router: Router) {}
+  rememberWalletAddress = false;
+
+  hideRememberWalletAddress = environment.enableQuickAccess;
+
+  constructor(
+    private modalCtrl: ModalController,
+    private router: Router,
+    private notification: SwalHelper,
+    private walletAccessPage: WalletAccessPage,
+    private quickAccessService: QAccessService
+  ) {}
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -58,6 +73,10 @@ export class PinEntryComponent implements OnInit {
       : null;
   }
 
+  onChangeRememberWalletAddress() {
+    this.rememberWalletAddress = !this.rememberWalletAddress;
+  }
+
   ngOnInit(): void {
     this.initForm();
   }
@@ -67,12 +86,49 @@ export class PinEntryComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.rememberWalletAddress) {
+      this.saveQuickAccess();
+    }
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
     console.log('PinEntryComponent.onSubmit: ', { valid: pinForm.valid });
     if (pinForm.valid) {
       const { pin }: PinFormValue = pinForm.value;
       this.pinConfirmed.emit(pin);
+    }
+  }
+
+  async saveQuickAccess() {
+    const saveWalletAddress: string =
+      this.walletAccessPage.address !== undefined
+        ? this.walletAccessPage.address
+        : '';
+    console.log(saveWalletAddress);
+    try {
+      await this.notification.swal
+        .fire({
+          titleText: 'Enter Wallet Nickname.',
+          input: 'text',
+          confirmButtonText: 'Confirm',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          reverseButtons: true,
+        })
+        .then((result) => {
+          const preferedName = result.value;
+          this.quickAccessService.addWalletAddress(
+            saveWalletAddress,
+            preferedName
+          );
+        })
+        .then(async () => {
+          await this.notification.swal.fire({
+            icon: 'success',
+            text: 'Your Wallet Address has been saved!',
+          });
+        });
+    } catch (error) {
+      console.log(error);
     }
   }
 

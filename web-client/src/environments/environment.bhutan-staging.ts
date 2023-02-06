@@ -13,6 +13,7 @@ export const environment: Environment = {
     measurementId: 'G-TW4DGPTJ62',
   },
   production: true,
+  staging: true,
   organization: 'bhutan',
 
   // Enable persistence for demo purposes.
@@ -39,6 +40,9 @@ export const environment: Environment = {
   xrpIssuer: 'r3PkrLTBJuwyCT2szoPtNmkn76oXr2Cxe5',
   hideXrpBalance: true,
   autofundXrp: true,
+  hidePullPayment: false,
+  enableQuickAccess: false,
+  autoLogout: false,
   autofundXrpAmount: 50,
   autofundAccountPin: 'L4b@Rr.ei7UAV26ZR!r6',
   autofundXrpPublicKey:

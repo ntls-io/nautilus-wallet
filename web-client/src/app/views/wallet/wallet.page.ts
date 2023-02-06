@@ -63,11 +63,28 @@ export class WalletPage implements OnInit {
       title: 'Pin Reset',
       icon: 'unlock',
       path: '/pin-reset',
+    },
+    {
+      title: 'Transactions History',
+      icon: 'list',
+      path: '/history',
+      disabled: false,
+    },
+    {
+      title: 'Bookmark Recipient',
+      icon: 'bookmark',
+      path: '/bookmarks',
       disabled: false,
     },
   ];
 
-  constructor(public sessionQuery: SessionQuery) {}
+  constructor(public sessionQuery: SessionQuery) {
+    if (environment.hidePullPayment) {
+      this.actionItems = this.actionItems.filter(
+        (action) => action.title !== 'Pull Payment'
+      );
+    }
+  }
 
   ngOnInit() {}
 }

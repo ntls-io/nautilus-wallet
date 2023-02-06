@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
@@ -135,6 +136,10 @@ export class PullPage implements OnInit {
         () => this.receiveXrpl(amount, sender, pin)
       );
       await this.notifyResult(result, amount, sender);
+      if (this.connectorQuery.getValue().walletId) {
+        resetStores({ exclude: ['connector'] });
+        await this.navCtrl.navigateRoot('/');
+      }
     }
   }
 
@@ -268,7 +273,7 @@ export class PullPage implements OnInit {
     this.notification.swal
       .fire({
         icon: 'success',
-        titleText: 'Money sent!',
+        titleText: 'Payment Received!',
         text: 'Your money was sent successfully.',
         html: `<div >
               <h2 class="text-primary font-bold">${amount}</h2>
