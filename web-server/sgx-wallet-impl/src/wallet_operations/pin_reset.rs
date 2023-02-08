@@ -88,9 +88,9 @@ pub fn reset_wallet_pin(request: &PinReset) -> PinResetResult {
             stored.auth_pin = request.new_pin.clone();
             stored
         }) {
-            Ok(Some(_)) => return PinResetResult::Reset,
+            Ok(Some(_)) => PinResetResult::Reset,
             Ok(None) => panic!("Wallet storable expected but not found"),
-            Err(err) => return PinResetResult::Failed(err.to_string()),
+            Err(err) => PinResetResult::Failed(err.to_string()),
         },
     )
 }
