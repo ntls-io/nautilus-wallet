@@ -14,6 +14,7 @@ use zeroize::{Zeroize, ZeroizeOnDrop};
 use crate::crypto::common::{Bytes32, PublicKey};
 use crate::schema::auth::AuthError;
 use crate::schema::entities::{WalletDisplay, XrplAccountDisplay};
+use crate::schema::serde_bytes_array;
 use crate::schema::types::{Bytes, WalletAuthMap, WalletId, WalletPin};
 use crate::wallet_operations::store::{GetXrplWalletError, UnlockWalletError};
 
@@ -98,6 +99,7 @@ pub struct StartPinReset {
      */
     #[zeroize(skip)]
     pub wallet_auth_map: RefCell<WalletAuthMap>,
+    #[serde(with = "serde_bytes_array")]
     pub client_pk: PublicKey,
 }
 
@@ -125,7 +127,9 @@ impl From<AuthError> for StartPinResetResult {
 pub struct PinReset {
     pub wallet_id: WalletId,
     pub new_pin: WalletPin,
+    #[serde(with = "serde_bytes_array")]
     pub new_pin_mac: Bytes32,
+    #[serde(with = "serde_bytes_array")]
     pub client_pk: PublicKey,
 }
 
