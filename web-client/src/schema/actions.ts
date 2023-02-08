@@ -31,20 +31,21 @@ export type StartPinReset = {
 };
 
 export type StartPinResetResult =
-  | { ServerPk: Uint8Array }
+  | { Success: null }
   | { InvalidAuth: null }
+  | { NotFound: null }
   | { Failed: string };
 
 export type PinReset = {
   wallet_id: WalletId;
   new_pin: string;
-  new_pin_mac: Uint8Array;
-  client_pk: Uint8Array;
+  wallet_auth_map: Map<string,string>;
 };
 
 export type PinResetResult =
   | { Reset: null }
   | { InvalidAuth: null }
+  | { NotFound: null }
   | { Failed: string };
 
 export type GetXrplWallet = {
