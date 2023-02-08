@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { PinResetPageRoutingModule } from './pin-reset-routing.module';
 import { PinResetPage } from './pin-reset.page';
+import { WalletAccessPage } from '../wallet-access/wallet-access.page';
 
 @NgModule({
   imports: [
@@ -15,5 +16,6 @@ import { PinResetPage } from './pin-reset.page';
     SharedModule,
   ],
   declarations: [PinResetPage],
+  providers: [WalletAccessPage],
 })
 export class PinResetPageModule {}

@@ -41,7 +41,12 @@
         >Confirm</ion-button
       >
     </form>
-    <p routerLink="/pin-reset" class="ion-text-center p-2">
-      I can't Remember My Pin</p>
+    <ion-button
+      fill="clear"
+      [routerLink]="['/pin-reset']"
+      (click)="goToPinReset()"
+      [state]="{wallet_id: wallet_id}"
+      >I can't remember my Pin
+    </ion-button>
   </div>
 </div>
