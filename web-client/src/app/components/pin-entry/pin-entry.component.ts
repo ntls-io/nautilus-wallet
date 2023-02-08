@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { QAccessService } from 'src/app/state/qAccess';
@@ -22,6 +23,8 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./pin-entry.component.scss'],
 })
 export class PinEntryComponent implements OnInit {
+  @Input() wallet_id: string | undefined;
+
   @Input() titleHeading = '';
 
   /** Emit the PIN confirmed by the user. */
@@ -48,6 +51,7 @@ export class PinEntryComponent implements OnInit {
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
     private quickAccessService: QAccessService
@@ -77,12 +81,14 @@ export class PinEntryComponent implements OnInit {
     this.rememberWalletAddress = !this.rememberWalletAddress;
   }
 
-  ngOnInit(): void {
-    this.initForm();
+  goToPinReset(){
+    this.modalCtrl.dismiss({
+      dismissed: true
+    });
   }
 
-  pinResetPage() {
-    this.router.navigate(['/print-wallet']);
+  ngOnInit(): void {
+    this.initForm();
   }
 
   onSubmit(): void {

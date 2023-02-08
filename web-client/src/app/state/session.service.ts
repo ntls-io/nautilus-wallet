@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { request } from 'http';
 import { EnclaveService } from 'src/app/services/enclave/index';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { SearchService } from 'src/app/services/search.service';
@@ -156,22 +155,12 @@ export class SessionService {
     walletId: string,
     auth_map: Map<string, string>,
     client_pk: Uint8Array):
-    Promise<string | Uint8Array | undefined>{
+    Promise<StartPinResetResult>{
       const request: StartPinReset = {wallet_id: walletId, wallet_auth_map: auth_map, client_pk};
       const result: StartPinResetResult = await this.enclaveService.startPinReset(
         request
       );
-
-    if('ServerPk' in result){
-      return result.ServerPk;
-    } else if('InvalidAuth' in result){
-      return 'Authentication failed, please ensure that the answers to the security questions are correct.';
-      } else if ('Failed' in result) {
-        console.error(result);
-        throw new Error(result.Failed);
-      } else {
-        throw never(result);
-      };
+      return result;
   };
 
   /**
@@ -182,24 +171,14 @@ export class SessionService {
   async pinReset(
     walletId: string,
     new_pin: string,
-    new_pin_mac: Uint8Array,
-    client_pk: Uint8Array):
-    Promise<string | undefined>{
-      const request: PinReset = {wallet_id: walletId, new_pin, new_pin_mac, client_pk};
+    auth_map: Map<string, string>):
+    Promise<PinResetResult>{
+      const request: PinReset = {wallet_id: walletId, new_pin,wallet_auth_map: auth_map};
       const result: PinResetResult = await this.enclaveService.pinReset(
         request
       );
 
-      if ('Reset' in result){
-        console.log(result);
-      } else if('InvalidAuth' in result){
-        return 'Unable to authenticate MAC';
-        } else if ('Failed' in result) {
-          console.error(result);
-          throw new Error(result.Failed);
-        } else {
-          throw never(result);
-        };
+      return result;
     };
 
   /**
