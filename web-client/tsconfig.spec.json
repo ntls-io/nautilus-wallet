@@ -8,6 +8,5 @@
     "resolveJsonModule": true
   },
   "files": ["src/test.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/main.ts", "src/**/*.stories.ts"]
+  "include": ["src/**/*.ts"]
 }
