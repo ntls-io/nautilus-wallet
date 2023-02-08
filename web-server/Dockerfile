@@ -246,6 +246,7 @@ ENV LD_LIBRARY_PATH=/build/intel/sgxsdk/sdk_libs
 FROM base AS base-sgx-runner-hw
 
 USER root
+RUN sed -i s/archive.ubuntu.com/azure.archive.ubuntu.com/ /etc/apt/sources.list
 # Requirements for apt-key
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \

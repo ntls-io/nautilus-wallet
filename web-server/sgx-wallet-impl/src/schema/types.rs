@@ -1,5 +1,4 @@
 //! Supporting data types.
-
 use std::boxed::Box;
 use std::collections::HashMap;
 use std::prelude::v1::String;
