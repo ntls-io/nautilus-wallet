@@ -147,8 +147,10 @@ export class SessionQuery extends Query<SessionState> {
     distinctUntilChanged()
   );
 
-  // Exclude KYC for specific organizations
-  showKYC = !(['palau'].includes(environment.organization)||['palau'].includes(environment.organization));
+  showKYC = !(
+    ['palau'].includes(environment.organization) ||
+    ['bhutan'].includes(environment.organization)
+  );
 
   onfidoCheck: Observable<SessionState['onfidoCheck']> =
     this.select('onfidoCheck');
