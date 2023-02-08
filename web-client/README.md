@@ -28,12 +28,6 @@ npm test
 npm run e2e
 ```
 
-Run Storybook:
-
-```shell
-npm run storybook
-```
-
 Run checks & formatting:
 
 ```shell

@@ -28,20 +28,6 @@ getTestBed().initTestEnvironment(
   }
 );
 // Then we find all the tests.
-const context = require.context(
-  './',
-  true,
-  // XXX: Work around Angular not reporting coverage for all files.
-  //
-  // In our case, we want to include everything except for:
-  //  * Storybook stories
-  //  * `main.ts`, because of platform configuration side effects.
-  //    (This avoids "Error: A platform with a different configuration has been created.")
-  //
-  // See also the include / exclude patterns in `tsconfig.spec.json`.
-  //
-  // Upstream issue: https://github.com/angular/angular-cli/issues/1735
-  /(?<!\/main|\.stories)\.ts$/
-);
+const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
