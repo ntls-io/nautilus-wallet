@@ -26,7 +26,7 @@ export type OpenWalletResult =
 
 export type StartPinReset = {
   wallet_id: WalletId;
-  wallet_auth_map: Map<string,string>;
+  wallet_auth_map: Map<string, string>;
   client_pk: Uint8Array;
 };
 
@@ -39,7 +39,7 @@ export type StartPinResetResult =
 export type PinReset = {
   wallet_id: WalletId;
   new_pin: string;
-  wallet_auth_map: Map<string,string>;
+  wallet_auth_map: Map<string, string>;
 };
 
 export type PinResetResult =

@@ -133,14 +133,18 @@ export class SessionService {
   async startPinReset(
     walletId: string,
     auth_map: Map<string, string>,
-    client_pk: Uint8Array):
-    Promise<StartPinResetResult>{
-      const request: StartPinReset = {wallet_id: walletId, wallet_auth_map: auth_map, client_pk};
-      const result: StartPinResetResult = await this.enclaveService.startPinReset(
-        request
-      );
-      return result;
-  };
+    client_pk: Uint8Array
+  ): Promise<StartPinResetResult> {
+    const request: StartPinReset = {
+      wallet_id: walletId,
+      wallet_auth_map: auth_map,
+      client_pk,
+    };
+    const result: StartPinResetResult = await this.enclaveService.startPinReset(
+      request
+    );
+    return result;
+  }
 
   /**
    * If first session is successful, pin is reset..
@@ -150,20 +154,22 @@ export class SessionService {
   async pinReset(
     walletId: string,
     new_pin: string,
-    auth_map: Map<string, string>):
-    Promise<PinResetResult>{
-      const request: PinReset = {wallet_id: walletId, new_pin,wallet_auth_map: auth_map};
-      const result: PinResetResult = await this.enclaveService.pinReset(
-        request
-      );
-
-      return result;
+    auth_map: Map<string, string>
+  ): Promise<PinResetResult> {
+    const request: PinReset = {
+      wallet_id: walletId,
+      new_pin,
+      wallet_auth_map: auth_map,
     };
-   /**
-    * Get public key of an existing wallet address.
-    *
-    * @see EnclaveService#getXrplWallet
-    */
+    const result: PinResetResult = await this.enclaveService.pinReset(request);
+
+    return result;
+  }
+  /**
+   * Get public key of an existing wallet address.
+   *
+   * @see EnclaveService#getXrplWallet
+   */
   async getXrplWalletPublicKey(walletId: string): Promise<XrplPublicKeyHex> {
     const request: GetXrplWallet = { wallet_id: walletId };
     const result: GetXrplWalletResult = await this.enclaveService.getXrplWallet(

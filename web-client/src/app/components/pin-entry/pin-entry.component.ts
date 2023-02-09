@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -81,9 +80,9 @@ export class PinEntryComponent implements OnInit {
     this.rememberWalletAddress = !this.rememberWalletAddress;
   }
 
-  goToPinReset(){
+  goToPinReset() {
     this.modalCtrl.dismiss({
-      dismissed: true
+      dismissed: true,
     });
   }
 
