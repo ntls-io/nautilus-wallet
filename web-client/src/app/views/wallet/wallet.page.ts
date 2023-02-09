@@ -43,8 +43,7 @@ export class WalletPage implements OnInit {
     {
       title: 'Send Money',
       icon: 'card',
-      path: '/wallet/transfer-funds',
-      state: { transferType: 'pay' },
+      path: '/wallet/send-funds',
       disabled: false,
     },
     {
