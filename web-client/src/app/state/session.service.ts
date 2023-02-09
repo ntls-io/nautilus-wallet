@@ -126,6 +126,46 @@ export class SessionService {
   }
 
   /**
+   * Start the PIN reset session.
+   *
+   * @see EnclaveService#startPinReset
+   */
+  async startPinReset(
+    walletId: string,
+    auth_map: Map<string, string>,
+    client_pk: Uint8Array
+  ): Promise<StartPinResetResult> {
+    const request: StartPinReset = {
+      wallet_id: walletId,
+      wallet_auth_map: Object.fromEntries(auth_map),
+      client_pk,
+    };
+    const result: StartPinResetResult = await this.enclaveService.startPinReset(
+      request
+    );
+    return result;
+  }
+
+  /**
+   * If first session is successful, pin is reset..
+   *
+   * @see EnclaveService#startPinReset
+   */
+  async pinReset(
+    walletId: string,
+    new_pin: string,
+    auth_map: Map<string, string>
+  ): Promise<PinResetResult> {
+    const request: PinReset = {
+      wallet_id: walletId,
+      new_pin,
+      wallet_auth_map: Object.fromEntries(auth_map),
+    };
+    const result: PinResetResult = await this.enclaveService.pinReset(request);
+
+    return result;
+  }
+  /**
    * Get public key of an existing wallet address.
    *
    * @see EnclaveService#getXrplWallet
@@ -145,41 +185,6 @@ export class SessionService {
       throw never(result);
     }
   }
-
-  /**
-   * Start the PIN reset session.
-   *
-   * @see EnclaveService#startPinReset
-   */
-  async startPinReset(
-    walletId: string,
-    auth_map: Map<string, string>,
-    client_pk: Uint8Array):
-    Promise<StartPinResetResult>{
-      const request: StartPinReset = {wallet_id: walletId, wallet_auth_map: auth_map, client_pk};
-      const result: StartPinResetResult = await this.enclaveService.startPinReset(
-        request
-      );
-      return result;
-  };
-
-  /**
-   * If first session is successful, pin is reset..
-   *
-   * @see EnclaveService#startPinReset
-   */
-  async pinReset(
-    walletId: string,
-    new_pin: string,
-    auth_map: Map<string, string>):
-    Promise<PinResetResult>{
-      const request: PinReset = {wallet_id: walletId, new_pin,wallet_auth_map: auth_map};
-      const result: PinResetResult = await this.enclaveService.pinReset(
-        request
-      );
-
-      return result;
-    };
 
   /**
    * Sign a transaction using the active session's wallet.
