@@ -103,8 +103,6 @@ export type Environment = {
 
   enableQuickAccess: boolean;
 
-  enablePinReset: boolean;
-
   autoLogout: boolean;
 
   autofundXrpAmount: number;
