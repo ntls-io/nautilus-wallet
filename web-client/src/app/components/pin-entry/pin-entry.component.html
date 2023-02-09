@@ -41,7 +41,7 @@
         >Confirm</ion-button
       >
     </form>
-    <ion-button
+    <ion-button *ngIf="hidePinReset"
       fill="clear"
       [routerLink]="['/pin-reset']"
       (click)="goToPinReset()"
