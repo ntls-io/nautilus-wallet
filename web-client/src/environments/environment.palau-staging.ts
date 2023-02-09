@@ -42,7 +42,6 @@ export const environment: Environment = {
   autofundXrp: true,
   hidePullPayment: false,
   enableQuickAccess: false,
-  enablePinReset: false,
   autoLogout: false,
   autofundXrpAmount: 50,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',

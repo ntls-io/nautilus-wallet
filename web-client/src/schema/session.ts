@@ -67,9 +67,4 @@ export class SgxSession {
     hmac.update(msg);
     return hmac.digest();
   };
-
-  string_to_mac = (msg_text: string): Bytes32 => {
-    const msg = new TextEncoder().encode(msg_text);
-    return this.message_authentication_code(msg);
-  };
 }
