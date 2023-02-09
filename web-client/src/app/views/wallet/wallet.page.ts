@@ -60,11 +60,6 @@ export class WalletPage implements OnInit {
       disabled: false,
     },
     {
-      title: 'Pin Reset',
-      icon: 'unlock',
-      path: '/pin-reset',
-    },
-    {
       title: 'Transactions History',
       icon: 'list',
       path: '/history',
