@@ -55,7 +55,7 @@ export class PinResetPage implements OnInit {
       console.log(initialResult.InvalidAuth);
       this.notification.swal.fire({
         icon: 'warning',
-        title: 'Incorrect PIN',
+        title: 'Incorrect Answers!',
         text: 'Authentication failed, please ensure that the answers to the security questions are correct.',
       });
       this.navCtrl.navigateRoot('/pin-reset');

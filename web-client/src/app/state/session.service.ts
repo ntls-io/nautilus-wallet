@@ -137,7 +137,7 @@ export class SessionService {
   ): Promise<StartPinResetResult> {
     const request: StartPinReset = {
       wallet_id: walletId,
-      wallet_auth_map: auth_map,
+      wallet_auth_map: Object.fromEntries(auth_map),
       client_pk,
     };
     const result: StartPinResetResult = await this.enclaveService.startPinReset(
@@ -159,7 +159,7 @@ export class SessionService {
     const request: PinReset = {
       wallet_id: walletId,
       new_pin,
-      wallet_auth_map: auth_map,
+      wallet_auth_map: Object.fromEntries(auth_map),
     };
     const result: PinResetResult = await this.enclaveService.pinReset(request);
 
