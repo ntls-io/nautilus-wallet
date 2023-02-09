@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { IonicModule } from '@ionic/angular';
-import { PinResetPage } from './pin-reset.page';
-import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { IonicModule } from '@ionic/angular';
+import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
+import { PinResetPage } from './pin-reset.page';
 
 describe('PinResetPage', () => {
   let component: PinResetPage;
@@ -15,7 +15,8 @@ describe('PinResetPage', () => {
       imports: [
         IonicModule.forRoot(),
         HttpClientTestingModule,
-        RouterTestingModule],
+        RouterTestingModule,
+      ],
       providers: [WalletAccessPage],
     }).compileComponents();
 

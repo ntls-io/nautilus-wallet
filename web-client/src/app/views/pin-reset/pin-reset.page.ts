@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
-import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
-import { ModalController } from '@ionic/angular';
-import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { Router } from '@angular/router';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
 import { SessionService } from 'src/app/state/session.service';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { StartSgxSession } from 'src/schema/session';
 import { WalletAccessPage } from '../wallet-access/wallet-access.page';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pin-reset',
@@ -14,7 +17,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./pin-reset.page.scss'],
 })
 export class PinResetPage implements OnInit {
-
   wallet_id: string | undefined;
 
   constructor(
@@ -24,9 +26,11 @@ export class PinResetPage implements OnInit {
     private notification: SwalHelper,
     private navCtrl: NavController,
     private walletAccessPage: WalletAccessPage,
-    private router: Router) {
-      this.wallet_id = this.router.getCurrentNavigation()?.extras.state?.wallet_id;
-    }
+    private router: Router
+  ) {
+    this.wallet_id =
+      this.router.getCurrentNavigation()?.extras.state?.wallet_id;
+  }
 
   ngOnInit() {}
 
@@ -34,17 +38,17 @@ export class PinResetPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-
   async onSubmit(answers: Map<string, string>) {
-    const wallet_id: string = this.wallet_id !== undefined
-    ? this.wallet_id : '';
+    const wallet_id: string =
+      this.wallet_id !== undefined ? this.wallet_id : '';
     const newSession = StartSgxSession.new(wallet_id);
     const client_pk = newSession.our_public_key();
 
     const initialResult = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Checking your answers...' },
-      async () => await this.sessionService.startPinReset(wallet_id,answers,client_pk)
+      async () =>
+        await this.sessionService.startPinReset(wallet_id, answers, client_pk)
     );
 
     if ('InvalidAuth' in initialResult) {
@@ -114,7 +118,5 @@ export class PinResetPage implements OnInit {
       });
       this.navCtrl.navigateRoot('/');
     }
-
-
   }
 }
