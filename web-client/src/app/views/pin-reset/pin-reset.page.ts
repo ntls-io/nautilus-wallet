@@ -55,54 +55,56 @@ export class PinResetPage implements OnInit {
         text: 'Authentication failed, please ensure that the answers to the security questions are correct.',
       });
       this.navCtrl.navigateRoot('/pin-reset');
-    } else if('Success' in initialResult) {
-        console.log(initialResult);
-        try {
-          const { value: password } = await this.notification.swal.fire({
-              title: 'Enter new PIN.',
-              input: 'password',
-              inputPlaceholder: 'Enter your PIN here',
-              inputAttributes: {
-                autocomplete: 'off',
-                minlength: '4',
-                autocapitalize: 'off',
-                autocorrect: 'off'
-              }
-            });
-          const pinResetResult = await withLoadingOverlayOpts(
-            this.loadingCtrl,
-            { message: 'Resetting your PIN...' },
-            async () => await this.sessionService.pinReset(wallet_id,password,answers)
+    } else if ('Success' in initialResult) {
+      console.log(initialResult);
+      try {
+        const { value: password } = await this.notification.swal.fire({
+          title: 'Enter new PIN.',
+          input: 'password',
+          inputPlaceholder: 'Enter your PIN here',
+          inputAttributes: {
+            autocomplete: 'off',
+            minlength: '4',
+            autocapitalize: 'off',
+            autocorrect: 'off',
+          },
+        });
+        const pinResetResult = await withLoadingOverlayOpts(
+          this.loadingCtrl,
+          { message: 'Resetting your PIN...' },
+          async () =>
+            await this.sessionService.pinReset(wallet_id, password, answers)
+        );
+        if ('Reset' in pinResetResult) {
+          this.notification.swal.fire({
+            icon: 'success',
+            title: 'Pin Reset Successfully!',
+            text: 'Your PIN has been reset.',
+          });
+          this.navCtrl.navigateRoot('/');
+        } else if ('InvalidAuth' in pinResetResult) {
+          console.log(
+            'pinResetResultError: InvalidAuth ' + pinResetResult.InvalidAuth
           );
-          if('Reset' in pinResetResult){
-            this.notification.swal.fire({
-              icon: 'success',
-              title: 'Pin Reset Successfully!',
-              text: 'Your PIN has been reset.',
-            });
-            this.navCtrl.navigateRoot('/');
-          } else if('InvalidAuth' in pinResetResult) {
-            console.log('pinResetResultError: InvalidAuth ' + pinResetResult.InvalidAuth);
-            this.notification.swal.fire({
-              icon: 'warning',
-              title: 'Unexpected Failure',
-              text: 'An unexpected error occured. Please try again.',
-            });
-            this.navCtrl.navigateRoot('/');
-          } else {
-            console.log(pinResetResult);
-            this.notification.swal.fire({
-              icon: 'warning',
-              title: 'Unexpected Failure',
-              text: 'An unexpected error occured. Please try again.',
-            });
-            this.navCtrl.navigateRoot('/');
-          }
-          } catch(err){
-            console.log('catch err: ' + err);
-          }
-    } else if('NotFound' in initialResult){
-
+          this.notification.swal.fire({
+            icon: 'warning',
+            title: 'Unexpected Failure',
+            text: 'An unexpected error occured. Please try again.',
+          });
+          this.navCtrl.navigateRoot('/');
+        } else {
+          console.log(pinResetResult);
+          this.notification.swal.fire({
+            icon: 'warning',
+            title: 'Unexpected Failure',
+            text: 'An unexpected error occured. Please try again.',
+          });
+          this.navCtrl.navigateRoot('/');
+        }
+      } catch (err) {
+        console.log('catch err: ' + err);
+      }
+    } else if ('NotFound' in initialResult) {
     } else {
       console.log(initialResult.Failed);
       this.notification.swal.fire({
