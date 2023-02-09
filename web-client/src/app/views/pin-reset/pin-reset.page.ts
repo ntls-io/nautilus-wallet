@@ -71,6 +71,8 @@ export class PinResetPage implements OnInit {
             minlength: '4',
             autocapitalize: 'off',
             autocorrect: 'off',
+            required: 'on',
+            type: 'number',
           },
         });
         const pinResetResult = await withLoadingOverlayOpts(
