@@ -47,6 +47,8 @@ export class PinEntryComponent implements OnInit {
 
   hideRememberWalletAddress = environment.enableQuickAccess;
 
+  hidePinReset = environment.enablePinReset;
+
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
