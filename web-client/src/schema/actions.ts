@@ -24,6 +24,30 @@ export type OpenWalletResult =
   | { InvalidAuth: null }
   | { Failed: string };
 
+export type StartPinReset = {
+  wallet_id: WalletId;
+  wallet_auth_map: object;
+  client_pk: Uint8Array;
+};
+
+export type StartPinResetResult =
+  | { Success: null }
+  | { InvalidAuth: null }
+  | { NotFound: null }
+  | { Failed: string };
+
+export type PinReset = {
+  wallet_id: WalletId;
+  new_pin: string;
+  wallet_auth_map: object;
+};
+
+export type PinResetResult =
+  | { Reset: null }
+  | { InvalidAuth: null }
+  | { NotFound: null }
+  | { Failed: string };
+
 export type GetXrplWallet = {
   wallet_id: WalletId;
 };
@@ -108,6 +132,8 @@ export type WalletRequest =
   | { CreateWallet: CreateWallet }
   | { OpenWallet: OpenWallet }
   | { GetXrplWallet: GetXrplWallet }
+  | { PinReset: PinReset }
+  | { StartPinReset: StartPinReset }
   | { SignTransaction: SignTransaction }
   | { SaveOnfidoCheck: SaveOnfidoCheck }
   | { LoadOnfidoCheck: LoadOnfidoCheck };
@@ -117,6 +143,8 @@ export type WalletResponse =
   | { CreateWallet: CreateWalletResult }
   | { OpenWallet: OpenWalletResult }
   | { GetXrplWallet: GetXrplWalletResult }
+  | { PinReset: PinResetResult }
+  | { StartPinReset: StartPinResetResult }
   | { SignTransaction: SignTransactionResult }
   | { SaveOnfidoCheck: SaveOnfidoCheckResult }
   | { LoadOnfidoCheck: LoadOnfidoCheckResult };
