@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnclaveService } from 'src/app/services/enclave/index';
+import { EnclaveService } from 'src/app/services/enclave/enclave.service';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';

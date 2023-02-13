@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
-import { EnclaveService } from 'src/app/services/enclave';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
   checkTxResponseSucceeded,
@@ -65,7 +64,6 @@ export class SessionXrplService {
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
-    private enclaveService: EnclaveService,
     private xrplService: XrplService,
     private connectorQuery: ConnectorQuery,
     private navCtrl: NavController,
