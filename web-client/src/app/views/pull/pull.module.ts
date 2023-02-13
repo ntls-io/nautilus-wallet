@@ -5,9 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { PayAmountFormComponentModule } from 'src/app/components/pay-amount-form/pay-amount-form.module';
 import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.module';
 import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
+import { WalletAccessPage } from '../wallet-access/wallet-access.page';
 import { PullPageRoutingModule } from './pull-routing.module';
 import { PullPage } from './pull.page';
-import { WalletAccessPage } from '../wallet-access/wallet-access.page';
 
 @NgModule({
   imports: [
