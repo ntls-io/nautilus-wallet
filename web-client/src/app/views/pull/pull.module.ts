@@ -7,6 +7,7 @@ import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.
 import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
 import { PullPageRoutingModule } from './pull-routing.module';
 import { PullPage } from './pull.page';
+import { WalletAccessPage } from '../wallet-access/wallet-access.page';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { PullPage } from './pull.page';
     AssetPipesModule,
     PinEntryComponentModule,
   ],
+  providers: [WalletAccessPage],
   declarations: [PullPage],
 })
 export class PullPageModule {}
