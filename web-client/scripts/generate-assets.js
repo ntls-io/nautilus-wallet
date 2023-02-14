@@ -8,7 +8,7 @@ module.exports = function (ctx) {
       ? "--assetPath assets/" + organisation
       : "";
 
-    var command = "npx capacitor-assets generate " + path;
+    var command = "npx capacitor-assets generate " + path + " --ios --android";
 
     console.log(">", command);
 

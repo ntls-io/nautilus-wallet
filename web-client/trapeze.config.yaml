@@ -15,7 +15,7 @@ platforms:
         displayName: $DISPLAY_NAME
         productName: $DISPLAY_NAME
         buildSettings:
-          ENABLE_BITCODE: true
+          ENABLE_BITCODE: false
           STRIP_SWIFT_SYMBOLS: true
 
   android:
