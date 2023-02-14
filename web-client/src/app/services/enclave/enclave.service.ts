@@ -12,10 +12,14 @@ import {
   LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  PinReset,
+  PinResetResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
+  StartPinReset,
+  StartPinResetResult,
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
@@ -81,6 +85,26 @@ export class EnclaveService {
       { SignTransaction: SignTransactionResult }
     >(walletRequest);
     const { SignTransaction: result } = response;
+    return result;
+  }
+
+  async startPinReset(request: StartPinReset): Promise<StartPinResetResult> {
+    const walletRequest = { StartPinReset: request };
+    const response = await this.postSealedExchange<
+      { StartPinReset: StartPinReset },
+      { StartPinReset: StartPinResetResult }
+    >(walletRequest);
+    const { StartPinReset: result } = response;
+    return result;
+  }
+
+  async pinReset(request: PinReset): Promise<PinResetResult> {
+    const walletRequest = { PinReset: request };
+    const response = await this.postSealedExchange<
+      { PinReset: PinReset },
+      { PinReset: PinResetResult }
+    >(walletRequest);
+    const { PinReset: result } = response;
     return result;
   }
 
