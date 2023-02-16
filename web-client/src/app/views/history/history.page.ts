@@ -45,7 +45,6 @@ export class HistoryPage implements OnInit {
 
         this.transactions = txs;
       });
-      console.log(this.transactions)
   }
 
   ngOnInit() {}
