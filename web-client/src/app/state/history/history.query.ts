@@ -5,12 +5,7 @@ import { HistoryState, HistoryStore } from './history.store';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryQuery extends QueryEntity<HistoryState> {
-  issuedCurrencyTransactions = this.selectAll({
-    filterBy: ({ tx }: any) =>
-      tx?.TransactionType === 'Payment' && typeof tx.Amount === 'object',
-  });
-
-  allTransactions = this.selectAll({
+  transactions = this.selectAll({
     filterBy: ({ tx }: any) => tx?.TransactionType === 'Payment',
   });
 

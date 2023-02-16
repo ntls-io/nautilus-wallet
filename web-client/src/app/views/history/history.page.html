@@ -15,41 +15,28 @@
     <h2 class="font-bold">Recent transactions</h2>
   </div>
 
-  <ng-container *ngIf="(displayTransactions| async)?.length; else empty">
-    <ion-list lines="full" mode="ios" *ngIf="displayTransactions| async">
-      <ion-item *ngFor="let item of displayTransactions| async">
-        <ion-icon
-          slot="start"
-          [name]="(item?.tx?.Account | isMe) ? 'arrow-forward' : 'arrow-back'"
-        ></ion-icon>
-        <ion-label>
-          <ion-text class="font-bold" color="primary">
-            <small>
-              {{(item?.tx?.Account | isMe) ? 'Sent To' : 'Received From'}}
-            </small>
-          </ion-text>
-          <h2>
-            {{(item?.tx?.Account | isMe) ? item?.tx?.Destination :
-            item?.tx?.Account}}
-          </h2>
-          <h6>{{item?.tx?.date | xrpDate}}</h6>
-        </ion-label>
-        <ion-note slot="end" color="primary">
-          <h6
-            class="font-bold"
-            *ngIf="typeOf(item?.tx?.Amount) === 'string'; else issuedCurrency"
-          >
-            {{convertdropToxrp(item?.tx?.Amount) | currency: 'XRP'}}
-          </h6>
-          <ng-template #issuedCurrency>
-            <h6 class="font-bold">
-              {{item?.tx?.Amount?.value | currency: tokenSymbol }}
-            </h6>
-          </ng-template>
-        </ion-note>
-      </ion-item>
-    </ion-list>
-  </ng-container>
+  <ion-list lines="full" mode="ios" *ngIf="transactions?.length; else empty">
+    <ion-item *ngFor="let tx of transactions">
+      <ion-icon
+        slot="start"
+        [name]="(tx?.Account | isMe) ? 'arrow-forward' : 'arrow-back'"
+      ></ion-icon>
+      <ion-label>
+        <ion-text class="font-bold" color="primary">
+          <small>
+            {{(tx?.Account | isMe) ? 'Sent To' : 'Received From'}}
+          </small>
+        </ion-text>
+        <h2>{{(tx?.Account | isMe) ? tx?.Destination : tx?.Account}}</h2>
+        <h6>{{tx?.date | xrpDate}}</h6>
+      </ion-label>
+      <ion-note slot="end" color="primary">
+        <small class="font-bold">
+          {{tx?.Amount?.value | currency: tx?.Amount?.currency}}
+        </small>
+      </ion-note>
+    </ion-item>
+  </ion-list>
 
   <ng-template #empty>
     <div class="ion-padding-horizontal ion-text-center">
