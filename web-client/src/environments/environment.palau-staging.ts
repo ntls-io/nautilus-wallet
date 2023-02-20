@@ -44,7 +44,7 @@ export const environment: Environment = {
   enableQuickAccess: true,
   enablePinReset: true,
   autoLogout: true,
-  autofundXrpAmount: 50,
+  autofundXrpAmount: 20,
   autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
   autofundXrpPublicKey:
     '026B39FC80ADB465409065CDDA4D03AF33801E305B20ACC303F37601BAA3462AD2',
