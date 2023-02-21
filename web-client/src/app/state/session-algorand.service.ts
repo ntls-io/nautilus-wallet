@@ -8,7 +8,6 @@ import {
   convertToMicroAlgos,
   TransactionConfirmation,
 } from 'src/app/services/algosdk.utils';
-import { EnclaveService } from 'src/app/services/enclave/index';
 import { SessionService } from 'src/app/state/session.service';
 import { panic } from 'src/app/utils/errors/panic';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
@@ -24,7 +23,6 @@ export class SessionAlgorandService {
     private sessionStore: SessionStore,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
-    private enclaveService: EnclaveService,
     private algodService: AlgodService
   ) {}
 
