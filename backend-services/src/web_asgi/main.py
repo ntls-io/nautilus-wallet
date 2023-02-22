@@ -62,5 +62,3 @@ async def delete_bookmark(request: DeleteBookmark) -> None:
 @app.post("/wallet/autofund", response_model=None, status_code=status.HTTP_200_OK)
 async def post_autofund_wallet(wallet_id: WalletAddress) -> None:
     await autofund_wallet(wallet_id)
-
-
