@@ -5,7 +5,10 @@ from xrpl.clients import JsonRpcClient
 from xrpl.wallet import Wallet
 from xrpl.models.transactions import Payment
 from xrpl.utils import xrp_to_drops
-from xrpl.asyncio.transaction import safe_sign_and_autofill_transaction, send_reliable_submission
+from xrpl.asyncio.transaction import (
+    safe_sign_and_autofill_transaction,
+    send_reliable_submission,
+)
 
 
 async def autofund_wallet(wallet_id: WalletAddress) -> None:
@@ -24,5 +27,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         destination="rGfxNFSJHx28gTmVt4UNow9K4VC1yVsXmH",
     )
 
-    my_tx_payment_signed = await safe_sign_and_autofill_transaction(my_tx_payment, sender_wallet, client)
+    my_tx_payment_signed = await safe_sign_and_autofill_transaction(
+        my_tx_payment, sender_wallet, client
+    )
     return await send_reliable_submission(my_tx_payment_signed, client)
