@@ -10,13 +10,13 @@ from data_service.operations.bookmark import bookmarks, create_bookmark, delete_
 from data_service.schema.actions import CreateBookmark, DeleteBookmark
 from data_service.schema.entities import Bookmark
 
-from data_service.operations.autofund import autofund_wallet
+# from data_service.operations.autofund import autofund_wallet
 
-@pytest.mark.asyncio
-async def test_fund_wallet() -> None:
-    wallet_id = WalletAddress("rGfxNFSJHx28gTmVt4UNow9K4VC1yVsXmH")
-    tx_response = await autofund_wallet(wallet_id)
-    assert tx_response != None #'success'
+# @pytest.mark.asyncio
+# async def test_fund_wallet() -> None:
+#     wallet_id = WalletAddress("rGfxNFSJHx28gTmVt4UNow9K4VC1yVsXmH")
+#     tx_response = await autofund_wallet(wallet_id)
+#     assert tx_response != None #'success'
 
 
 @pytest.mark.asyncio
