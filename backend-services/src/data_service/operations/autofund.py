@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-<<<<<<< HEAD
 from xrpl.asyncio.transaction import (
     safe_sign_and_autofill_transaction,
     send_reliable_submission,
