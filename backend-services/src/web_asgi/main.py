@@ -8,14 +8,12 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 
 from common.types import WalletAddress
+from data_service.operations.autofund import autofund_wallet
 from data_service.operations.bookmark import bookmarks, create_bookmark
 from data_service.operations.bookmark import delete_bookmark as data_delete_bookmark
-from data_service.operations.autofund import autofund_wallet
-
 from data_service.schema.actions import CreateBookmark, DeleteBookmark
 from data_service.schema.entities import Bookmark, BookmarkList
 from web_asgi.settings import AppSettings
-
 
 app_settings = AppSettings()
 mongo_client = AsyncIOMotorClient(app_settings.wallet_db_connection_string)
