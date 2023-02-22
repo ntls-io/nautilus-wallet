@@ -8,6 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 
 from common.types import WalletAddress
+from data_service.operations.autofund import autofund_wallet
 from data_service.operations.bookmark import bookmarks, create_bookmark
 from data_service.operations.bookmark import delete_bookmark as data_delete_bookmark
 from data_service.schema.actions import CreateBookmark, DeleteBookmark
@@ -54,3 +55,8 @@ async def post_bookmark_create(request: CreateBookmark) -> Bookmark:
 )
 async def delete_bookmark(request: DeleteBookmark) -> None:
     await data_delete_bookmark(mongo_engine, request)
+
+
+@app.post("/wallet/autofund", response_model=None, status_code=status.HTTP_200_OK)
+async def post_autofund_wallet(wallet_id: WalletAddress) -> None:
+    await autofund_wallet(wallet_id)
