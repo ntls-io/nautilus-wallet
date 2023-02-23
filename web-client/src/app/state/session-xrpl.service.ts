@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { CapacitorHttp } from '@capacitor/core';
+import { createUrlWith } from 'src/app/utils/http.helpers';
 import { firstValueFrom } from 'rxjs';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
@@ -27,6 +29,12 @@ import { SwalHelper } from '../utils/notification/swal-helper';
 import { ConnectorQuery } from './connector';
 import { SessionQuery } from './session.query';
 import { SessionStore, XrplBalance } from './session.store';
+
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+};
+
 /**
  * This service manages session state and operations related to the XRP ledger.
  */
@@ -134,33 +142,23 @@ export class SessionXrplService {
   }
 
   // Prepare transaction to autoload a new wallet with funds
-  async sendAutoFunds(
-    receiverId: string,
-    amount: number
-  ): Promise<{ xrplResult: xrpl.TxResponse }> {
-    const public_key_hex = environment.autofundXrpPublicKey;
-    const issuer_id = environment.xrpIssuer;
-    const pin = environment.autofundAccountPin;
-    const autoFundAmount = assetAmountXrp(amount);
-    const autoFundAmountXrp = convertFromAssetAmountXrpToLedger(autoFundAmount);
-
-    const preparedTx: xrpl.Payment = await this.prepareUnsignedTransaction(
-      receiverId,
-      autoFundAmountXrp,
-      issuer_id
-    );
-
-    // const txResponse = await this.sendTransaction(preparedTx);
-    const txnSignedEncoded = await this.signXrplTransaction(
-      preparedTx,
-      public_key_hex,
-      issuer_id,
-      pin
-    );
-
-    const txResponse = await this.submitTransaction(txnSignedEncoded);
-
-    return { xrplResult: txResponse };
+  async sendAutoFunds(wallet_id: string) {
+    if (wallet_id) {
+      return await CapacitorHttp.post({
+        headers,
+        url: createUrlWith('wallet/autofund'),
+        params: { wallet_id },
+      })
+      .then(({ status }) => {
+        if (status === 201) {
+          return true;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+    }
   }
 
   async sendFundsCommissioned(
@@ -613,4 +611,6 @@ export class SessionXrplService {
       return txResponse;
     }
   }
+
+
 }

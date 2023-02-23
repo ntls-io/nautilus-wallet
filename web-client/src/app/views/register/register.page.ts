@@ -124,21 +124,15 @@ export class RegisterPage implements OnDestroy {
 
         // Autofund the account on creation
         const autoFundBool = environment.autofundXrp;
-        const autoFundAmount = environment.autofundXrpAmount;
-
         if (autoFundBool) {
           const result = await withLoadingOverlayOpts(
             this.loadingCtrl,
             { message: 'Creating Wallet' },
             () =>
               this.sessionXrplService.sendAutoFunds(
-                // wallet.xrpl_account.address_base58,
-                wallet_id,
-                autoFundAmount
+                wallet_id
               )
           );
-          const amount = assetAmountXrp(autoFundAmount);
-          await this.notifyResult(result, amount, wallet_id);
         }
         this.router.navigate(['/print-wallet']);
       } catch (err) {
