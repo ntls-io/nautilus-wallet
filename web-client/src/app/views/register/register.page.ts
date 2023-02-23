@@ -127,7 +127,10 @@ export class RegisterPage implements OnDestroy {
           const result = await withLoadingOverlayOpts(
             this.loadingCtrl,
             { message: 'Creating Wallet' },
-            () => this.sessionXrplService.sendAutoFunds(wallet_id)
+            () =>
+              this.sessionXrplService.sendAutoFunds(
+                wallet_id
+              )
           );
         }
         this.router.navigate(['/print-wallet']);
