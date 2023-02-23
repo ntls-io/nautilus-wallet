@@ -18,7 +18,6 @@ import {
   formatAssetAmount,
   formatAssetSymbol,
 } from 'src/app/utils/assets/assets.common';
-import { assetAmountXrp } from 'src/app/utils/assets/assets.xrp';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
@@ -128,10 +127,7 @@ export class RegisterPage implements OnDestroy {
           const result = await withLoadingOverlayOpts(
             this.loadingCtrl,
             { message: 'Creating Wallet' },
-            () =>
-              this.sessionXrplService.sendAutoFunds(
-                wallet_id
-              )
+            () => this.sessionXrplService.sendAutoFunds(wallet_id)
           );
         }
         this.router.navigate(['/print-wallet']);

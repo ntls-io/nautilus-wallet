@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { CapacitorHttp } from '@capacitor/core';
-import { createUrlWith } from 'src/app/utils/http.helpers';
+import { NavController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
@@ -12,14 +11,10 @@ import {
   uint8ArrayToHex,
 } from 'src/app/services/xrpl.utils';
 import { SessionService } from 'src/app/state/session.service';
-import {
-  assetAmountXrp,
-  convertFromAssetAmountXrpToLedger,
-} from 'src/app/utils/assets/assets.xrp';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
+import { createUrlWith } from 'src/app/utils/http.helpers';
 import { parseNumber } from 'src/app/utils/validators';
-import { environment } from 'src/environments/environment';
 import { ifDefined } from 'src/helpers/helpers';
 import { TransactionSigned, TransactionToSign } from 'src/schema/actions';
 import * as xrpl from 'xrpl';
@@ -149,15 +144,15 @@ export class SessionXrplService {
         url: createUrlWith('wallet/autofund'),
         params: { wallet_id },
       })
-      .then(({ status }) => {
-        if (status === 201) {
-          return true;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        throw error;
-      });
+        .then(({ status }) => {
+          if (status === 201) {
+            return true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          throw error;
+        });
     }
   }
 
@@ -611,6 +606,4 @@ export class SessionXrplService {
       return txResponse;
     }
   }
-
-
 }
