@@ -24,7 +24,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
     my_tx_payment = Payment(
         account=sender_account,
         amount=xrp_to_drops(app_settings.autofund_amount),
-        destination="rGfxNFSJHx28gTmVt4UNow9K4VC1yVsXmH",
+        destination=wallet_id,
     )
 
     my_tx_payment_signed = await safe_sign_and_autofill_transaction(
