@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { NavController } from '@ionic/angular';
-import { CapacitorHttp } from '@capacitor/core';
-import { createUrlWith } from 'src/app/utils/http.helpers';
 import { firstValueFrom } from 'rxjs';
 import { XrplService } from 'src/app/services/xrpl.service';
 import {
@@ -146,15 +144,15 @@ export class SessionXrplService {
         url: createUrlWith('wallet/autofund'),
         params: { wallet_id },
       })
-      .then(({ status }) => {
-        if (status === 201) {
-          return true;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        throw error;
-      });
+        .then(({ status }) => {
+          if (status === 201) {
+            return true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          throw error;
+        });
     }
   }
 
@@ -608,6 +606,4 @@ export class SessionXrplService {
       return txResponse;
     }
   }
-
-
 }
