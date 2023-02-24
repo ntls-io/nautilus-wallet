@@ -17,9 +17,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
     Create and send a transaction to fund a newly created wallet
     """
 
-    try:
         app_settings = AppSettings()
-        client = JsonRpcClient(app_settings.autofund_server)
 
         sender_wallet = Wallet(
             app_settings.autofund_key, app_settings.autofund_sequence
@@ -32,6 +30,8 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
             destination=wallet_id,
         )
 
+    try:
+        client = JsonRpcClient(app_settings.autofund_server)
         my_tx_payment_signed = await safe_sign_and_autofill_transaction(
             my_tx_payment, sender_wallet, client
         )
