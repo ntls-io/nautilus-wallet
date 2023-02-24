@@ -39,4 +39,3 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         raise HTTPException(
             status_code=503, detail="Autofund transactions temporarily unavailable."
         ) from None
-
