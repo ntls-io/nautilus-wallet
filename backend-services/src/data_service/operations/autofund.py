@@ -35,7 +35,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         my_tx_payment_signed = await safe_sign_and_autofill_transaction(
             my_tx_payment, sender_wallet, client
         )
-        tx_response = await send_reliable_submission(my_tx_payment_signed, client)
+        await send_reliable_submission(my_tx_payment_signed, client)
     except Exception:
         raise HTTPException(
             status_code=503, detail="Autofund transactions temporarily unavailable."
