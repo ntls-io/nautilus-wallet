@@ -40,5 +40,3 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         raise HTTPException(
             status_code=503, detail="Autofund transactions temporarily unavailable."
         )
-
-    return {"Access-Control-Allow-Origin": app_settings.primary_origin}
