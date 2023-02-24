@@ -51,10 +51,6 @@ export const environment: Environment = {
   enableQuickAccess: true,
   enablePinReset: true,
   autoLogout: false,
-  autofundXrpAmount: 50,
-  autofundAccountPin: 'K3VG-M@YQF9gzjq.DGW!',
-  autofundXrpPublicKey:
-    '028E00428D3EC7633234CF1047913524D03CE1FD122227DFD9CDD0967429758FE3',
 };
 
 /*
