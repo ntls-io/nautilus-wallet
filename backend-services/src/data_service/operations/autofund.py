@@ -19,9 +19,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
 
     app_settings = AppSettings()
 
-    sender_wallet = Wallet(
-        app_settings.autofund_key, app_settings.autofund_sequence
-    )
+    sender_wallet = Wallet(app_settings.autofund_key, app_settings.autofund_sequence)
     sender_account = sender_wallet.classic_address
 
     my_tx_payment = Payment(
