@@ -17,18 +17,18 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
     Create and send a transaction to fund a newly created wallet
     """
 
-        app_settings = AppSettings()
+    app_settings = AppSettings()
 
-        sender_wallet = Wallet(
-            app_settings.autofund_key, app_settings.autofund_sequence
-        )
-        sender_account = sender_wallet.classic_address
+    sender_wallet = Wallet(
+        app_settings.autofund_key, app_settings.autofund_sequence
+    )
+    sender_account = sender_wallet.classic_address
 
-        my_tx_payment = Payment(
-            account=sender_account,
-            amount=xrp_to_drops(app_settings.autofund_amount),
-            destination=wallet_id,
-        )
+    my_tx_payment = Payment(
+        account=sender_account,
+        amount=xrp_to_drops(app_settings.autofund_amount),
+        destination=wallet_id,
+    )
 
     try:
         client = JsonRpcClient(app_settings.autofund_server)
@@ -36,7 +36,8 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
             my_tx_payment, sender_wallet, client
         )
         await send_reliable_submission(my_tx_payment_signed, client)
-    except Exception:
+    # TODO: more granular exception handling
+    except Exception:  # noqa: BLE001
         raise HTTPException(
             status_code=503, detail="Autofund transactions temporarily unavailable."
-        )
+        ) from None
