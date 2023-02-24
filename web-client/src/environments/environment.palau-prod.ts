@@ -36,15 +36,11 @@ export const environment: Environment = {
   commissionPercentage: 0.0,
   tokenIssuer: 'rwekfW4MiS5yZjXASRBDzzPPWYKuHvKP7E',
   tokenSymbol: 'PSC',
-  xrpIssuer: 'r3xUVoiRsww3SpPhkYaPfhNZ52K8KP5rEc',
+  xrpIssuer: 'rNZzcjq4vgKxiTVWBJefMGqaE7Qera297i',
   hideXrpBalance: true,
   autofundXrp: true,
   hidePullPayment: false,
   enableQuickAccess: true,
   enablePinReset: true,
   autoLogout: true,
-  autofundXrpAmount: 20,
-  autofundAccountPin: '@CsmRxaR9UDXWfwy.rMv',
-  autofundXrpPublicKey:
-    '0283F89740510C965195EC9DD539D612D26DB9A44531B23C4830C066476E25B7F3',
 };

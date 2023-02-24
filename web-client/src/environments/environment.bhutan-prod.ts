@@ -36,15 +36,11 @@ export const environment: Environment = {
   commissionPercentage: 0.0,
   tokenIssuer: 'rDzwrgetpdAwSU226dTbk6BQye1tJthCMa',
   tokenSymbol: 'BTN',
-  xrpIssuer: 'rfgasaRgZYJMxPEuAWUPH2ShSBhQJQFHCh',
+  xrpIssuer: 'rUDN4wSW86oHo92zr6PCMC3EjdckUCxY8w',
   hideXrpBalance: true,
   autofundXrp: true,
   hidePullPayment: false,
   enableQuickAccess: true,
   enablePinReset: true,
   autoLogout: true,
-  autofundXrpAmount: 50,
-  autofundAccountPin: 'uzD3Y8idq6*x8vGwWxRC',
-  autofundXrpPublicKey:
-    '0208A1EE854F42E720F700CE4687D75838A92EA7F630F2964F1457D61623CA6E1D',
 };
