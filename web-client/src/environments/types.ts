@@ -107,7 +107,6 @@ export type Environment = {
 
   autoLogout: boolean;
 
-
   /**
    * Require a clear Onfido check status before enabling sending payments.
    */
