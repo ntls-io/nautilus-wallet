@@ -38,7 +38,7 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         tx_response = await send_reliable_submission(my_tx_payment_signed, client)
     except:
         raise HTTPException(
-            status_code=404, detail="Error submitting autofund transaction."
+            status_code=503, detail="Autofund transactions temporarily unavailable."
         )
 
     return {"Access-Control-Allow-Origin": app_settings.primary_origin}
