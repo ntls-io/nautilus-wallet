@@ -1,4 +1,4 @@
-FROM python:3.10.8-slim-bullseye
+FROM python:3.10-slim-bullseye
 
 RUN useradd user --create-home --uid 1000
 
