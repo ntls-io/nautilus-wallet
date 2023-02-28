@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from xrpl import XRPLException
 from xrpl.asyncio.transaction import (
     safe_sign_and_autofill_transaction,
     send_reliable_submission,
@@ -35,6 +36,10 @@ async def autofund_wallet(wallet_id: WalletAddress) -> None:
         )
         await send_reliable_submission(my_tx_payment_signed, client)
     # TODO: more granular exception handling
+    except XRPLException as e:
+        raise HTTPException(
+            status_code=503, detail="XRPL Exception, {}".format(e)
+        ) from None
     except Exception:  # noqa: BLE001
         raise HTTPException(
             status_code=503, detail="Autofund transactions temporarily unavailable."
