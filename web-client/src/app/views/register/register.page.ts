@@ -38,6 +38,7 @@ export class RegisterPage implements OnDestroy {
   numInputMask = '9999999999';
   isOpening = false;
   subscription$;
+  isBusySaving = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,6 +107,7 @@ export class RegisterPage implements OnDestroy {
   async onSubmit(answers: Map<string, string>): Promise<void> {
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
+      this.isBusySaving = true;
       const phoneNumber =
         this.registrationForm.controls.mobile.value.internationalNumber
           .split(' ')
@@ -140,6 +142,7 @@ export class RegisterPage implements OnDestroy {
         });
         this.router.navigate(['/']);
       }
+      this.isBusySaving = false;
     }
   }
 
