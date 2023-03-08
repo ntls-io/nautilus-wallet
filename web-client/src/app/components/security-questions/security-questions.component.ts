@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SecurityQuestionsComponent implements OnInit {
   @Output() answers = new EventEmitter<any>();
+  @Input() isBusy = false;
   questions = [
     { field: 'mother', text: 'What is your mothers maiden name?' },
     { field: 'city', text: 'What city were you born in?' },
@@ -39,6 +40,7 @@ export class SecurityQuestionsComponent implements OnInit {
   validateForm() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
+      this.isBusy = true;
       const qMap = new Map(Object.entries(this.form.getRawValue()));
       this.answers.emit(qMap);
     }

@@ -129,7 +129,7 @@
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col>
-            <app-security-questions (answers)="onSubmit($event)">
+            <app-security-questions (answers)="onSubmit($event)" [isBusy]="isBusySaving">
               <ion-button
                 actionButton
                 (click)="swiper?.swiperRef?.slidePrev()"
