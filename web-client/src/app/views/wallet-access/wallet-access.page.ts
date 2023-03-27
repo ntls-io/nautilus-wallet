@@ -5,11 +5,13 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import algosdk from 'algosdk';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
+import * as xrpl from 'xrpl';
 import { handleScan } from '../scanner.helpers';
 
 @Component({
@@ -43,6 +45,12 @@ export class WalletAccessPage implements OnInit {
     return trimmed === '' ? undefined : trimmed;
   }
 
+  get validAddressType(): AddressType | undefined {
+    return this.validatedAddress
+      ? addressType(this.validatedAddress)
+      : undefined;
+  }
+
   ngOnInit(): void {
     // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
     this.hasCamera = Capacitor.isPluginAvailable('Camera');
@@ -58,7 +66,10 @@ export class WalletAccessPage implements OnInit {
 
   /** User clicked to confirm address: show PIN entry. */
   async confirmAddress(): Promise<void> {
-    if (this.validatedAddress !== undefined) {
+    if (
+      this.validatedAddress !== undefined &&
+      this.validAddressType !== undefined
+    ) {
       this.showPinEntryModal();
     } else {
       await this.notification.swal.fire({
@@ -96,3 +107,29 @@ export class WalletAccessPage implements OnInit {
     }
   }
 }
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
+};
