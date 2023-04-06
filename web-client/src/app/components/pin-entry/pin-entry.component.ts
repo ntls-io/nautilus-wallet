@@ -111,19 +111,39 @@ export class PinEntryComponent implements OnInit {
         ? this.walletAccessPage.address
         : '';
     try {
-      await this.notification.swal.fire({
-        titleText: 'Enter Wallet Nickname.',
-        input: 'text',
-        confirmButtonText: 'Confirm',
-        showCancelButton: true,
-        showLoaderOnConfirm: true,
-        confirmButtonColor: 'var(--ion-color-primary)',
-        cancelButtonColor: 'var(--ion-color-medium)',
-        reverseButtons: true,
-        preConfirm: async (preferedName) => {
-          await this.saveWalletAddress(saveWalletAddress, preferedName);
-        },
-      });
+      await this.notification.swal
+        .fire({
+          titleText: 'Enter Wallet Nickname.',
+          html: `<input type="text" id="wallet-nickname" class="swal2-input" placeholder="Enter wallet nickname" autofocus>`,
+          inputAttributes: {
+            autocapitalize: 'off',
+            autocorrect: 'off'
+          },
+          focusConfirm: false,
+          confirmButtonText: 'Confirm',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          reverseButtons: true,
+          didOpen: () => {
+            document.getElementById('wallet-nickname')?.focus();
+          },
+          allowOutsideClick: false,
+        })
+        .then(() => {
+          const input = document.getElementById('wallet-nickname') as HTMLInputElement;
+          const preferedName = input.value;
+          console.log(preferedName);
+          this.quickAccessService.addWalletAddress(
+            saveWalletAddress,
+            preferedName
+          );
+        })
+        .then(async () => {
+          await this.notification.swal.fire({
+            icon: 'success',
+            text: 'Your Wallet Address has been saved!',
+          });
+        });
     } catch (error) {
       console.log(error);
       this.notification.swal.fire({
