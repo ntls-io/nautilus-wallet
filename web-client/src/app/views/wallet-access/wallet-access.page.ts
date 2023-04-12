@@ -6,6 +6,7 @@ import {
   NavController,
 } from '@ionic/angular';
 import algosdk from 'algosdk';
+import { QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -36,7 +37,8 @@ export class WalletAccessPage implements OnInit {
     private sessionService: SessionService,
     private notification: SwalHelper,
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private quickAccessService: QAccessService
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
@@ -102,7 +104,12 @@ export class WalletAccessPage implements OnInit {
         title: 'Open Wallet Failed',
         text: openWalletErrorMessage,
       });
+      this.quickAccessService.setRememberWalletAddress(false);
     } else {
+      if (this.quickAccessService.getRememberWalletAddress()) {
+        this.quickAccessService.saveQuickAccess(this.address);
+        this.quickAccessService.setRememberWalletAddress(false);
+      }
       await this.navCtrl.navigateRoot(['/wallet']);
     }
   }

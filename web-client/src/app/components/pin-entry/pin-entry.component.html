@@ -1,5 +1,5 @@
 <div class="text-center">
-  <div *ngIf="hideRememberWalletAddress">
+  <div *ngIf="hideRememberWalletAddress && !walletAddressExists">
     <ion-checkbox (ionChange)="onChangeRememberWalletAddress()"></ion-checkbox>
     <ion-label> Remember Wallet Address?</ion-label>
   </div>
