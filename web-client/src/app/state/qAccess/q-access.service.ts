@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
 import { QAccess } from './q-access.model';
@@ -8,10 +8,11 @@ import { QAccessQuery } from './q-access.query';
 import { Subscription } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class QAccessService {
+export class QAccessService implements OnDestroy {
 
   walletAddresses!: string[];
   subscription!: Subscription;
+  rememberWalletAddress!: boolean;
 
   constructor(private quickAccessStore: QAccessStore,
               private quickAccessQuery: QAccessQuery,
@@ -24,8 +25,6 @@ export class QAccessService {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-  rememberWalletAddress: boolean = false;
 
   setRememberWalletAddress(value: boolean) {
     this.rememberWalletAddress = value;

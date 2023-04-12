@@ -91,7 +91,7 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.walletAddressExists = this.quickAccessService.walletAddressExists(this.walletAccessPage.address)
+    this.walletAddressExists = this.quickAccessService.walletAddressExists(this.walletAccessPage.address);
   }
 
   async onSubmit(): Promise<void> {
