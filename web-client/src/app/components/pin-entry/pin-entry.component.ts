@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -80,8 +79,10 @@ export class PinEntryComponent implements OnInit {
 
   onChangeRememberWalletAddress() {
     this.rememberWalletAddress = !this.rememberWalletAddress;
-    this.quickAccessService.setRememberWalletAddress(this.rememberWalletAddress);
-  };
+    this.quickAccessService.setRememberWalletAddress(
+      this.rememberWalletAddress
+    );
+  }
 
   goToPinReset() {
     this.modalCtrl.dismiss({
@@ -91,7 +92,9 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.walletAddressExists = this.quickAccessService.walletAddressExists(this.walletAccessPage.address);
+    this.walletAddressExists = this.quickAccessService.walletAddressExists(
+      this.walletAccessPage.address
+    );
   }
 
   async onSubmit(): Promise<void> {
@@ -115,7 +118,7 @@ export class PinEntryComponent implements OnInit {
         input: 'text',
         inputAttributes: {
           autocapitalize: 'off',
-          autocorrect: 'off'
+          autocorrect: 'off',
         },
         focusConfirm: false,
         confirmButtonText: 'Confirm',

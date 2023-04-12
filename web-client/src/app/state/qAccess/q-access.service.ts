@@ -1,26 +1,27 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
-import { QAccess } from './q-access.model';
-import { QAccessStore } from './q-access.store';
-import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { QAccessQuery } from './q-access.query';
 import { Subscription } from 'rxjs';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { QAccess } from './q-access.model';
+import { QAccessQuery } from './q-access.query';
+import { QAccessStore } from './q-access.store';
 
 @Injectable({ providedIn: 'root' })
 export class QAccessService implements OnDestroy {
-
   walletAddresses!: string[];
   subscription!: Subscription;
   rememberWalletAddress!: boolean;
 
-  constructor(private quickAccessStore: QAccessStore,
-              private quickAccessQuery: QAccessQuery,
-              public notification: SwalHelper,) {
-                this.subscription = this.quickAccessQuery.walletAddresses$.subscribe(
-                  walletAddresses => this.walletAddresses = walletAddresses
-                );
-              }
+  constructor(
+    private quickAccessStore: QAccessStore,
+    private quickAccessQuery: QAccessQuery,
+    public notification: SwalHelper
+  ) {
+    this.subscription = this.quickAccessQuery.walletAddresses$.subscribe(
+      (walletAddresses) => (this.walletAddresses = walletAddresses)
+    );
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -36,7 +37,7 @@ export class QAccessService implements OnDestroy {
 
   walletAddressExists(walletAddress: string | undefined): boolean {
     // const { keys } = await Preferences.keys();
-    walletAddress = walletAddress !== undefined ? walletAddress: '';
+    walletAddress = walletAddress !== undefined ? walletAddress : '';
     // console.log(keys);
     console.log(this.walletAddresses);
     return this.walletAddresses.includes(walletAddress);
@@ -100,17 +101,14 @@ export class QAccessService implements OnDestroy {
   }
 
   async saveQuickAccess(address: string | undefined) {
-    const saveWalletAddress: string =
-      address !== undefined
-        ? address
-        : '';
+    const saveWalletAddress: string = address !== undefined ? address : '';
     try {
       const result = await this.notification.swal.fire({
         titleText: 'Enter Wallet Nickname.',
         input: 'text',
         inputAttributes: {
           autocapitalize: 'off',
-          autocorrect: 'off'
+          autocorrect: 'off',
         },
         focusConfirm: false,
         confirmButtonText: 'Save Wallet Address',
@@ -119,10 +117,7 @@ export class QAccessService implements OnDestroy {
       });
       if (result.isConfirmed) {
         const preferedName = result.value;
-        this.addWalletAddress(
-          saveWalletAddress,
-          preferedName
-        );
+        this.addWalletAddress(saveWalletAddress, preferedName);
         await this.notification.swal.fire({
           icon: 'success',
           text: 'Your Wallet Address has been saved!',

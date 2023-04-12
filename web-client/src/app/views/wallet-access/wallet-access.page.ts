@@ -6,6 +6,7 @@ import {
   NavController,
 } from '@ionic/angular';
 import algosdk from 'algosdk';
+import { QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -13,8 +14,6 @@ import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
 import { handleScan } from '../scanner.helpers';
-import { QAccessService } from 'src/app/state/qAccess';
-
 
 @Component({
   selector: 'app-wallet-access',
@@ -107,10 +106,10 @@ export class WalletAccessPage implements OnInit {
       });
       this.quickAccessService.setRememberWalletAddress(false);
     } else {
-      if (this.quickAccessService.getRememberWalletAddress()){
+      if (this.quickAccessService.getRememberWalletAddress()) {
         this.quickAccessService.saveQuickAccess(this.address);
         this.quickAccessService.setRememberWalletAddress(false);
-      };
+      }
       await this.navCtrl.navigateRoot(['/wallet']);
     }
   }
