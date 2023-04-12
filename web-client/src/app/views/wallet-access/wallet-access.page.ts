@@ -13,6 +13,8 @@ import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
 import { handleScan } from '../scanner.helpers';
+import { QAccessService } from 'src/app/state/qAccess';
+
 
 @Component({
   selector: 'app-wallet-access',
@@ -36,7 +38,8 @@ export class WalletAccessPage implements OnInit {
     private sessionService: SessionService,
     private notification: SwalHelper,
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private quickAccessService: QAccessService
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
@@ -102,7 +105,12 @@ export class WalletAccessPage implements OnInit {
         title: 'Open Wallet Failed',
         text: openWalletErrorMessage,
       });
+      this.quickAccessService.setRememberWalletAddress(false);
     } else {
+      if (this.quickAccessService.getRememberWalletAddress()){
+        this.quickAccessService.saveQuickAccess(this.address);
+        this.quickAccessService.setRememberWalletAddress(false);
+      };
       await this.navCtrl.navigateRoot(['/wallet']);
     }
   }

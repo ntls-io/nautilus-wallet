@@ -45,14 +45,14 @@ export class PinEntryComponent implements OnInit {
 
   rememberWalletAddress = false;
 
+  walletAddressExists = false;
+
   hideRememberWalletAddress = environment.enableQuickAccess;
 
   hidePinReset = environment.enablePinReset;
 
   constructor(
-    private router: Router,
     private modalCtrl: ModalController,
-    private navCtrl: NavController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
     private quickAccessService: QAccessService
@@ -80,7 +80,8 @@ export class PinEntryComponent implements OnInit {
 
   onChangeRememberWalletAddress() {
     this.rememberWalletAddress = !this.rememberWalletAddress;
-  }
+    this.quickAccessService.setRememberWalletAddress(this.rememberWalletAddress);
+  };
 
   goToPinReset() {
     this.modalCtrl.dismiss({
@@ -90,12 +91,10 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.walletAddressExists = this.quickAccessService.walletAddressExists(this.walletAccessPage.address)
   }
 
-  onSubmit(): void {
-    if (this.rememberWalletAddress) {
-      this.saveQuickAccess();
-    }
+  async onSubmit(): Promise<void> {
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
     console.log('PinEntryComponent.onSubmit: ', { valid: pinForm.valid });
@@ -111,39 +110,29 @@ export class PinEntryComponent implements OnInit {
         ? this.walletAccessPage.address
         : '';
     try {
-      await this.notification.swal
-        .fire({
-          titleText: 'Enter Wallet Nickname.',
-          html: `<input type="text" id="wallet-nickname" class="swal2-input" placeholder="Enter wallet nickname" autofocus>`,
-          inputAttributes: {
-            autocapitalize: 'off',
-            autocorrect: 'off'
-          },
-          focusConfirm: false,
-          confirmButtonText: 'Confirm',
-          showCancelButton: true,
-          showLoaderOnConfirm: true,
-          reverseButtons: true,
-          didOpen: () => {
-            document.getElementById('wallet-nickname')?.focus();
-          },
-          allowOutsideClick: false,
-        })
-        .then(() => {
-          const input = document.getElementById('wallet-nickname') as HTMLInputElement;
-          const preferedName = input.value;
-          console.log(preferedName);
-          this.quickAccessService.addWalletAddress(
-            saveWalletAddress,
-            preferedName
-          );
-        })
-        .then(async () => {
-          await this.notification.swal.fire({
-            icon: 'success',
-            text: 'Your Wallet Address has been saved!',
-          });
+      const result = await this.notification.swal.fire({
+        titleText: 'Enter Wallet Nickname.',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off',
+          autocorrect: 'off'
+        },
+        focusConfirm: false,
+        confirmButtonText: 'Confirm',
+        showCancelButton: true,
+        reverseButtons: true,
+      });
+      if (result.isConfirmed) {
+        const preferedName = result.value;
+        this.quickAccessService.addWalletAddress(
+          saveWalletAddress,
+          preferedName
+        );
+        await this.notification.swal.fire({
+          icon: 'success',
+          text: 'Your Wallet Address has been saved!',
         });
+      }
     } catch (error) {
       console.log(error);
       this.notification.swal.fire({
