@@ -40,13 +40,13 @@ export class PinEntryComponent implements OnInit {
   /** Optional hook: set an initial PIN value, if defined. */
   @Input() setInitialPinValue?: string;
 
+  @Input() hideRememberWalletAddress = environment.enableQuickAccess;
+
   #pinForm?: FormGroup;
 
   rememberWalletAddress = false;
 
   walletAddressExists = false;
-
-  hideRememberWalletAddress = environment.enableQuickAccess;
 
   hidePinReset = environment.enablePinReset;
 
