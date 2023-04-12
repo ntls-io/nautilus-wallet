@@ -107,52 +107,6 @@ export class PinEntryComponent implements OnInit {
     }
   }
 
-  async saveQuickAccess() {
-    const saveWalletAddress: string =
-      this.walletAccessPage.address !== undefined
-        ? this.walletAccessPage.address
-        : '';
-    try {
-      const result = await this.notification.swal.fire({
-        titleText: 'Enter Wallet Nickname.',
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'off',
-          autocorrect: 'off',
-        },
-        focusConfirm: false,
-        confirmButtonText: 'Confirm',
-        showCancelButton: true,
-        reverseButtons: true,
-      });
-      if (result.isConfirmed) {
-        const preferedName = result.value;
-        this.quickAccessService.addWalletAddress(
-          saveWalletAddress,
-          preferedName
-        );
-        await this.notification.swal.fire({
-          icon: 'success',
-          text: 'Your Wallet Address has been saved!',
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      this.notification.swal.fire({
-        icon: 'error',
-        text: 'An error occured whilst saving your Wallet Address. Please try again.',
-      });
-    }
-  }
-
-  async saveWalletAddress(walletAddress: string, preferedName: string) {
-    this.quickAccessService.addWalletAddress(walletAddress, preferedName);
-    await this.notification.swal.fire({
-      icon: 'success',
-      text: 'Your Wallet Address has been saved!',
-    });
-  }
-
   async goToReset() {
     await this.modalCtrl.dismiss();
     const modal = await this.modalCtrl.create({ component: PinResetPage });
