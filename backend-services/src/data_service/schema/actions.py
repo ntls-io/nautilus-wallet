@@ -25,3 +25,16 @@ class DeleteBookmark(BaseModel):
     @classmethod
     def valid_object_id_hex_representation(cls: type, v: str) -> str:
         return valid_hex_representation(cls, v)
+
+
+class RedeemInvite(BaseModel):
+    invite_id: str
+
+    @validator("invite_id")
+    @classmethod
+    def valid_object_id_hex_representation(cls: type, v: str) -> str:
+        return valid_hex_representation(cls, v)
+
+
+class RedeemInviteResponse(BaseModel):
+    pass
