@@ -1,6 +1,7 @@
 from pydantic import BaseModel, validator
 
 from common.types import WalletAddress
+from data_service.schema.utils import valid_hex_representation
 
 
 class CreateBookmark(BaseModel):
@@ -23,9 +24,4 @@ class DeleteBookmark(BaseModel):
     @validator("delete_id")
     @classmethod
     def valid_object_id_hex_representation(cls: type, v: str) -> str:
-        int(v, 16)
-        if len(v) != 24:
-            raise AssertionError(
-                f"expected a 24 character hexadecimal string but '{v}' has length {len(v)}"
-            )
-        return v
+        return valid_hex_representation(cls, v)
