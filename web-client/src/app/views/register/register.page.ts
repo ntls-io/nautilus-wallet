@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { InviteService } from 'src/app/services/invite.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -42,6 +43,7 @@ export class RegisterPage implements OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
+    private inviteService: InviteService,
     private sessionService: SessionService,
     private router: Router,
     private sessionQuery: SessionQuery,
@@ -104,7 +106,37 @@ export class RegisterPage implements OnDestroy {
     }
   }
 
+  async promptForInviteCode() {
+    return await this.notification.swal
+      .fire({
+        titleText: 'Enter your invite code',
+        input: 'text',
+        inputPlaceholder: 'Enter your code here',
+        preConfirm: async (invite_code) => {
+          const invite = await withLoadingOverlayOpts(
+            this.loadingCtrl,
+            { message: 'Checking your invite code...' },
+            async () => await this.inviteService.getInvite(invite_code)
+          );
+          if (!invite) {
+            return false; // keep the prompt open
+          }
+          return invite.id;
+        },
+        inputAttributes: {
+          autocomplete: 'off',
+          minlength: '6',
+          maxlength: '6',
+          autocapitalize: 'off',
+          autocorrect: 'off',
+        },
+      })
+      .then(({ value }) => value || '');
+  }
+
   async onSubmit(answers: Map<string, string>): Promise<void> {
+    let invite_id = '';
+
     /* istanbul ignore next TODO */
     if (this.registrationForm.valid) {
       this.isBusySaving = true;
@@ -112,6 +144,10 @@ export class RegisterPage implements OnDestroy {
         this.registrationForm.controls.mobile.value.internationalNumber
           .split(' ')
           .join('');
+
+      if (environment.enableInvites) {
+        invite_id = await this.promptForInviteCode();
+      }
 
       const { firstName, lastName, pin } = this.registrationForm.value;
 
@@ -130,7 +166,17 @@ export class RegisterPage implements OnDestroy {
             this.loadingCtrl,
             { message: 'Creating Wallet' },
             () => this.sessionXrplService.sendAutoFunds(wallet_id)
-          );
+          ).then(async () => {
+            await withLoadingOverlayOpts(
+              this.loadingCtrl,
+              { message: 'Redeeming invite code' },
+              async () => {
+                if (environment.enableInvites) {
+                  await this.inviteService.redeemInvite(invite_id);
+                }
+              }
+            );
+          });
         }
         this.router.navigate(['/print-wallet']);
       } catch (err) {
