@@ -47,7 +47,7 @@ async def get_invite(invite_code: str) -> Invite:
     return await invite(mongo_engine, invite_code)
 
 
-@app.post("/invite/redeem", response_model=Bookmark, status_code=status.HTTP_200_OK)
+@app.post("/invite/redeem", response_model=None, status_code=status.HTTP_200_OK)
 async def post_invite_redeem(request: RedeemInvite) -> None:
     return await redeem_invite(mongo_engine, request)
 
