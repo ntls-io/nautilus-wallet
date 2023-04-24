@@ -1,15 +1,27 @@
+import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
+
+// Difference between Unix Epoch and Ripple Epoch
+const RIPPLE_EPOCH = 946684800; // seconds
 
 @Pipe({
   name: 'xrpDate',
 })
 export class XrpDatePipe implements PipeTransform {
-  transform(date: number | undefined): string {
+  constructor(private datePipe: DatePipe) {}
+
+  transform(date: number): string {
     if (date) {
-      const from = moment.utc('01/01/2000', 'DD/MM/YYYY');
-      const finalDate = moment(from).add(date, 'seconds');
-      return finalDate.local().format('YYYY-MM-DD HH:mm:ss');
+      const rippleEpochMilliseconds = (RIPPLE_EPOCH + date) * 1000;
+      const rippleEpochDate = new Date(rippleEpochMilliseconds);
+      const localTimeZoneOffsetMinutes = rippleEpochDate.getTimezoneOffset();
+      const localTimeMilliseconds =
+        rippleEpochMilliseconds - localTimeZoneOffsetMinutes * 60;
+      const localTimeFormatted = this.datePipe.transform(
+        localTimeMilliseconds,
+        'yyyy-MM-dd HH:mm:ss'
+      );
+      return localTimeFormatted || '';
     }
     return '';
   }
