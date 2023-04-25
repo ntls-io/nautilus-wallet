@@ -31,7 +31,8 @@ async def test_get_invite_success(mocker: MockerFixture) -> None:
 
     assert await invite(engine, test_invite_code) == test_invite
     mock_find_one.assert_awaited_once_with(
-        Invite, (Invite.code == test_invite_code) & (Invite.redeemed is False)
+        Invite,
+        (Invite.code == test_invite_code) & (Invite.redeemed == False),  # noqa: E712
     )
 
 
