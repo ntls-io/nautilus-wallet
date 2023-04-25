@@ -58,8 +58,8 @@ export class InviteService {
       .catch((error) => {
         this.notification.swal.fire({
           icon: 'error',
-          title: error,
-          text: 'Please try again',
+          titleText: 'Please try again',
+          text: error,
         });
       });
   }
