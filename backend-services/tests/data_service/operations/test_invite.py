@@ -56,5 +56,7 @@ async def test_redeem_invite_success(mocker: MockerFixture) -> None:
     mocker.patch.object(AIOEngine, "save", mock_save)
 
     assert await redeem_invite(engine, RedeemInvite(invite_id=test_invite_id)) is None
-    mock_find_one.assert_awaited_once_with(Invite, Invite.id == test_invite_id)
+    mock_find_one.assert_awaited_once_with(
+        Invite, Invite.id == ObjectId(test_invite_id)
+    )
     mock_save.assert_awaited_once_with(test_invite)
