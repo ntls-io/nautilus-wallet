@@ -11,8 +11,9 @@ from common.types import WalletAddress
 from data_service.operations.autofund import autofund_wallet
 from data_service.operations.bookmark import bookmarks, create_bookmark
 from data_service.operations.bookmark import delete_bookmark as data_delete_bookmark
-from data_service.schema.actions import CreateBookmark, DeleteBookmark
-from data_service.schema.entities import Bookmark, BookmarkList
+from data_service.operations.invite import invite, redeem_invite
+from data_service.schema.actions import CreateBookmark, DeleteBookmark, RedeemInvite
+from data_service.schema.entities import Bookmark, BookmarkList, Invite
 from web_asgi.settings import AppSettings
 
 app_settings = AppSettings()
@@ -39,6 +40,16 @@ app.add_middleware(
 @app.get("/bookmarks", response_model=BookmarkList, status_code=status.HTTP_200_OK)
 async def get_bookmarks(wallet_id: WalletAddress) -> BookmarkList:
     return await bookmarks(mongo_engine, wallet_id)
+
+
+@app.get("/invite", response_model=Invite, status_code=status.HTTP_200_OK)
+async def get_invite(invite_code: str) -> Invite:
+    return await invite(mongo_engine, invite_code)
+
+
+@app.post("/invite/redeem", response_model=None, status_code=status.HTTP_200_OK)
+async def post_invite_redeem(request: RedeemInvite) -> None:
+    return await redeem_invite(mongo_engine, request)
 
 
 @app.post(

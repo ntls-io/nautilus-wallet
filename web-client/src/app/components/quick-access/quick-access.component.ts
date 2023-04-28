@@ -7,6 +7,7 @@ import {
   QAccessService,
   QAccessStore,
 } from 'src/app/state/qAccess';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { showToast } from '../../utils/toast.helpers';
 
@@ -24,7 +25,8 @@ export class QuickAccessComponent implements OnInit {
     private quickAccessService: QAccessService,
     private quickAccessStore: QAccessStore,
     private toastCtrl: ToastController,
-    public quickAccessQuery: QAccessQuery
+    public quickAccessQuery: QAccessQuery,
+    private notification: SwalHelper
   ) {}
 
   async ionViewWillEnter() {
@@ -34,9 +36,22 @@ export class QuickAccessComponent implements OnInit {
   ngOnInit() {}
 
   async deleteAddress(address: QAccess) {
-    await this.quickAccessService.deleteAddress(address.walletAddress);
-    this.quickAccessStore.remove(address.id);
-    this.showSuccess('Wallet Address deleted');
+    this.notification.swal.fire({
+      icon: 'warning',
+      titleText: 'Delete Saved Wallet Address',
+      text: 'Are you sure you want to delete this Wallet Address?',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      showLoaderOnConfirm: true,
+      confirmButtonColor: 'var(--ion-color-primary)',
+      cancelButtonColor: 'var(--ion-color-medium)',
+      reverseButtons: true,
+      preConfirm: async () => {
+        await this.quickAccessService.deleteAddress(address.walletAddress);
+        this.quickAccessStore.remove(address.id);
+        this.showSuccess('Wallet Address deleted');
+      },
+    });
   }
 
   async showSuccess(message: string) {

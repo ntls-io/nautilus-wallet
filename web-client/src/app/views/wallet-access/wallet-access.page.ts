@@ -5,11 +5,14 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
+import algosdk from 'algosdk';
+import { QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
+import * as xrpl from 'xrpl';
 import { handleScan } from '../scanner.helpers';
 
 @Component({
@@ -34,13 +37,20 @@ export class WalletAccessPage implements OnInit {
     private sessionService: SessionService,
     private notification: SwalHelper,
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private quickAccessService: QAccessService
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
   get validatedAddress(): string | undefined {
     const trimmed = this.address?.trim();
     return trimmed === '' ? undefined : trimmed;
+  }
+
+  get validAddressType(): AddressType | undefined {
+    return this.validatedAddress
+      ? addressType(this.validatedAddress)
+      : undefined;
   }
 
   ngOnInit(): void {
@@ -58,7 +68,10 @@ export class WalletAccessPage implements OnInit {
 
   /** User clicked to confirm address: show PIN entry. */
   async confirmAddress(): Promise<void> {
-    if (this.validatedAddress !== undefined) {
+    if (
+      this.validatedAddress !== undefined &&
+      this.validAddressType !== undefined
+    ) {
       this.showPinEntryModal();
     } else {
       await this.notification.swal.fire({
@@ -91,8 +104,39 @@ export class WalletAccessPage implements OnInit {
         title: 'Open Wallet Failed',
         text: openWalletErrorMessage,
       });
+      this.quickAccessService.setRememberWalletAddress(false);
     } else {
+      if (this.quickAccessService.getRememberWalletAddress()) {
+        this.quickAccessService.saveQuickAccess(this.address);
+        this.quickAccessService.setRememberWalletAddress(false);
+      }
       await this.navCtrl.navigateRoot(['/wallet']);
     }
   }
 }
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
+};

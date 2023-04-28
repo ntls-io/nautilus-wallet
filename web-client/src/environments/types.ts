@@ -101,6 +101,8 @@ export type Environment = {
 
   hidePullPayment: boolean;
 
+  enableInvites: boolean;
+
   enableQuickAccess: boolean;
 
   enablePinReset: boolean;
