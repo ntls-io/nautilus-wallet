@@ -32,6 +32,9 @@ export class InviteService {
         if (status === 404) {
           throw new Error('Unrecognized invite code');
         }
+        if (status === 422) {
+          throw new Error('Invite code has already been redeemed.');
+        }
         return undefined;
       })
       .catch((error) => {
