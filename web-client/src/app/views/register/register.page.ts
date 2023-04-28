@@ -112,21 +112,26 @@ export class RegisterPage implements OnDestroy {
         titleText: 'Enter your invite code',
         input: 'text',
         inputPlaceholder: 'Enter your code here',
+        showLoaderOnConfirm: true,
         preConfirm: async (invite_code) => {
-          const invite = await withLoadingOverlayOpts(
-            this.loadingCtrl,
-            { message: 'Checking your invite code...' },
-            async () => await this.inviteService.getInvite(invite_code)
-          );
-          if (!invite) {
-            return false; // keep the prompt open
+          if (invite_code.length !== 6) {
+            this.notification.swal.showValidationMessage(
+              'You have entered an invalid invite code.'
+            );
+          } else {
+            const invite = await withLoadingOverlayOpts(
+              this.loadingCtrl,
+              { message: 'Checking your invite code...' },
+              async () => await this.inviteService.getInvite(invite_code)
+            );
+            if (!invite) {
+              return false; // keep the prompt open
+            }
+            return invite.id;
           }
-          return invite.id;
         },
         inputAttributes: {
           autocomplete: 'off',
-          minlength: '6',
-          maxlength: '6',
           autocapitalize: 'off',
           autocorrect: 'off',
         },
