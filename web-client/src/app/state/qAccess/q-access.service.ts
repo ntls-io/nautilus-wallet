@@ -114,6 +114,13 @@ export class QAccessService implements OnDestroy {
         confirmButtonText: 'Save Wallet Address',
         showCancelButton: true,
         reverseButtons: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Wallet nickname cannot be empty';
+          } else {
+            return null;
+          }
+        },
       });
       if (result.isConfirmed) {
         const preferedName = result.value;
