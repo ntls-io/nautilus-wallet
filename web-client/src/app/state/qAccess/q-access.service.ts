@@ -131,7 +131,10 @@ export class QAccessService implements OnDestroy {
         });
       }
     } catch (error) {
-      console.log(error);
+      await this.notification.swal.fire({
+        icon: 'error',
+        text: 'An unexpected error occured when saving your wallet address.',
+      });
     }
   }
 }
