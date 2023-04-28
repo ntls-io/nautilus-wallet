@@ -15,7 +15,7 @@ async def invite(engine: Engine, invite_code: str) -> Invite:
     )
     if existing_invite is None:
         raise HTTPException(404)
-    elif existing_invite.redeemed:
+    if existing_invite.redeemed:
         raise HTTPException(422, detail="This invite code has already been redeemed.")
     return existing_invite
 
