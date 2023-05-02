@@ -1,9 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
-// Difference between Unix Epoch and Ripple Epoch
-const RIPPLE_EPOCH = 946684800; // seconds
-
 @Pipe({
   name: 'xrpDate',
 })
