@@ -10,9 +10,7 @@ async def invite(engine: Engine, invite_code: str) -> Invite:
     """
     Retrieve an unredeemed invite from the database, if available.
     """
-    existing_invite = await engine.find_one(
-        Invite, (Invite.code == invite_code) & (Invite.redeemed == False)  # noqa: E712
-    )
+    existing_invite = await engine.find_one(Invite, (Invite.code == invite_code))
     if existing_invite is None:
         raise HTTPException(404)
     if existing_invite.redeemed:
