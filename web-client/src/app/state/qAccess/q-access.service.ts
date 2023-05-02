@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
 import { Subscription } from 'rxjs';
@@ -14,6 +15,7 @@ export class QAccessService implements OnDestroy {
   rememberWalletAddress!: boolean;
 
   constructor(
+    private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
     public notification: SwalHelper
@@ -114,6 +116,13 @@ export class QAccessService implements OnDestroy {
         confirmButtonText: 'Save Wallet Address',
         showCancelButton: true,
         reverseButtons: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Wallet nickname cannot be empty';
+          } else {
+            return null;
+          }
+        },
       });
       if (result.isConfirmed) {
         const preferedName = result.value;
@@ -124,7 +133,12 @@ export class QAccessService implements OnDestroy {
         });
       }
     } catch (error) {
-      console.log(error);
+      await this.notification.swal.fire({
+        icon: 'error',
+        text: 'An unexpected error occured when saving your wallet address',
+        toast: true,
+        position: 'bottom',
+      });
     }
   }
 }
