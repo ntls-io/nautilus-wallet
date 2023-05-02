@@ -11,9 +11,10 @@ use std::prelude::v1::{String, ToString};
 use serde::{Deserialize, Serialize};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
-use crate::crypto::common::{Bytes32, PublicKey};
+use crate::crypto::common::PublicKey;
 use crate::schema::auth::AuthError;
 use crate::schema::entities::{WalletDisplay, XrplAccountDisplay};
+use crate::schema::serde_bytes_array;
 use crate::schema::types::{Bytes, WalletAuthMap, WalletId, WalletPin};
 use crate::wallet_operations::store::{GetXrplWalletError, UnlockWalletError};
 
@@ -98,14 +99,16 @@ pub struct StartPinReset {
      */
     #[zeroize(skip)]
     pub wallet_auth_map: RefCell<WalletAuthMap>,
+    #[serde(with = "serde_bytes_array")]
     pub client_pk: PublicKey,
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
 pub enum StartPinResetResult {
-    ServerPk(PublicKey),
+    Success,
     InvalidAuth,
+    NotFound,
     Failed(String),
 }
 
@@ -125,8 +128,8 @@ impl From<AuthError> for StartPinResetResult {
 pub struct PinReset {
     pub wallet_id: WalletId,
     pub new_pin: WalletPin,
-    pub new_pin_mac: Bytes32,
-    pub client_pk: PublicKey,
+    #[zeroize(skip)]
+    pub wallet_auth_map: RefCell<WalletAuthMap>,
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -134,6 +137,7 @@ pub struct PinReset {
 pub enum PinResetResult {
     Reset,
     InvalidAuth,
+    NotFound,
     Failed(String),
 }
 

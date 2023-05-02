@@ -120,6 +120,23 @@ export const routes: Routes = [
         (m) => m.SearchWalletPageModule
       ),
   },
+  {
+    path: 'history',
+    loadChildren: () =>
+      import('./views/history/history.module').then((m) => m.HistoryPageModule),
+  },
+  {
+    path: 'bookmarks',
+    loadChildren: () =>
+      import('./views/bookmarks/bookmarks.module').then(
+        (m) => m.BookmarksPageModule
+      ),
+  },
+  {
+    path: 'pull',
+    loadChildren: () =>
+      import('./views/pull/pull.module').then((m) => m.PullPageModule),
+  },
 ];
 
 @NgModule({

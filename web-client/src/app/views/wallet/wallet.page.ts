@@ -43,18 +43,44 @@ export class WalletPage implements OnInit {
     {
       title: 'Send Money',
       icon: 'card',
-      path: '/wallet/send-funds',
+      path: '/wallet/transfer-funds',
+      state: { transferType: 'pay' },
       disabled: false,
     },
     {
-      title: 'Receive',
-      icon: 'download',
+      title: 'Pull Payment',
+      icon: 'cash',
+      path: '/wallet/transfer-funds',
+      state: { transferType: 'pull' },
+      disabled: false,
+    },
+    {
+      title: 'My Wallet Address',
+      icon: 'qr-code',
       path: '/wallet/receive',
+      disabled: false,
+    },
+    {
+      title: 'Transactions History',
+      icon: 'list',
+      path: '/history',
+      disabled: false,
+    },
+    {
+      title: 'Bookmark Recipient',
+      icon: 'bookmark',
+      path: '/bookmarks',
       disabled: false,
     },
   ];
 
-  constructor(public sessionQuery: SessionQuery) {}
+  constructor(public sessionQuery: SessionQuery) {
+    if (environment.hidePullPayment) {
+      this.actionItems = this.actionItems.filter(
+        (action) => action.title !== 'Pull Payment'
+      );
+    }
+  }
 
   ngOnInit() {}
 }

@@ -9,10 +9,21 @@ import * as xrpl from 'xrpl';
  * Common type declaration for environment files.
  */
 export type Environment = {
+  firebase: {
+    projectId: string;
+    appId: string;
+    databaseURL: string;
+    storageBucket: string;
+    apiKey: string;
+    authDomain: string;
+    messagingSenderId: string;
+    measurementId: string;
+  };
   /**
    * Toggle Angular and libraries between production and development modes.
    */
   production: boolean;
+  staging?: boolean;
 
   /**
    * Name of the organization.
@@ -88,11 +99,15 @@ export type Environment = {
 
   autofundXrp: boolean;
 
-  autofundXrpAmount: number;
+  hidePullPayment: boolean;
 
-  autofundAccountPin: string;
+  enableInvites: boolean;
 
-  autofundXrpPublicKey: string;
+  enableQuickAccess: boolean;
+
+  enablePinReset: boolean;
+
+  autoLogout: boolean;
 
   /**
    * Require a clear Onfido check status before enabling sending payments.

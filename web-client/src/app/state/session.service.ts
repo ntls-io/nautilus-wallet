@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
-import { EnclaveService } from 'src/app/services/enclave/index';
+import { EnclaveService } from 'src/app/services/enclave/enclave.service';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { SearchService } from 'src/app/services/search.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { panic } from 'src/app/utils/errors/panic';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { never } from 'src/helpers/helpers';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   LoadOnfidoCheck,
   LoadOnfidoCheckResult,
   OnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  PinReset,
+  PinResetResult,
   SaveOnfidoCheck,
   SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
+  StartPinReset,
+  StartPinResetResult,
   TransactionSigned,
   TransactionToSign,
 } from 'src/schema/actions';
+import { XrplPublicKeyHex } from '../../schema/types';
 import { SessionStore } from './session.store';
 
 /**
@@ -33,7 +41,9 @@ export class SessionService {
     private sessionQuery: SessionQuery,
     private enclaveService: EnclaveService,
     private messagingService: MessagingService,
-    private searchService: SearchService
+    private searchService: SearchService,
+
+    private notification: SwalHelper
   ) {}
 
   /**
@@ -52,7 +62,7 @@ export class SessionService {
         owner_name: name,
         auth_pin: pin,
         phone_number,
-        auth_map,
+        auth_map: Object.fromEntries(auth_map),
       };
       const result: CreateWalletResult = await this.enclaveService.createWallet(
         request
@@ -116,6 +126,67 @@ export class SessionService {
   }
 
   /**
+   * Start the PIN reset session.
+   *
+   * @see EnclaveService#startPinReset
+   */
+  async startPinReset(
+    walletId: string,
+    auth_map: Map<string, string>,
+    client_pk: Uint8Array
+  ): Promise<StartPinResetResult> {
+    const request: StartPinReset = {
+      wallet_id: walletId,
+      wallet_auth_map: Object.fromEntries(auth_map),
+      client_pk,
+    };
+    const result: StartPinResetResult = await this.enclaveService.startPinReset(
+      request
+    );
+    return result;
+  }
+
+  /**
+   * If first session is successful, pin is reset..
+   *
+   * @see EnclaveService#startPinReset
+   */
+  async pinReset(
+    walletId: string,
+    new_pin: string,
+    auth_map: Map<string, string>
+  ): Promise<PinResetResult> {
+    const request: PinReset = {
+      wallet_id: walletId,
+      new_pin,
+      wallet_auth_map: Object.fromEntries(auth_map),
+    };
+    const result: PinResetResult = await this.enclaveService.pinReset(request);
+
+    return result;
+  }
+  /**
+   * Get public key of an existing wallet address.
+   *
+   * @see EnclaveService#getXrplWallet
+   */
+  async getXrplWalletPublicKey(walletId: string): Promise<XrplPublicKeyHex> {
+    const request: GetXrplWallet = { wallet_id: walletId };
+    const result: GetXrplWalletResult = await this.enclaveService.getXrplWallet(
+      request
+    );
+
+    if ('Opened' in result) {
+      return result.Opened.public_key_hex;
+    } else if ('Failed' in result) {
+      console.error(result);
+      throw new Error(result.Failed);
+    } else {
+      throw never(result);
+    }
+  }
+
+  /**
    * Sign a transaction using the active session's wallet.
    *
    * This takes care of wrapping {@link SignTransaction}
@@ -150,7 +221,7 @@ export class SessionService {
       return signResult.Signed;
     } else if ('InvalidAuth' in signResult) {
       this.sessionStore.setError({ signResult });
-      throw panic('SessionService.signTransaction: invalid auth', signResult);
+      throw new Error('SessionService.signTransaction: invalid auth');
     } else if ('Failed' in signResult) {
       this.sessionStore.setError({ signResult });
       throw panic(

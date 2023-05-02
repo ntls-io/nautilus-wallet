@@ -3,6 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -20,11 +23,5 @@
         (click)="execItemAction(item.action)"
       ></app-action-item>
     </ion-item-group>
-    <p
-      routerLink="/search-wallet"
-      class="ion-text-wrap font-bold ion-text-center"
-    >
-      Forgot Wallet Address?
-    </p>
   </ion-list>
 </ion-content>

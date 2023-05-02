@@ -1,7 +1,19 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
+  firebase: {
+    projectId: 'wallet-setup',
+    appId: '1:907972056790:web:18c0095eccf21eedf15b77',
+    databaseURL:
+      'https://wallet-setup-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'wallet-setup.appspot.com',
+    apiKey: 'AIzaSyDPq5JcM2dVVYisvvqANjJipKInkMdy_zc',
+    authDomain: 'wallet-setup.firebaseapp.com',
+    messagingSenderId: '907972056790',
+    measurementId: 'G-TW4DGPTJ62',
+  },
   production: true,
+  staging: true,
   organization: 'bhutan',
 
   // Enable persistence for demo purposes.
@@ -25,11 +37,12 @@ export const environment: Environment = {
   commissionPercentage: 0.0,
   tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
   tokenSymbol: 'BTN',
-  xrpIssuer: 'rpd17stoaELtzuhxEn4eAQcipXy2w8DEXQ',
+  xrpIssuer: 'r97EPXchsAxBuoroDSK1xWswALcqqYJ4QF',
   hideXrpBalance: true,
-  autofundXrp: false,
-  autofundXrpAmount: 11,
-  autofundAccountPin: 'L4b@Rr.ei7UAV26ZR!r6',
-  autofundXrpPublicKey:
-    '03EE5AA3E95486138DFAD5C389E5A3E98A25DFC5BD331588C73EB30657BF7701E5',
+  autofundXrp: true,
+  hidePullPayment: false,
+  enableInvites: false,
+  enableQuickAccess: true,
+  enablePinReset: true,
+  autoLogout: true,
 };

@@ -78,7 +78,7 @@ ion-textarea {
   --padding-end: 10px !important;
   @apply bg-transparent #{!important};
   textarea {
-    @apply border border-solid focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-opacity-70 rounded-full #{!important};
+    @apply border-2 border-solid focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-opacity-70 rounded-full #{!important};
   }
 }
 

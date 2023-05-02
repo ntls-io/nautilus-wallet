@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import {
   MaxLengthValidationError,
   MinLengthValidationError,
@@ -9,6 +11,8 @@ import {
   RequiredValidationError,
 } from 'src/app/utils/validation.errors';
 import { PinResetPage } from 'src/app/views/pin-reset/pin-reset.page';
+import { WalletAccessPage } from 'src/app/views/wallet-access/wallet-access.page';
+import { environment } from 'src/environments/environment';
 import { checkClass } from 'src/helpers/helpers';
 
 @Component({
@@ -17,6 +21,10 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./pin-entry.component.scss'],
 })
 export class PinEntryComponent implements OnInit {
+  @Input() wallet_id: string | undefined;
+
+  @Input() titleHeading = '';
+
   /** Emit the PIN confirmed by the user. */
   @Output() pinConfirmed = new EventEmitter<PinValue>();
 
@@ -32,9 +40,22 @@ export class PinEntryComponent implements OnInit {
   /** Optional hook: set an initial PIN value, if defined. */
   @Input() setInitialPinValue?: string;
 
+  @Input() hideRememberWalletAddress = environment.enableQuickAccess;
+
   #pinForm?: FormGroup;
 
-  constructor(private modalCtrl: ModalController) {}
+  rememberWalletAddress = false;
+
+  walletAddressExists = false;
+
+  hidePinReset = environment.enablePinReset;
+
+  constructor(
+    private modalCtrl: ModalController,
+    private notification: SwalHelper,
+    private walletAccessPage: WalletAccessPage,
+    private quickAccessService: QAccessService
+  ) {}
 
   /** Safe accessor. */
   get pinForm(): FormGroup {
@@ -56,11 +77,27 @@ export class PinEntryComponent implements OnInit {
       : null;
   }
 
-  ngOnInit(): void {
-    this.initForm();
+  onChangeRememberWalletAddress() {
+    this.rememberWalletAddress = !this.rememberWalletAddress;
+    this.quickAccessService.setRememberWalletAddress(
+      this.rememberWalletAddress
+    );
   }
 
-  onSubmit(): void {
+  goToPinReset() {
+    this.modalCtrl.dismiss({
+      dismissed: true,
+    });
+  }
+
+  ngOnInit(): void {
+    this.initForm();
+    this.walletAddressExists = this.quickAccessService.walletAddressExists(
+      this.walletAccessPage.address
+    );
+  }
+
+  async onSubmit(): Promise<void> {
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
     console.log('PinEntryComponent.onSubmit: ', { valid: pinForm.valid });

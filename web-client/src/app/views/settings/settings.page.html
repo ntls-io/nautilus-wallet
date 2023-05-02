@@ -6,9 +6,7 @@
     <ion-title>Settings</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="signOut()">
-        <ion-icon slot="icon-only" name="log-out"></ion-icon>
-      </ion-button>
+      <app-logout-button [title]="true"></app-logout-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -28,7 +26,9 @@
     <ion-row>
       <ion-col>
         <ion-list lines="none">
-          <ng-container *ngIf="(sessionQuery.onfidoCheckIsClear | async)">
+          <ng-container
+            *ngIf="!sessionQuery.showKYC || (sessionQuery.onfidoCheckIsClear | async)"
+          >
             <ion-item
               *ngIf="showConnector"
               class="app-item"

@@ -48,6 +48,8 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
   /** (Optional) Hook to set an initial amount value, if defined. */
   @Input() setInitialAmountValue?: string;
 
+  @Input() buttonHeading = 'PAY';
+
   #paymentForm?: FormGroup;
 
   constructor() {}
@@ -81,6 +83,10 @@ export class PayAmountFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.#paymentForm && (changes?.minAmount || changes?.maxAmount)) {
       this.amountControl.updateValueAndValidity();
+    }
+    if (changes?.balance.previousValue) {
+      this.#paymentForm = this.initPaymentForm();
+      this.setInitialValues();
     }
   }
 

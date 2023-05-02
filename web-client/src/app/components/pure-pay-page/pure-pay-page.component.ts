@@ -28,6 +28,8 @@ import * as xrpl from 'xrpl';
 export class PurePayPageComponent implements OnInit, OnChanges {
   @Input() senderName?: string | null;
 
+  @Input() senderAddress?: string | null;
+
   @Input() receiverAddress?: string | null;
 
   @Input() algorandBalances?: AssetAmount[] | null;

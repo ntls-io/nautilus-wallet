@@ -6,6 +6,7 @@ use sgx_types::{
     SGX_KEYPOLICY_MRSIGNER,
     SGX_KEYSELECT_SEAL,
 };
+use x25519_dalek::StaticSecret;
 
 use super::common::*;
 use crate::ported::crypto::sgx_get_key_helper;
@@ -47,9 +48,10 @@ impl SgxGetKey {
             |salt| HkdfSha256::new(Some(&salt), &secret_key),
         );
         hkdf_expand(&hkdf, &mut output);
+        let x25519_secret = StaticSecret::from(output);
         KeyPair {
             sk: Secret::new(output),
-            pk: x25519_dalek::PublicKey::from(output).to_bytes(),
+            pk: x25519_dalek::PublicKey::from(&x25519_secret).to_bytes(),
         }
     }
 }

@@ -6,7 +6,7 @@ import { Bytes, WalletId, WalletPin } from './types';
 export type CreateWallet = {
   owner_name: string;
   auth_pin: WalletPin;
-  auth_map: Map<string, string>;
+  auth_map: object;
   phone_number?: string;
 };
 
@@ -22,6 +22,30 @@ export type OpenWallet = {
 export type OpenWalletResult =
   | { Opened: WalletDisplay }
   | { InvalidAuth: null }
+  | { Failed: string };
+
+export type StartPinReset = {
+  wallet_id: WalletId;
+  wallet_auth_map: object;
+  client_pk: Uint8Array;
+};
+
+export type StartPinResetResult =
+  | { Success: null }
+  | { InvalidAuth: null }
+  | { NotFound: null }
+  | { Failed: string };
+
+export type PinReset = {
+  wallet_id: WalletId;
+  new_pin: string;
+  wallet_auth_map: object;
+};
+
+export type PinResetResult =
+  | { Reset: null }
+  | { InvalidAuth: null }
+  | { NotFound: null }
   | { Failed: string };
 
 export type GetXrplWallet = {
@@ -108,6 +132,8 @@ export type WalletRequest =
   | { CreateWallet: CreateWallet }
   | { OpenWallet: OpenWallet }
   | { GetXrplWallet: GetXrplWallet }
+  | { PinReset: PinReset }
+  | { StartPinReset: StartPinReset }
   | { SignTransaction: SignTransaction }
   | { SaveOnfidoCheck: SaveOnfidoCheck }
   | { LoadOnfidoCheck: LoadOnfidoCheck };
@@ -117,6 +143,8 @@ export type WalletResponse =
   | { CreateWallet: CreateWalletResult }
   | { OpenWallet: OpenWalletResult }
   | { GetXrplWallet: GetXrplWalletResult }
+  | { PinReset: PinResetResult }
+  | { StartPinReset: StartPinResetResult }
   | { SignTransaction: SignTransactionResult }
   | { SaveOnfidoCheck: SaveOnfidoCheckResult }
   | { LoadOnfidoCheck: LoadOnfidoCheckResult };

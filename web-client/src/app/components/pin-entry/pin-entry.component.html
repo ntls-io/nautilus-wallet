@@ -1,8 +1,13 @@
 <div class="text-center">
+  <div *ngIf="hideRememberWalletAddress && !walletAddressExists">
+    <ion-checkbox (ionChange)="onChangeRememberWalletAddress()"></ion-checkbox>
+    <ion-label> Remember Wallet Address?</ion-label>
+  </div>
+
   <div class="inline-block w-auto m-auto">
     <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
 
-    <h1 class="font-semibold font-nasalization">Enter Pin</h1>
+    <h1 class="font-semibold font-nasalization">{{ titleHeading }}</h1>
 
     <form [formGroup]="pinForm" (ngSubmit)="onSubmit()">
       <div>
@@ -36,5 +41,13 @@
         >Confirm</ion-button
       >
     </form>
+    <ion-button
+      *ngIf="hidePinReset"
+      fill="clear"
+      [routerLink]="['/pin-reset']"
+      (click)="goToPinReset()"
+      [state]="{ wallet_id: wallet_id }"
+      >I can't remember my Pin
+    </ion-button>
   </div>
 </div>

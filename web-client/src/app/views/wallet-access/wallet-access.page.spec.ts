@@ -26,6 +26,7 @@ describe('WalletAccessPage', () => {
         IonicModule.forRoot(),
         WalletAccessPageModule,
         RouterTestingModule.withRoutes(routes),
+        RouterTestingModule,
         HttpClientTestingModule,
       ],
     }).compileComponents();
@@ -122,7 +123,7 @@ describe('WalletAccessPage', () => {
     it('shows modal dialog', () => {
       const showPinEntryModalSpy = spyOn(component, 'showPinEntryModal');
 
-      component.address = 'non-empty address';
+      component.address = 'rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn';
       component.confirmAddress();
 
       expect(showPinEntryModalSpy).toHaveBeenCalledOnceWith();

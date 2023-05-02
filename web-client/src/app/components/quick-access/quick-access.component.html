@@ -1,0 +1,67 @@
+<ion-list lines="none" *ngIf="hideSavedWalletAddress">
+  <ion-list-header>
+    <ion-label color="primary">
+      <h3 class="font-nasalization">Saved Addresses</h3>
+    </ion-label>
+  </ion-list-header>
+
+  <div *ngIf="quickAccessQuery.selectCount() | async; else empty">
+    <ng-container *ngFor="let address of quickAccessQuery.selectAll() | async">
+      <ion-item class="app-item" *ngIf="address">
+        <ion-icon slot="start" name="key"></ion-icon>
+        <ion-label>
+          <h2 class="!font-black">{{ address.preferedName }}</h2>
+          <h6>{{ address.walletAddress }}</h6>
+        </ion-label>
+        <ion-buttons>
+          <ion-button (click)="login()">
+            <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteAddress(address)">
+            <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <!-- Show PIN entry modal on `isPinEntryOpen`. -->
+      <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+      <ion-modal
+        [isOpen]="isPinEntryOpen"
+        (didDismiss)="isPinEntryOpen = false"
+      >
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons>
+                <ion-button slot="start" (click)="isPinEntryOpen = false">
+                  <ion-icon
+                    slot="icon-only"
+                    name="close-circle-outline"
+                  ></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <app-pin-entry
+              class="h-full flex ion-justify-content-center ion-align-items-center"
+              (pinConfirmed)="
+                isPinEntryOpen = false;
+                onPinConfirmed($event, address.walletAddress)
+              "
+              titleHeading="Enter Pin"
+              [wallet_id]="address.walletAddress"
+              [hideRememberWalletAddress]="false"
+            ></app-pin-entry>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ng-container>
+  </div>
+
+  <ng-template #empty>
+    <div class="ion-padding-horizontal ion-text-center">
+      <p>No Address is saved.</p>
+    </div>
+  </ng-template>
+</ion-list>

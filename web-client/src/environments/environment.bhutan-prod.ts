@@ -1,6 +1,17 @@
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
+  firebase: {
+    projectId: 'wallet-setup',
+    appId: '1:907972056790:web:18c0095eccf21eedf15b77',
+    databaseURL:
+      'https://wallet-setup-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'wallet-setup.appspot.com',
+    apiKey: 'AIzaSyDPq5JcM2dVVYisvvqANjJipKInkMdy_zc',
+    authDomain: 'wallet-setup.firebaseapp.com',
+    messagingSenderId: '907972056790',
+    measurementId: 'G-TW4DGPTJ62',
+  },
   production: true,
   organization: 'bhutan',
 
@@ -17,19 +28,20 @@ export const environment: Environment = {
   // USDC from https://testnet.folks.finance/faucet
   defaultAlgorandAssetId: 67395862,
   xrplClient: {
-    server: 'wss://s1.cbdc-sandbox.rippletest.net:51233',
+    server: 'wss://uuvvvai.com:51233',
     options: {
       connectionTimeout: 20000,
     },
   },
   commissionPercentage: 0.0,
-  tokenIssuer: 'rKitZq2qY8REiq7xvY3MfaqMhQkMekJtK',
+  tokenIssuer: 'rDzwrgetpdAwSU226dTbk6BQye1tJthCMa',
   tokenSymbol: 'BTN',
-  xrpIssuer: 'rpd17stoaELtzuhxEn4eAQcipXy2w8DEXQ',
+  xrpIssuer: 'rUDN4wSW86oHo92zr6PCMC3EjdckUCxY8w',
   hideXrpBalance: true,
-  autofundXrp: false,
-  autofundXrpAmount: 11,
-  autofundAccountPin: 'L4b@Rr.ei7UAV26ZR!r6',
-  autofundXrpPublicKey:
-    '03EE5AA3E95486138DFAD5C389E5A3E98A25DFC5BD331588C73EB30657BF7701E5',
+  autofundXrp: true,
+  hidePullPayment: false,
+  enableInvites: false,
+  enableQuickAccess: true,
+  enablePinReset: true,
+  autoLogout: true,
 };

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { checkRippledErrorResponse } from 'src/app/services/xrpl.utils';
 import { defined } from 'src/app/utils/errors/panic';
-import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
 import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
+import { SetupQuery } from '../state/setup';
 
 /**
  * This service wraps an instance of the algosdk {@link xrpl.Client},
@@ -18,7 +18,7 @@ import { IssuedCurrencyAmount } from 'xrpl/dist/npm/models/common/index';
   providedIn: 'root',
 })
 export class XrplService {
-  constructor() {
+  constructor(private setupQuery: SetupQuery) {
     // Call this once on construction as a smoke test.
     this.getClient();
   }
@@ -181,6 +181,21 @@ export class XrplService {
     );
   }
 
+  /**
+   * Retrieves a list of transactions that involved the specified account
+   *
+   * @see https://js.xrpl.org/interfaces/AccountTxRequest.html
+   */
+  async getAccountTx(account: string): Promise<xrpl.AccountTxResponse> {
+    return await this.withConnection(
+      async (client) =>
+        await client.request({
+          command: 'account_tx',
+          account,
+        })
+    );
+  }
+
   // For Reference: https://github.com/XRPLF/xrpl.js/blob/6e4868e6c7a03f0d48de1ddee5d9a88700ab5a7c/src/transaction/sign.ts#L54
   /*
   async submitTransaction(
@@ -223,7 +238,12 @@ export class XrplService {
   }
 
   protected getClient(): xrpl.Client {
-    return getXrplClientFromEnvironment();
+    const xrplClient = this.setupQuery.ledger;
+    const { server, options } = defined(
+      xrplClient,
+      'environment.xrplClient not configured'
+    );
+    return new xrpl.Client(server, options);
   }
 }
 
@@ -231,12 +251,4 @@ export type Balance = {
   value: string;
   currency: string;
   issuer?: string;
-};
-
-const getXrplClientFromEnvironment = (): xrpl.Client => {
-  const { server, options } = defined(
-    environment.xrplClient,
-    'environment.xrplClient not configured'
-  );
-  return new xrpl.Client(server, options);
 };

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { resetStores } from '@datorama/akita';
-import { NavController } from '@ionic/angular';
 import { ConnectorQuery } from 'src/app/state/connector';
 import { SessionQuery } from 'src/app/state/session.query';
 
@@ -14,7 +12,6 @@ export class SettingsPage implements OnInit {
   isWalletConnector = false;
 
   constructor(
-    private navController: NavController,
     public sessionQuery: SessionQuery,
     public connectorQuery: ConnectorQuery
   ) {
@@ -25,11 +22,6 @@ export class SettingsPage implements OnInit {
       this.isWalletConnector = connectorWallet === userWallet;
       this.showConnector = !!connectorWallet ? this.isWalletConnector : true;
     });
-  }
-
-  signOut() {
-    resetStores({ exclude: ['connector'] });
-    this.navController.navigateRoot('/');
   }
 
   ngOnInit() {}

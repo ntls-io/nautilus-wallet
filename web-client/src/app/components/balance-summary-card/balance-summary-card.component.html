@@ -16,26 +16,20 @@
       </ion-list-header>
       <ng-container *ngIf="sessionQuery.allBalances | async as balances">
         <ion-item-group *ngIf="balances?.length; else empty">
-          <ion-item *ngFor="let balance of balances">
-            <ion-label class="ion-text-right">
-              <ion-text
-                *ngIf="balance.assetDisplay.assetSymbol !== hideXRP"
-                class="font-audiowide"
-              >
-                {{ balance | assetAmount }}
-              </ion-text>
-            </ion-label>
-            <div slot="end" class="w-12">
-              <ion-text
-                *ngIf="balance.assetDisplay.assetSymbol !== hideXRP"
-                slot="end"
-                color="secondary"
-                class="font-bold"
-              >
-                {{ balance | assetSymbol }}
-              </ion-text>
-            </div>
-          </ion-item>
+          <ng-container *ngFor="let balance of balances">
+            <ion-item *ngIf="balance.assetDisplay.assetSymbol !== hideXRP">
+              <ion-label class="ion-text-right">
+                <ion-text class="font-audiowide">
+                  {{ balance | assetAmount }}
+                </ion-text>
+              </ion-label>
+              <div slot="end" class="w-12">
+                <ion-text slot="end" color="secondary" class="font-bold">
+                  {{ balance | assetSymbol }}
+                </ion-text>
+              </div>
+            </ion-item>
+          </ng-container>
         </ion-item-group>
       </ng-container>
     </ion-list>
@@ -48,7 +42,13 @@
 
   <ng-template #empty>
     <div class="px-2 ion-text-center">
-      <p>There are currently no assets in your wallet.</p>
+      <p>
+        {{
+          isLoading
+            ? "Retrieving Balances..."
+            : "There are currently no assets in your wallet."
+        }}
+      </p>
     </div>
   </ng-template>
 </div>
