@@ -2,10 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
-import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { showToast } from '../../utils/toast.helpers';
 import { QAccess } from './q-access.model';
 import { QAccessQuery } from './q-access.query';
 import { QAccessStore } from './q-access.store';
@@ -17,7 +15,6 @@ export class QAccessService implements OnDestroy {
   rememberWalletAddress!: boolean;
 
   constructor(
-    private toastCtrl: ToastController,
     private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
@@ -143,12 +140,5 @@ export class QAccessService implements OnDestroy {
         position: 'bottom',
       });
     }
-  }
-
-  async notice(message: string): Promise<HTMLIonToastElement> {
-    return showToast(this.toastCtrl, message, {
-      color: 'white',
-      duration: 2000,
-    });
   }
 }
