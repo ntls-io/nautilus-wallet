@@ -12,17 +12,6 @@ export class XrpDatePipe implements PipeTransform {
 
   transform(date: number): string {
     if (date) {
-      // const rippleEpochMilliseconds = (RIPPLE_EPOCH + date) * 1000;
-      // const rippleEpochDate = new Date(rippleEpochMilliseconds);
-      // const localTimeZoneOffsetMinutes = rippleEpochDate.getTimezoneOffset();
-      // const localTimeMilliseconds =
-      //   rippleEpochMilliseconds - localTimeZoneOffsetMinutes * 60;
-      // const localTimeFormatted = this.datePipe.transform(
-      //   localTimeMilliseconds,
-      //   'yyyy-MM-dd HH:mm:ss'
-      // );
-      // return localTimeFormatted || '';
-
       const rippleEpoch = new Date('01/01/2000 00:00:00');
       rippleEpoch.setTime(rippleEpoch.getTime() + date * 1000);
       const offsetMilliSeconds = rippleEpoch.getTimezoneOffset() * 60 * 1000;
