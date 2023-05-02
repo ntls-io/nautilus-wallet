@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
 import { ToastController } from '@ionic/angular';
@@ -17,6 +18,7 @@ export class QAccessService implements OnDestroy {
 
   constructor(
     private toastCtrl: ToastController,
+    private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
     public notification: SwalHelper
@@ -134,7 +136,12 @@ export class QAccessService implements OnDestroy {
         });
       }
     } catch (error) {
-      this.notice('Something weird happened, please try again!');
+      await this.notification.swal.fire({
+        icon: 'error',
+        text: 'An unexpected error occured when saving your wallet address.',
+        footer: '<p>Please try again.</p>',
+      });
+      this.router.navigate(['/wallet-access']);
     }
   }
 
