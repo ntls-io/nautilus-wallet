@@ -138,10 +138,10 @@ export class QAccessService implements OnDestroy {
     } catch (error) {
       await this.notification.swal.fire({
         icon: 'error',
-        text: 'An unexpected error occured when saving your wallet address.',
-        footer: '<p>Please try again.</p>',
+        text: 'An unexpected error occured when saving your wallet address',
+        toast: true,
+        position: 'bottom',
       });
-      this.router.navigate(['/wallet-access']);
     }
   }
 
