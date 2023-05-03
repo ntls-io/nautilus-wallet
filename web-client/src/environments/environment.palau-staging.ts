@@ -41,7 +41,7 @@ export const environment: Environment = {
   hideXrpBalance: true,
   autofundXrp: true,
   hidePullPayment: false,
-  enableInvites: false,
+  enableInvites: true,
   enableQuickAccess: true,
   enablePinReset: true,
   autoLogout: true,
