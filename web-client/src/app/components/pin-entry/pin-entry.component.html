@@ -1,8 +1,14 @@
 <div class="text-center">
-  <div *ngIf="hideRememberWalletAddress && !walletAddressExists">
-    <ion-checkbox (ionChange)="onChangeRememberWalletAddress()"></ion-checkbox>
+  <ion-item
+    lines="none"
+    *ngIf="hideRememberWalletAddress && !walletAddressExists"
+  >
+    <ion-checkbox
+      slot="start"
+      (ionChange)="onChangeRememberWalletAddress()"
+    ></ion-checkbox>
     <ion-label> Remember Wallet Address?</ion-label>
-  </div>
+  </ion-item>
 
   <div class="inline-block w-auto m-auto">
     <ion-icon name="lock-closed-outline" class="!text-5xl"></ion-icon>
