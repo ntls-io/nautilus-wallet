@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -41,18 +40,18 @@ export class PinEntryComponent implements OnInit {
   /** Optional hook: set an initial PIN value, if defined. */
   @Input() setInitialPinValue?: string;
 
+  @Input() hideRememberWalletAddress = environment.enableQuickAccess;
+
   #pinForm?: FormGroup;
 
   rememberWalletAddress = false;
 
-  hideRememberWalletAddress = environment.enableQuickAccess;
+  walletAddressExists = false;
 
   hidePinReset = environment.enablePinReset;
 
   constructor(
-    private router: Router,
     private modalCtrl: ModalController,
-    private navCtrl: NavController,
     private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
     private quickAccessService: QAccessService
@@ -80,6 +79,9 @@ export class PinEntryComponent implements OnInit {
 
   onChangeRememberWalletAddress() {
     this.rememberWalletAddress = !this.rememberWalletAddress;
+    this.quickAccessService.setRememberWalletAddress(
+      this.rememberWalletAddress
+    );
   }
 
   goToPinReset() {
@@ -90,52 +92,18 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.walletAddressExists = this.quickAccessService.walletAddressExists(
+      this.walletAccessPage.address
+    );
   }
 
-  onSubmit(): void {
-    if (this.rememberWalletAddress) {
-      this.saveQuickAccess();
-    }
+  async onSubmit(): Promise<void> {
     const pinForm = defined(this.pinForm);
     pinForm.markAllAsTouched();
     console.log('PinEntryComponent.onSubmit: ', { valid: pinForm.valid });
     if (pinForm.valid) {
       const { pin }: PinFormValue = pinForm.value;
       this.pinConfirmed.emit(pin);
-    }
-  }
-
-  async saveQuickAccess() {
-    const saveWalletAddress: string =
-      this.walletAccessPage.address !== undefined
-        ? this.walletAccessPage.address
-        : '';
-    console.log(saveWalletAddress);
-    try {
-      await this.notification.swal
-        .fire({
-          titleText: 'Enter Wallet Nickname.',
-          input: 'text',
-          confirmButtonText: 'Confirm',
-          showCancelButton: true,
-          showLoaderOnConfirm: true,
-          reverseButtons: true,
-        })
-        .then((result) => {
-          const preferedName = result.value;
-          this.quickAccessService.addWalletAddress(
-            saveWalletAddress,
-            preferedName
-          );
-        })
-        .then(async () => {
-          await this.notification.swal.fire({
-            icon: 'success',
-            text: 'Your Wallet Address has been saved!',
-          });
-        });
-    } catch (error) {
-      console.log(error);
     }
   }
 

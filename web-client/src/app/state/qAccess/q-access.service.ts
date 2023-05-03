@@ -1,12 +1,49 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
+import { Subscription } from 'rxjs';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { QAccess } from './q-access.model';
+import { QAccessQuery } from './q-access.query';
 import { QAccessStore } from './q-access.store';
 
 @Injectable({ providedIn: 'root' })
-export class QAccessService {
-  constructor(private quickAccessStore: QAccessStore) {}
+export class QAccessService implements OnDestroy {
+  walletAddresses!: string[];
+  subscription!: Subscription;
+  rememberWalletAddress!: boolean;
+
+  constructor(
+    private router: Router,
+    private quickAccessStore: QAccessStore,
+    private quickAccessQuery: QAccessQuery,
+    public notification: SwalHelper
+  ) {
+    this.subscription = this.quickAccessQuery.walletAddresses$.subscribe(
+      (walletAddresses) => (this.walletAddresses = walletAddresses)
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  setRememberWalletAddress(value: boolean) {
+    this.rememberWalletAddress = value;
+  }
+
+  getRememberWalletAddress() {
+    return this.rememberWalletAddress;
+  }
+
+  walletAddressExists(walletAddress: string | undefined): boolean {
+    // const { keys } = await Preferences.keys();
+    walletAddress = walletAddress !== undefined ? walletAddress : '';
+    // console.log(keys);
+    console.log(this.walletAddresses);
+    return this.walletAddresses.includes(walletAddress);
+  }
 
   addWalletAddress(address: string, preferedName: string) {
     Preferences.set({
@@ -63,5 +100,45 @@ export class QAccessService {
     return Preferences.remove({
       key: walletAddress,
     });
+  }
+
+  async saveQuickAccess(address: string | undefined) {
+    const saveWalletAddress: string = address !== undefined ? address : '';
+    try {
+      const result = await this.notification.swal.fire({
+        titleText: 'Enter Wallet Nickname.',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off',
+          autocorrect: 'off',
+        },
+        focusConfirm: false,
+        confirmButtonText: 'Save Wallet Address',
+        showCancelButton: true,
+        reverseButtons: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Wallet nickname cannot be empty';
+          } else {
+            return null;
+          }
+        },
+      });
+      if (result.isConfirmed) {
+        const preferedName = result.value;
+        this.addWalletAddress(saveWalletAddress, preferedName);
+        await this.notification.swal.fire({
+          icon: 'success',
+          text: 'Your Wallet Address has been saved!',
+        });
+      }
+    } catch (error) {
+      await this.notification.swal.fire({
+        icon: 'error',
+        text: 'An unexpected error occured when saving your wallet address',
+        toast: true,
+        position: 'bottom',
+      });
+    }
   }
 }

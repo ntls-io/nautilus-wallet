@@ -26,3 +26,12 @@ class BookmarkDocument(BaseModel):
 
     wallet_id: WalletAddress
     bookmark: Bookmark
+
+
+class Invite(Model):
+    """
+    A single-use invitation.
+    """
+
+    code: str
+    redeemed: bool = False
