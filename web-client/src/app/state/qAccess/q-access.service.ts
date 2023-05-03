@@ -102,36 +102,44 @@ export class QAccessService implements OnDestroy {
     });
   }
 
-  async saveQuickAccess(address: string | undefined) {
+  async saveQuickAccess(
+    address: string | undefined,
+    promptForNickname: boolean = true
+  ) {
     const saveWalletAddress: string = address !== undefined ? address : '';
     try {
-      const result = await this.notification.swal.fire({
-        titleText: 'Enter Wallet Nickname.',
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'off',
-          autocorrect: 'off',
-        },
-        focusConfirm: false,
-        confirmButtonText: 'Save Wallet Address',
-        showCancelButton: true,
-        reverseButtons: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return 'Wallet nickname cannot be empty';
-          } else {
-            return null;
-          }
-        },
-      });
-      if (result.isConfirmed) {
-        const preferedName = result.value;
-        this.addWalletAddress(saveWalletAddress, preferedName);
-        await this.notification.swal.fire({
-          icon: 'success',
-          text: 'Your Wallet Address has been saved!',
+      let preferedName = '';
+      if (promptForNickname) {
+        const result = await this.notification.swal.fire({
+          titleText: 'Enter Wallet Nickname.',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off',
+            autocorrect: 'off',
+          },
+          focusConfirm: false,
+          confirmButtonText: 'Save Wallet Address',
+          showCancelButton: true,
+          reverseButtons: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Wallet nickname cannot be empty';
+            } else {
+              return null;
+            }
+          },
         });
+        if (result.isConfirmed) {
+          preferedName = result.value;
+        } else if (result.isDismissed) {
+          return;
+        }
       }
+      this.addWalletAddress(saveWalletAddress, preferedName);
+      await this.notification.swal.fire({
+        icon: 'success',
+        text: 'Your Wallet Address has been saved!',
+      });
     } catch (error) {
       await this.notification.swal.fire({
         icon: 'error',
