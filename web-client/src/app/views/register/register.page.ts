@@ -106,37 +106,44 @@ export class RegisterPage implements OnDestroy {
     }
   }
 
-  async promptForInviteCode() {
-    return await this.notification.swal
-      .fire({
-        titleText: 'Enter your invite code',
-        input: 'text',
-        inputPlaceholder: 'Enter your code here',
-        showLoaderOnConfirm: true,
-        preConfirm: async (invite_code) => {
-          if (invite_code.length !== 6) {
-            this.notification.swal.showValidationMessage(
-              'You have entered an invalid invite code.'
-            );
-          } else {
-            const invite = await withLoadingOverlayOpts(
-              this.loadingCtrl,
-              { message: 'Checking your invite code...' },
-              async () => await this.inviteService.getInvite(invite_code)
-            );
-            if (!invite) {
-              return false; // keep the prompt open
-            }
-            return invite.id;
+  async promptForInviteCode(): Promise<string> {
+    const { value, isDismissed } = await this.notification.swal.fire({
+      titleText: 'Enter your invite code',
+      input: 'text',
+      inputPlaceholder: 'Enter your code here',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      preConfirm: async (invite_code) => {
+        if (invite_code === undefined) {
+          return '';
+        } else if (invite_code.length !== 6) {
+          this.notification.swal.showValidationMessage(
+            'You have entered an invalid invite code.'
+          );
+        } else {
+          const invite = await withLoadingOverlayOpts(
+            this.loadingCtrl,
+            { message: 'Checking your invite code...' },
+            async () => await this.inviteService.getInvite(invite_code)
+          );
+          if (!invite) {
+            return false;
           }
-        },
-        inputAttributes: {
-          autocomplete: 'off',
-          autocapitalize: 'off',
-          autocorrect: 'off',
-        },
-      })
-      .then(({ value }) => value || '');
+          return invite.id;
+        }
+      },
+      inputAttributes: {
+        autocomplete: 'off',
+        autocapitalize: 'off',
+        autocorrect: 'off',
+      },
+    });
+
+    if (isDismissed || !value) {
+      return '';
+    }
+
+    return value;
   }
 
   async onSubmit(answers: Map<string, string>): Promise<void> {
@@ -152,6 +159,10 @@ export class RegisterPage implements OnDestroy {
 
       if (environment.enableInvites) {
         invite_id = await this.promptForInviteCode();
+        if (!invite_id) {
+          this.isBusySaving = false;
+          return;
+        }
       }
 
       const { firstName, lastName, pin } = this.registrationForm.value;
