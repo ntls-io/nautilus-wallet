@@ -113,6 +113,10 @@ export class RegisterPage implements OnDestroy {
       inputPlaceholder: 'Enter your code here',
       showLoaderOnConfirm: true,
       showCancelButton: true,
+      customClass: {
+        cancelButton: 'order-1',
+        confirmButton: 'order-2',
+      },
       preConfirm: async (invite_code) => {
         if (invite_code === undefined) {
           return '';
