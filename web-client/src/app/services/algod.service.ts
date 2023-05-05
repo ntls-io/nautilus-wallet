@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import algosdk, { IntDecoding, Transaction } from 'algosdk';
-import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
+import AlgodClient from 'algosdk/dist/types/client/v2/algod/algod';
 import {
   AccountData,
   Asset,

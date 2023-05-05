@@ -1,7 +1,7 @@
 import {
   AlgodTokenHeader,
   CustomTokenHeader,
-} from 'algosdk/dist/types/src/client/urlTokenBaseHTTPClient';
+} from 'algosdk/dist/types/client/urlTokenBaseHTTPClient';
 import { AssetConfigs } from 'src/app/utils/assets/assets.config';
 import * as xrpl from 'xrpl';
 

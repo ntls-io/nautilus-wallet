@@ -1,7 +1,6 @@
-import algosdk, { SuggestedParams, Transaction } from 'algosdk';
-import { PaymentTxn } from 'algosdk/dist/types/src/types/transactions';
-import { AssetTransferTransaction } from 'algosdk/dist/types/src/types/transactions/asset';
-import { RenameProperty } from 'algosdk/dist/types/src/types/utils';
+import algosdk, { PaymentTxn, SuggestedParams, Transaction } from 'algosdk';
+import { AssetTransferTransaction } from 'algosdk/dist/types/types/transactions/asset';
+import { RenameProperty } from 'algosdk/dist/types/types/utils';
 
 export type RequiredParameters = Pick<PaymentTxn, 'from' | 'to' | 'amount'>;
 
