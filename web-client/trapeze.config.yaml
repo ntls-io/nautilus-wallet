@@ -1,6 +1,6 @@
 vars:
   APP_ID:
-    default: io.nlts.connect
+    default: io.ntls.connect
   DISPLAY_NAME:
     default: Nautilus Wallet
   VERSION:
