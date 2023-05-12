@@ -22,6 +22,10 @@ class AppSettings(BaseSettings):
     autofund_sequence: int
     autofund_amount: int
 
+    twilio_account_sid: str
+    twilio_auth_token: str
+    twilio_service_sid: str
+
     class Config:
         allow_mutation = False
         env_file = ".env"
