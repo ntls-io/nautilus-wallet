@@ -36,5 +36,3 @@ class RedeemInvite(BaseModel):
         return valid_hex_representation(cls, v)
 
 
-class RedeemInviteResponse(BaseModel):
-    pass
