@@ -10,7 +10,7 @@ from xrpl.utils import xrp_to_drops
 from xrpl.wallet import Wallet
 
 from common.types import WalletAddress
-from web_asgi.settings import AppSettings
+from common.settings import AppSettings
 
 
 async def autofund_wallet(wallet_id: WalletAddress) -> None:
