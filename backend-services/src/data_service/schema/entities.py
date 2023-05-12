@@ -35,3 +35,22 @@ class Invite(Model):
 
     code: str
     redeemed: bool = False
+
+
+class OtpLimitTrigger(Model):
+    """
+    Threshold amount for triggering 2FA.
+    """
+
+    wallet_id: WalletAddress
+    currency_code: str
+    limit: int
+
+
+class OtpRecipientTrigger(Model):
+    """
+    Recipient address for which 2FA should always be triggered.
+    """
+
+    wallet_id: WalletAddress
+    recipient: WalletAddress
