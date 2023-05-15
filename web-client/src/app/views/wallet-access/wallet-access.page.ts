@@ -107,7 +107,7 @@ export class WalletAccessPage implements OnInit {
       this.quickAccessService.setRememberWalletAddress(false);
     } else {
       if (this.quickAccessService.getRememberWalletAddress()) {
-        this.quickAccessService.saveQuickAccess(this.address);
+        await this.quickAccessService.saveQuickAccess(this.address, true); // prompt user to enter a nickname
         this.quickAccessService.setRememberWalletAddress(false);
       }
       await this.navCtrl.navigateRoot(['/wallet']);

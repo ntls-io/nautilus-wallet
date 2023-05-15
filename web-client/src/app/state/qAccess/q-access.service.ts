@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { guid } from '@datorama/akita';
 import { Subscription } from 'rxjs';
@@ -14,6 +15,7 @@ export class QAccessService implements OnDestroy {
   rememberWalletAddress!: boolean;
 
   constructor(
+    private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
     public notification: SwalHelper
@@ -100,31 +102,51 @@ export class QAccessService implements OnDestroy {
     });
   }
 
-  async saveQuickAccess(address: string | undefined) {
+  async saveQuickAccess(
+    address: string | undefined,
+    promptForNickname: boolean = true
+  ) {
     const saveWalletAddress: string = address !== undefined ? address : '';
     try {
-      const result = await this.notification.swal.fire({
-        titleText: 'Enter Wallet Nickname.',
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'off',
-          autocorrect: 'off',
-        },
-        focusConfirm: false,
-        confirmButtonText: 'Save Wallet Address',
-        showCancelButton: true,
-        reverseButtons: true,
-      });
-      if (result.isConfirmed) {
-        const preferedName = result.value;
-        this.addWalletAddress(saveWalletAddress, preferedName);
-        await this.notification.swal.fire({
-          icon: 'success',
-          text: 'Your Wallet Address has been saved!',
+      let preferedName = '';
+      if (promptForNickname) {
+        const result = await this.notification.swal.fire({
+          titleText: 'Enter Wallet Nickname.',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off',
+            autocorrect: 'off',
+          },
+          focusConfirm: false,
+          confirmButtonText: 'Save Wallet Address',
+          showCancelButton: true,
+          reverseButtons: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Wallet nickname cannot be empty';
+            } else {
+              return null;
+            }
+          },
         });
+        if (result.isConfirmed) {
+          preferedName = result.value;
+        } else if (result.isDismissed) {
+          return;
+        }
       }
+      this.addWalletAddress(saveWalletAddress, preferedName);
+      await this.notification.swal.fire({
+        icon: 'success',
+        text: 'Your Wallet Address has been saved!',
+      });
     } catch (error) {
-      console.log(error);
+      await this.notification.swal.fire({
+        icon: 'error',
+        text: 'An unexpected error occured when saving your wallet address',
+        toast: true,
+        position: 'bottom',
+      });
     }
   }
 }
