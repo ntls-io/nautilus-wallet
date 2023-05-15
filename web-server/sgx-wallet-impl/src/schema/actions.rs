@@ -27,6 +27,7 @@ pub struct CreateWallet {
     #[zeroize(skip)]
     pub auth_map: WalletAuthMap,
     pub phone_number: Option<String>,
+    pub otp_phone_number: Option<String>,
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -325,6 +326,23 @@ pub struct OnfidoCheckResult {
     pub sub_result: Option<String>,
 }
 
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct UpdateOtpPhoneNumber {
+    pub wallet_id: WalletId,
+    pub new_phone_number: String,
+    pub auth_pin: WalletPin,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum UpdateOtpPhoneNumberResult {
+    Updated,
+    NotFound,
+    Failed(String),
+}
+
 /// Dispatching enum for action requests.
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -337,6 +355,7 @@ pub enum WalletRequest {
 
     StartPinReset(StartPinReset),
     PinReset(PinReset),
+    UpdateOtpPhoneNumber(UpdateOtpPhoneNumber),
 
     #[zeroize(skip)]
     SaveOnfidoCheck(SaveOnfidoCheck),
@@ -356,6 +375,7 @@ pub enum WalletResponse {
     PinReset(PinResetResult),
     SignTransaction(SignTransactionResult),
     SaveOnfidoCheck(SaveOnfidoCheckResult),
+    UpdateOtpPhoneNumber(UpdateOtpPhoneNumberResult),
     LoadOnfidoCheck(LoadOnfidoCheckResult),
 }
 
@@ -400,6 +420,12 @@ impl From<PinResetResult> for WalletResponse {
 impl From<SaveOnfidoCheckResult> for WalletResponse {
     fn from(result: SaveOnfidoCheckResult) -> Self {
         Self::SaveOnfidoCheck(result)
+    }
+}
+
+impl From<UpdateOtpPhoneNumberResult> for WalletResponse {
+    fn from(result: UpdateOtpPhoneNumberResult) -> Self {
+        Self::UpdateOtpPhoneNumber(result)
     }
 }
 
