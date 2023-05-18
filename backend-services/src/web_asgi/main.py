@@ -21,6 +21,7 @@ from data_service.operations.autofund import autofund_wallet
 from data_service.operations.bookmark import bookmarks, create_bookmark
 from data_service.operations.bookmark import delete_bookmark as data_delete_bookmark
 from data_service.operations.invite import invite, redeem_invite
+from data_service.operations.otp import create_otp_recipient_trigger
 from data_service.operations.otp import (
     delete_otp_limit_trigger as data_delete_otp_limit_trigger,
 )
@@ -30,10 +31,11 @@ from data_service.operations.otp import (
 from data_service.operations.otp import (
     otp_limit_triggers,
     otp_recipient_triggers,
-    set_otp_limit,
+    set_otp_limit_trigger,
 )
 from data_service.schema.actions import (
     CreateBookmark,
+    CreateOtpRecipientTrigger,
     DeleteBookmark,
     DeleteOtpLimitTrigger,
     DeleteOtpRecipientTrigger,
@@ -121,9 +123,18 @@ async def post_bookmark_create(request: CreateBookmark) -> Bookmark:
     return await create_bookmark(mongo_engine, request)
 
 
-@app.put("/otp/limit/set", response_model=None, status_code=status.HTTP_200_CREATED)
-async def put_set_otp_limit(request: OtpLimitTrigger) -> None:
-    await set_otp_limit(mongo_engine, request)
+@app.put("/otp/limit/set", response_model=None, status_code=status.HTTP_200_OK)
+async def put_set_otp_limit_trigger(request: OtpLimitTrigger) -> None:
+    await set_otp_limit_trigger(mongo_engine, request)
+
+
+@app.post(
+    "/otp/recipient/trigger",
+    response_model=None,
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_create_otp_recipient_trigger(request: CreateOtpRecipientTrigger) -> None:
+    await create_otp_recipient_trigger(mongo_engine, request)
 
 
 @app.post(
