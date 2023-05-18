@@ -2,6 +2,11 @@
 *
 !poetry.lock
 !pyproject.toml
+!src/auth_service/__init__.py
+!src/auth_service/operations/__init__.py
+!src/auth_service/operations/twilio_2fa.py
+!src/auth_service/schema/__init__.py
+!src/auth_service/schema/actions.py
 !src/common/__init__.py
 !src/common/settings.py
 !src/common/types.py
@@ -10,6 +15,7 @@
 !src/data_service/operations/autofund.py
 !src/data_service/operations/bookmark.py
 !src/data_service/operations/invite.py
+!src/data_service/operations/otp.py
 !src/data_service/schema/__init__.py
 !src/data_service/schema/actions.py
 !src/data_service/schema/entities.py
@@ -17,7 +23,6 @@
 !src/data_service/schema/utils.py
 !src/web_asgi/__init__.py
 !src/web_asgi/main.py
-!src/web_asgi/settings.py
 !tests/__init__.py
 !tests/data_service/__init__.py
 !tests/data_service/operations/__init__.py

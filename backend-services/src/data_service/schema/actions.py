@@ -36,5 +36,36 @@ class RedeemInvite(BaseModel):
         return valid_hex_representation(cls, v)
 
 
-class RedeemInviteResponse(BaseModel):
-    pass
+class CreateOtpRecipientTrigger(BaseModel):
+    """
+    OTP limit creation paramaters.
+    """
+
+    wallet_id: WalletAddress
+    recipient: WalletAddress
+
+
+class DeleteOtpLimitTrigger(BaseModel):
+    """
+    OTP limit deletion paramaters.
+    """
+
+    trigger_id: str
+
+    @validator("trigger_id")
+    @classmethod
+    def valid_object_id_hex_representation(cls: type, v: str) -> str:
+        return valid_hex_representation(cls, v)
+
+
+class DeleteOtpRecipientTrigger(BaseModel):
+    """
+    OTP limit deletion paramaters.
+    """
+
+    trigger_id: str
+
+    @validator("trigger_id")
+    @classmethod
+    def valid_object_id_hex_representation(cls: type, v: str) -> str:
+        return valid_hex_representation(cls, v)
