@@ -13,9 +13,9 @@ from common.settings import AppSettings
 async def send_otp_to_user(
     settings: AppSettings, client: Client, params: SendOtp
 ) -> SendOtpResponse:
-    verification = client.verify.v2.services(
+    verification = await client.verify.v2.services(
         settings.twilio_service_sid
-    ).verifications.create(to=params.phone_number, channel="sms")
+    ).verifications.create_async(to=params.phone_number, channel="sms")
 
     if verification.sid is None:
         raise HTTPException(500)
@@ -25,9 +25,9 @@ async def send_otp_to_user(
 async def check_otp_verification_status(
     settings: AppSettings, client: Client, params: CheckOtpStatus
 ) -> CheckOtpStatusResponse:
-    verification_check = client.verify.v2.services(
+    verification_check = await client.verify.v2.services(
         settings.twilio_service_sid
-    ).verification_checks.create(
+    ).verification_checks.create_async(
         verification_sid=params.verification_sid, code=params.otp
     )
 
