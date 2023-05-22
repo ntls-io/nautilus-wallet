@@ -12,6 +12,7 @@ pub(crate) fn create_wallet_works() {
         auth_pin: "123456".to_string(),
         auth_map: crate::helpers::wallet_store::create_test_auth_map(),
         phone_number: None,
+        otp_phone_number: None,
     };
     let display = &match create_wallet(request) {
         Result::Created(created) => created,

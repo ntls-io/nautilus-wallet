@@ -12,3 +12,4 @@ pub mod sign_transaction;
 pub mod sign_transaction_algorand;
 pub(crate) mod sign_transaction_xrpl;
 pub mod store;
+pub mod update_otp_number;

@@ -32,6 +32,7 @@ pub fn create_test_wallet() -> WalletDisplay {
         auth_pin: "123456".to_string(),
         auth_map: create_test_auth_map(),
         phone_number: None,
+        otp_phone_number: None,
     };
     match create_wallet(request) {
         Result::Created(created) => created,

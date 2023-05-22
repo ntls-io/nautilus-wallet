@@ -18,6 +18,7 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
         auth_pin: request.auth_pin.clone(),
         auth_map: request.auth_map.clone(),
         phone_number: request.phone_number.clone(),
+        otp_phone_number: request.phone_number.clone(),
 
         algorand_account: new_algorand_account,
         xrpl_account: new_xrpl_account,
