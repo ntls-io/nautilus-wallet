@@ -136,14 +136,15 @@ export class SessionService {
     wallet_id: string,
     new_phone_number: string,
     auth_pin: string
-  ): Promise<UpdateOtpPhoneNumberResult> {
-    const request: UpdateOtpPhoneNumber = {
+  ): Promise<UpdateOtpPhoneNumberResult>{
+    const request: UpdateOtpPhoneNumber ={
       wallet_id,
       new_phone_number,
-      auth_pin,
+      auth_pin
     };
-    const result: UpdateOtpPhoneNumberResult =
-      await this.enclaveService.updateOtpPhoneNumber(request);
+    const result: UpdateOtpPhoneNumberResult = await this.enclaveService.updateOtpPhoneNumber(
+      request
+    );
     return result;
   }
 

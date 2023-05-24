@@ -15,57 +15,62 @@
     <h4 class="font-bold">Two Factor Authentication Settings</h4>
   </div>
 
+
   <p>What cell number should we use to authenticate against?</p>
-  <form
-    [formGroup]="registrationForm"
-    (ngSubmit)="onSubmit()"
-    class="form-item"
-  >
-    <ion-item [disabled]="isOpening">
-      <ion-label position="stacked">Mobile</ion-label>
-      <ion-intl-tel-input
-        formControlName="mobile"
-        class="ion-align-items-center"
-        defaultCountryiso="za"
-        (click)="onModalOpen($event)"
-        (codeOpen)="isOpening = false"
+    <form
+        [formGroup]="registrationForm"
+        (ngSubmit)="onSubmit()"
+        class="form-item"
       >
-      </ion-intl-tel-input>
+        <ion-item [disabled]="isOpening">
+            <ion-label position="stacked">Mobile</ion-label>
+            <ion-intl-tel-input
+              formControlName="mobile"
+              class="ion-align-items-center"
+              defaultCountryiso="za"
+              (click)="onModalOpen($event)"
+              (codeOpen)="isOpening = false"
+            >
+            </ion-intl-tel-input>
 
-      <small *ngIf="isOpening"><em> Loading country codes... </em></small>
-      <ion-text slot="error" *ngIf="f.mobile.touched && f.mobile.hasError">
-        <p *ngIf="f.mobile.errors?.required">Phone Number is required.</p>
-        <p *ngIf="!f.mobile.errors?.required && f.mobile.errors?.phone">
-          Phone Number is not valid.
-        </p>
-      </ion-text>
-    </ion-item>
+            <small *ngIf="isOpening"><em> Loading country codes... </em></small>
+            <ion-text
+              slot="error"
+              *ngIf="f.mobile.touched && f.mobile.hasError"
+            >
+              <p *ngIf="f.mobile.errors?.required">Phone Number is required.</p>
+              <p *ngIf="!f.mobile.errors?.required && f.mobile.errors?.phone">
+                Phone Number is not valid.
+              </p>
+            </ion-text>
+          </ion-item>
 
-    <ion-button
-      expand="block"
-      (click)="onSubmit()"
-      [disabled]="!registrationForm.controls.mobile.valid"
-      shape="round"
-      >Save Phone Number
-    </ion-button>
-  </form>
+          <ion-button
+          expand="block"
+          (click)="onSubmit()"
+          [disabled]="!registrationForm.controls.mobile.valid"
+          shape="round"
+          >Save Phone Number
+        </ion-button>
+      </form>
 
-  <ng-container *ngFor="let item of actionItems">
-    <ion-item
-      class="app-item"
-      button
-      detail
-      detailIcon="chevron-forward-circle"
-      class="app-item"
-      [routerLink]="item.path"
-      [disabled]="item.disabled"
-    >
-      <ion-icon slot="start" [name]="item.icon"></ion-icon>
-      <ion-label>
-        <ion-text class="block font-bold"> {{item.title}} </ion-text>
-      </ion-label>
-    </ion-item>
-  </ng-container>
+      <ng-container *ngFor="let item of actionItems">
+        <ion-item
+          class="app-item"
+          button
+          detail
+          detailIcon="chevron-forward-circle"
+          class="app-item"
+          [routerLink]="item.path"
+          [disabled]="item.disabled"
+        >
+          <ion-icon slot="start" [name]="item.icon"></ion-icon>
+          <ion-label>
+            <ion-text class="block font-bold"> {{item.title}} </ion-text>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+
 </ion-content>
 
 <!-- Show PIN entry modal on `isPinEntryOpen`. -->

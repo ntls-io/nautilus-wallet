@@ -7,7 +7,9 @@ export type OtpRecipientState = EntityState<OtpRecipient>;
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'otpRecipient' })
 export class OtpRecipientStore extends EntityStore<OtpRecipientState> {
+
   constructor() {
     super();
   }
+
 }

@@ -4,6 +4,6 @@ export interface OtpRecipient {
   recipient: string;
 }
 
-export const createOtpRecipient = (
-  params: Partial<OtpRecipient>
-): OtpRecipient => ({} as OtpRecipient);
+export const createOtpRecipient = (params: Partial<OtpRecipient>): OtpRecipient => ({
+
+  } as OtpRecipient);

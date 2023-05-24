@@ -1,15 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonInput, LoadingController } from '@ionic/angular';
-import { OtpPromptService } from 'src/app/services/otp-prompt.service';
-import { OtpLimitService } from 'src/app/state/otp/otpLimit/otp-limit.service';
 import { OtpRecipientQuery } from 'src/app/state/otp/otpRecipient/otp-recipient.query';
-import { OtpRecipientService } from 'src/app/state/otp/otpRecipient/otp-recipient.service';
-import { SessionQuery } from 'src/app/state/session.query';
-import { AssetAmount } from 'src/app/utils/assets/assets.common';
-import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { OtpRecipientService } from 'src/app/state/otp/otpRecipient/otp-recipient.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { OtpPromptService } from 'src/app/services/otp-prompt.service';
+import { AssetAmount } from 'src/app/utils/assets/assets.common';
+import { SessionQuery } from 'src/app/state/session.query';
+import { IonInput, LoadingController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { OtpLimitService } from 'src/app/state/otp/otpLimit/otp-limit.service';
+
 
 @Component({
   selector: 'app-triggers',
@@ -17,8 +18,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./triggers.page.scss'],
 })
 export class TriggersPage implements OnInit {
-  /** The available payment options. */
-  @Input() paymentOptions?: AssetAmount[];
+    /** The available payment options. */
+    @Input() paymentOptions?: AssetAmount[];
 
   selectTabs = 'limits';
   otpRecipientForm: FormGroup;
@@ -34,39 +35,33 @@ export class TriggersPage implements OnInit {
     private otpLimitService: OtpLimitService,
     private otpRecipientService: OtpRecipientService,
     private sessionQuery: SessionQuery
-  ) {
+    ) {
     this.otpRecipientForm = this.formBuilder.group({
-      otpRecipient: [
-        '',
-        Validators.compose([Validators.minLength(2), Validators.required]),
-      ],
+      otpRecipient: ['', Validators.compose([Validators.minLength(2), Validators.required])]
     });
   }
 
   /** "Change account" button should show for multiple options. */
   get shouldShowChangeButton(): boolean {
     return this.paymentOptions !== undefined && this.paymentOptions.length > 1;
-  }
+}
 
   ngOnInit() {
     this.sessionQuery.allBalances.subscribe((balances: AssetAmount[]) => {
       // 'balances' is now of type 'AssetAmount[]'
       this.paymentOptions = balances;
-      if (environment.hideXrpBalance) {
-        this.paymentOptions = balances.filter(
-          (balance) => balance.assetDisplay.assetSymbol !== 'XRP'
-        );
+      if(environment.hideXrpBalance){
+        this.paymentOptions = balances.filter(balance => balance.assetDisplay.assetSymbol !== 'XRP');
       }
     });
     this.initSelectedOption();
-  }
+    }
 
   async saveLimits(limitInput: IonInput) {
     const currencyCode = this.selectedOption?.assetDisplay.assetSymbol || '';
-    await this.otpLimitService.setOtpLimit({
-      currency_code: currencyCode,
-      limit: this.limit,
-    });
+    await this.otpLimitService.setOtpLimit(
+      {currency_code: currencyCode,
+        limit: this.limit });
 
     limitInput.value = null;
   }
@@ -118,6 +113,7 @@ export class TriggersPage implements OnInit {
       }
     );
   }
+
 
   private initSelectedOption(): void {
     if (this.paymentOptions !== undefined && this.paymentOptions.length === 1) {

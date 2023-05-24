@@ -32,9 +32,9 @@ export type UpdateOtpPhoneNumber = {
 };
 
 export type UpdateOtpPhoneNumberResult =
-  | { Updated: string }
-  | { NotFound: string }
-  | { Failed: string };
+  | {Updated: string}
+  | {NotFound: string}
+  | {Failed: string};
 
 export type StartPinReset = {
   wallet_id: WalletId;

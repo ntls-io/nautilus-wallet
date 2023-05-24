@@ -1,10 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
-import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
-import { SessionQuery } from '../../session.query';
-import { OtpLimitQuery } from './otp-limit.query';
+import { ID } from '@datorama/akita';
+import { tap } from 'rxjs/operators';
+import { OtpLimit } from './otp-limit.model';
 import { OtpLimitStore } from './otp-limit.store';
+import { SessionQuery } from '../../session.query';
+import { ToastController } from '@ionic/angular';
+import { OtpLimitQuery } from './otp-limit.query';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -13,12 +17,14 @@ const headers = {
 
 @Injectable({ providedIn: 'root' })
 export class OtpLimitService {
+
   constructor(
     private otpLimitStore: OtpLimitStore,
     private otpLimitQuery: OtpLimitQuery,
     private sessionQuery: SessionQuery,
-    private toastCtrl: ToastController
-  ) {}
+    private toastCtrl: ToastController,
+     ) {
+  }
 
   async getOtpLimits() {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
@@ -46,18 +52,12 @@ export class OtpLimitService {
     }
   }
 
-  async setOtpLimit(otpLimit: {
-    id?: string;
-    currency_code: string;
-    limit: number;
-  }) {
+  async setOtpLimit(otpLimit: { id?: string; currency_code: string; limit: number }) {
     console.log('Function initiated...');
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
     const limits = await this.otpLimitQuery.selectAll().toPromise();
 
-    const existingLimit = limits?.find(
-      (limit) => limit.currency_code === otpLimit.currency_code
-    );
+    const existingLimit = limits?.find((limit) => limit.currency_code === otpLimit.currency_code);
 
     const data = {
       wallet_id,
@@ -82,13 +82,15 @@ export class OtpLimitService {
     }
   }
 
-  async showSuccess(message: string) {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 2000,
-      color: 'success',
-    });
 
-    return toast.present();
-  }
+async showSuccess(message: string) {
+  const toast = await this.toastCtrl.create({
+    message,
+    duration: 2000,
+    color: 'success',
+  });
+
+  return toast.present();
+}
+
 }

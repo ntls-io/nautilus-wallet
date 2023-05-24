@@ -24,34 +24,38 @@
       </ion-item>
     </ng-container>
     <!-- Show PIN entry modal on `isPinEntryOpen`. -->
-    <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
-    <ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons>
-              <ion-button slot="start" (click)="isPinEntryOpen = false">
-                <ion-icon
-                  slot="icon-only"
-                  name="close-circle-outline"
-                ></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <app-pin-entry
-            class="h-full flex ion-justify-content-center ion-align-items-center"
-            (pinConfirmed)="
-              isPinEntryOpen = false; onPinConfirmed($event, walletAddress)
-            "
-            titleHeading="Enter Pin"
-            [wallet_id]="walletAddress"
-            [hideRememberWalletAddress]="false"
-          ></app-pin-entry>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
+      <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+      <ion-modal
+        [isOpen]="isPinEntryOpen"
+        (didDismiss)="isPinEntryOpen = false"
+      >
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons>
+                <ion-button slot="start" (click)="isPinEntryOpen = false">
+                  <ion-icon
+                    slot="icon-only"
+                    name="close-circle-outline"
+                  ></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <app-pin-entry
+              class="h-full flex ion-justify-content-center ion-align-items-center"
+              (pinConfirmed)="
+                isPinEntryOpen = false;
+                onPinConfirmed($event, walletAddress)
+              "
+              titleHeading="Enter Pin"
+              [wallet_id]="walletAddress"
+              [hideRememberWalletAddress]="false"
+            ></app-pin-entry>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
   </div>
 
   <ng-template #empty>

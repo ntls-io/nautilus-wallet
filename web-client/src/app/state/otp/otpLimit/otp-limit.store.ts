@@ -7,7 +7,9 @@ export type OtpLimitState = EntityState<OtpLimit>;
 @Injectable({ providedIn: 'root' })
 @StoreConfig({ name: 'otpLimit', resettable: true })
 export class OtpLimitStore extends EntityStore<OtpLimitState> {
+
   constructor() {
     super();
   }
+
 }

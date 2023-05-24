@@ -90,9 +90,7 @@ export class QuickAccessComponent implements OnInit {
 
   /** User confirmed PIN: attempt to open wallet. */
   async onPinConfirmed(pin: string, address?: string): Promise<void> {
-    if (!address) {
-      return;
-    }
+    if(!address) {return;}
     this.quickAccessService.setRememberWalletAddress(false);
     const openWalletErrorMessage = await withLoadingOverlayOpts(
       this.loadingCtrl,

@@ -5,5 +5,6 @@ export interface OtpLimit {
   limit: number;
 }
 
-export const createOtpLimit = (params: Partial<OtpLimit>): OtpLimit =>
-  ({} as OtpLimit);
+export const createOtpLimit = (params: Partial<OtpLimit>): OtpLimit => ({
+
+  } as OtpLimit);
