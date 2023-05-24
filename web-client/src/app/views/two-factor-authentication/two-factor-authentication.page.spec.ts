@@ -14,7 +14,6 @@ describe('TwoFactorAuthenticationPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TwoFactorAuthenticationPage ],
       imports: [
         IonicModule.forRoot(),
         HttpClientTestingModule,
@@ -24,6 +23,8 @@ describe('TwoFactorAuthenticationPage', () => {
       ]
     }).compileComponents();
 
+    router = TestBed.inject(Router);
+    router.navigate(['2FA']);
     fixture = TestBed.createComponent(TwoFactorAuthenticationPage);
     component = fixture.componentInstance;
     fixture.detectChanges();

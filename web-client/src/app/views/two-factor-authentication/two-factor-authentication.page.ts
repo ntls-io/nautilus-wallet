@@ -1,16 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { IonIntlTelInputModel, IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionService } from 'src/app/state/session.service';
-import { SessionStore } from 'src/app/state/session.store';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
