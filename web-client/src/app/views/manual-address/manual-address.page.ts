@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { checkClass } from 'src/helpers/helpers';
 
@@ -9,12 +14,20 @@ import { checkClass } from 'src/helpers/helpers';
   styleUrls: ['./manual-address.page.scss'],
 })
 export class ManualAddressPage implements OnInit {
+  @Input() wallet_id: string | undefined;
   addressForm: FormGroup;
 
   constructor(private modalCtrl: ModalController) {
     this.addressForm = new FormGroup({
-      address: new FormControl('', [Validators.required, addressValidator]),
+      address: new FormControl('', [
+        Validators.required,
+        this.addressValidator,
+      ]),
     });
+  }
+
+  get f() {
+    return this.addressForm.controls;
   }
 
   ngOnInit() {}
@@ -37,12 +50,12 @@ export class ManualAddressPage implements OnInit {
       this.dismiss(true, address);
     }
   }
-}
 
-const addressValidator = (formGroup: FormControl) => {
-  const address = trimmedValue(formGroup);
-  return address ? null : { invalidAddress: true };
-};
+  addressValidator = (formGroup: AbstractControl) => {
+    const address = trimmedValue(formGroup as FormControl);
+    return address === this.wallet_id ? { selfAddress: true } : null;
+  };
+}
 
 const trimmedValue = (formControl: FormControl) => {
   const value = formControl.value;
