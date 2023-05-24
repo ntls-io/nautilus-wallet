@@ -4,6 +4,7 @@ use std::prelude::v1::Box;
 use secrecy::{ExposeSecret, Secret};
 
 use super::pin_reset::{reset_wallet_pin, start_pin_reset};
+use super::update_otp_number::update_otp_phone_number;
 use crate::ported::crypto::SecretBytes;
 use crate::schema::actions::{WalletRequest, WalletResponse};
 use crate::schema::msgpack::{FromMessagePack, ToMessagePack};
@@ -114,6 +115,7 @@ fn wallet_operation_impl_dispatch(wallet_request: &WalletRequest) -> WalletRespo
         WalletRequest::SignTransaction(request) => sign_transaction(request).into(),
         WalletRequest::StartPinReset(request) => start_pin_reset(request).into(),
         WalletRequest::PinReset(request) => reset_wallet_pin(request).into(),
+        WalletRequest::UpdateOtpPhoneNumber(request) => update_otp_phone_number(request).into(),
         WalletRequest::SaveOnfidoCheck(request) => save_onfido_check(request).into(),
         WalletRequest::LoadOnfidoCheck(request) => load_onfido_check(request).into(),
     }
