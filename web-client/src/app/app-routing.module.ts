@@ -139,15 +139,18 @@ export const routes: Routes = [
   },
   {
     path: '2FA',
-    loadChildren: () => import('./views/two-factor-authentication/two-factor-authentication.module')
-    .then( m => m.TwoFactorAuthenticationPageModule)
+    loadChildren: () =>
+      import(
+        './views/two-factor-authentication/two-factor-authentication.module'
+      ).then((m) => m.TwoFactorAuthenticationPageModule),
   },
   {
     path: 'triggers',
-    loadChildren: () => import('./views/triggers/triggers.module').then( m => m.TriggersPageModule)
+    loadChildren: () =>
+      import('./views/triggers/triggers.module').then(
+        (m) => m.TriggersPageModule
+      ),
   },
-
-
 ];
 
 @NgModule({

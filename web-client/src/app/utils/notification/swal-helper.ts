@@ -18,7 +18,7 @@ export class SwalHelper {
     allowOutsideClick: false,
   });
 
-   showIncorrectOTPWarning() {
+  showIncorrectOTPWarning() {
     this.swal.fire({
       icon: 'warning',
       title: 'Incorrect OTP',
@@ -26,7 +26,7 @@ export class SwalHelper {
     });
   }
 
-   showUnexpectedFailureWarning() {
+  showUnexpectedFailureWarning() {
     this.swal.fire({
       icon: 'warning',
       title: 'Unexpected Failure',

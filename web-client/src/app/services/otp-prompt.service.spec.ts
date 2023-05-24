@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { OtpPromptService } from './otp-prompt.service';
 
 describe('OtpPromptService', () => {

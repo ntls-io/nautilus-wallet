@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
-import { OtpLimitStore, OtpLimitState } from './otp-limit.store';
 import { OtpLimit } from './otp-limit.model';
+import { OtpLimitState, OtpLimitStore } from './otp-limit.store';
 
 @Injectable({ providedIn: 'root' })
 export class OtpLimitQuery extends QueryEntity<OtpLimitState> {
-
   constructor(protected store: OtpLimitStore) {
     super(store);
   }
@@ -19,7 +18,6 @@ export class OtpLimitQuery extends QueryEntity<OtpLimitState> {
   }
 
   private getEntityByCurrency(currencyCode: string): OtpLimit | undefined {
-    return this.getAll().find(limit => limit.currency_code === currencyCode);
+    return this.getAll().find((limit) => limit.currency_code === currencyCode);
   }
-
 }
