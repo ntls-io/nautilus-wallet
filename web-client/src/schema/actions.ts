@@ -8,6 +8,7 @@ export type CreateWallet = {
   auth_pin: WalletPin;
   auth_map: object;
   phone_number?: string;
+  otp_phone_number?: string;
 };
 
 export type CreateWalletResult =
@@ -23,6 +24,17 @@ export type OpenWalletResult =
   | { Opened: WalletDisplay }
   | { InvalidAuth: null }
   | { Failed: string };
+
+export type UpdateOtpPhoneNumber = {
+  wallet_id: WalletId;
+  new_phone_number: string;
+  auth_pin: WalletPin;
+};
+
+export type UpdateOtpPhoneNumberResult =
+  | {Updated: string}
+  | {NotFound: string}
+  | {Failed: string};
 
 export type StartPinReset = {
   wallet_id: WalletId;

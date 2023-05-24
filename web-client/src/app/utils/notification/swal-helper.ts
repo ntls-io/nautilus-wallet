@@ -17,4 +17,20 @@ export class SwalHelper {
     heightAuto: false,
     allowOutsideClick: false,
   });
+
+   showIncorrectOTPWarning() {
+    this.swal.fire({
+      icon: 'warning',
+      title: 'Incorrect OTP',
+      text: 'You entered an incorrect OTP. Please try again.',
+    });
+  }
+
+   showUnexpectedFailureWarning() {
+    this.swal.fire({
+      icon: 'warning',
+      title: 'Unexpected Failure',
+      text: 'An unexpected error occurred. Please try again.',
+    });
+  }
 }

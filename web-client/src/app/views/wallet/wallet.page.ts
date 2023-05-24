@@ -72,6 +72,12 @@ export class WalletPage implements OnInit {
       path: '/bookmarks',
       disabled: false,
     },
+    {
+      title: '2 FA',
+      icon: 'key',
+      path: '/2FA',
+      disabled: false,
+    },
   ];
 
   constructor(public sessionQuery: SessionQuery) {

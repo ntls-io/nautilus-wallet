@@ -20,6 +20,8 @@ import {
   SignTransactionResult,
   StartPinReset,
   StartPinResetResult,
+  UpdateOtpPhoneNumber,
+  UpdateOtpPhoneNumberResult,
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
@@ -85,6 +87,17 @@ export class EnclaveService {
       { SignTransaction: SignTransactionResult }
     >(walletRequest);
     const { SignTransaction: result } = response;
+    return result;
+  }
+
+  async updateOtpPhoneNumber(request: UpdateOtpPhoneNumber):
+  Promise<UpdateOtpPhoneNumberResult>{
+    const walletRequest = { UpdateOtpPhoneNumber: request };
+    const response = await this.postSealedExchange<
+      { UpdateOtpPhoneNumber: UpdateOtpPhoneNumber },
+      { UpdateOtpPhoneNumber: UpdateOtpPhoneNumberResult }
+    >(walletRequest);
+    const { UpdateOtpPhoneNumber: result } = response;
     return result;
   }
 

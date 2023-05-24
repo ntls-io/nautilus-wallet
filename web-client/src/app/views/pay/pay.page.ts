@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { filterNilValue, resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
+import { OtpRecipientQuery } from 'src/app/state/otp/otpRecipient/otp-recipient.query';
+import { OtpPromptService } from 'src/app/services/otp-prompt.service';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
@@ -43,6 +45,7 @@ import { never } from 'src/helpers/helpers';
 import { WalletId } from 'src/schema/types';
 import * as xrpl from 'xrpl';
 import { TxResponse } from 'xrpl';
+import { OtpLimitQuery } from 'src/app/state/otp/otpLimit/otp-limit.query';
 
 @Component({
   selector: 'app-pay-page',
@@ -75,6 +78,9 @@ export class PayPage implements OnInit {
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
     private sessionStore: SessionStore,
+    private otpRecipientQuery: OtpRecipientQuery,
+    private otpLimitQuery: OtpLimitQuery,
+    private otpPromptService: OtpPromptService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
@@ -94,12 +100,55 @@ export class PayPage implements OnInit {
     amount,
     option: { receiverAddress },
   }: Payment): Promise<void> {
+    const isOtpRecipient = this.otpRecipientQuery.isOtpRecipient(receiverAddress);
+    const isOtpLimit = this.otpLimitQuery.isOtpLimit(amount.assetDisplay.assetSymbol,amount.amount);
+
+    if (isOtpRecipient || isOtpLimit) {
+      await this.processPaymentWithOTP(amount, receiverAddress);
+    } else {
+      await this.confirmTransaction(amount, receiverAddress);
+    }
+  }
+
+  async processPaymentWithOTP(amount: AssetAmount, receiverAddress: string): Promise<void> {
+    const otpAttempt = await this.otpPromptService.requestOTP();
+    if (!otpAttempt) {
+      return;
+    }
+
+    const result = await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Checking OTP...' },
+      async () => {
+        try {
+          const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
+          if (otpResult.status === 200) {
+            if (otpResult.data.status === 'approved') {
+              await this.confirmTransaction(amount, receiverAddress);
+            } else if (otpResult.data.status === 'pending') {
+              this.notification.showIncorrectOTPWarning();
+            }
+          } else {
+            this.notification.showUnexpectedFailureWarning();
+          }
+        } catch (error) {
+          // Handle OTP verification error
+          console.error('OTP verification failed:', error);
+          this.notification.showUnexpectedFailureWarning();
+        }
+      }
+    );
+  }
+
+  async confirmTransaction(amount: AssetAmount, receiverAddress: string): Promise<void> {
     const result = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Confirming Transaction' },
       () => this.sendByLedgerType(amount, receiverAddress)
     );
+
     await this.notifyResult(result, amount, receiverAddress);
+
     if (this.connectorQuery.getValue().walletId) {
       resetStores({ exclude: ['connector'] });
       await this.navCtrl.navigateRoot('/');

@@ -38,10 +38,7 @@ export class QAccessService implements OnDestroy {
   }
 
   walletAddressExists(walletAddress: string | undefined): boolean {
-    // const { keys } = await Preferences.keys();
     walletAddress = walletAddress !== undefined ? walletAddress : '';
-    // console.log(keys);
-    console.log(this.walletAddresses);
     return this.walletAddresses.includes(walletAddress);
   }
 

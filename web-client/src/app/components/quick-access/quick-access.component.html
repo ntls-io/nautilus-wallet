@@ -14,7 +14,7 @@
           <h6>{{ address.walletAddress }}</h6>
         </ion-label>
         <ion-buttons>
-          <ion-button (click)="login()">
+          <ion-button (click)="login(address.walletAddress)">
             <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
           </ion-button>
           <ion-button (click)="deleteAddress(address)">
@@ -22,8 +22,8 @@
           </ion-button>
         </ion-buttons>
       </ion-item>
-
-      <!-- Show PIN entry modal on `isPinEntryOpen`. -->
+    </ng-container>
+    <!-- Show PIN entry modal on `isPinEntryOpen`. -->
       <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
       <ion-modal
         [isOpen]="isPinEntryOpen"
@@ -47,16 +47,15 @@
               class="h-full flex ion-justify-content-center ion-align-items-center"
               (pinConfirmed)="
                 isPinEntryOpen = false;
-                onPinConfirmed($event, address.walletAddress)
+                onPinConfirmed($event, walletAddress)
               "
               titleHeading="Enter Pin"
-              [wallet_id]="address.walletAddress"
+              [wallet_id]="walletAddress"
               [hideRememberWalletAddress]="false"
             ></app-pin-entry>
           </ion-content>
         </ng-template>
       </ion-modal>
-    </ng-container>
   </div>
 
   <ng-template #empty>
