@@ -34,7 +34,7 @@ export class OtpPromptService {
       text:
         'A one time pin has been sent to the number ending with ' +
         maskedPhoneNumber +
-        '. Please enter the 4 digit code below',
+        '. Please enter the 6 digit code below.',
       input: 'password',
       confirmButtonText: 'Confirm',
       showCancelButton: true,
