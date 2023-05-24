@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TwoFactorAuthenticationPage } from './two-factor-authentication.page';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { routes } from '../../app-routing.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { IonicModule } from '@ionic/angular';
+import { routes } from '../../app-routing.module';
+import { TwoFactorAuthenticationPage } from './two-factor-authentication.page';
 
 describe('TwoFactorAuthenticationPage', () => {
   let router: Router;
@@ -19,8 +19,8 @@ describe('TwoFactorAuthenticationPage', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
         ReactiveFormsModule,
-        FormsModule
-      ]
+        FormsModule,
+      ],
     }).compileComponents();
 
     router = TestBed.inject(Router);

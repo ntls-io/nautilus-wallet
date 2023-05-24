@@ -1,13 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { CapacitorHttp } from '@capacitor/core';
 import { Injectable } from '@angular/core';
-import { ID } from '@datorama/akita';
-import { tap } from 'rxjs/operators';
-import { OtpRecipient } from './otp-recipient.model';
+import { CapacitorHttp } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
-import { OtpRecipientStore } from './otp-recipient.store';
 import { SessionQuery } from '../../session.query';
+import { OtpRecipientStore } from './otp-recipient.store';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -16,15 +13,14 @@ const headers = {
 
 @Injectable({ providedIn: 'root' })
 export class OtpRecipientService {
-
   constructor(
     private otpRecipientStore: OtpRecipientStore,
     private sessionQuery: SessionQuery,
     private toastCtrl: ToastController,
-    private http: HttpClient) {
-  }
+    private http: HttpClient
+  ) {}
 
-  async createOtpRecipient(recipient: string ) {
+  async createOtpRecipient(recipient: string) {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
 
     const data = {

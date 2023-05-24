@@ -90,8 +90,9 @@ export class EnclaveService {
     return result;
   }
 
-  async updateOtpPhoneNumber(request: UpdateOtpPhoneNumber):
-  Promise<UpdateOtpPhoneNumberResult>{
+  async updateOtpPhoneNumber(
+    request: UpdateOtpPhoneNumber
+  ): Promise<UpdateOtpPhoneNumberResult> {
     const walletRequest = { UpdateOtpPhoneNumber: request };
     const response = await this.postSealedExchange<
       { UpdateOtpPhoneNumber: UpdateOtpPhoneNumber },

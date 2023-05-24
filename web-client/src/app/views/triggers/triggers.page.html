@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-content class="ion-padding-horizontal">
-
   <div class="ion-padding" class="ion-text-center">
     <h4 class="font-bold">Set Triggers</h4>
     <p>Set the triggers which will require 2 FA</p>
@@ -44,101 +43,127 @@
       trigger="trigger-change-account"
       dismiss-on-select="true"
       alignment="center"
-  >
-  <ng-template>
-    <ion-list lines="full">
-      <ng-container *ngFor="let option of paymentOptions">
-        <ion-item button (click)="selectedOption = option" class="">
-          <div class="w-full text-center">
-            <ion-text
-              color="primary"
-              class="text-3xl font-audiowide overflow-wrap-anywhere"
-            >
-              {{ option.assetDisplay.assetSymbol }}
-            </ion-text>
-          </div>
-        </ion-item>
-      </ng-container>
-    </ion-list>
-  </ng-template>
+    >
+      <ng-template>
+        <ion-list lines="full">
+          <ng-container *ngFor="let option of paymentOptions">
+            <ion-item button (click)="selectedOption = option" class="">
+              <div class="w-full text-center">
+                <ion-text
+                  color="primary"
+                  class="text-3xl font-audiowide overflow-wrap-anywhere"
+                >
+                  {{ option.assetDisplay.assetSymbol }}
+                </ion-text>
+              </div>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </ng-template>
     </ion-popover>
 
-    <div *ngIf="selectedOption || paymentOptions?.length === 1" class="w-full text-center">
-      <p>Set Limits for <b>{{selectedOption?.assetDisplay?.assetSymbol}}</b>.</p>
+    <div
+      *ngIf="selectedOption || paymentOptions?.length === 1"
+      class="w-full text-center"
+    >
+      <p>
+        Set Limits for <b>{{selectedOption?.assetDisplay?.assetSymbol}}</b>.
+      </p>
       <p>Set limit for which will require 2FA for this account.</p>
-      <ion-input #limitInput placeholder="Limit" class="text-2xl font-audiowide" [(ngModel)]="limit"></ion-input>
-      <ion-button shape="round" expand="block" (click)="saveLimits(limitInput)">Confirm</ion-button>
+      <ion-input
+        #limitInput
+        placeholder="Limit"
+        class="text-2xl font-audiowide"
+        [(ngModel)]="limit"
+      ></ion-input>
+      <ion-button shape="round" expand="block" (click)="saveLimits(limitInput)"
+        >Confirm</ion-button
+      >
     </div>
-
 
     <div *ngIf="paymentOptions?.length === 0" class="w-full text-center">
       <p>You currently are not opt-in to an issued currency.</p>
     </div>
-
   </div>
 
   <div *ngIf="selectTabs === 'walletAddresses'" class="ion-padding">
-  <ion-list>
-    <ion-list-header>
-      <ion-label color="primary" class="ion-padding-horizontal ion-text-center">
-        <h1>Active Wallet Triggers</h1>
-      </ion-label>
-    </ion-list-header>
+    <ion-list>
+      <ion-list-header>
+        <ion-label
+          color="primary"
+          class="ion-padding-horizontal ion-text-center"
+        >
+          <h1>Active Wallet Triggers</h1>
+        </ion-label>
+      </ion-list-header>
 
-    <div *ngIf="otpRecipientQuery.selectCount() | async; else empty">
-      <ng-container *ngFor="let otpRecipient of otpRecipientQuery.selectAll() | async">
-        <ion-item class="app-item" *ngIf="otpRecipient?.id">
-          <ion-icon slot="start" name="bookmark"></ion-icon>
-          <ion-label>
-            <h2 class="!font-black">{{ otpRecipient.recipient }}</h2>
-          </ion-label>
-          <ion-buttons>
-            <ion-button (click)="deleteOtpRecipient(otpRecipient.id)">
-              <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ng-container>
-    </div>
-
-    <ng-template #empty>
-      <div class="ion-padding-horizontal ion-text-center">
-        <p>Your recipient list is empty</p>
+      <div *ngIf="otpRecipientQuery.selectCount() | async; else empty">
+        <ng-container
+          *ngFor="let otpRecipient of otpRecipientQuery.selectAll() | async"
+        >
+          <ion-item class="app-item" *ngIf="otpRecipient?.id">
+            <ion-icon slot="start" name="bookmark"></ion-icon>
+            <ion-label>
+              <h2 class="!font-black">{{ otpRecipient.recipient }}</h2>
+            </ion-label>
+            <ion-buttons>
+              <ion-button (click)="deleteOtpRecipient(otpRecipient.id)">
+                <ion-icon
+                  slot="icon-only"
+                  name="trash"
+                  color="danger"
+                ></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ng-container>
       </div>
-    </ng-template>
-  </ion-list>
 
-  <div class="ion-padding-horizontal ion-text-center">
-      <h5> New Wallet Address</h5>
+      <ng-template #empty>
+        <div class="ion-padding-horizontal ion-text-center">
+          <p>Your recipient list is empty</p>
+        </div>
+      </ng-template>
+    </ion-list>
+
+    <div class="ion-padding-horizontal ion-text-center">
+      <h5>New Wallet Address</h5>
       <p>Add a wallet address that should require 2FA.</p>
 
       <ion-accordion-group class="app-item">
-          <ion-accordion value="new">
-              <ion-item slot="header" lines="none">
-                <ion-icon slot="start" name="add-circle"></ion-icon>
-                <ion-label>Add Wallet Address</ion-label>
-              </ion-item>
+        <ion-accordion value="new">
+          <ion-item slot="header" lines="none">
+            <ion-icon slot="start" name="add-circle"></ion-icon>
+            <ion-label>Add Wallet Address</ion-label>
+          </ion-item>
 
-              <div slot="content">
-                <ion-list lines="none" class="p-0">
-                  <form
-                  id="form-otpRecipient"
-                  [formGroup]="otpRecipientForm"
-                  (ngSubmit)="createOtpRecipient(otpRecipientForm)"
-                  >
-                    <ion-item>
-                      <ion-label position="stacked">Wallet Address</ion-label>
-                      <ion-input type="text" formControlName="otpRecipient"></ion-input>
-                    </ion-item>
-                  </form>
-                </ion-list>
-                <ion-button expand="full" class="m-0" type="submit" form="form-otpRecipient">
-                  Add Wallet Address
-                </ion-button>
-              </div>
-          </ion-accordion>
+          <div slot="content">
+            <ion-list lines="none" class="p-0">
+              <form
+                id="form-otpRecipient"
+                [formGroup]="otpRecipientForm"
+                (ngSubmit)="createOtpRecipient(otpRecipientForm)"
+              >
+                <ion-item>
+                  <ion-label position="stacked">Wallet Address</ion-label>
+                  <ion-input
+                    type="text"
+                    formControlName="otpRecipient"
+                  ></ion-input>
+                </ion-item>
+              </form>
+            </ion-list>
+            <ion-button
+              expand="full"
+              class="m-0"
+              type="submit"
+              form="form-otpRecipient"
+            >
+              Add Wallet Address
+            </ion-button>
+          </div>
+        </ion-accordion>
       </ion-accordion-group>
-  </div>
-
+    </div>
   </div>
 </ion-content>
