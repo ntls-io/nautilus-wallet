@@ -17,7 +17,7 @@ export class OtpLimitQuery extends QueryEntity<OtpLimitState> {
     return false;
   }
 
-  private getEntityByCurrency(currencyCode: string): OtpLimit | undefined {
+  getEntityByCurrency(currencyCode: string): OtpLimit | undefined {
     return this.getAll().find((limit) => limit.currency_code === currencyCode);
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { SessionQuery } from '../../session.query';
 import { OtpLimitQuery } from './otp-limit.query';
 import { OtpLimitStore } from './otp-limit.store';
@@ -14,6 +15,7 @@ const headers = {
 @Injectable({ providedIn: 'root' })
 export class OtpLimitService {
   constructor(
+    private notification: SwalHelper,
     private otpLimitStore: OtpLimitStore,
     private otpLimitQuery: OtpLimitQuery,
     private sessionQuery: SessionQuery,
@@ -51,35 +53,36 @@ export class OtpLimitService {
     currency_code: string;
     limit: number;
   }) {
-    console.log('Function initiated...');
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
-    const limits = await this.otpLimitQuery.selectAll().toPromise();
-
-    const existingLimit = limits?.find(
-      (limit) => limit.currency_code === otpLimit.currency_code
+    const existingLimit = this.otpLimitQuery.getEntityByCurrency(
+      otpLimit.currency_code
     );
 
     const data = {
       wallet_id,
       ...otpLimit,
-      id: existingLimit?.id ?? null,
     };
 
-    try {
-      const { status } = await CapacitorHttp.put({
-        headers,
-        url: createUrlWith('otp/limit/set'),
-        data,
-      });
-
-      if (status === 200) {
-        this.getOtpLimits();
-        this.showSuccess('Limit Threshold Set!');
-        return true;
-      }
-    } catch (error) {
-      console.log(error);
+    if (existingLimit) {
+      data.id = existingLimit.id;
     }
+
+    return await CapacitorHttp.put({
+      headers,
+      url: createUrlWith('otp/limit/set'),
+      data,
+    })
+      .then(({ status }) => {
+        if (status === 200) {
+          this.getOtpLimits();
+          this.showSuccess('Limit Threshold Set!');
+          return true;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.notification.showUnexpectedFailureWarning();
+      });
   }
 
   async showSuccess(message: string) {
