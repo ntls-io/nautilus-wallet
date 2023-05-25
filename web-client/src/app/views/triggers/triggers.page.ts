@@ -2,9 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonInput, LoadingController } from '@ionic/angular';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
-import { OtpLimitService } from 'src/app/state/otp/otpLimit/otp-limit.service';
-import { OtpRecipientQuery } from 'src/app/state/otp/otpRecipient/otp-recipient.query';
-import { OtpRecipientService } from 'src/app/state/otp/otpRecipient/otp-recipient.service';
+import { OtpLimitsService } from 'src/app/state/otpLimits';
+import {
+  OtpRecipientsQuery,
+  OtpRecipientsService,
+} from 'src/app/state/otpRecipients';
 import { SessionQuery } from 'src/app/state/session.query';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -26,13 +28,13 @@ export class TriggersPage implements OnInit {
   limit!: number;
 
   constructor(
-    public otpRecipientQuery: OtpRecipientQuery,
+    public otpRecipientsQuery: OtpRecipientsQuery,
     private notification: SwalHelper,
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private otpPromptService: OtpPromptService,
-    private otpLimitService: OtpLimitService,
-    private otpRecipientService: OtpRecipientService,
+    private otpLimitsService: OtpLimitsService,
+    private otpRecipientsService: OtpRecipientsService,
     private sessionQuery: SessionQuery
   ) {
     this.otpRecipientForm = this.formBuilder.group({
@@ -61,9 +63,14 @@ export class TriggersPage implements OnInit {
     this.initSelectedOption();
   }
 
+  async ionViewWillEnter() {
+    await this.otpLimitsService.getOtpLimits();
+    await this.otpRecipientsService.getOtpRecipients();
+  }
+
   async saveLimits(limitInput: IonInput) {
     const currencyCode = this.selectedOption?.assetDisplay.assetSymbol || '';
-    await this.otpLimitService.setOtpLimit({
+    await this.otpLimitsService.setOtpLimit({
       currency_code: currencyCode,
       limit: this.limit,
     });
@@ -75,7 +82,7 @@ export class TriggersPage implements OnInit {
     form.markAllAsTouched();
     if (form.valid) {
       const otpRecipient = form.value.otpRecipient;
-      await this.otpRecipientService
+      await this.otpRecipientsService
         .createOtpRecipient(otpRecipient)
         .then((success) => {
           if (success) {
@@ -145,7 +152,7 @@ export class TriggersPage implements OnInit {
     await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Deleting Wallet Address...' },
-      async () => await this.otpRecipientService.deleteOtpRecipient(id)
+      async () => await this.otpRecipientsService.deleteOtpRecipient(id)
     );
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
 import { OtpLimit } from './otp-limit.model';
-import { OtpLimitState, OtpLimitStore } from './otp-limit.store';
+import { OtpLimitsState, OtpLimitsStore } from './otp-limits.store';
 
 @Injectable({ providedIn: 'root' })
-export class OtpLimitQuery extends QueryEntity<OtpLimitState> {
-  constructor(protected store: OtpLimitStore) {
+export class OtpLimitsQuery extends QueryEntity<OtpLimitsState> {
+  constructor(protected store: OtpLimitsStore) {
     super(store);
   }
 

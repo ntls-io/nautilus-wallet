@@ -3,9 +3,9 @@ import { CapacitorHttp } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { SessionQuery } from '../../session.query';
-import { OtpLimitQuery } from './otp-limit.query';
-import { OtpLimitStore } from './otp-limit.store';
+import { SessionQuery } from '../session.query';
+import { OtpLimitsQuery } from './otp-limits.query';
+import { OtpLimitsStore } from './otp-limits.store';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -13,11 +13,11 @@ const headers = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class OtpLimitService {
+export class OtpLimitsService {
   constructor(
+    private otpLimitsStore: OtpLimitsStore,
+    private otpLimitsQuery: OtpLimitsQuery,
     private notification: SwalHelper,
-    private otpLimitStore: OtpLimitStore,
-    private otpLimitQuery: OtpLimitQuery,
     private sessionQuery: SessionQuery,
     private toastCtrl: ToastController
   ) {}
@@ -33,8 +33,9 @@ export class OtpLimitService {
       })
         .then(({ status, data }) => {
           if (status === 200) {
-            this.otpLimitStore.upsertMany(data);
-            this.otpLimitStore.remove(
+            console.log(data);
+            this.otpLimitsStore.upsertMany(data);
+            this.otpLimitsStore.remove(
               (entity: { id: string }) =>
                 !data.some(
                   (newEntity: { id: string }) => newEntity.id === entity?.id
@@ -54,7 +55,7 @@ export class OtpLimitService {
     limit: number;
   }) {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
-    const existingLimit = this.otpLimitQuery.getEntityByCurrency(
+    const existingLimit = this.otpLimitsQuery.getEntityByCurrency(
       otpLimit.currency_code
     );
 
@@ -62,10 +63,10 @@ export class OtpLimitService {
       wallet_id,
       ...otpLimit,
     };
-
-    if (existingLimit) {
-      data.id = existingLimit.id;
-    }
+    // console.log(existingLimit);
+    // if (existingLimit?.id) {
+    //   data.id = existingLimit.map.id;
+    // }
 
     return await CapacitorHttp.put({
       headers,

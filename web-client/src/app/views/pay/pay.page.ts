@@ -8,8 +8,8 @@ import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
-import { OtpLimitQuery } from 'src/app/state/otp/otpLimit/otp-limit.query';
-import { OtpRecipientQuery } from 'src/app/state/otp/otpRecipient/otp-recipient.query';
+import { OtpLimitsQuery } from 'src/app/state/otpLimits';
+import { OtpRecipientsQuery } from 'src/app/state/otpRecipients';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import {
   CommissionedTxResponse,
@@ -78,8 +78,8 @@ export class PayPage implements OnInit {
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
     private sessionStore: SessionStore,
-    private otpRecipientQuery: OtpRecipientQuery,
-    private otpLimitQuery: OtpLimitQuery,
+    private otpRecipientsQuery: OtpRecipientsQuery,
+    private otpLimitsQuery: OtpLimitsQuery,
     private otpPromptService: OtpPromptService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
@@ -101,8 +101,8 @@ export class PayPage implements OnInit {
     option: { receiverAddress },
   }: Payment): Promise<void> {
     const isOtpRecipient =
-      this.otpRecipientQuery.isOtpRecipient(receiverAddress);
-    const isOtpLimit = this.otpLimitQuery.isOtpLimit(
+      this.otpRecipientsQuery.isOtpRecipient(receiverAddress);
+    const isOtpLimit = this.otpLimitsQuery.isOtpLimit(
       amount.assetDisplay.assetSymbol,
       amount.amount
     );

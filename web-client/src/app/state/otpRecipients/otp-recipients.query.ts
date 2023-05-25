@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
-import { OtpRecipientState, OtpRecipientStore } from './otp-recipient.store';
+import { OtpRecipientsState, OtpRecipientsStore } from './otp-recipients.store';
 
 @Injectable({ providedIn: 'root' })
-export class OtpRecipientQuery extends QueryEntity<OtpRecipientState> {
-  constructor(protected store: OtpRecipientStore) {
+export class OtpRecipientsQuery extends QueryEntity<OtpRecipientsState> {
+  constructor(protected store: OtpRecipientsStore) {
     super(store);
   }
 

@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { createUrlWith } from 'src/app/utils/http.helpers';
-import { SessionQuery } from '../../session.query';
-import { OtpRecipientStore } from './otp-recipient.store';
+import { SessionQuery } from '../session.query';
+import { OtpRecipientsStore } from './otp-recipients.store';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -12,12 +11,11 @@ const headers = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class OtpRecipientService {
+export class OtpRecipientsService {
   constructor(
-    private otpRecipientStore: OtpRecipientStore,
+    private otpRecipientsStore: OtpRecipientsStore,
     private sessionQuery: SessionQuery,
-    private toastCtrl: ToastController,
-    private http: HttpClient
+    private toastCtrl: ToastController
   ) {}
 
   async createOtpRecipient(recipient: string) {
@@ -58,8 +56,8 @@ export class OtpRecipientService {
       })
         .then(({ status, data }) => {
           if (status === 200) {
-            this.otpRecipientStore.upsertMany(data);
-            this.otpRecipientStore.remove(
+            this.otpRecipientsStore.upsertMany(data);
+            this.otpRecipientsStore.remove(
               (entity: { id: string }) =>
                 !data.some(
                   (newEntity: { id: string }) => newEntity.id === entity?.id
@@ -82,7 +80,7 @@ export class OtpRecipientService {
       .then(({ status }) => {
         if (status === 204) {
           this.showSuccess('OTP Wallet Address deleted');
-          this.otpRecipientStore.remove(delete_id);
+          this.otpRecipientsStore.remove(delete_id);
         }
       })
       .catch((error) => {
@@ -93,7 +91,7 @@ export class OtpRecipientService {
   async showSuccess(message: string) {
     const toast = await this.toastCtrl.create({
       message,
-      duration: 3000,
+      duration: 2000,
       color: 'success',
     });
 

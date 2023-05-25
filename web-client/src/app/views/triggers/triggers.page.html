@@ -17,10 +17,10 @@
 
   <ion-segment [(ngModel)]="selectTabs">
     <ion-segment-button value="limits">
-      <ion-label>Limits</ion-label>
+      <ion-label color="light">Limits</ion-label>
     </ion-segment-button>
     <ion-segment-button value="walletAddresses">
-      <ion-label>Wallet Addresses</ion-label>
+      <ion-label color="light">Wallet Addresses</ion-label>
     </ion-segment-button>
   </ion-segment>
 
@@ -97,9 +97,9 @@
         </ion-label>
       </ion-list-header>
 
-      <div *ngIf="otpRecipientQuery.selectCount() | async; else empty">
+      <div *ngIf="otpRecipientsQuery.selectCount() | async; else empty">
         <ng-container
-          *ngFor="let otpRecipient of otpRecipientQuery.selectAll() | async"
+          *ngFor="let otpRecipient of otpRecipientsQuery.selectAll() | async"
         >
           <ion-item class="app-item" *ngIf="otpRecipient?.id">
             <ion-icon slot="start" name="bookmark"></ion-icon>

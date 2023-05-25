@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { OtpRecipient } from './otp-recipient.model';
 
-export type OtpRecipientState = EntityState<OtpRecipient>;
+export type OtpRecipientsState = EntityState<OtpRecipient>;
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'otpRecipient' })
-export class OtpRecipientStore extends EntityStore<OtpRecipientState> {
+@StoreConfig({
+  name: 'otpRecipients',
+  resettable: true,
+  idKey: 'wallet_id',
+})
+export class OtpRecipientsStore extends EntityStore<OtpRecipientsState> {
   constructor() {
     super();
   }
