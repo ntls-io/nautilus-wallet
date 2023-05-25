@@ -69,10 +69,17 @@ async def create_otp_recipient_trigger(
     """
     Create a new address for which OTPs should be triggered.
     """
-    new_trigger = OtpRecipientTrigger(
-        wallet_id=params.wallet_id, recipient=params.recipient
+    existing_trigger = await engine.find_one(
+        OtpRecipientTrigger,
+        (OtpRecipientTrigger.wallet_id == params.wallet_id)
+        & (OtpRecipientTrigger.recipient == params.recipient),
     )
-    await engine.save(new_trigger)
+
+    if not existing_trigger:
+        new_trigger = OtpRecipientTrigger(
+            wallet_id=params.wallet_id, recipient=params.recipient
+        )
+        await engine.save(new_trigger)
 
 
 async def delete_otp_recipient_trigger(
