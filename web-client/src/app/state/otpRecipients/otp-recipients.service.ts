@@ -71,16 +71,16 @@ export class OtpRecipientsService {
     }
   }
 
-  async deleteOtpRecipient(delete_id: string) {
+  async deleteOtpRecipient(trigger_id: string) {
     return await CapacitorHttp.delete({
       headers,
       url: createUrlWith('otp/recipient/trigger'),
-      data: { trigger_id: delete_id },
+      data: { trigger_id },
     })
       .then(({ status }) => {
         if (status === 204) {
           this.showSuccess('OTP Wallet Address deleted');
-          this.otpRecipientsStore.remove(delete_id);
+          this.otpRecipientsStore.remove(trigger_id);
         }
       })
       .catch((error) => {

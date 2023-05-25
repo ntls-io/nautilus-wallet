@@ -33,7 +33,6 @@ export class OtpLimitsService {
       })
         .then(({ status, data }) => {
           if (status === 200) {
-            console.log(data);
             this.otpLimitsStore.upsertMany(data);
             this.otpLimitsStore.remove(
               (entity: { id: string }) =>

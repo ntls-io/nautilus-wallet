@@ -8,7 +8,6 @@ export type OtpRecipientsState = EntityState<OtpRecipient>;
 @StoreConfig({
   name: 'otpRecipients',
   resettable: true,
-  idKey: 'wallet_id',
 })
 export class OtpRecipientsStore extends EntityStore<OtpRecipientsState> {
   constructor() {
