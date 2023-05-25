@@ -14,7 +14,7 @@
           <h6>{{ address.walletAddress }}</h6>
         </ion-label>
         <ion-buttons>
-          <ion-button (click)="login()">
+          <ion-button (click)="login(address.walletAddress)">
             <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
           </ion-button>
           <ion-button (click)="deleteAddress(address)">
@@ -22,41 +22,36 @@
           </ion-button>
         </ion-buttons>
       </ion-item>
-
-      <!-- Show PIN entry modal on `isPinEntryOpen`. -->
-      <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
-      <ion-modal
-        [isOpen]="isPinEntryOpen"
-        (didDismiss)="isPinEntryOpen = false"
-      >
-        <ng-template>
-          <ion-header>
-            <ion-toolbar>
-              <ion-buttons>
-                <ion-button slot="start" (click)="isPinEntryOpen = false">
-                  <ion-icon
-                    slot="icon-only"
-                    name="close-circle-outline"
-                  ></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
-          <ion-content>
-            <app-pin-entry
-              class="h-full flex ion-justify-content-center ion-align-items-center"
-              (pinConfirmed)="
-                isPinEntryOpen = false;
-                onPinConfirmed($event, address.walletAddress)
-              "
-              titleHeading="Enter Pin"
-              [wallet_id]="address.walletAddress"
-              [hideRememberWalletAddress]="false"
-            ></app-pin-entry>
-          </ion-content>
-        </ng-template>
-      </ion-modal>
     </ng-container>
+    <!-- Show PIN entry modal on `isPinEntryOpen`. -->
+    <!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+    <ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons>
+              <ion-button slot="start" (click)="isPinEntryOpen = false">
+                <ion-icon
+                  slot="icon-only"
+                  name="close-circle-outline"
+                ></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <app-pin-entry
+            class="h-full flex ion-justify-content-center ion-align-items-center"
+            (pinConfirmed)="
+              isPinEntryOpen = false; onPinConfirmed($event, walletAddress)
+            "
+            titleHeading="Enter Pin"
+            [wallet_id]="walletAddress"
+            [hideRememberWalletAddress]="false"
+          ></app-pin-entry>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
   </div>
 
   <ng-template #empty>

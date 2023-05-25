@@ -5,8 +5,11 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { OtpPromptService } from 'src/app/services/otp-prompt.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
+import { OtpLimitsQuery } from 'src/app/state/otpLimits';
+import { OtpRecipientsQuery } from 'src/app/state/otpRecipients';
 import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import {
   CommissionedTxResponse,
@@ -75,6 +78,9 @@ export class PayPage implements OnInit {
     private sessionAlgorandService: SessionAlgorandService,
     private sessionXrplService: SessionXrplService,
     private sessionStore: SessionStore,
+    private otpRecipientsQuery: OtpRecipientsQuery,
+    private otpLimitsQuery: OtpLimitsQuery,
+    private otpPromptService: OtpPromptService,
     public sessionQuery: SessionQuery,
     private loadingCtrl: LoadingController,
     private notification: SwalHelper,
@@ -94,12 +100,65 @@ export class PayPage implements OnInit {
     amount,
     option: { receiverAddress },
   }: Payment): Promise<void> {
+    const isOtpRecipient =
+      this.otpRecipientsQuery.isOtpRecipient(receiverAddress);
+    const isOtpLimit = this.otpLimitsQuery.isOtpLimit(
+      amount.assetDisplay.assetSymbol,
+      amount.amount
+    );
+
+    if (isOtpRecipient || isOtpLimit) {
+      await this.processPaymentWithOTP(amount, receiverAddress);
+    } else {
+      await this.confirmTransaction(amount, receiverAddress);
+    }
+  }
+
+  async processPaymentWithOTP(
+    amount: AssetAmount,
+    receiverAddress: string
+  ): Promise<void> {
+    const otpAttempt = await this.otpPromptService.requestOTP();
+    if (!otpAttempt) {
+      return;
+    }
+
+    const result = await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Checking OTP...' },
+      async () => {
+        try {
+          const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
+          if (otpResult.status === 200) {
+            if (otpResult.data.status === 'approved') {
+              await this.confirmTransaction(amount, receiverAddress);
+            } else if (otpResult.data.status === 'pending') {
+              this.notification.showIncorrectOTPWarning();
+            }
+          } else {
+            this.notification.showUnexpectedFailureWarning();
+          }
+        } catch (error) {
+          // Handle OTP verification error
+          console.error('OTP verification failed:', error);
+          this.notification.showUnexpectedFailureWarning();
+        }
+      }
+    );
+  }
+
+  async confirmTransaction(
+    amount: AssetAmount,
+    receiverAddress: string
+  ): Promise<void> {
     const result = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Confirming Transaction' },
       () => this.sendByLedgerType(amount, receiverAddress)
     );
+
     await this.notifyResult(result, amount, receiverAddress);
+
     if (this.connectorQuery.getValue().walletId) {
       resetStores({ exclude: ['connector'] });
       await this.navCtrl.navigateRoot('/');

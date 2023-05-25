@@ -25,6 +25,8 @@ import { showToast } from '../../utils/toast.helpers';
 export class QuickAccessComponent implements OnInit {
   @Input() isPinEntryOpen = false;
 
+  walletAddress: string | undefined;
+
   hideSavedWalletAddress = environment.enableQuickAccess;
 
   public Clipboard = Clipboard;
@@ -75,8 +77,9 @@ export class QuickAccessComponent implements OnInit {
     return toast.present();
   }
 
-  login() {
+  login(address: string) {
     this.quickAccessService.setRememberWalletAddress(false);
+    this.walletAddress = address;
     this.showPinEntryModal();
   }
 
@@ -86,7 +89,10 @@ export class QuickAccessComponent implements OnInit {
   }
 
   /** User confirmed PIN: attempt to open wallet. */
-  async onPinConfirmed(pin: string, address: string): Promise<void> {
+  async onPinConfirmed(pin: string, address?: string): Promise<void> {
+    if (!address) {
+      return;
+    }
     this.quickAccessService.setRememberWalletAddress(false);
     const openWalletErrorMessage = await withLoadingOverlayOpts(
       this.loadingCtrl,
@@ -101,10 +107,6 @@ export class QuickAccessComponent implements OnInit {
       });
       this.quickAccessService.setRememberWalletAddress(false);
     } else {
-      // if (this.quickAccessService.getRememberWalletAddress()) {
-      //   this.quickAccessService.saveQuickAccess(address);
-      //   this.quickAccessService.setRememberWalletAddress(false);
-      // }
       await this.navCtrl.navigateRoot(['/wallet']);
     }
   }

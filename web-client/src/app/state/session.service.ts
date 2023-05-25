@@ -27,6 +27,8 @@ import {
   StartPinResetResult,
   TransactionSigned,
   TransactionToSign,
+  UpdateOtpPhoneNumber,
+  UpdateOtpPhoneNumberResult,
 } from 'src/schema/actions';
 import { XrplPublicKeyHex } from '../../schema/types';
 import { SessionStore } from './session.store';
@@ -123,6 +125,26 @@ export class SessionService {
     } else {
       throw never(result);
     }
+  }
+
+  /**
+   * Update Phone number to be used for OTP.
+   *
+   * @see EnclaveService#UpdateOtpPhoneNumber
+   */
+  async updateOtpPhoneNumber(
+    wallet_id: string,
+    new_phone_number: string,
+    auth_pin: string
+  ): Promise<UpdateOtpPhoneNumberResult> {
+    const request: UpdateOtpPhoneNumber = {
+      wallet_id,
+      new_phone_number,
+      auth_pin,
+    };
+    const result: UpdateOtpPhoneNumberResult =
+      await this.enclaveService.updateOtpPhoneNumber(request);
+    return result;
   }
 
   /**
