@@ -6,7 +6,6 @@ from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
-from twilio.http.async_http_client import AsyncTwilioHttpClient
 from twilio.rest import Client as TwilioClient
 
 from auth_service.schema.actions import (
@@ -60,11 +59,9 @@ mongo_engine = AIOEngine(
     database=app_settings.wallet_db_name,
 )
 
-twilio_http_client = AsyncTwilioHttpClient()
 twilio_client = TwilioClient(
     app_settings.twilio_account_sid,
     app_settings.twilio_auth_token,
-    http_client=twilio_http_client,
 )
 
 origins = [str(app_settings.primary_origin)]
@@ -76,7 +73,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "HEAD", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "HEAD", "DELETE"],
     allow_headers=["*"],
 )
 

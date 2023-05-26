@@ -21,12 +21,15 @@
             class="p-0"
             formControlName="address"
           ></ion-textarea>
-          <p
-            class="text-danger text-sm"
-            *ngIf="!addressForm?.pristine && addressForm.errors?.invalidAddress"
-          >
-            This address is not valid
-          </p>
+
+          <ion-text color="danger" *ngIf="f.address.touched">
+            <p class="text-sm" *ngIf="f.address.errors?.required">
+              An address is required
+            </p>
+            <p class="text-sm" *ngIf="f.address.errors?.selfAddress">
+              You cannot transfer funds to yourself
+            </p>
+          </ion-text>
 
           <ion-button expand="block" shape="round" type="submit" class="mt-4">
             Confirm

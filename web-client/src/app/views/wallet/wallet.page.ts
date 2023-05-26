@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest, map, Observable } from 'rxjs';
+import { OtpLimitsService } from 'src/app/state/otpLimits';
+import { OtpRecipientsService } from 'src/app/state/otpRecipients';
 import { SessionQuery } from 'src/app/state/session.query';
 import { environment } from 'src/environments/environment';
 
@@ -72,14 +74,29 @@ export class WalletPage implements OnInit {
       path: '/bookmarks',
       disabled: false,
     },
+    {
+      title: '2 FA',
+      icon: 'key',
+      path: '/2FA',
+      disabled: false,
+    },
   ];
 
-  constructor(public sessionQuery: SessionQuery) {
+  constructor(
+    public sessionQuery: SessionQuery,
+    public otpLimitsService: OtpLimitsService,
+    public otpRecipientsService: OtpRecipientsService
+  ) {
     if (environment.hidePullPayment) {
       this.actionItems = this.actionItems.filter(
         (action) => action.title !== 'Pull Payment'
       );
     }
+  }
+
+  async ionViewWillEnter() {
+    await this.otpLimitsService.getOtpLimits();
+    await this.otpRecipientsService.getOtpRecipients();
   }
 
   ngOnInit() {}

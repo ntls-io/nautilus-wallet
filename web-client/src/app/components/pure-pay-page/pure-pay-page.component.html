@@ -24,9 +24,9 @@
       <ng-container *ngIf="!receiverAddressType">
         <h2 class="font-semibold font-nasalization">Unsupported address</h2>
         <p>Address not recognised:</p>
-        <pre class="whitespace-pre-wrap overflow-wrap-anywhere">
-          {{ receiverAddress | json }}
-        </pre>
+        <code class="whitespace-pre-wrap overflow-wrap-anywhere">
+          {{ receiverAddress }}
+        </code>
       </ng-container>
 
       <ng-container

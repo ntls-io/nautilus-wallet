@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
+import { SessionQuery } from 'src/app/state/session.query';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
@@ -32,7 +33,8 @@ export class TransferFundsPage implements OnInit {
     private router: Router,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private sessionQuery: SessionQuery
   ) {
     const state = this.router.getCurrentNavigation()?.extras?.state;
     if (state) {
@@ -54,7 +56,11 @@ export class TransferFundsPage implements OnInit {
   }
 
   async presentAddressModal() {
-    const modal = await this.modalCtrl.create({ component: ManualAddressPage });
+    const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
+    const modal = await this.modalCtrl.create({
+      component: ManualAddressPage,
+      componentProps: { wallet_id },
+    });
 
     await modal.present();
 
