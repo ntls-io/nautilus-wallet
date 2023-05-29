@@ -19,6 +19,7 @@
       <h1 class="font-semibold font-nasalization">Verify Identity</h1>
       <app-security-questions
         (answers)="onSubmit($event)"
+        [isBusy]="isBusySaving"
       ></app-security-questions>
     </div>
   </div>

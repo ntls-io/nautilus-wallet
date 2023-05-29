@@ -18,6 +18,7 @@ import { WalletAccessPage } from '../wallet-access/wallet-access.page';
 })
 export class PinResetPage implements OnInit {
   wallet_id: string | undefined;
+  isBusySaving = false;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -39,8 +40,10 @@ export class PinResetPage implements OnInit {
   }
 
   async onSubmit(answers: Map<string, string>) {
+    this.isBusySaving = true;
     const wallet_id: string =
       this.wallet_id !== undefined ? this.wallet_id : '';
+    console.log(wallet_id);
     const newSession = StartSgxSession.new(wallet_id);
     const client_pk = newSession.our_public_key();
 
@@ -50,6 +53,8 @@ export class PinResetPage implements OnInit {
       async () =>
         await this.sessionService.startPinReset(wallet_id, answers, client_pk)
     );
+
+    console.log(initialResult);
 
     if ('InvalidAuth' in initialResult) {
       console.log(initialResult.InvalidAuth);
@@ -104,6 +109,7 @@ export class PinResetPage implements OnInit {
             text: 'An unexpected error occured. Please try again.',
           });
           this.navCtrl.navigateRoot('/');
+          this.isBusySaving = false;
         }
       } catch (err) {
         console.log('catch err: ' + err);
@@ -118,5 +124,6 @@ export class PinResetPage implements OnInit {
       });
       this.navCtrl.navigateRoot('/');
     }
+    this.isBusySaving = false;
   }
 }
