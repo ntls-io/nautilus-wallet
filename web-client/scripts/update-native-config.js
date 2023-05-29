@@ -14,6 +14,10 @@ module.exports = function (ctx) {
         ' Wallet"'
       : "";
 
+    if (org == "palau") {
+      variables = 'APP_ID="io.ntls.palau" APP_NAME="Palau PSC Wallet"';
+    }
+
     var command = variables + " " + base;
 
     console.log("> Run Trapeze", command);
