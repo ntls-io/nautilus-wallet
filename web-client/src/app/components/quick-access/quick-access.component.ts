@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Clipboard } from '@capacitor/clipboard';
 import {
   LoadingController,
   NavController,
@@ -22,8 +21,6 @@ export class QuickAccessComponent implements OnInit {
 
   walletAddress: string | undefined;
 
-  public Clipboard = Clipboard;
-
   constructor(
     private quickAccessService: QAccessService,
     private toastCtrl: ToastController,
@@ -32,10 +29,6 @@ export class QuickAccessComponent implements OnInit {
     private navCtrl: NavController,
     private notification: SwalHelper
   ) {}
-
-  async ionViewWillEnter() {
-    await this.quickAccessService.fetchWalletAddresses();
-  }
 
   ngOnInit() {}
 
