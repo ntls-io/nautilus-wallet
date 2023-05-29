@@ -1,10 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { guid } from '@datorama/akita';
 import { Subscription } from 'rxjs';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { QAccess } from './q-access.model';
 import { QAccessQuery } from './q-access.query';
 import { QAccessStore } from './q-access.store';
 
@@ -15,7 +12,6 @@ export class QAccessService implements OnDestroy {
   rememberWalletAddress!: boolean;
 
   constructor(
-    private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
     public notification: SwalHelper
@@ -76,27 +72,21 @@ export class QAccessService implements OnDestroy {
 
   async fetchWalletAddresses() {
     const fetchWalletAddresses = await this.loadWalletAddresses();
-    let quickAcess: QAccess;
     for (const walletAddress of fetchWalletAddresses) {
       const getPreferedName = await this.fetchPreferedName(walletAddress);
-      const id = guid();
-      quickAcess = {
-        id,
-        walletAddress,
-        preferedName: getPreferedName,
-      };
       this.quickAccessStore.add({
-        id,
         walletAddress,
         preferedName: getPreferedName,
       });
     }
   }
 
-  deleteAddress(walletAddress: string) {
-    return Preferences.remove({
+  async deleteAddress(walletAddress: string) {
+    await Preferences.remove({
       key: walletAddress,
     });
+
+    this.quickAccessStore.remove(walletAddress);
   }
 
   async saveQuickAccess(
@@ -115,7 +105,7 @@ export class QAccessService implements OnDestroy {
             autocorrect: 'off',
           },
           focusConfirm: false,
-          confirmButtonText: 'Save Wallet Address',
+          confirmButtonText: 'Save',
           showCancelButton: true,
           reverseButtons: true,
           inputValidator: (value) => {

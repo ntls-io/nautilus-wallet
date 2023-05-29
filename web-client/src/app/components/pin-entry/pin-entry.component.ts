@@ -23,7 +23,7 @@ import { checkClass } from 'src/helpers/helpers';
 export class PinEntryComponent implements OnInit {
   @Input() wallet_id: string | undefined;
 
-  @Input() titleHeading = '';
+  @Input() titleHeading = 'Enter Pin';
 
   /** Emit the PIN confirmed by the user. */
   @Output() pinConfirmed = new EventEmitter<PinValue>();

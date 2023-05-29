@@ -28,7 +28,11 @@
           (click)="confirmAddress()"
           >Confirm</ion-button
         >
-        <app-quick-access></app-quick-access>
+
+        <app-quick-access
+          *ngIf="hideSavedWalletAddress && (quickAccessQuery.selectCount() |async)"
+          [addresses]="quickAccessQuery.selectAll() | async"
+        ></app-quick-access>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -51,7 +55,6 @@
       <app-pin-entry
         class="h-full flex ion-justify-content-center ion-align-items-center"
         (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
-        titleHeading="Enter Pin"
         [wallet_id]="address"
       ></app-pin-entry>
     </ion-content>

@@ -1,5 +1,4 @@
 export interface QAccess {
-  id: string;
   walletAddress: string;
   preferedName: string | null;
 }
