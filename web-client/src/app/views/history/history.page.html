@@ -13,6 +13,10 @@
 <ion-content>
   <div class="ion-padding">
     <h2 class="font-bold">Recent transactions</h2>
+
+    <div class="text-center" *ngIf="historyQuery.selectLoading() | async">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ion-list lines="full" mode="ios" *ngIf="transactions?.length; else empty">
@@ -39,7 +43,10 @@
   </ion-list>
 
   <ng-template #empty>
-    <div class="ion-padding-horizontal ion-text-center">
+    <div
+      *ngIf="(historyQuery.selectLoading() | async) === false"
+      class="ion-padding-horizontal ion-text-center"
+    >
       <p>Your transactions list is empty</p>
     </div>
   </ng-template>
