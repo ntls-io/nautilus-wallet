@@ -6,13 +6,13 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
+import { BookmarkQuery } from 'src/app/state/bookmark';
 import { ConnectorQuery } from 'src/app/state/connector';
 import {
   CommissionedTxResponse,
   SessionXrplService,
 } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
-import { SessionStore } from 'src/app/state/session.store';
 import {
   AssetAmount,
   assetAmountFromBase,
@@ -49,6 +49,7 @@ import { Payment, TxResponse } from 'xrpl';
 export class PullPage implements OnInit {
   isPinEntryOpen = false;
   senderAddress: string | undefined;
+  senderName: string | undefined;
   selectedCurrency = environment.hideXrpBalance
     ? environment.tokenSymbol
     : 'XRP';
@@ -71,19 +72,23 @@ export class PullPage implements OnInit {
 
   constructor(
     public sessionQuery: SessionQuery,
-    private sessionStore: SessionStore,
     private router: Router,
     private navCtrl: NavController,
     private connectorQuery: ConnectorQuery,
     private sessionXrplService: SessionXrplService,
     private loadingCtrl: LoadingController,
-    private notification: SwalHelper
+    private notification: SwalHelper,
+    private bookmarkQuery: BookmarkQuery
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state?.address) {
       this.senderAddress = state.address;
+      const senderBookmark = this.bookmarkQuery.getAll({
+        filterBy: (bookmark) => bookmark.address === state.address,
+      });
+
+      this.senderName = senderBookmark[0]?.name;
     } else {
-      // this.navCtrl.navigateRoot('wallet/transfer-funds');
       this.navCtrl.pop();
     }
     this.balances
