@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { resetStores } from '@datorama/akita';
 import { LoadingController, NavController } from '@ionic/angular';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
@@ -39,6 +40,7 @@ import { never } from 'src/helpers/helpers';
 import * as xrpl from 'xrpl';
 import { Payment, TxResponse } from 'xrpl';
 
+@UntilDestroy()
 @Component({
   selector: 'app-pull',
   templateUrl: './pull.page.html',
@@ -84,9 +86,9 @@ export class PullPage implements OnInit {
       // this.navCtrl.navigateRoot('wallet/transfer-funds');
       this.navCtrl.pop();
     }
-    this.balances.subscribe(
-      (balance) => (this.availableAccounts = balance?.length)
-    );
+    this.balances
+      .pipe(untilDestroyed(this))
+      .subscribe((balance) => (this.availableAccounts = balance?.length));
   }
 
   async getXrplBalance(currency: string): Promise<AssetAmount | undefined> {
