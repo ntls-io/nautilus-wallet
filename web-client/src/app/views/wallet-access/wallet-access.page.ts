@@ -6,7 +6,7 @@ import {
   NavController,
 } from '@ionic/angular';
 import algosdk from 'algosdk';
-import { QAccessService } from 'src/app/state/qAccess';
+import { QAccessQuery, QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -38,7 +38,8 @@ export class WalletAccessPage implements OnInit {
     private notification: SwalHelper,
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
-    private quickAccessService: QAccessService
+    private quickAccessService: QAccessService,
+    public quickAccessQuery: QAccessQuery
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
