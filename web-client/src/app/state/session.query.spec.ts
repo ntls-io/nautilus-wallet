@@ -61,6 +61,7 @@ describe('SessionQuery', () => {
         public_key_hex: 'public key',
         address_base58: 'address',
       },
+      auth_map: new Object(),
     };
     const state: StubSessionState = {
       wallet,

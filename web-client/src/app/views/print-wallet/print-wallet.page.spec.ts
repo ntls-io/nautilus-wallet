@@ -52,6 +52,7 @@ describe('PrintWalletPage', () => {
             public_key_hex: wallet?.xrpl_account?.public_key_hex ?? 'fake',
             address_base58: wallet?.xrpl_account?.address_base58 ?? 'fake',
           },
+          auth_map: wallet?.auth_map ?? new Object(),
         },
       })
     );
