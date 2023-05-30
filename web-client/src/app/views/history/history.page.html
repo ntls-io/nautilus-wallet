@@ -31,7 +31,17 @@
             {{(tx?.Account | isMe) ? 'Sent To' : 'Received From'}}
           </small>
         </ion-text>
-        <h2>{{(tx?.Account | isMe) ? tx?.Destination : tx?.Account}}</h2>
+        <ion-text *ngIf="tx?.Bookmark; else noBookmark">
+          <h4 class="ion-text-capitalize font-nasalization flex">
+            <ion-icon name="bookmark" color="warning"></ion-icon>
+            {{tx?.Bookmark}}
+          </h4>
+        </ion-text>
+        <ng-template #noBookmark>
+          <h4 *ngIf="!tx?.Bookmark">
+            {{ (tx?.Account | isMe) ? tx?.Destination : tx?.Account}}
+          </h4>
+        </ng-template>
         <h6>{{tx?.date | xrpDate}}</h6>
       </ion-label>
       <ion-note slot="end" color="primary">
