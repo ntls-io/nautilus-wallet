@@ -5,7 +5,6 @@ import { QAccessStore } from './q-access.store';
 
 @Injectable({ providedIn: 'root' })
 export class QAccessService {
-  walletAddresses!: string[];
   rememberWalletAddress!: boolean;
 
   constructor(
@@ -34,11 +33,6 @@ export class QAccessService {
 
   getRememberWalletAddress() {
     return this.rememberWalletAddress;
-  }
-
-  walletAddressExists(walletAddress: string | undefined): boolean {
-    walletAddress = walletAddress ?? '';
-    return this.walletAddresses.includes(walletAddress);
   }
 
   async addWalletAddress(walletAddress: string, preferedName: string) {
