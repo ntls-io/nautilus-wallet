@@ -14,7 +14,6 @@ import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import * as xrpl from 'xrpl';
-import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-wallet-access',
@@ -65,14 +64,6 @@ export class WalletAccessPage implements OnInit {
       this.address = data.result;
       this.confirmAddress();
     }
-  }
-
-  async openScanner(): Promise<void> {
-    await handleScan(
-      this.modalCtrl,
-      this.notification.swal,
-      this.confirmAddress
-    );
   }
 
   /** User clicked to confirm address: show PIN entry. */
