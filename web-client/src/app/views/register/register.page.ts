@@ -1,110 +1,304 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { createMask } from '@ngneat/input-mask';
-import { WalletService } from 'src/app/services/wallet';
+import { LoadingController } from '@ionic/angular';
+import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { InviteService } from 'src/app/services/invite.service';
+import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
+import { SessionXrplService } from 'src/app/state/session-xrpl.service';
+import { SessionQuery } from 'src/app/state/session.query';
+import { SessionService } from 'src/app/state/session.service';
+import {
+  AssetAmount,
+  formatAssetAmount,
+  formatAssetSymbol,
+} from 'src/app/utils/assets/assets.common';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
+import SwiperCore, { Pagination } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
+import * as xrpl from 'xrpl';
+
+SwiperCore.use([Pagination]);
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
-  public registrationForm: FormGroup;
-  nonValidSubmit = true;
-  numInputMask = createMask({
-    alias: 'numeric',
-    rightAlign: false,
-    placeholder: '',
-  });
-  phoneInputMask = createMask({
-    mask: '(999) 999-99-99',
-    autoUnmask: true,
-  });
+export class RegisterPage implements OnDestroy {
+  @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
+  registrationForm: FormGroup;
+  numInputMask = '9999999999';
+  isOpening = false;
+  subscription$;
+  isBusySaving = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private walletService: WalletService,
-    private router: Router
+    private inviteService: InviteService,
+    private sessionService: SessionService,
+    private router: Router,
+    private sessionQuery: SessionQuery,
+    private sessionXrplService: SessionXrplService,
+    private loadingCtrl: LoadingController,
+    private notification: SwalHelper
   ) {
     this.registrationForm = this.generateFormGroup();
+
+    this.subscription$ = this.f.pin.valueChanges.pipe().subscribe(() => {
+      this.f.confirmPin.updateValueAndValidity();
+    });
   }
 
   get f() {
     return this.registrationForm.controls;
   }
 
-  ngOnInit() {}
-
   generateFormGroup(): FormGroup {
-    return this.formBuilder.group(
-      {
-        firstName: ['', Validators.compose([Validators.required])],
-        lastName: ['', Validators.compose([Validators.required])],
-        mobile: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
-          ]),
-        ],
-        pin: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
-          ]),
-        ],
-        confirmPin: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.minLength(4),
-            Validators.maxLength(10),
-          ]),
-        ],
-      },
-      { validator: this.pinValidator }
-    );
+    return this.formBuilder.group({
+      firstName: [
+        '',
+        Validators.compose([Validators.minLength(2), Validators.required]),
+      ],
+      lastName: [
+        '',
+        Validators.compose([Validators.minLength(2), Validators.required]),
+      ],
+      mobile: [
+        '',
+        Validators.compose([
+          Validators.required,
+          IonIntlTelInputValidators.phone,
+        ]),
+      ],
+      pin: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(10),
+        ]),
+      ],
+      confirmPin: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(10),
+          this.matchValues('pin'),
+        ]),
+      ],
+    });
   }
 
-  async onSubmit(): Promise<void> {
-    /* istanbul ignore next TODO */
+  validateForm() {
+    this.registrationForm.markAllAsTouched();
     if (this.registrationForm.valid) {
-      try {
-        await this.walletService.createWallet(
-          this.registrationForm.controls.firstName.value +
-            ' ' +
-            this.registrationForm.controls.lastName.value,
-          this.registrationForm.controls.pin.value
-        );
-        this.router.navigate(['/print-wallet']);
-      } catch (err) {
-        // TODO: error handling
-        console.log(err);
-      }
-    } else {
-      this.showErrors();
+      this.swiper?.swiperRef?.slideNext();
     }
   }
 
-  pinValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const pin = control.get('pin');
-    const confirmPin = control.get('confirmPin');
+  async promptForInviteCode(): Promise<string> {
+    const { value, isDismissed } = await this.notification.swal.fire({
+      titleText: 'Enter your invite code',
+      input: 'text',
+      inputPlaceholder: 'Enter your code here',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      reverseButtons: true,
+      preConfirm: async (invite_code) => {
+        if (invite_code === undefined) {
+          return '';
+        } else if (invite_code.length !== 6) {
+          this.notification.swal.showValidationMessage(
+            'You have entered an invalid invite code.'
+          );
+        } else {
+          const invite = await withLoadingOverlayOpts(
+            this.loadingCtrl,
+            { message: 'Checking your invite code...' },
+            async () => await this.inviteService.getInvite(invite_code)
+          );
+          if (!invite) {
+            return false;
+          }
+          return invite.id;
+        }
+      },
+      inputAttributes: {
+        autocomplete: 'off',
+        autocapitalize: 'off',
+        autocorrect: 'off',
+      },
+    });
 
-    return pin && confirmPin && pin.value !== confirmPin.value
-      ? { misMatch: true }
-      : null;
+    if (isDismissed || !value) {
+      return '';
+    }
+
+    return value;
   }
 
-  showErrors() {
-    this.nonValidSubmit = false;
+  async onSubmit(answers: Map<string, string>): Promise<void> {
+    let invite_id = '';
+
+    /* istanbul ignore next TODO */
+    if (this.registrationForm.valid) {
+      this.isBusySaving = true;
+      const phoneNumber =
+        this.registrationForm.controls.mobile.value.internationalNumber
+          .split(' ')
+          .join('');
+
+      if (environment.enableInvites) {
+        invite_id = await this.promptForInviteCode();
+        if (!invite_id) {
+          this.isBusySaving = false;
+          return;
+        }
+      }
+
+      const { firstName, lastName, pin } = this.registrationForm.value;
+
+      try {
+        const wallet_id: string = await this.sessionService.createWallet(
+          firstName + ' ' + lastName,
+          pin,
+          answers,
+          phoneNumber
+        );
+
+        // Autofund the account on creation
+        const autoFundBool = environment.autofundXrp;
+        if (autoFundBool) {
+          const result = await withLoadingOverlayOpts(
+            this.loadingCtrl,
+            { message: 'Creating Wallet' },
+            () => this.sessionXrplService.sendAutoFunds(wallet_id)
+          ).then(async () => {
+            await withLoadingOverlayOpts(
+              this.loadingCtrl,
+              { message: 'Redeeming invite code' },
+              async () => {
+                if (environment.enableInvites) {
+                  await this.inviteService.redeemInvite(invite_id);
+                }
+              }
+            );
+          });
+        }
+        this.router.navigate(['/print-wallet']);
+      } catch (err) {
+        this.notification.swal.fire({
+          icon: 'error',
+          titleText: 'Wallet Not Created!',
+          text: 'There was a problem creating your wallet, please try again.',
+          confirmButtonText: 'DONE',
+        });
+        this.router.navigate(['/']);
+      }
+      this.isBusySaving = false;
+    }
+  }
+
+  matchValues(
+    matchTo: string
+  ): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null =>
+      !!control?.parent?.value &&
+      control?.value ===
+        (control.parent.controls as { [key: string]: AbstractControl })[matchTo]
+          .value
+        ? null
+        : { mismatch: true };
+  }
+
+  onModalOpen(event: any) {
+    if (event?.target?.type === 'button') {
+      this.isOpening = true;
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription$.unsubscribe();
+  }
+
+  protected async notifyResult(
+    result: { xrplResult: xrpl.TxResponse },
+    amount: AssetAmount,
+    receiverAddress: string
+  ): Promise<void> {
+    if ('xrplResult' in result) {
+      const { xrplResult: txResponse } = result;
+      const { succeeded, resultCode } = checkTxResponseSucceeded(txResponse);
+      if (succeeded) {
+        this.notifySuccess({
+          amount: `${formatAssetAmount(amount)} ${formatAssetSymbol(amount)}`,
+          address: receiverAddress,
+          txId: txResponse.id.toString(),
+          timestamp: new Date(),
+        });
+      } else {
+        await this.notifyXrplFailure({ resultCode });
+      }
+    }
+  }
+
+  protected notifySuccess({
+    amount,
+    address,
+    txId,
+    timestamp,
+    txUrlPrefix,
+  }: {
+    amount: string;
+    address: string;
+    txId: string;
+    timestamp: Date;
+    txUrlPrefix?: string;
+  }): void {
+    const txIdHtml = txUrlPrefix
+      ? `<a href="${txUrlPrefix}${txId}" target="_blank" >${txId}</a>`
+      : `${txId}`;
+    this.notification.swal.fire({
+      icon: 'success',
+      titleText: 'Wallet Created!',
+      html: `<div >
+              Your wallet was successfully created.
+              <p class="text-xs"><b>Address:</b> ${address}</p>
+              <p class="text-xs"><b>Transaction ID:</b> ${txIdHtml}</p>
+              <p class="text-xs">Completed on ${timestamp.toLocaleString()}</p>
+            </div>`,
+      confirmButtonText: 'DONE',
+    });
+  }
+
+  protected async notifyXrplFailure({
+    resultCode,
+  }: {
+    resultCode: xrpl.TransactionMetadata['TransactionResult'];
+  }): Promise<void> {
+    const categoryLocalError = resultCode.startsWith('tel');
+    const categoryRetry = resultCode.startsWith('ter');
+    const retryable = categoryLocalError || categoryRetry;
+
+    await this.notification.swal.fire({
+      icon: retryable ? 'warning' : 'error',
+      titleText: 'Transaction failed',
+      html: [
+        ...(categoryLocalError ? ['<p>(Local error)</p>'] : []),
+        ...(categoryRetry ? ['<p>(Retry possible)</p>'] : []),
+        `<p>Result code: ${resultCode}</p>`,
+        '<p>See <a href="https://xrpl.org/transaction-results.html" target="_blank">Transaction Results</a> for more details.</p>',
+      ].join('\n'),
+    });
   }
 }

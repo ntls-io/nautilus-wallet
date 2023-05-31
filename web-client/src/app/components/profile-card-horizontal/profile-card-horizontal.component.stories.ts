@@ -1,10 +1,11 @@
-import { Meta, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { ProfileCardHorizontalComponent } from './profile-card-horizontal.component';
 
-export default {
+export default ionicStoryMeta<ProfileCardHorizontalComponent>({
   title: 'Components/ProfileCardHorizontalComponent',
   component: ProfileCardHorizontalComponent,
-} as Meta;
+});
 
 const Template: Story<ProfileCardHorizontalComponent> = (
   args: ProfileCardHorizontalComponent
@@ -14,8 +15,7 @@ const Template: Story<ProfileCardHorizontalComponent> = (
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Dr.',
-  fullName: 'Nautilus Wallet',
-  cellphone: '+27 (12) 456-7890',
-  avatar: 'assets/img/logo.svg',
+  isVerified: true,
+  owner_name: 'Nautilus Wallet',
+  phone_number: '+27 (12) 456-7890',
 };

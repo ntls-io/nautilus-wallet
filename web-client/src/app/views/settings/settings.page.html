@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+
+    <ion-buttons slot="end">
+      <app-logout-button [title]="true"></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <app-profile-card-horizontal
+          *ngIf="sessionQuery.select('wallet') | async as wallet"
+          [owner_name]="wallet?.owner_name"
+          [phone_number]="wallet?.phone_number"
+          [isVerified]="sessionQuery.onfidoCheckIsClear | async"
+        ></app-profile-card-horizontal>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none">
+          <ng-container
+            *ngIf="!sessionQuery.showKYC || (sessionQuery.onfidoCheckIsClear | async)"
+          >
+            <ion-item
+              *ngIf="showConnector"
+              class="app-item"
+              button
+              detail="false"
+              routerLink="../become-connector"
+              [disabled]="isWalletConnector"
+            >
+              <ion-icon slot="start" name="git-merge"></ion-icon>
+              <ion-label>
+                <h2>
+                  {{ isWalletConnector ? 'You are a connector' : 'Become a
+                  connector' }}
+                </h2>
+                <p>On this device</p>
+              </ion-label>
+              <ion-icon
+                slot="end"
+                name="checkmark-circle"
+                color="success"
+                *ngIf="isWalletConnector; else isNotConnector"
+              ></ion-icon>
+              <ng-template #isNotConnector>
+                <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
+              </ng-template>
+            </ion-item>
+          </ng-container>
+
+          <ng-container *ngIf="sessionQuery.allBalances | async as balances">
+            <ion-item
+              *ngIf="balances.length > 0"
+              detail="false"
+              class="app-item"
+              button
+              routerLink="../delete-user"
+            >
+              <ion-icon slot="start" name="trash" color="danger"></ion-icon>
+              <ion-label>Delete My Wallet</ion-label>
+              <ion-icon slot="end" name="chevron-forward-circle"></ion-icon>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

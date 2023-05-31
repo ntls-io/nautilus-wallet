@@ -1,5 +1,13 @@
-<ion-header class="ion-no-border">
-  <app-header></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Verify Identity</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -14,30 +22,58 @@
     (completed)="onSdkComplete($event)"
   ></app-onfido-widget>
 
-  <div *ngIf="viewState === 'step3_result'">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Check result</ion-card-title>
-      </ion-card-header>
+  <div *ngIf="viewState === 'step3_result'" class="text-center">
+    <h1 class="text-center font-nasalization">
+      Verifying Identity<ng-container *ngIf="!checkIsComplete">…</ng-container>
+    </h1>
 
-      <ion-card-content>
-        <table class="check-result">
-          <tr>
-            <th>Created at:</th>
-            <td [innerText]="check?.created_at"></td>
-          </tr>
-          <tr>
-            <th>Status:</th>
-            <td [innerText]="check?.status"></td>
-          </tr>
-          <tr>
-            <th>Result:</th>
-            <td [innerText]="check?.result"></td>
-          </tr>
-        </table>
+    <div>
+      <table class="inline-table check-result">
+        <tr>
+          <th>Check created:</th>
+          <td [innerText]="check?.created_at"></td>
+        </tr>
+        <tr>
+          <th>Status:</th>
+          <td
+            [innerText]="check?.status?.replace?.('_', ' ') | titlecase "
+          ></td>
+        </tr>
+        <tr *ngIf="check?.result">
+          <th>Result:</th>
+          <td
+            class="font-bold text-lg"
+            [innerText]="check?.result?.replace?.('_', ' ') | titlecase"
+          ></td>
+        </tr>
+      </table>
+    </div>
 
-        <ion-button (click)="refreshCheck()">Refresh</ion-button>
-      </ion-card-content>
-    </ion-card>
+    <div>
+      <ion-button
+        *ngIf="!checkIsComplete"
+        (click)="refreshCheck()"
+        shape="round"
+        class="ion-margin"
+        >Refresh</ion-button
+      >
+      <ion-button
+        *ngIf="checkIsComplete && checkIsClear"
+        (click)="saveCheck()"
+        color="success"
+        shape="round"
+        class="ion-margin"
+        >Save</ion-button
+      >
+      <ion-button
+        routerLink="/wallet"
+        routerDirection="root"
+        color="medium"
+        fill="outline"
+        shape="round"
+        class="ion-margin"
+        >Cancel</ion-button
+      >
+    </div>
   </div>
 </ion-content>

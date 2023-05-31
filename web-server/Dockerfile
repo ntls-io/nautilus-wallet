@@ -134,7 +134,7 @@ USER user
 RUN --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/registry \
     --mount=type=cache,sharing=locked,uid=1000,gid=1000,target=/home/user/.cargo/git \
     . ~/.cargo/env && \
-    cargo install bindgen
+    cargo install --version 0.63.0 bindgen-cli
 
 # Cargo make
 USER root
@@ -246,6 +246,7 @@ ENV LD_LIBRARY_PATH=/build/intel/sgxsdk/sdk_libs
 FROM base AS base-sgx-runner-hw
 
 USER root
+RUN sed -i s/archive.ubuntu.com/azure.archive.ubuntu.com/ /etc/apt/sources.list
 # Requirements for apt-key
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \

@@ -1,0 +1,49 @@
+<div class="pt-5">
+  <ion-text color="primary" class="ion-text-center font-nasalization text-sm">
+    <p class="mb-0">Saved Addresses</p>
+  </ion-text>
+</div>
+
+<ion-list lines="none">
+  <ion-item class="app-item !mx-0" *ngFor="let address of addresses">
+    <ion-icon slot="start" name="wallet"></ion-icon>
+    <ion-label>
+      <h2 class="!font-black">{{ address.preferedName }}</h2>
+      <small>{{ address.walletAddress }}</small>
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-button (click)="login(address.walletAddress)">
+        <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="deleteAddress(address)">
+        <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-list>
+
+<!-- Show PIN entry modal on `isPinEntryOpen`. -->
+<!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
+        (pinConfirmed)="
+          isPinEntryOpen = false; onPinConfirmed($event, walletAddress)
+        "
+        [wallet_id]="walletAddress"
+        [hideRememberWalletAddress]="false"
+      ></app-pin-entry>
+    </ion-content>
+  </ng-template>
+</ion-modal>

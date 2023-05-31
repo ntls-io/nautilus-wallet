@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { SdkResponse } from 'onfido-sdk-ui';
 import {
@@ -17,20 +18,22 @@ describe('KycPage', () => {
   let component: KycPage;
   let fixture: ComponentFixture<KycPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [KycPage],
-        imports: [IonicModule.forRoot(), HttpClientTestingModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [KycPage],
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule,
+        HttpClientTestingModule,
+      ],
+    }).compileComponents();
 
-      onfidoService = TestBed.inject(OnfidoService);
+    onfidoService = TestBed.inject(OnfidoService);
 
-      fixture = TestBed.createComponent(KycPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(KycPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -62,6 +65,12 @@ describe('KycPage', () => {
   });
 
   it('onSdkComplete + createCheck', async () => {
+    // Stub refreshCheck
+    const refreshCheckSpy: Spy<typeof component.refreshCheck> = spyOn(
+      component,
+      'refreshCheck'
+    ).and.resolveTo();
+
     const sdkResponse: SdkResponse = {};
 
     const check: Check = { id: 'placeholder id' };
@@ -79,6 +88,8 @@ describe('KycPage', () => {
     );
     expect(component.check).toBe(check);
     expect(component.viewState).toBe('step3_result');
+
+    expect(refreshCheckSpy).toHaveBeenCalledOnceWith();
   });
 
   it('refreshCheck', async () => {

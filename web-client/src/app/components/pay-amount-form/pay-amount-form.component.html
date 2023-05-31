@@ -1,0 +1,43 @@
+<form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+  <div class="ion-text-center">
+    <ion-input
+      formControlName="amount"
+      name="amount"
+      type="text"
+      inputmode="decimal"
+      placeholder="Amount"
+      [autofocus]="autofocus"
+      [ngClass]="{ invalid: amountErrors }"
+      class="text-2xl font-audiowide"
+    ></ion-input>
+
+    <ion-text color="danger" *ngIf="amountErrors">
+      <div *ngIf="amountErrors.required">Required</div>
+      <!-- Skip the additional numeric message if it's just empty. -->
+      <div *ngIf="amountErrors.numeric && !amountErrors.required">
+        Please enter a number
+      </div>
+      <div *ngIf="amountErrors.min">
+        Amount too low (minimum {{ amountErrors.min.min }})
+      </div>
+      <div *ngIf="amountErrors.max">
+        Amount too high (maximum {{ amountErrors.max.max }})
+      </div>
+    </ion-text>
+  </div>
+
+  <div class="ion-margin-vertical" *ngIf="balance">
+    <app-transaction-fees
+      [transactionAmount]="paymentForm.value.amount"
+      [balance]="balance"
+    ></app-transaction-fees>
+  </div>
+
+  <ion-button
+    expand="block"
+    shape="round"
+    type="submit"
+    [disabled]="!paymentForm.valid"
+    >{{ buttonHeading }}
+  </ion-button>
+</form>

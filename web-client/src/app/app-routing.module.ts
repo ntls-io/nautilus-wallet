@@ -19,13 +19,6 @@ export const routes: Routes = [
     canActivate: [OpenWalletGuard],
   },
   {
-    path: 'login',
-    loadChildren: () =>
-      import('./views/login/login.module').then(
-        m => m.LoginPageModule // prettier-ignore
-      ),
-  },
-  {
     path: 'register',
     loadChildren: () =>
       import('./views/register/register.module').then(
@@ -51,13 +44,6 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./views/print-wallet/print-wallet.module').then(
         (m) => m.PrintWalletPageModule // prettier-ignore
-      ),
-  },
-  {
-    path: 'lockscreen',
-    loadChildren: () =>
-      import('./views/lockscreen/lockscreen.module').then(
-        m => m.LockscreenPageModule // prettier-ignore
       ),
   },
   {
@@ -91,6 +77,79 @@ export const routes: Routes = [
     path: 'kyc',
     loadChildren: () =>
       import('./views/kyc/kyc.module').then((m) => m.KycPageModule),
+  },
+  {
+    path: 'delete-user',
+    loadChildren: () =>
+      import('./views/delete-user/delete-user.module').then(
+        (m) => m.DeleteUserPageModule
+      ),
+  },
+  {
+    path: 'deposit-funds',
+    loadChildren: () =>
+      import('./views/deposit-funds/deposit-funds.module').then(
+        (m) => m.DepositFundsPageModule
+      ),
+  },
+  {
+    path: 'become-connector',
+    loadChildren: () =>
+      import('./views/become-connector/become-connector.module').then(
+        (m) => m.BecomeConnectorPageModule
+      ),
+  },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('./views/settings/settings.module').then(
+        (m) => m.SettingsPageModule
+      ),
+  },
+  {
+    path: 'pin-reset',
+    loadChildren: () =>
+      import('./views/pin-reset/pin-reset.module').then(
+        (m) => m.PinResetPageModule
+      ),
+  },
+  {
+    path: 'search-wallet',
+    loadChildren: () =>
+      import('./views/search-wallet/search-wallet.module').then(
+        (m) => m.SearchWalletPageModule
+      ),
+  },
+  {
+    path: 'history',
+    loadChildren: () =>
+      import('./views/history/history.module').then((m) => m.HistoryPageModule),
+  },
+  {
+    path: 'bookmarks',
+    loadChildren: () =>
+      import('./views/bookmarks/bookmarks.module').then(
+        (m) => m.BookmarksPageModule
+      ),
+  },
+  {
+    path: 'pull',
+    loadChildren: () =>
+      import('./views/pull/pull.module').then((m) => m.PullPageModule),
+  },
+  {
+    path: '2FA',
+    loadChildren: () =>
+      import(
+        './views/two-factor-authentication/two-factor-authentication.module'
+      ).then((m) => m.TwoFactorAuthenticationPageModule),
+  },
+  {
+    path: 'triggers',
+    loadChildren: () =>
+      import('./views/triggers/triggers.module').then(
+        (m) => m.TriggersPageModule
+      ),
   },
 ];
 

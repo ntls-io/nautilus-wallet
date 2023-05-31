@@ -1,58 +1,103 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  faCreditCard,
-  faDonate,
-  faFingerprint,
-  faHandHoldingUsd,
-  faQrcode,
-  faReceipt,
-  faWallet,
-} from '@fortawesome/free-solid-svg-icons';
-import { SessionQuery } from 'src/app/stores/session';
+import { Component, Input, OnInit } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { combineLatest, map, Observable } from 'rxjs';
+import { OtpLimitsService } from 'src/app/state/otpLimits';
+import { OtpRecipientsService } from 'src/app/state/otpRecipients';
+import { SessionQuery } from 'src/app/state/session.query';
+import { environment } from 'src/environments/environment';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-wallet',
   templateUrl: './wallet.page.html',
   styleUrls: ['./wallet.page.scss'],
 })
 export class WalletPage implements OnInit {
-  faWallet = faWallet;
+  /** (Optional) Hook to override environment setting, if given. */
+  @Input() requireKycBeforeSendPayment =
+    environment?.requireOnfidoCheckBeforeSendPayment;
+
+  organization = environment.organization;
+
+  /**
+   * Enable the "Send Money" action if both:
+   * - KYC status is either cleared or not required
+   * - At least one balance is available
+   */
+  actionSendMoneyEnabled: Observable<boolean> = combineLatest(
+    this.sessionQuery.onfidoCheckIsClear,
+    this.sessionQuery.allBalances
+  ).pipe(
+    map(
+      ([onfidoCheckIsClear, assetAmounts]) =>
+        (onfidoCheckIsClear || !this.requireKycBeforeSendPayment) &&
+        assetAmounts.length > 0
+    )
+  );
+
+  /** Show the "Verify Profile" if KYC status is not cleared. */
+  actionVerifyProfileShown: Observable<boolean> =
+    this.sessionQuery.onfidoCheckIsClear.pipe(
+      map((onfidoCheckIsClear: boolean) => !onfidoCheckIsClear)
+    );
 
   actionItems = [
     {
       title: 'Send Money',
-      icon: faCreditCard,
-      path: '/wallet/send-funds',
+      icon: 'card',
+      path: '/wallet/transfer-funds',
+      state: { transferType: 'pay' },
+      disabled: false,
     },
     {
-      title: 'Top Up Wallet',
-      icon: faDonate,
-      url: 'https://testnet.algoexplorer.io/dispenser',
+      title: 'Pull Payment',
+      icon: 'cash',
+      path: '/wallet/transfer-funds',
+      state: { transferType: 'pull' },
+      disabled: false,
     },
     {
-      title: 'Verify Profile',
-      icon: faFingerprint,
-      path: '/kyc',
-    },
-    {
-      title: 'Withdraw',
-      icon: faHandHoldingUsd,
-      disabled: true,
-    },
-    {
-      title: 'Receive',
-      icon: faQrcode,
+      title: 'My Wallet Address',
+      icon: 'qr-code',
       path: '/wallet/receive',
-      disabled: true,
+      disabled: false,
     },
     {
-      title: 'My Transactions',
-      icon: faReceipt,
-      disabled: true,
+      title: 'Transactions History',
+      icon: 'list',
+      path: '/history',
+      disabled: false,
     },
-  ]; // Placeholder icons until we get definite ones.
+    {
+      title: 'Bookmark Recipient',
+      icon: 'bookmark',
+      path: '/bookmarks',
+      disabled: false,
+    },
+    {
+      title: '2 FA',
+      icon: 'key',
+      path: '/2FA',
+      disabled: false,
+    },
+  ];
 
-  constructor(public sessionQuery: SessionQuery) {}
+  constructor(
+    public sessionQuery: SessionQuery,
+    public otpLimitsService: OtpLimitsService,
+    public otpRecipientsService: OtpRecipientsService
+  ) {
+    if (environment.hidePullPayment) {
+      this.actionItems = this.actionItems.filter(
+        (action) => action.title !== 'Pull Payment'
+      );
+    }
+  }
+
+  async ionViewWillEnter() {
+    await this.otpLimitsService.getOtpLimits();
+    await this.otpRecipientsService.getOtpRecipients();
+  }
 
   ngOnInit() {}
 }

@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Two Factor Authentication</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-horizontal">
+  <div class="ion-padding">
+    <h4 class="font-bold">Two Factor Authentication Settings</h4>
+  </div>
+
+  <p>What cell number should we use to authenticate against?</p>
+  <form
+    [formGroup]="registrationForm"
+    (ngSubmit)="onSubmit()"
+    class="form-item"
+  >
+    <ion-item [disabled]="isOpening">
+      <ion-label position="stacked">Mobile</ion-label>
+      <ion-intl-tel-input
+        formControlName="mobile"
+        class="ion-align-items-center"
+        defaultCountryiso="za"
+        (click)="onModalOpen($event)"
+        (codeOpen)="isOpening = false"
+      >
+      </ion-intl-tel-input>
+
+      <small *ngIf="isOpening"><em> Loading country codes... </em></small>
+      <ion-text slot="error" *ngIf="f.mobile.touched && f.mobile.hasError">
+        <p *ngIf="f.mobile.errors?.required">Phone Number is required.</p>
+        <p *ngIf="!f.mobile.errors?.required && f.mobile.errors?.phone">
+          Phone Number is not valid.
+        </p>
+      </ion-text>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      (click)="onSubmit()"
+      [disabled]="!registrationForm.controls.mobile.valid"
+      shape="round"
+      >Save Phone Number
+    </ion-button>
+  </form>
+
+  <ng-container *ngFor="let item of actionItems">
+    <ion-item
+      class="app-item"
+      button
+      detail
+      detailIcon="chevron-forward-circle"
+      class="app-item"
+      [routerLink]="item.path"
+      [disabled]="item.disabled"
+    >
+      <ion-icon slot="start" [name]="item.icon"></ion-icon>
+      <ion-label>
+        <ion-text class="block font-bold"> {{item.title}} </ion-text>
+      </ion-label>
+    </ion-item>
+  </ng-container>
+</ion-content>
+
+<!-- Show PIN entry modal on `isPinEntryOpen`. -->
+<!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
+        (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+        [hideRememberWalletAddress]="false"
+        walletAddressExists="false"
+      ></app-pin-entry>
+    </ion-content>
+  </ng-template>
+</ion-modal>

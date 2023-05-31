@@ -53,5 +53,17 @@ pub async fn init_celery_app(broker_url: &str) -> Result<CeleryBox, CeleryError>
         .register_task::<tasks::kyc::upload_live_photo>()
         .await?;
 
+    celery
+        .register_task::<tasks::messaging::create_message>()
+        .await?;
+
+    celery
+        .register_task::<tasks::search::insert_wallet_address>()
+        .await?;
+
+    celery
+        .register_task::<tasks::search::find_wallet_address>()
+        .await?;
+
     Ok(celery)
 }

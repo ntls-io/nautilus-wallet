@@ -1,0 +1,24 @@
+<ion-card class="ion-no-margin">
+  <ion-item lines="none">
+    <ion-label>
+      <ion-text>Transaction Fees:</ion-text>
+    </ion-label>
+    <div slot="end" class="font-nasalization">
+      <ion-text color="primary">
+        {{ assetAmount | transactionFee | assetAmount }}
+      </ion-text>
+      <ion-text>{{ assetAmount | assetSymbol }}</ion-text>
+    </div>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label>
+      <h2>Total Sent:</h2>
+    </ion-label>
+    <div slot="end" class="font-nasalization">
+      <ion-text color="primary">
+        {{ assetAmount | transactionFee: true | assetAmount }}
+      </ion-text>
+      <ion-text>{{ assetAmount | assetSymbol }}</ion-text>
+    </div>
+  </ion-item>
+</ion-card>

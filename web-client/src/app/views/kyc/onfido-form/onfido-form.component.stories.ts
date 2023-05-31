@@ -1,16 +1,21 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { KycPageModule } from '../kyc.module';
 import { OnfidoFormComponent } from './onfido-form.component';
 
-export default {
-  title: 'Components/KYC/OnfidoFormComponent',
-  component: OnfidoFormComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [KycPageModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<OnfidoFormComponent>(
+  {
+    title: 'Components/KYC/OnfidoFormComponent',
+    component: OnfidoFormComponent,
+  },
+  {
+    imports: [KycPageModule],
+    controls: {
+      outputs: ['submitted'],
+      hidden: ['nameForm', 'onSubmit'],
+    },
+  }
+);
 
 const Template: Story<OnfidoFormComponent> = (args: OnfidoFormComponent) => ({
   props: args,

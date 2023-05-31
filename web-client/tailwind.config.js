@@ -1,12 +1,14 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
-  mode: "jit",
-  purge: ["./src/**/*.{html,ts}"],
-  darkMode: false, // or 'media' or 'class'
+  content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
+      screens: {
+        xs: "260px",
+        ...defaultTheme.screens,
+      },
       colors: {
         primary: "var(--ion-color-primary)",
-        "primary-background": "var(--ion-color-primary-background)",
         secondary: "var(--ion-color-secondary)",
         tertiary: "var(--ion-color-tertiary)",
         success: "var(--ion-color-success)",
@@ -15,39 +17,16 @@ module.exports = {
         dark: "var(--ion-color-dark)",
         medium: "var(--ion-color-medium)",
         light: "var(--ion-color-light)",
-        "jungle-green": "var(--ion-color-jungle-green)",
+        background: "var(--ion-color-background)",
       },
       fontFamily: {
         nasalization: "nasalization",
         audiowide: "Audiowide, cursive",
       },
+      screens: {
+        print: { raw: "print" },
+      },
     },
-  },
-  variants: {
-    extend: {},
-    display: [
-      "children",
-      "default",
-      "children-first",
-      "children-last",
-      "children-odd",
-      "children-even",
-      "children-not-first",
-      "children-not-last",
-      "children-hover",
-      "hover",
-      "children-focus",
-      "focus",
-      "children-focus-within",
-      "focus-within",
-      "children-active",
-      "active",
-      "children-visited",
-      "visited",
-      "children-disabled",
-      "disabled",
-      "responsive",
-    ],
   },
   plugins: [
     require("@tailwindcss/aspect-ratio"),

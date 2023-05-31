@@ -1,0 +1,40 @@
+<ion-card class="ion-no-margin">
+  <ion-list lines="full" class="!p-0">
+    <ion-item-group>
+      <ion-item lines="none">
+        <ion-label>
+          <h2 class="!font-bold">From:</h2>
+          <p>{{ name }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+        <ion-label slot="end">
+          <ion-text
+            color="primary"
+            class="font-bold font-nasalization !text-xl"
+          >
+            {{ balance | assetAmount }}
+          </ion-text>
+        </ion-label>
+        <ion-text slot="end" class="font-bold font-nasalization !text-xl">
+          {{ balance | assetSymbol }}
+        </ion-text>
+      </ion-item>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item lines="none">
+        <ion-label>
+          <h2 class="!font-bold">To:</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
+
+        <ion-label class="ion-text-wrap">
+          <p class="font-mono font-bold">{{ receiverAddress }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</ion-card>

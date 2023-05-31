@@ -4,12 +4,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ClipboardPlugin } from '@capacitor/clipboard';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { QRCodeComponent } from 'angularx-qrcode';
+import { SessionState, SessionStore } from 'src/app/state/session.store';
 import {
   assertShowsToast,
   componentElement,
 } from '../../../tests/test.helpers';
 import { SharedModule } from '../../modules/shared/shared.module';
-import { SessionStore } from '../../stores/session';
 import { PrintWalletPage } from './print-wallet.page';
 
 describe('PrintWalletPage', () => {
@@ -18,20 +18,18 @@ describe('PrintWalletPage', () => {
   let sessionStore: SessionStore;
   let toastCtrl: ToastController;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PrintWalletPage],
-        imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PrintWalletPage],
+      imports: [IonicModule.forRoot(), RouterTestingModule, SharedModule],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(PrintWalletPage);
-      component = fixture.componentInstance;
-      sessionStore = TestBed.inject(SessionStore);
-      toastCtrl = TestBed.inject(ToastController);
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(PrintWalletPage);
+    component = fixture.componentInstance;
+    sessionStore = TestBed.inject(SessionStore);
+    toastCtrl = TestBed.inject(ToastController);
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -43,7 +41,20 @@ describe('PrintWalletPage', () => {
   });
 
   const setWalletId = (walletId: string): void => {
-    sessionStore.update({ walletId });
+    sessionStore.update(
+      ({ wallet }: Partial<SessionState>): Partial<SessionState> => ({
+        wallet: {
+          wallet_id: walletId,
+          owner_name: wallet?.owner_name ?? 'fake',
+          algorand_address_base32: wallet?.algorand_address_base32 ?? 'fake',
+          xrpl_account: {
+            key_type: wallet?.xrpl_account?.key_type ?? 'secp256k1',
+            public_key_hex: wallet?.xrpl_account?.public_key_hex ?? 'fake',
+            address_base58: wallet?.xrpl_account?.address_base58 ?? 'fake',
+          },
+        },
+      })
+    );
     fixture.detectChanges();
   };
 

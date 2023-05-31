@@ -1,16 +1,19 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { Story } from '@storybook/angular';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { ionicStoryMeta } from 'src/stories/storybook.helpers';
 import { ReceivePage } from './receive.page';
 
-export default {
-  title: 'Views/ReceivePage',
-  component: ReceivePage,
-  decorators: [
-    moduleMetadata({
-      imports: [SharedModule],
-    }),
-  ],
-} as Meta;
+export default ionicStoryMeta<ReceivePage>(
+  {
+    title: 'Views/ReceivePage',
+    component: ReceivePage,
+  },
+  {
+    imports: [SharedModule],
+    controls: { hidden: ['actionItems'] },
+    layoutType: 'page',
+  }
+);
 
 const Template: Story<ReceivePage> = (args: ReceivePage) => ({
   props: args,

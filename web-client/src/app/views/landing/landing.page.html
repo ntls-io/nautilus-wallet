@@ -2,8 +2,10 @@
   <ion-grid class="h-full">
     <ion-row class="h-full content-around px-5">
       <ion-col size="12">
-        <img src="assets/img/logo-icon.svg" class="block mx-auto w-3/5" />
-        <img src="assets/img/logo-title.svg" class="block mx-auto" />
+        <img
+          [src]="setupQuery.logo |async"
+          class="block mx-auto rounded-full w-3/5"
+        />
       </ion-col>
       <ion-col size="12">
         <ion-button
@@ -15,14 +17,17 @@
         <ion-button
           expand="block"
           shape="round"
-          color="white"
           fill="outline"
           routerLink="/wallet-access"
           transloco="LANDING.open"
         ></ion-button>
+        <p routerLink="/search-wallet" class="ion-text-center p-2">
+          Forgot Wallet Address?
+        </p>
       </ion-col>
-      <ion-col size="12">
-        <p class="ion-text-center">Terms & Conditions apply</p>
+      <ion-col size="12" class="ion-text-center">
+        <p class="font-nasalization">Powered by</p>
+        <ion-text class="font-audiowide text-3xl font-bold">NAUTILUS</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>

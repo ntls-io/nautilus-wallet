@@ -1,63 +1,19 @@
-<ion-header class="ion-no-border">
-  <app-header></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-text-center p-2">
-    <h1 class="font-semibold font-nasalization">Pay</h1>
-  </div>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-card class="mx-0">
-          <ion-list lines="full" class="p-0">
-            <ion-item color="white">
-              <ion-icon name="wallet" color="primary" slot="start"></ion-icon>
-              <ion-label class="ion-text-wrap">
-                <h2 class="!font-black">From:</h2>
-                <p>{{sessionQuery.name | async}}</p>
-                <small>Available Balance</small>
-              </ion-label>
-              <ion-text slot="end" color="primary">
-                <h1 class="font-semibold m-0">
-                  R{{sessionQuery.balance| async}}
-                </h1>
-              </ion-text>
-            </ion-item>
-            <ion-item color="white">
-              <ion-icon name="qr-code" color="primary" slot="start"></ion-icon>
-              <ion-label class="ion-text-wrap">
-                <h2 class="!font-black">To:</h2>
-                <p>{{wallet}}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
-          <ion-item lines="none">
-            <ion-input
-              inputmode="tel"
-              placeholder="Amount"
-              type="text"
-              formControlName="amount"
-              [inputMask]="currencyInputMask"
-            ></ion-input>
-          </ion-item>
-          <div class="m-5">
-            <ion-button expand="block" shape="round" type="submit"
-              >PAY
-            </ion-button>
-            <p class="text-sm text-center">
-              Please check payment amount carefully. Transaction fees up to
-              R0.01 apply.
-            </p>
-          </div>
-        </form>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <app-pure-pay-page
+    [senderName]="senderName | async"
+    [receiverAddress]="receiverAddress"
+    [algorandBalances]="algorandBalances | async"
+    [xrplBalances]="xrplBalances | async"
+    [flagOnfidoCheckIsClear]="onfidoCheckIsClear | async"
+    (paymentSubmitted)="onPaymentSubmitted($event)"
+    [autofocus]="autofocus"
+  ></app-pure-pay-page>
 </ion-content>

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Become a connector</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center text-center">
+      <ion-col size="12">
+        <p>Share access to your app with others.</p>
+        <p>0.1% of each transaction will be paid into your wallet.</p>
+      </ion-col>
+      <ion-col size="auto" *ngIf="sessionQuery.walletId | async as walletId">
+        <ion-item lines="none">
+          <ion-checkbox slot="start" [(ngModel)]="isConfirmed"></ion-checkbox>
+          <ion-label class="ion-text-wrap">
+            <p>I confirm that I am the owner of this device.</p>
+          </ion-label>
+        </ion-item>
+        <ion-button
+          shape="round"
+          [disabled]="!isConfirmed"
+          (click)="optin(walletId)"
+          >Become a connector
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

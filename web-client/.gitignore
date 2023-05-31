@@ -27,8 +27,16 @@ npm-debug.log*
 /coverage
 /dist
 /documentation
+/documentation.json
 /node_modules
 /platforms
+/ios
+/android
 /plugins
 /storybook-static
 /www
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

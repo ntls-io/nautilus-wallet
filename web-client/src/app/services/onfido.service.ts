@@ -1,19 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { panic } from 'src/app/utils/errors/panic';
-import { environment } from 'src/environments/environment';
+import { NautilusAssetServicesService } from './nautilus-asset-services.service';
 
 @Injectable({ providedIn: 'root' })
 export class OnfidoService {
-  constructor(private http: HttpClient) {}
+  constructor(private nautilusAssetServices: NautilusAssetServicesService) {}
 
   async start(
     first_name: string,
     last_name: string
   ): Promise<OnfidoKycStarted> {
-    const url = this.getAssetServicesUrl('kyc/start');
-    const body: StartKyc = { first_name, last_name };
-    const response = await this.http.post(url, body).toPromise();
+    const response = await this.nautilusAssetServices.post<StartKyc>(
+      'kyc/start',
+      { first_name, last_name }
+    );
     return checkedOnfidoKycStarted(response);
   }
 
@@ -21,26 +21,20 @@ export class OnfidoService {
     applicant_id: string,
     report_names: Array<string>
   ): Promise<Check> {
-    const url = this.getAssetServicesUrl('kyc/checks/create');
-    const body: CreateCheck = { applicant_id, report_names };
-    const response = await this.http.post(url, body).toPromise();
-    return response as Check; // XXX: Unchecked cast
+    return await this.nautilusAssetServices.post<CreateCheck, Check>(
+      'kyc/checks/create',
+      {
+        applicant_id,
+        report_names,
+      }
+    );
   }
 
   async retrieveCheck(check_id: string): Promise<Check> {
-    const url = this.getAssetServicesUrl('kyc/checks/retrieve');
-    const body: RetrieveCheck = { check_id };
-    const response = await this.http.post(url, body).toPromise();
-    return response as Check; // XXX: Unchecked cast
-  }
-
-  protected getAssetServicesUrl(path: string): string {
-    const base = environment.nautilusAssetServices;
-    if (base) {
-      return new URL(path, base).toString();
-    } else {
-      throw new Error('environment.nautilusAssetServices not configured');
-    }
+    return await this.nautilusAssetServices.post<RetrieveCheck, Check>(
+      'kyc/checks/retrieve',
+      { check_id }
+    );
   }
 }
 

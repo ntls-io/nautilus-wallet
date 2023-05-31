@@ -16,147 +16,92 @@
 /** Ionic CSS Variables **/
 :root {
   --ion-font-family: "Open Sans", sans-serif;
-
-  // See Nautilus UI Kit:
-  // https://www.figma.com/file/zYVHu1EwCIDCbQp8rFscyA/Nautilus-Branding?node-id=23%3A128
-
-  /** colors **/
-  // UI Kit: Primary 1 - Prussian Blue
-  --ion-color-primary-background: #003450;
-  --ion-color-primary-background-rgb: 0, 52, 80;
-  --ion-color-primary-background-contrast: #ffffff;
-  --ion-color-primary-background-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-background-shade: #002e46;
-  --ion-color-primary-background-tint: #1a4862;
-
-  // UI Kit: Primary 2 - Portland Orange
-  --ion-color-primary: #ff642e;
-  --ion-color-primary-rgb: 255, 100, 46;
-  // Deviating from default contrast to match desings (See UI Kit)
+  /** primary **/
+  --ion-color-primary: #3880ff;
+  --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #e05828;
-  --ion-color-primary-tint: #ff7443;
+  --ion-color-primary-shade: #3171e0;
+  --ion-color-primary-tint: #4c8dff;
 
-  // UI Kit: Secondary - Viridian Green
-  --ion-color-secondary: #209c95;
-  --ion-color-secondary-rgb: 32, 156, 149;
+  /** secondary **/
+  --ion-color-secondary: #3dc2ff;
+  --ion-color-secondary-rgb: 61, 194, 255;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #1c8983;
-  --ion-color-secondary-tint: #36a6a0;
+  --ion-color-secondary-shade: #36abe0;
+  --ion-color-secondary-tint: #50c8ff;
 
-  // UI Kit: Tertiary - Blue Jeans
-  --ion-color-tertiary: #02a7ff;
-  --ion-color-tertiary-rgb: 2, 167, 255;
+  /** tertiary **/
+  --ion-color-tertiary: #5260ff;
+  --ion-color-tertiary-rgb: 82, 96, 255;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #0293e0;
-  --ion-color-tertiary-tint: #1bb0ff;
+  --ion-color-tertiary-shade: #4854e0;
+  --ion-color-tertiary-tint: #6370ff;
 
-  // UI Kit: Success - Caribbean Green
-  --ion-color-success: #11ca92;
-  --ion-color-success-rgb: 17, 202, 146;
-  --ion-color-success-contrast: #000000;
-  --ion-color-success-contrast-rgb: 0, 0, 0;
-  --ion-color-success-shade: #0fb280;
-  --ion-color-success-tint: #29cf9d;
+  /** success **/
+  --ion-color-success: #2dd36f;
+  --ion-color-success-rgb: 45, 211, 111;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #28ba62;
+  --ion-color-success-tint: #42d77d;
 
-  // UI Kit: Warning - Mustard
-  --ion-color-warning: #ffd952;
-  --ion-color-warning-rgb: 255, 217, 82;
+  /** warning **/
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255, 196, 9;
   --ion-color-warning-contrast: #000000;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #e0bf48;
-  --ion-color-warning-tint: #ffdd63;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
 
-  // Ui Kit: Danger - Red Salsa
-  --ion-color-danger: #ff2d42;
-  --ion-color-danger-rgb: 255, 45, 66;
+  /** danger **/
+  --ion-color-danger: #eb445a;
+  --ion-color-danger-rgb: 235, 68, 90;
   --ion-color-danger-contrast: #ffffff;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #e0283a;
-  --ion-color-danger-tint: #ff4255;
+  --ion-color-danger-shade: #cf3c4f;
+  --ion-color-danger-tint: #ed576b;
 
-  // UI Kit: Support 1 - USAFA Blue
-  --ion-color-dark: #025581;
-  --ion-color-dark-rgb: 2, 85, 129;
+  /** dark **/
+  --ion-color-dark: #222428;
+  --ion-color-dark-rgb: 34, 36, 40;
   --ion-color-dark-contrast: #ffffff;
   --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #024b72;
-  --ion-color-dark-tint: #1b668e;
+  --ion-color-dark-shade: #1e2023;
+  --ion-color-dark-tint: #383a3e;
 
-  // UI Kit: Medium - Morning Blue
-  --ion-color-medium: #92a2a1;
-  --ion-color-medium-rgb: 146, 162, 161;
-  --ion-color-medium-contrast: #000000;
-  --ion-color-medium-contrast-rgb: 0, 0, 0;
-  --ion-color-medium-shade: #808f8e;
-  --ion-color-medium-tint: #9dabaa;
+  /** medium **/
+  --ion-color-medium: #92949c;
+  --ion-color-medium-rgb: 146, 148, 156;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #808289;
+  --ion-color-medium-tint: #9d9fa6;
 
-  // UI Kit: Light - Gainsboro
-  --ion-color-light: #dadfdf;
-  --ion-color-light-rgb: 218, 223, 223;
+  /** light **/
+  --ion-color-light: #f4f5f8;
+  --ion-color-light-rgb: 244, 245, 248;
   --ion-color-light-contrast: #000000;
   --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #c0c4c4;
-  --ion-color-light-tint: #dee2e2;
+  --ion-color-light-shade: #d7d8da;
+  --ion-color-light-tint: #f5f6f9;
 
-  // UI Kit: Support 2 - Deep Jungle Green
-  --ion-color-jungle-green: #1a4c48;
-  --ion-color-jungle-green-rgb: 26, 76, 72;
-  --ion-color-jungle-green-contrast: #ffffff;
-  --ion-color-jungle-green-contrast-rgb: 255, 255, 255;
-  --ion-color-jungle-green-shade: #17433f;
-  --ion-color-jungle-green-tint: #315e5a;
-
-  --ion-color-black: #000000;
-  --ion-color-black-rgb: 0, 0, 0;
-  --ion-color-black-contrast: #ffffff;
-  --ion-color-black-contrast-rgb: 255, 255, 255;
-  --ion-color-black-shade: #000000;
-  --ion-color-black-tint: #1a1a1a;
-
-  --ion-color-white: #ffffff;
-  --ion-color-white-rgb: 255, 255, 255;
-  --ion-color-white-contrast: #000000;
-  --ion-color-white-contrast-rgb: 0, 0, 0;
-  --ion-color-white-shade: #e0e0e0;
-  --ion-color-white-tint: #ffffff;
+  /** background **/
+  --ion-color-background: #ffffff;
+  --ion-color-background-rgb: 255, 255, 255;
+  --ion-color-background-contrast: #000000;
+  --ion-color-background-contrast-rgb: 0, 0, 0;
+  --ion-color-background-shade: #e0e0e0;
+  --ion-color-background-tint: #ffffff;
 }
 
-.ion-color-primary-background {
-  --ion-color-base: var(--ion-color-primary-background);
-  --ion-color-base-rgb: var(--ion-color-primary-background-rgb);
-  --ion-color-contrast: var(--ion-color-primary-background-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-primary-background-contrast-rgb);
-  --ion-color-shade: var(--ion-color-primary-background-shade);
-  --ion-color-tint: var(--ion-color-primary-background-tint);
-}
-
-.ion-color-jungle-green {
-  --ion-color-base: var(--ion-color-jungle-green);
-  --ion-color-base-rgb: var(--ion-color-jungle-green-rgb);
-  --ion-color-contrast: var(--ion-color-jungle-green-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-jungle-green-contrast-rgb);
-  --ion-color-shade: var(--ion-color-jungle-green-shade);
-  --ion-color-tint: var(--ion-color-jungle-green-tint);
-}
-
-.ion-color-black {
-  --ion-color-base: var(--ion-color-black);
-  --ion-color-base-rgb: var(--ion-color-black-rgb);
-  --ion-color-contrast: var(--ion-color-black-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-black-contrast-rgb);
-  --ion-color-shade: var(--ion-color-black-shade);
-  --ion-color-tint: var(--ion-color-black-tint);
-}
-
-.ion-color-white {
-  --ion-color-base: var(--ion-color-white);
-  --ion-color-base-rgb: var(--ion-color-white-rgb);
-  --ion-color-contrast: var(--ion-color-white-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-white-contrast-rgb);
-  --ion-color-shade: var(--ion-color-white-shade);
-  --ion-color-tint: var(--ion-color-white-tint);
+.ion-color-background {
+  --ion-color-base: var(--ion-color-background);
+  --ion-color-base-rgb: var(--ion-color-background-rgb);
+  --ion-color-contrast: var(--ion-color-background-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-background-contrast-rgb);
+  --ion-color-shade: var(--ion-color-background-shade);
+  --ion-color-tint: var(--ion-color-background-tint);
 }

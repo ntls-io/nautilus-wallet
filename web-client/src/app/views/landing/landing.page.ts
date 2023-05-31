@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { resetStores } from '@datorama/akita';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ViewDidEnter } from '@ionic/angular';
+import { SetupQuery } from 'src/app/state/setup';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.scss'],
 })
-export class LandingPage implements OnInit {
-  constructor(private modalCtrl: ModalController) {
-    resetStores();
+export class LandingPage implements OnInit, ViewDidEnter {
+  firebasestorage =
+    'https://firebasestorage.googleapis.com/v0/b/wallet-setup.appspot.com/o';
+
+  constructor(
+    private modalCtrl: ModalController,
+    public setupQuery: SetupQuery
+  ) {
+    checkResetStores();
   }
 
   async ngOnInit() {
@@ -23,10 +31,17 @@ export class LandingPage implements OnInit {
       await this.modalCtrl.dismiss();
     }
 
-    resetStores();
+    checkResetStores();
   }
 
   ionViewDidEnter() {
-    resetStores();
+    checkResetStores();
   }
 }
+
+/**
+ * Reset Akita state with {@link resetStores}, unless configured with {@link environment.persistAkitaState}.
+ */
+const checkResetStores: () => void = environment.persistAkitaState
+  ? () => {}
+  : () => resetStores();

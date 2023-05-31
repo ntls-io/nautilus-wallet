@@ -12,5 +12,9 @@
 !onfido/src/
 !rust-toolchain.toml
 !rustfmt.toml
+!twilio-api/Cargo.toml
+!twilio-api/src/
 !twilio-verify/Cargo.toml
 !twilio-verify/src/
+!wallet-address-db-api/Cargo.toml
+!wallet-address-db-api/src/

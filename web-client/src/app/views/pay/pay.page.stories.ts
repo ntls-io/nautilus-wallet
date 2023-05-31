@@ -1,36 +1,56 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { SessionState } from 'src/app/stores/session/session.store';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Story } from '@storybook/angular';
+import { PayFromToComponent } from 'src/app/components/pay-from-to/pay-from-to.component';
+import { PayFromToAlgoArgs } from 'src/app/components/pay-from-to/pay-from-to.component.stories';
+import { convertToMicroAlgos } from 'src/app/services/algosdk.utils';
 import {
+  ionicStoryMeta,
   provideActivatedRouteQueryParams,
   provideSessionStore,
 } from 'src/stories/storybook.helpers';
+import { PayPageModule } from './pay.module';
 import { PayPage } from './pay.page';
 
-export default {
-  title: 'Views/PayPage',
-  component: PayPage,
-  decorators: [
-    moduleMetadata({
-      imports: [SharedModule],
-    }),
-  ],
-} as Meta;
+type Args = typeof PayFromToAlgoArgs;
 
-type Args = { receiverAddress: string } & SessionState;
+export default ionicStoryMeta<Args>(
+  {
+    title: 'Views/PayPage',
+    component: PayPage,
+    subcomponents: { PayFromToComponent },
+  },
+  {
+    imports: [HttpClientTestingModule, PayPageModule],
+    controls: {
+      shown: ['name', 'balance', 'receiverAddress'],
+    },
+    layoutType: 'page',
+  }
+);
 
-const Template: Story<Args> = ({ receiverAddress, ...state }: Args) => ({
+const Template: Story<Args> = ({ name, balance, receiverAddress }) => ({
   moduleMetadata: {
     providers: [
       provideActivatedRouteQueryParams({ receiverAddress }),
-      provideSessionStore(state),
+      provideSessionStore({
+        wallet: {
+          wallet_id: 'id',
+          owner_name: name,
+          algorand_address_base32: 'address',
+          xrpl_account: {
+            key_type: 'secp256k1',
+            public_key_hex: 'public key',
+            address_base58: 'address',
+          },
+        },
+        algorandAccountData: {
+          address: 'address',
+          amount: convertToMicroAlgos(balance.amount),
+        },
+      }),
     ],
   },
 });
 
 export const Default = Template.bind({});
-Default.args = {
-  name: 'Test Owner',
-  balance: 1234,
-  receiverAddress: 'G6AIRDAJFSBXNFBHLQ2F5JLZJ6EYYYLDZSCDHUQUB2YUG5QO4ZB4VNAL7I',
-};
+Default.args = { ...PayFromToAlgoArgs };

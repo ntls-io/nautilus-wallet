@@ -11,10 +11,10 @@ export const panic = (message: string, value: unknown): never => {
 /**
  * Return defined value or panic.
  */
-export const defined = <T>(value: T | undefined): T => {
+export const defined = <T>(value: T | undefined, message?: string): T => {
   if (value !== undefined) {
     return value;
   } else {
-    throw panic('unexpected undefined', value);
+    throw panic(message ?? 'unexpected undefined', value);
   }
 };

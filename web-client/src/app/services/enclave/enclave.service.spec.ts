@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
   OpenWallet,
   OpenWalletResult,
   SignTransaction,
@@ -16,6 +18,7 @@ import {
 } from 'src/schema/actions';
 import { AttestationReport } from 'src/schema/attestation';
 import { TweetNaClCrypto } from 'src/schema/crypto';
+import { WalletDisplay, XrplAccountDisplay } from 'src/schema/entities';
 import { from_msgpack_as, to_msgpack_as } from 'src/schema/msgpack';
 import {
   SealedMessage,
@@ -79,15 +82,12 @@ describe('EnclaveService', () => {
     const requestCreate: CreateWallet = {
       owner_name: 'Test Owner',
       auth_pin: '1234',
+      auth_map: Object(Object.entries({ city: 'Cape Town' })),
     };
 
     it('Created', async () => {
       const stubResultCreated: CreateWalletResult = {
-        Created: {
-          wallet_id: 'dummy wallet id',
-          owner_name: requestCreate.owner_name,
-          algorand_address_base32: 'dummy algorand address',
-        },
+        Created: placeholderWalletDisplay(requestCreate.owner_name),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -114,17 +114,13 @@ describe('EnclaveService', () => {
 
   describe('openWallet', () => {
     const requestOpen: OpenWallet = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
     };
 
     it('Opened', async () => {
       const stubResultOpened: OpenWalletResult = {
-        Opened: {
-          wallet_id: 'dummy wallet id',
-          owner_name: 'dummy owner name',
-          algorand_address_base32: 'dummy algorand address',
-        },
+        Opened: placeholderWalletDisplay('placeholder owner name'),
       };
       const result = await simulateWalletOperation(
         httpTestingController,
@@ -162,21 +158,59 @@ describe('EnclaveService', () => {
     });
   });
 
+  describe('getXrplWallet', () => {
+    const requestOpen: GetXrplWallet = {
+      wallet_id: 'placeholder wallet id',
+    };
+
+    it('Opened', async () => {
+      const stubResultOpened: GetXrplWalletResult = {
+        Opened: placeholderXrplAccountDisplay(),
+      };
+      const result = await simulateWalletOperation(
+        httpTestingController,
+        service.getXrplWallet(requestOpen),
+        { GetXrplWallet: requestOpen },
+        { GetXrplWallet: stubResultOpened }
+      );
+      await expect(result).toEqual(stubResultOpened);
+    });
+
+    it('Failed', async () => {
+      const stubResultFailed: GetXrplWalletResult = {
+        Failed: 'failed to open wallet',
+      };
+      const result = await simulateWalletOperation(
+        httpTestingController,
+        service.getXrplWallet(requestOpen),
+        { GetXrplWallet: requestOpen },
+        { GetXrplWallet: stubResultFailed }
+      );
+      await expect(result).toEqual(stubResultFailed);
+    });
+  });
+
   describe('signTransaction', () => {
     const requestSign: SignTransaction = {
-      wallet_id: 'dummy wallet id',
+      wallet_id: 'placeholder wallet id',
       auth_pin: '1234',
-      algorand_transaction_bytes: new TextEncoder().encode(
-        'dummy unsigned transaction'
-      ),
+      transaction_to_sign: {
+        AlgorandTransaction: {
+          transaction_bytes: new TextEncoder().encode(
+            'placeholder unsigned transaction'
+          ),
+        },
+      },
     };
 
     it('Signed', async () => {
       const stubResultSigned: SignTransactionResult = {
         Signed: {
-          signed_transaction_bytes: new TextEncoder().encode(
-            'dummy signed transaction'
-          ),
+          AlgorandTransactionSigned: {
+            signed_transaction_bytes: new TextEncoder().encode(
+              'placeholder signed transaction'
+            ),
+          },
         },
       };
       const result = await simulateWalletOperation(
@@ -214,6 +248,23 @@ describe('EnclaveService', () => {
       await expect(result).toEqual(stubResultFailed);
     });
   });
+});
+
+const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
+  wallet_id: 'placeholder wallet id',
+  owner_name,
+  algorand_address_base32: 'placeholder algorand address',
+  xrpl_account: {
+    key_type: 'secp256k1',
+    public_key_hex: 'placeholder public key hex',
+    address_base58: 'placeholder xrp address',
+  },
+});
+
+const placeholderXrplAccountDisplay = (): XrplAccountDisplay => ({
+  key_type: 'secp256k1',
+  public_key_hex: 'placeholder public key hex',
+  address_base58: 'placeholder xrp address',
 });
 
 /**

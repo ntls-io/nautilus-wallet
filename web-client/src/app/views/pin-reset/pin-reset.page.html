@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div
+    class="ion-padding-horizontal text-center h-full w-auto m-auto flex ion-justify-content-center ion-align-items-center"
+  >
+    <div>
+      <ion-icon name="lock-open-outline" class="!text-5xl"></ion-icon>
+
+      <h1 class="font-semibold font-nasalization">Verify Identity</h1>
+      <app-security-questions
+        (answers)="onSubmit($event)"
+      ></app-security-questions>
+    </div>
+  </div>
+</ion-content>

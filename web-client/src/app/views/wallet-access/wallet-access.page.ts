@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoadingController, ModalController } from '@ionic/angular';
-import { isValidAddress } from 'algosdk';
-import { WalletService } from 'src/app/services/wallet/wallet.service';
-import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { Component, Input, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import {
-  LockscreenPage,
-  LockscreenResult,
-} from 'src/app/views/lockscreen/lockscreen.page';
-import { ScannerService } from '../../services/scanner.service';
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import algosdk from 'algosdk';
+import { ScannerService } from 'src/app/services/scanner.service';
+import { QAccessQuery, QAccessService } from 'src/app/state/qAccess';
+import { SessionService } from 'src/app/state/session.service';
+import { defined } from 'src/app/utils/errors/panic';
+import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { environment } from 'src/environments/environment';
+import * as xrpl from 'xrpl';
+import { handleScan } from '../scanner.helpers';
 
 @Component({
   selector: 'app-wallet-access',
@@ -16,50 +22,66 @@ import { ScannerService } from '../../services/scanner.service';
   styleUrls: ['./wallet-access.page.scss'],
 })
 export class WalletAccessPage implements OnInit {
-  address: string | undefined;
+  /** @see showPinEntryModal */
+  @Input() isPinEntryOpen = false;
+
+  hasCamera?: boolean;
+
+  /** @see validatedAddress */
+  address?: string;
+
+  hideSavedWalletAddress = environment.enableQuickAccess;
 
   constructor(
     private scannerService: ScannerService,
     private modalCtrl: ModalController,
-    private walletService: WalletService,
+    private sessionService: SessionService,
     private notification: SwalHelper,
-    private router: Router,
-    private loadingCtrl: LoadingController
+    private navCtrl: NavController,
+    private loadingCtrl: LoadingController,
+    private quickAccessService: QAccessService,
+    public quickAccessQuery: QAccessQuery
   ) {}
+  /** Validated {@link address}, or `undefined`. */
+  get validatedAddress(): string | undefined {
+    const trimmed = this.address?.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }
 
-  ngOnInit() {}
+  get validAddressType(): AddressType | undefined {
+    return this.validatedAddress
+      ? addressType(this.validatedAddress)
+      : undefined;
+  }
+
+  ngOnInit(): void {
+    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
+    this.hasCamera = Capacitor.isPluginAvailable('Camera');
+  }
 
   async handleScanner() {
     const { data } = await this.scannerService.scannerHandler();
     if (data?.type === 'scanSuccess') {
-      this.confirm(data.result);
+      this.address = data.result;
+      this.confirmAddress();
     }
   }
 
-  async confirm(value: string | undefined) {
-    const address = value?.trim();
+  async openScanner(): Promise<void> {
+    await handleScan(
+      this.modalCtrl,
+      this.notification.swal,
+      this.confirmAddress
+    );
+  }
 
-    if (address && isValidAddress(address)) {
-      const pinPromise = await this.presentLock();
-      const loading = await this.loadingCtrl.create();
-      const { success, pin } = pinPromise;
-      if (success && pin) {
-        await loading.present();
-        try {
-          const error = await this.walletService.openWallet(address, pin);
-          if (error) {
-            await this.notification.swal.fire({
-              icon: 'error',
-              title: 'Open Wallet Failed',
-              text: error,
-            });
-          } else {
-            this.router.navigate(['/wallet']);
-          }
-        } finally {
-          await loading.dismiss();
-        }
-      }
+  /** User clicked to confirm address: show PIN entry. */
+  async confirmAddress(): Promise<void> {
+    if (
+      this.validatedAddress !== undefined &&
+      this.validAddressType !== undefined
+    ) {
+      this.showPinEntryModal();
     } else {
       await this.notification.swal.fire({
         icon: 'warning',
@@ -69,15 +91,61 @@ export class WalletAccessPage implements OnInit {
     }
   }
 
-  async presentLock(): Promise<LockscreenResult> {
-    const lock = await this.modalCtrl.create({ component: LockscreenPage });
+  /** Show the PIN entry modal. */
+  showPinEntryModal(): void {
+    this.isPinEntryOpen = true;
+  }
 
-    const dismiss = lock.onDidDismiss();
-    await lock.present();
-
-    const result = await dismiss;
-
-    return result.data ?? { success: false, pin: null };
-    // failsafe for when modal is dismissed without data (via back button, backdrop click, escape key, etc.)
+  /** User confirmed PIN: attempt to open wallet. */
+  async onPinConfirmed(pin: string): Promise<void> {
+    const address = defined(
+      this.validatedAddress,
+      'WalletAccessPage.onPinConfirmed: unexpected invalid address'
+    );
+    const openWalletErrorMessage = await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Opening wallet…' },
+      async () => await this.sessionService.openWallet(address, pin)
+    );
+    if (openWalletErrorMessage !== undefined) {
+      await this.notification.swal.fire({
+        icon: 'error',
+        title: 'Open Wallet Failed',
+        text: openWalletErrorMessage,
+      });
+      this.quickAccessService.setRememberWalletAddress(false);
+    } else {
+      if (this.quickAccessService.getRememberWalletAddress()) {
+        await this.quickAccessService.saveQuickAccess(this.address, true); // prompt user to enter a nickname
+        this.quickAccessService.setRememberWalletAddress(false);
+      }
+      await this.navCtrl.navigateRoot(['/wallet']);
+    }
   }
 }
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
+};

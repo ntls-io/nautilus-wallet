@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { isValidAddress } from 'algosdk';
+import { checkClass } from 'src/helpers/helpers';
 
 @Component({
   selector: 'app-manual-address',
@@ -9,27 +14,23 @@ import { isValidAddress } from 'algosdk';
   styleUrls: ['./manual-address.page.scss'],
 })
 export class ManualAddressPage implements OnInit {
+  @Input() wallet_id: string | undefined;
   addressForm: FormGroup;
 
-  constructor(
-    private modalCtrl: ModalController,
-    public formBuilder: FormBuilder
-  ) {
-    this.addressForm = this.formBuilder.group(
-      {
-        address: ['', Validators.compose([Validators.required])],
-      },
-      { validator: this.addressValidator }
-    );
+  constructor(private modalCtrl: ModalController) {
+    this.addressForm = new FormGroup({
+      address: new FormControl('', [
+        Validators.required,
+        this.addressValidator,
+      ]),
+    });
+  }
+
+  get f() {
+    return this.addressForm.controls;
   }
 
   ngOnInit() {}
-
-  addressValidator(fg: FormGroup) {
-    const address = fg.get('address')?.value;
-
-    return isValidAddress(address) ? null : { invalidAddress: true };
-  }
 
   dismiss(success: boolean, address?: string) {
     this.modalCtrl.dismiss({
@@ -40,12 +41,27 @@ export class ManualAddressPage implements OnInit {
 
   onSubmit() {
     this.addressForm.markAllAsTouched();
-
-    console.log(this.addressForm);
-
     if (this.addressForm.valid) {
-      const address = this.addressForm.get('address')?.value;
+      const formControl = checkClass(
+        this.addressForm.controls.address,
+        FormControl
+      );
+      const address = trimmedValue(formControl);
       this.dismiss(true, address);
     }
   }
+
+  addressValidator = (formGroup: AbstractControl) => {
+    const address = trimmedValue(formGroup as FormControl);
+    return address === this.wallet_id ? { selfAddress: true } : null;
+  };
 }
+
+const trimmedValue = (formControl: FormControl) => {
+  const value = formControl.value;
+  if (typeof value === 'string') {
+    return value.trim();
+  } else {
+    throw TypeError(`ManualAddressPage: expected string, got ${typeof value}`);
+  }
+};

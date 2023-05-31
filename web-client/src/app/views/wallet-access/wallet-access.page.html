@@ -1,5 +1,9 @@
-<ion-header class="ion-no-border">
-  <app-header></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -17,14 +21,42 @@
           [(ngModel)]="address"
         ></ion-textarea>
         <ion-button
-          [disabled]="!address"
+          [disabled]="!validatedAddress"
           expand="block"
           shape="round"
           class="mt-4"
-          (click)="confirm(address)"
+          (click)="confirmAddress()"
           >Confirm</ion-button
         >
+
+        <app-quick-access
+          *ngIf="hideSavedWalletAddress && (quickAccessQuery.selectCount() |async)"
+          [addresses]="quickAccessQuery.selectAll() | async"
+        ></app-quick-access>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<!-- Show PIN entry modal on `isPinEntryOpen`. -->
+<!-- Calls `onPinConfirmed` to continue with wallet opening process. -->
+<ion-modal [isOpen]="isPinEntryOpen" (didDismiss)="isPinEntryOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button slot="start" (click)="isPinEntryOpen = false">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-pin-entry
+        class="h-full flex ion-justify-content-center ion-align-items-center"
+        (pinConfirmed)="isPinEntryOpen = false; onPinConfirmed($event)"
+        [wallet_id]="address"
+      ></app-pin-entry>
+    </ion-content>
+  </ng-template>
+</ion-modal>

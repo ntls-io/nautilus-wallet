@@ -13,24 +13,22 @@ describe('SendFundsPage', () => {
   let fixture: ComponentFixture<SendFundsPage>;
   let modalCtrl: ModalController;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          SharedModule,
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        SharedModule,
+      ],
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-      router.navigate(['send-funds']);
-      fixture = TestBed.createComponent(SendFundsPage);
-      component = fixture.componentInstance;
-      modalCtrl = TestBed.get(ModalController);
-      fixture.detectChanges();
-    })
-  );
+    router = TestBed.inject(Router);
+    router.navigate(['send-funds']);
+    fixture = TestBed.createComponent(SendFundsPage);
+    component = fixture.componentInstance;
+    modalCtrl = TestBed.get(ModalController);
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -56,7 +54,7 @@ describe('SendFundsPage', () => {
   it('#execItemAction should not call anything if the action string does not match', () => {
     const presentScannerSpy = spyOn(component, 'presentScanner');
 
-    component.execItemAction('');
+    component.execItemAction('' as any);
 
     expect(presentScannerSpy.calls.count()).toBe(0);
   });

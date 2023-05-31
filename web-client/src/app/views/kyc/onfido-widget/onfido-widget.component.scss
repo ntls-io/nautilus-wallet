@@ -1,4 +1,8 @@
 #onfido-mount {
+  // Create a stacking context for the Onfido widget to attach to.
+  position: relative;
+  height: 100%;
+
   // Replace var(--ion-color-step-900)
   --ods-color-neutral-900: 230, 235, 238;
   --ods-color-neutral-800: 204, 214, 220;
@@ -18,8 +22,12 @@
 // Fix some hardcoded Onfido widget styles that don't work with dark backgrounds.
 // XXX(Pi): ::ng-deep seems to be the least terrible way of doing this, right now?
 :host ::ng-deep {
+  .onfido-sdk-ui-crossDevice-CrossDeviceLink-inputContainer,
+  .onfido-sdk-ui-PhoneNumberInput-mobileInput,
+  .onfido-sdk-ui-PhoneNumberInput-phoneNumberContainer
+    .react-phone-number-input__country-select,
   .onfido-sdk-ui-CountrySelector-custom__input,
   .onfido-sdk-ui-CountrySelector-custom__menu {
-    background-color: rgba(var(--ods-color-neutral-050));
+    background-color: var(--ion-color-background-rgb);
   }
 }

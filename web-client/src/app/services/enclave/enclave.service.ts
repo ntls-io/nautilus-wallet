@@ -1,27 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import algosdk from 'algosdk';
 import { lastValueFrom } from 'rxjs';
+import { withLoggedExchange } from 'src/app/utils/console.helpers';
 import { environment } from 'src/environments/environment';
 import {
   CreateWallet,
   CreateWalletResult,
+  GetXrplWallet,
+  GetXrplWalletResult,
+  LoadOnfidoCheck,
+  LoadOnfidoCheckResult,
   OpenWallet,
   OpenWalletResult,
+  PinReset,
+  PinResetResult,
+  SaveOnfidoCheck,
+  SaveOnfidoCheckResult,
   SignTransaction,
   SignTransactionResult,
+  StartPinReset,
+  StartPinResetResult,
+  UpdateOtpPhoneNumber,
+  UpdateOtpPhoneNumberResult,
 } from 'src/schema/actions';
-import {
-  makePaymentTxnHelper,
-  OptionalParameters,
-  RequiredParameters,
-} from 'src/schema/algorand.helpers';
 import { AttestationReport } from 'src/schema/attestation';
 import { PublicKey, TweetNaClCrypto } from 'src/schema/crypto';
 import { from_msgpack_as } from 'src/schema/msgpack';
 import { seal_msgpack_as, unseal_msgpack_as } from 'src/schema/sealing';
-import { TransactionConfirmation, waitForConfirmation } from '../algosdk.utils';
 
+/**
+ * This service handles communication with the wallet enclave.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -59,6 +68,16 @@ export class EnclaveService {
     return result;
   }
 
+  async getXrplWallet(request: GetXrplWallet): Promise<GetXrplWalletResult> {
+    const walletRequest = { GetXrplWallet: request };
+    const response = await this.postSealedExchange<
+      { GetXrplWallet: GetXrplWallet },
+      { GetXrplWallet: GetXrplWalletResult }
+    >(walletRequest);
+    const { GetXrplWallet: result } = response;
+    return result;
+  }
+
   async signTransaction(
     request: SignTransaction
   ): Promise<SignTransactionResult> {
@@ -71,50 +90,60 @@ export class EnclaveService {
     return result;
   }
 
-  async getBalance(address: string): Promise<number> {
-    const algodClient = this.getAlgodClient();
-    const accountDetails = await algodClient.accountInformation(address).do();
-    // https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account
-    return accountDetails.amount as number;
+  async updateOtpPhoneNumber(
+    request: UpdateOtpPhoneNumber
+  ): Promise<UpdateOtpPhoneNumberResult> {
+    const walletRequest = { UpdateOtpPhoneNumber: request };
+    const response = await this.postSealedExchange<
+      { UpdateOtpPhoneNumber: UpdateOtpPhoneNumber },
+      { UpdateOtpPhoneNumber: UpdateOtpPhoneNumberResult }
+    >(walletRequest);
+    const { UpdateOtpPhoneNumber: result } = response;
+    return result;
   }
 
-  // Algorand network interface functions:
-
-  async createUnsignedTransaction(
-    required: RequiredParameters,
-    optional?: OptionalParameters
-  ) {
-    const algodClient = this.getAlgodClient();
-    const suggestedParams = await algodClient.getTransactionParams().do();
-    console.log('createUnsignedTransaction', 'got:', { suggestedParams });
-    const transaction = makePaymentTxnHelper(
-      suggestedParams,
-      required,
-      optional
-    );
-    console.log('createUnsignedTransaction', 'created:', { transaction });
-    return transaction;
+  async startPinReset(request: StartPinReset): Promise<StartPinResetResult> {
+    const walletRequest = { StartPinReset: request };
+    const response = await this.postSealedExchange<
+      { StartPinReset: StartPinReset },
+      { StartPinReset: StartPinResetResult }
+    >(walletRequest);
+    const { StartPinReset: result } = response;
+    return result;
   }
 
-  async submitSignedTransaction(
-    signedTxn: Uint8Array
-  ): Promise<{ txId: string }> {
-    return await this.getAlgodClient().sendRawTransaction(signedTxn).do();
+  async pinReset(request: PinReset): Promise<PinResetResult> {
+    const walletRequest = { PinReset: request };
+    const response = await this.postSealedExchange<
+      { PinReset: PinReset },
+      { PinReset: PinResetResult }
+    >(walletRequest);
+    const { PinReset: result } = response;
+    return result;
   }
 
-  async waitForTransactionConfirmation(
-    txId: string
-  ): Promise<TransactionConfirmation> {
-    // TODO: Report rejection and timeout in a way the UI can use.
-    return waitForConfirmation(this.getAlgodClient(), txId, 4);
+  async saveOnfidoCheck(
+    request: SaveOnfidoCheck
+  ): Promise<SaveOnfidoCheckResult> {
+    const walletRequest = { SaveOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { SaveOnfidoCheck: SaveOnfidoCheck },
+      { SaveOnfidoCheck: SaveOnfidoCheckResult }
+    >(walletRequest);
+    const { SaveOnfidoCheck: result } = response;
+    return result;
   }
 
-  /** Combine {@link submitSignedTransaction} and {@link waitForTransactionConfirmation}. */
-  async submitAndConfirmTransaction(
-    signedTxn: Uint8Array
-  ): Promise<TransactionConfirmation> {
-    const { txId } = await this.submitSignedTransaction(signedTxn);
-    return await this.waitForTransactionConfirmation(txId);
+  async loadOnfidoCheck(
+    request: LoadOnfidoCheck
+  ): Promise<LoadOnfidoCheckResult> {
+    const walletRequest = { LoadOnfidoCheck: request };
+    const response = await this.postSealedExchange<
+      { LoadOnfidoCheck: LoadOnfidoCheck },
+      { LoadOnfidoCheck: LoadOnfidoCheckResult }
+    >(walletRequest);
+    const { LoadOnfidoCheck: result } = response;
+    return result;
   }
 
   // HTTP helpers
@@ -146,6 +175,16 @@ export class EnclaveService {
   protected async postSealedExchange<Request, Response>(
     request: Request
   ): Promise<Response> {
+    return withLoggedExchange(
+      'EnclaveService.postSealedExchange:',
+      () => this.postSealedExchangeInner(request),
+      request
+    );
+  }
+
+  protected async postSealedExchangeInner<Request, Response>(
+    request: Request
+  ): Promise<Response> {
     const clientCrypto = TweetNaClCrypto.new();
 
     const enclavePublicKey = await this.getEnclavePublicKey();
@@ -174,19 +213,7 @@ export class EnclaveService {
   // Configuration helpers:
 
   protected getWalletApiUrl(path: string): string {
-    const nautilusBaseUrl = environment.nautilusWalletServer;
-    if (nautilusBaseUrl === undefined) {
-      throw new Error('environment.algod.token not configured');
-    }
-    return new URL(path, nautilusBaseUrl).toString();
-  }
-
-  protected getAlgodClient() {
-    const algod = environment.algod;
-    if (algod.token === undefined) {
-      throw new Error('environment.algod.token not configured');
-    }
-    return new algosdk.Algodv2(algod.token, algod.baseServer, algod.port);
+    return new URL(path, environment.nautilusWalletServer).toString();
   }
 }
 

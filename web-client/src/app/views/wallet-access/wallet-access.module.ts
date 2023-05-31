@@ -2,20 +2,21 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { PinEntryComponentModule } from 'src/app/components/pin-entry/pin-entry.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { LockscreenPageModule } from 'src/app/views/lockscreen/lockscreen.module';
+import { QuickAccessComponent } from '../../components/quick-access/quick-access.component';
 import { WalletAccessPageRoutingModule } from './wallet-access-routing.module';
 import { WalletAccessPage } from './wallet-access.page';
 
 @NgModule({
+  declarations: [WalletAccessPage, QuickAccessComponent],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     WalletAccessPageRoutingModule,
     SharedModule,
-    LockscreenPageModule,
+    PinEntryComponentModule,
   ],
-  declarations: [WalletAccessPage],
 })
 export class WalletAccessPageModule {}

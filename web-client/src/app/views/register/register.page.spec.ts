@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { InputMaskModule } from '@ngneat/input-mask';
 import { routes } from '../../app-routing.module';
 import { RegisterPage } from './register.page';
 
@@ -13,26 +12,23 @@ describe('RegisterPage', () => {
   let component: RegisterPage;
   let fixture: ComponentFixture<RegisterPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          IonicModule.forRoot(),
-          RouterTestingModule.withRoutes(routes),
-          ReactiveFormsModule,
-          FormsModule,
-          HttpClientTestingModule,
-          InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule.withRoutes(routes),
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientTestingModule,
+      ],
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-      router.navigate(['register']);
-      fixture = TestBed.createComponent(RegisterPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    router = TestBed.inject(Router);
+    router.navigate(['register']);
+    fixture = TestBed.createComponent(RegisterPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -44,16 +40,9 @@ describe('RegisterPage', () => {
       'valid',
       'get'
     ).and.returnValue(false);
-    const showErrorsSpy = spyOn(component, 'showErrors');
 
-    component.onSubmit();
+    component.onSubmit(new Map(Object.entries({})));
 
-    expect(showErrorsSpy).toHaveBeenCalled();
     expect(getValidSpy).toHaveBeenCalled();
-  });
-
-  it('#showErrors should set nonValidSubmit to false', () => {
-    component.showErrors();
-    expect(component.nonValidSubmit).toBeFalse();
   });
 });

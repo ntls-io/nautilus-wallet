@@ -1,0 +1,15 @@
+[package]
+name = "twilio-api"
+version = "0.1.0"
+authors = ["Nautilus team"]
+license = "Apache-2.0"
+
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+phonenumber = "0.3"
+
+env-var-helpers = { git = "https://github.com/PiDelport/rust-env-var-helpers" }
+twilio-oai-api-v2010 = { git = "https://github.com/PiDelport/twilio-oai-rust", branch = "main" }
