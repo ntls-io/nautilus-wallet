@@ -13,6 +13,10 @@
 <ion-content>
   <div class="ion-padding">
     <h2 class="font-bold">Recent transactions</h2>
+
+    <div class="text-center" *ngIf="historyQuery.selectLoading() | async">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ion-list lines="full" mode="ios" *ngIf="transactions?.length; else empty">
@@ -27,7 +31,17 @@
             {{(tx?.Account | isMe) ? 'Sent To' : 'Received From'}}
           </small>
         </ion-text>
-        <h2>{{(tx?.Account | isMe) ? tx?.Destination : tx?.Account}}</h2>
+        <ion-text *ngIf="tx?.Bookmark; else noBookmark">
+          <h4 class="ion-text-capitalize font-nasalization flex">
+            <ion-icon name="bookmark" color="warning"></ion-icon>
+            {{tx?.Bookmark}}
+          </h4>
+        </ion-text>
+        <ng-template #noBookmark>
+          <h4 *ngIf="!tx?.Bookmark">
+            {{ (tx?.Account | isMe) ? tx?.Destination : tx?.Account}}
+          </h4>
+        </ng-template>
         <h6>{{tx?.date | xrpDate}}</h6>
       </ion-label>
       <ion-note slot="end" color="primary">
@@ -39,7 +53,10 @@
   </ion-list>
 
   <ng-template #empty>
-    <div class="ion-padding-horizontal ion-text-center">
+    <div
+      *ngIf="(historyQuery.selectLoading() | async) === false"
+      class="ion-padding-horizontal ion-text-center"
+    >
       <p>Your transactions list is empty</p>
     </div>
   </ng-template>

@@ -7,7 +7,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgxPrinterModule } from 'ngx-printer';
-import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import { ActionItemComponent } from 'src/app/components/action-item/action-item.component';
 import { AssetAccordionComponent } from 'src/app/components/asset-accordion/asset-accordion.component';
 import { BalanceSummaryCardComponent } from 'src/app/components/balance-summary-card/balance-summary-card.component';
@@ -54,7 +53,6 @@ import { AssetPipesModule } from 'src/app/pipes/asset-pipes.module';
     LogoutButtonComponent,
     NewBookmarkComponent,
     BookmarkListComponent,
-    NgxScannerQrcodeModule,
   ],
   providers: [Printer],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
