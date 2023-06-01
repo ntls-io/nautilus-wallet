@@ -7,6 +7,7 @@ import { SessionAlgorandService } from 'src/app/state/session-algorand.service';
 import { SessionXrplService } from 'src/app/state/session-xrpl.service';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
+import { deviceHasCamera } from 'src/app/utils/camara.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { checkClass } from 'src/helpers/helpers';
 import { environment } from '../../../environments/environment';
@@ -27,6 +28,7 @@ export class DeleteUserPage implements OnInit {
       title: 'Scan a QR code',
       icon: faQrcode,
       action: 'presentScanner',
+      showItem: async () => await deviceHasCamera(),
     },
     {
       title: 'Enter address manually',

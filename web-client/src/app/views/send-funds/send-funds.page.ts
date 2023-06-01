@@ -10,6 +10,7 @@ import {
   NavController,
 } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
+import { deviceHasCamera } from 'src/app/utils/camara.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
@@ -25,6 +26,7 @@ export class SendFundsPage implements OnInit {
       title: 'Scan a QR code',
       icon: faQrcode,
       action: 'presentScanner',
+      showItem: async () => await deviceHasCamera(),
     },
     {
       title: 'Enter address manually',
