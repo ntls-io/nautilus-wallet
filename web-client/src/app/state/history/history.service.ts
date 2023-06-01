@@ -14,10 +14,16 @@ export class HistoryService {
   async getTxList() {
     const address = this.sessionQuery.getValue().wallet?.wallet_id;
     if (address) {
-      await this.xrplService.getAccountTx(address).then(({ result }) => {
-        const { transactions } = result;
-        this.historyStore.set(transactions);
-      });
+      this.historyStore.setLoading(true);
+      await this.xrplService
+        .getAccountTx(address)
+        .then(({ result }) => {
+          const { transactions } = result;
+          this.historyStore.set(transactions);
+        })
+        .finally(() => {
+          this.historyStore.setLoading(false);
+        });
     }
   }
 }
