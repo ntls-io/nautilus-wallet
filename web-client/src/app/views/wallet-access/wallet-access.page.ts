@@ -63,12 +63,15 @@ export class WalletAccessPage implements OnInit {
     await handleScan(
       this.modalCtrl,
       this.notification.swal,
-      this.confirmAddress
+      this.confirmAddress.bind(this)
     );
   }
 
   /** User clicked to confirm address: show PIN entry. */
-  async confirmAddress(): Promise<void> {
+  async confirmAddress(wallet_id?: string): Promise<void> {
+    if (wallet_id) {
+      this.address = wallet_id;
+    }
     if (
       this.validatedAddress !== undefined &&
       this.validAddressType !== undefined
