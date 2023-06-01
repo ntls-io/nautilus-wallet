@@ -12,6 +12,8 @@ import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
+import algosdk from 'algosdk';
+import * as xrpl from 'xrpl';
 
 @Component({
   selector: 'app-triggers',
@@ -78,17 +80,38 @@ export class TriggersPage implements OnInit {
     limitInput.value = null;
   }
 
+  /** Validated {@link address}, or `undefined`. */
+  validatedAddress(address: string): string {
+    const trimmed = address?.trim();
+    return trimmed === '' ? '' : trimmed;
+  }
+
+  validAddressType(address: string): AddressType | undefined {
+    return this.validatedAddress(address)
+      ? addressType(this.validatedAddress(address))
+      : undefined;
+  }
+
   async createOtpRecipient(form: FormGroup) {
     form.markAllAsTouched();
     if (form.valid) {
       const otpRecipient = form.value.otpRecipient;
-      await this.otpRecipientsService
+      if(this.validatedAddress(otpRecipient) !== '' &&
+        this.validAddressType(otpRecipient)){
+          await this.otpRecipientsService
         .createOtpRecipient(otpRecipient)
         .then((success) => {
           if (success) {
             form.reset();
           }
         });
+      } else {
+        await this.notification.swal.fire({
+          icon: 'warning',
+          title: 'Invalid Address',
+          text: 'Please input a valid wallet address',
+        });
+      }
     }
   }
 
@@ -172,4 +195,30 @@ export type PaymentOption = {
 
   /** (Optional) A transaction amount limit for this option. */
   transactionLimit?: number;
+};
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
 };
