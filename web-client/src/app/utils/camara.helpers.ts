@@ -5,8 +5,6 @@ export const deviceHasCamera = async () => {
     return Capacitor.isPluginAvailable('Camera');
   } else {
     const devices = await navigator?.mediaDevices.enumerateDevices();
-    console.log(devices);
-
     return devices.some((device) => device.kind === 'videoinput');
   }
 };
