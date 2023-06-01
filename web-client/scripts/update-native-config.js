@@ -15,7 +15,7 @@ module.exports = function (ctx) {
       : "";
 
     if (org == "palau") {
-      variables = 'APP_ID="io.ntls.palau" APP_NAME="Palau PSC Wallet"';
+      variables = 'APP_ID="io.ntls.palau" DISPLAY_NAME="Palau PSC Wallet"';
     }
 
     var command = variables + " " + base;
