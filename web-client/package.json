@@ -73,7 +73,7 @@
     "@zxing/ngx-scanner": "~3.5.0",
     "algosdk": "^1.19.0",
     "angularx-qrcode": "^13.0.1",
-    "cordova-plugin-printer": "github:QuinnChrest/cordova-plugin-printer",
+    "cordova-plugin-printer": "github:KK998/cordova-plugin-printer-2023",
     "firebase": "^9.14.0",
     "flag-icon-css": "^4.1.7",
     "google-libphonenumber": "^3.2.31",
