@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonInput, LoadingController } from '@ionic/angular';
+import algosdk from 'algosdk';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
-import { OtpLimitsService, OtpLimitsQuery } from 'src/app/state/otpLimits';
+import { OtpLimitsQuery, OtpLimitsService } from 'src/app/state/otpLimits';
 import {
   OtpRecipientsQuery,
   OtpRecipientsService,
@@ -12,7 +13,6 @@ import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
-import algosdk from 'algosdk';
 import * as xrpl from 'xrpl';
 
 @Component({
@@ -50,11 +50,16 @@ export class TriggersPage implements OnInit {
     });
   }
 
+  /** "Change account" button should show for multiple options. */
+  get shouldShowChangeButton(): boolean {
+    return this.paymentOptions !== undefined && this.paymentOptions.length > 1;
+  }
+
   selectAccount(option: AssetAmount) {
     this.selectedOption = option;
     this.currencyCode = option.assetDisplay.assetSymbol;
     const limits = this.otpLimitsQuery.getAll({
-      filterBy: (limit) => limit.currency_code === this.currencyCode
+      filterBy: (limit) => limit.currency_code === this.currencyCode,
     });
 
     if (limits.length > 0) {
@@ -62,12 +67,6 @@ export class TriggersPage implements OnInit {
     } else {
       this.currentLimitAmount = 0;
     }
-  }
-
-
-  /** "Change account" button should show for multiple options. */
-  get shouldShowChangeButton(): boolean {
-    return this.paymentOptions !== undefined && this.paymentOptions.length > 1;
   }
 
   ngOnInit() {
@@ -111,7 +110,7 @@ export class TriggersPage implements OnInit {
                   currency_code: currencyCode,
                   limit: this.limit,
                 });
-                this.currentLimitAmount = this.limit
+                this.currentLimitAmount = this.limit;
                 limitInput.value = null;
               }
             );
@@ -141,40 +140,42 @@ export class TriggersPage implements OnInit {
     form.markAllAsTouched();
     if (form.valid) {
       const otpRecipient = form.value.otpRecipient;
-      if(this.validatedAddress(otpRecipient) !== '' &&
-        this.validAddressType(otpRecipient)){
-          const otpAttempt = await this.otpPromptService.requestOTP();
-          if (!otpAttempt) {
-            return;
-          }
-          await withLoadingOverlayOpts(
-      this.loadingCtrl,
-      { message: 'Checking OTP...' },
-      async () => {
-        const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
-        if (otpResult.status === 200) {
-          if (otpResult.data.status === 'approved') {
-            await withLoadingOverlayOpts(
-              this.loadingCtrl,
-              { message: 'Savint OTP Recipient...' },
-              async () => {
-                await this.otpRecipientsService
-                .createOtpRecipient(otpRecipient)
-                .then((success) => {
-                  if (success) {
-                    form.reset();
-                  }
-                });
-              }
-            );
-          } else if (otpResult.data.status === 'pending') {
-            this.notification.showIncorrectOTPWarning();
-          }
-        } else {
-          this.notification.showUnexpectedFailureWarning();
+      if (
+        this.validatedAddress(otpRecipient) !== '' &&
+        this.validAddressType(otpRecipient)
+      ) {
+        const otpAttempt = await this.otpPromptService.requestOTP();
+        if (!otpAttempt) {
+          return;
         }
-      }
-    );
+        await withLoadingOverlayOpts(
+          this.loadingCtrl,
+          { message: 'Checking OTP...' },
+          async () => {
+            const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
+            if (otpResult.status === 200) {
+              if (otpResult.data.status === 'approved') {
+                await withLoadingOverlayOpts(
+                  this.loadingCtrl,
+                  { message: 'Savint OTP Recipient...' },
+                  async () => {
+                    await this.otpRecipientsService
+                      .createOtpRecipient(otpRecipient)
+                      .then((success) => {
+                        if (success) {
+                          form.reset();
+                        }
+                      });
+                  }
+                );
+              } else if (otpResult.data.status === 'pending') {
+                this.notification.showIncorrectOTPWarning();
+              }
+            } else {
+              this.notification.showUnexpectedFailureWarning();
+            }
+          }
+        );
       } else {
         await this.notification.swal.fire({
           icon: 'warning',

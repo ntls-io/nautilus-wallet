@@ -28,7 +28,9 @@
     <ion-list-header>
       <ion-label color="primary" class="ion-padding-horizontal ion-text-center">
         <h1>Limits</h1>
-        <ion-text color="light">Please choose an account to set a Limit for.</ion-text>
+        <ion-text color="light"
+          >Please choose an account to set a Limit for.</ion-text
+        >
       </ion-label>
     </ion-list-header>
 
@@ -70,7 +72,13 @@
       <p>
         Set Limits for <b>{{selectedOption?.assetDisplay?.assetSymbol}}</b>.
       </p>
-      <p>Current Limit is set at <b>{{currentLimitAmount}} {{selectedOption?.assetDisplay?.assetSymbol}}</b>.</p>
+      <p>
+        Current Limit is set at
+        <b
+          >{{currentLimitAmount}}
+          {{selectedOption?.assetDisplay?.assetSymbol}}</b
+        >.
+      </p>
       <p>Set limit for which will require 2FA for this account.</p>
       <ion-input
         #limitInput
