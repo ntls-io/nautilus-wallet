@@ -48,7 +48,7 @@
       <ng-template>
         <ion-list lines="full">
           <ng-container *ngFor="let option of paymentOptions">
-            <ion-item button (click)="selectedOption = option" class="">
+            <ion-item button (click)="selectAccount(option)" class="">
               <div class="w-full text-center">
                 <ion-text
                   color="primary"
@@ -70,6 +70,7 @@
       <p>
         Set Limits for <b>{{selectedOption?.assetDisplay?.assetSymbol}}</b>.
       </p>
+      <p>Current Limit is set at <b>{{currentLimitAmount}} {{selectedOption?.assetDisplay?.assetSymbol}}</b>.</p>
       <p>Set limit for which will require 2FA for this account.</p>
       <ion-input
         #limitInput
