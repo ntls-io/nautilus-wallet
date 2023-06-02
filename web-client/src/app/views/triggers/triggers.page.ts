@@ -62,11 +62,7 @@ export class TriggersPage implements OnInit {
       filterBy: (limit) => limit.currency_code === this.currencyCode,
     });
 
-    if (limits.length > 0) {
-      this.currentLimitAmount = limits[0].limit;
-    } else {
-      this.currentLimitAmount = 0;
-    }
+    this.currentLimitAmount = limits.length > 0 ? limits[0].limit : 0;
   }
 
   ngOnInit() {
