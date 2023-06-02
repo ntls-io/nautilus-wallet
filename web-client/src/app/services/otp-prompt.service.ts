@@ -21,7 +21,8 @@ export class OtpPromptService {
   ) {}
 
   async requestOTP() {
-    const phoneNumberToSend = this.sessionQuery.getValue().wallet?.otp_phone_number;
+    const phoneNumberToSend =
+      this.sessionQuery.getValue().wallet?.otp_phone_number;
     this.sendOtp(phoneNumberToSend);
     const lastFourDigits = phoneNumberToSend?.slice(-4);
     const maskedPhoneNumber = `*** *** ${lastFourDigits}`;

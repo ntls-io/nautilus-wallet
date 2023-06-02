@@ -146,8 +146,8 @@ export class SessionService {
       await this.enclaveService.updateOtpPhoneNumber(request);
 
     if ('Updated' in result) {
-      this.sessionStore.update(state => {
-        if(state.wallet){
+      this.sessionStore.update((state) => {
+        if (state.wallet) {
           state.wallet.otp_phone_number = new_phone_number;
         }
       });
@@ -155,7 +155,6 @@ export class SessionService {
 
     return result;
   }
-
 
   /**
    * Start the PIN reset session.

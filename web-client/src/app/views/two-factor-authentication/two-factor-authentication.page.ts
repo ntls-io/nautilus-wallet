@@ -58,7 +58,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionQuery.wallet.subscribe(wallet => {
+    this.sessionQuery.wallet.subscribe((wallet) => {
       this.otpPhoneNumber = wallet?.otp_phone_number;
     });
   }
