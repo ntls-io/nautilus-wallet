@@ -18,6 +18,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
   isOpening = false;
   registrationForm: FormGroup;
   walletId: string | undefined;
+  otpPhoneNumber: string | undefined;
 
   actionItems = [
     {
@@ -56,7 +57,11 @@ export class TwoFactorAuthenticationPage implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sessionQuery.wallet.subscribe(wallet => {
+      this.otpPhoneNumber = wallet?.otp_phone_number;
+    });
+  }
 
   /** Show the PIN entry modal. */
   showPinEntryModal(): void {
@@ -92,6 +97,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
         title: 'OTP Phone Number Updated',
         text: 'The Phone Number for OTP has been updated successfully.',
       });
+      this.otpPhoneNumber = phoneNumber;
     } else if ('Failed' in updateOtpPhoneNumberResult) {
       await this.notification.swal.fire({
         icon: 'error',

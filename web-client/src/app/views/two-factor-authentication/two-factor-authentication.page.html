@@ -10,12 +10,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-horizontal">
+<ion-content class="ion-padding-horizontal ion-text-center">
   <div class="ion-padding">
     <h4 class="font-bold">Two Factor Authentication Settings</h4>
   </div>
 
   <p>What cell number should we use to authenticate against?</p>
+  <p>Current Phone Number used for OTP is {{otpPhoneNumber}}.</p>
   <form
     [formGroup]="registrationForm"
     (ngSubmit)="onSubmit()"
@@ -46,7 +47,7 @@
       (click)="onSubmit()"
       [disabled]="!registrationForm.controls.mobile.valid"
       shape="round"
-      >Save Phone Number
+      >Update Phone Number
     </ion-button>
   </form>
 
