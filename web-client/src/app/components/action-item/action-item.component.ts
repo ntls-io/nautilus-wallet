@@ -13,7 +13,9 @@ export class ActionItemComponent implements OnInit {
   @Input() path?: string;
   @Input() disabled?: boolean;
   @Input() url?: string;
+  @Input() showItem?: () => Promise<boolean> | boolean = async () => true;
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   constructor() {}
 
   ngOnInit() {}
@@ -22,5 +24,5 @@ export class ActionItemComponent implements OnInit {
 /** A convenience type alias for {@link ActionItemComponent}'s inputs. */
 export type ActionItem = Pick<
   ActionItemComponent,
-  'preTitle' | 'title' | 'icon' | 'path' | 'disabled' | 'url'
+  'preTitle' | 'title' | 'icon' | 'path' | 'disabled' | 'url' | 'showItem'
 >;

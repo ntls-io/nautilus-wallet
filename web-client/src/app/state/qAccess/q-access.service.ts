@@ -1,32 +1,30 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Preferences } from '@capacitor/preferences';
-import { guid } from '@datorama/akita';
-import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { QAccess } from './q-access.model';
 import { QAccessQuery } from './q-access.query';
 import { QAccessStore } from './q-access.store';
 
 @Injectable({ providedIn: 'root' })
-export class QAccessService implements OnDestroy {
-  walletAddresses!: string[];
-  subscription!: Subscription;
+export class QAccessService {
   rememberWalletAddress!: boolean;
 
   constructor(
-    private router: Router,
     private quickAccessStore: QAccessStore,
     private quickAccessQuery: QAccessQuery,
     public notification: SwalHelper
   ) {
-    this.subscription = this.quickAccessQuery.walletAddresses$.subscribe(
-      (walletAddresses) => (this.walletAddresses = walletAddresses)
-    );
-  }
+    const legacies = this.quickAccessQuery.getAll({
+      filterBy: (entity) => typeof entity?.id === 'string',
+    });
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (legacies?.length) {
+      legacies.forEach(({ walletAddress, preferedName, id }) => {
+        this.quickAccessStore.upsert(walletAddress, {
+          walletAddress,
+          preferedName,
+        });
+        this.quickAccessStore.remove(id);
+      });
+    }
   }
 
   setRememberWalletAddress(value: boolean) {
@@ -37,73 +35,26 @@ export class QAccessService implements OnDestroy {
     return this.rememberWalletAddress;
   }
 
-  walletAddressExists(walletAddress: string | undefined): boolean {
-    walletAddress = walletAddress !== undefined ? walletAddress : '';
-    return this.walletAddresses.includes(walletAddress);
-  }
-
-  addWalletAddress(address: string, preferedName: string) {
-    Preferences.set({
-      key: address,
-      value: preferedName,
+  async addWalletAddress(walletAddress: string, preferedName: string) {
+    this.quickAccessStore.upsert(walletAddress, {
+      walletAddress,
+      preferedName,
     });
-    this.fetchWalletAddresses();
-  }
-
-  async loadPreferedName(walletAddress: string) {
-    const result = await Preferences.get({
-      key: walletAddress,
+    await this.notification.swal.fire({
+      icon: 'success',
+      text: 'Your Wallet Address has been saved!',
     });
-    return result.value;
-  }
-
-  async loadWalletAddresses(): Promise<string[]> {
-    let fetchedwalletAdresses: string[] = [];
-    try {
-      const walletAddresses = (await Preferences.keys()).keys;
-      fetchedwalletAdresses = walletAddresses;
-    } catch (err) {
-      console.log(err);
-    }
-    return fetchedwalletAdresses;
-  }
-
-  async fetchPreferedName(walletAddress: string) {
-    const preferedName = this.loadPreferedName(walletAddress);
-    const data = await preferedName.then((result) => result);
-    return data;
-  }
-
-  async fetchWalletAddresses() {
-    const fetchWalletAddresses = await this.loadWalletAddresses();
-    let quickAcess: QAccess;
-    for (const walletAddress of fetchWalletAddresses) {
-      const getPreferedName = await this.fetchPreferedName(walletAddress);
-      const id = guid();
-      quickAcess = {
-        id,
-        walletAddress,
-        preferedName: getPreferedName,
-      };
-      this.quickAccessStore.add({
-        id,
-        walletAddress,
-        preferedName: getPreferedName,
-      });
-    }
   }
 
   deleteAddress(walletAddress: string) {
-    return Preferences.remove({
-      key: walletAddress,
-    });
+    this.quickAccessStore.remove(walletAddress);
   }
 
   async saveQuickAccess(
     address: string | undefined,
     promptForNickname: boolean = true
   ) {
-    const saveWalletAddress: string = address !== undefined ? address : '';
+    const walletAddress = address ?? '';
     try {
       let preferedName = '';
       if (promptForNickname) {
@@ -115,16 +66,11 @@ export class QAccessService implements OnDestroy {
             autocorrect: 'off',
           },
           focusConfirm: false,
-          confirmButtonText: 'Save Wallet Address',
+          confirmButtonText: 'Save',
           showCancelButton: true,
           reverseButtons: true,
-          inputValidator: (value) => {
-            if (!value) {
-              return 'Wallet nickname cannot be empty';
-            } else {
-              return null;
-            }
-          },
+          inputValidator: (value) =>
+            value ? null : 'Wallet nickname cannot be empty',
         });
         if (result.isConfirmed) {
           preferedName = result.value;
@@ -132,11 +78,7 @@ export class QAccessService implements OnDestroy {
           return;
         }
       }
-      this.addWalletAddress(saveWalletAddress, preferedName);
-      await this.notification.swal.fire({
-        icon: 'success',
-        text: 'Your Wallet Address has been saved!',
-      });
+      this.addWalletAddress(walletAddress, preferedName);
     } catch (error) {
       await this.notification.swal.fire({
         icon: 'error',

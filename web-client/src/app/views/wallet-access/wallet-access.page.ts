@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
 import {
   LoadingController,
   ModalController,
   NavController,
 } from '@ionic/angular';
 import algosdk from 'algosdk';
-import { QAccessService } from 'src/app/state/qAccess';
+import { QAccessQuery, QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
+import { deviceHasCamera } from 'src/app/utils/camara.helpers';
 import { defined } from 'src/app/utils/errors/panic';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
@@ -38,7 +38,8 @@ export class WalletAccessPage implements OnInit {
     private notification: SwalHelper,
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
-    private quickAccessService: QAccessService
+    private quickAccessService: QAccessService,
+    public quickAccessQuery: QAccessQuery
   ) {}
 
   /** Validated {@link address}, or `undefined`. */
@@ -53,9 +54,8 @@ export class WalletAccessPage implements OnInit {
       : undefined;
   }
 
-  ngOnInit(): void {
-    // XXX: Capacitor.isPluginAvailable('Camera') depends on ScannerService, as a side effect.
-    this.hasCamera = Capacitor.isPluginAvailable('Camera');
+  async ngOnInit(): Promise<void> {
+    this.hasCamera = await deviceHasCamera();
   }
 
   async openScanner(): Promise<void> {
