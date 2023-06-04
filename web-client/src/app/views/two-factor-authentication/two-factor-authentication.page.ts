@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
+import { Subscription } from 'rxjs';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -12,13 +13,14 @@ import { SwalHelper } from 'src/app/utils/notification/swal-helper';
   templateUrl: './two-factor-authentication.page.html',
   styleUrls: ['./two-factor-authentication.page.scss'],
 })
-export class TwoFactorAuthenticationPage implements OnInit {
+export class TwoFactorAuthenticationPage implements OnInit, OnDestroy {
   /** @see showPinEntryModal */
   @Input() isPinEntryOpen = false;
   isOpening = false;
   registrationForm: FormGroup;
   walletId: string | undefined;
   otpPhoneNumber: string | undefined;
+  subscription: Subscription | undefined;
 
   actionItems = [
     {
@@ -58,7 +60,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionQuery.wallet.subscribe((wallet) => {
+    this.subscription = this.sessionQuery.wallet.subscribe((wallet) => {
       this.otpPhoneNumber = wallet?.otp_phone_number;
     });
   }
@@ -71,6 +73,12 @@ export class TwoFactorAuthenticationPage implements OnInit {
   onSubmit() {
     if (this.registrationForm.valid) {
       this.showPinEntryModal();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
