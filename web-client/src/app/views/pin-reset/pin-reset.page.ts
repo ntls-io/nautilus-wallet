@@ -43,7 +43,6 @@ export class PinResetPage implements OnInit {
     this.isBusySaving = true;
     const wallet_id: string =
       this.wallet_id !== undefined ? this.wallet_id : '';
-    console.log(wallet_id);
     const newSession = StartSgxSession.new(wallet_id);
     const client_pk = newSession.our_public_key();
 
@@ -54,10 +53,7 @@ export class PinResetPage implements OnInit {
         await this.sessionService.startPinReset(wallet_id, answers, client_pk)
     );
 
-    console.log(initialResult);
-
     if ('InvalidAuth' in initialResult) {
-      console.log(initialResult.InvalidAuth);
       this.notification.swal.fire({
         icon: 'warning',
         title: 'Incorrect Answers!',
@@ -65,7 +61,6 @@ export class PinResetPage implements OnInit {
       });
       this.navCtrl.navigateRoot('/pin-reset');
     } else if ('Success' in initialResult) {
-      console.log(initialResult);
       try {
         const { value: password, dismiss: cancelReset } =
           await this.notification.swal.fire({
@@ -114,9 +109,6 @@ export class PinResetPage implements OnInit {
           });
           this.navCtrl.navigateRoot('/');
         } else if ('InvalidAuth' in pinResetResult) {
-          console.log(
-            'pinResetResultError: InvalidAuth ' + pinResetResult.InvalidAuth
-          );
           this.notification.swal.fire({
             icon: 'warning',
             title: 'Unexpected Failure',
@@ -124,7 +116,6 @@ export class PinResetPage implements OnInit {
           });
           this.navCtrl.navigateRoot('/');
         } else {
-          console.log(pinResetResult);
           this.notification.swal.fire({
             icon: 'warning',
             title: 'Unexpected Failure',
@@ -138,7 +129,6 @@ export class PinResetPage implements OnInit {
       }
     } else if ('NotFound' in initialResult) {
     } else {
-      console.log(initialResult.Failed);
       this.notification.swal.fire({
         icon: 'warning',
         title: 'Unexpected Failure',
