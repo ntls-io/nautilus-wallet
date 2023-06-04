@@ -67,28 +67,33 @@ export class PinResetPage implements OnInit {
     } else if ('Success' in initialResult) {
       console.log(initialResult);
       try {
-        const { value: password, dismiss: cancelReset } = await this.notification.swal.fire({
-          title: 'Enter new PIN.',
-          input: 'password',
-          inputPlaceholder: 'Enter your PIN here',
-          inputAttributes: {
-            autocomplete: 'off',
-            autocapitalize: 'off',
-            autocorrect: 'off',
-          },
-          preConfirm: (password) => {
-            // Perform additional PIN verification here
-            if (!/^\d+$/.test(password)) {
-              this.notification.swal.showValidationMessage('Please enter digits only (0-9).');
-              return false; // Prevent closing the popup
-            }
-            if (password.length < 4) {
-              this.notification.swal.showValidationMessage('PIN should have a minimum of 4 digits.');
-              return false; // Prevent closing the popup
-            }
-            return password; // Return the valid PIN
-          },
-        });
+        const { value: password, dismiss: cancelReset } =
+          await this.notification.swal.fire({
+            title: 'Enter new PIN.',
+            input: 'password',
+            inputPlaceholder: 'Enter your PIN here',
+            inputAttributes: {
+              autocomplete: 'off',
+              autocapitalize: 'off',
+              autocorrect: 'off',
+            },
+            preConfirm: (pin) => {
+              // Perform additional PIN verification here
+              if (!/^\d+$/.test(pin)) {
+                this.notification.swal.showValidationMessage(
+                  'Please enter digits only (0-9).'
+                );
+                return false; // Prevent closing the popup
+              }
+              if (pin.length < 4) {
+                this.notification.swal.showValidationMessage(
+                  'PIN should have a minimum of 4 digits.'
+                );
+                return false; // Prevent closing the popup
+              }
+              return pin; // Return the valid PIN
+            },
+          });
 
         if (cancelReset) {
           this.isBusySaving = false;
