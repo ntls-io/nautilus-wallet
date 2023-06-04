@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { QAccessService } from 'src/app/state/qAccess';
+import { QAccessQuery, QAccessService } from 'src/app/state/qAccess';
 import { defined } from 'src/app/utils/errors/panic';
-import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import {
   MaxLengthValidationError,
   MinLengthValidationError,
@@ -23,7 +22,7 @@ import { checkClass } from 'src/helpers/helpers';
 export class PinEntryComponent implements OnInit {
   @Input() wallet_id: string | undefined;
 
-  @Input() titleHeading = '';
+  @Input() titleHeading = 'Enter Pin';
 
   /** Emit the PIN confirmed by the user. */
   @Output() pinConfirmed = new EventEmitter<PinValue>();
@@ -52,9 +51,9 @@ export class PinEntryComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private notification: SwalHelper,
     private walletAccessPage: WalletAccessPage,
-    private quickAccessService: QAccessService
+    private quickAccessService: QAccessService,
+    private quickAccessQuery: QAccessQuery
   ) {}
 
   /** Safe accessor. */
@@ -92,9 +91,11 @@ export class PinEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.walletAddressExists = this.quickAccessService.walletAddressExists(
-      this.walletAccessPage.address
-    );
+    if (this.walletAccessPage.address) {
+      this.walletAddressExists = this.quickAccessQuery.hasEntity(
+        this.walletAccessPage.address
+      );
+    }
   }
 
   async onSubmit(): Promise<void> {

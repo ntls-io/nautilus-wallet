@@ -1,20 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Clipboard } from '@capacitor/clipboard';
 import {
   LoadingController,
   NavController,
   ToastController,
 } from '@ionic/angular';
-import {
-  QAccess,
-  QAccessQuery,
-  QAccessService,
-  QAccessStore,
-} from 'src/app/state/qAccess';
+import { QAccess, QAccessService } from 'src/app/state/qAccess';
 import { SessionService } from 'src/app/state/session.service';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
-import { environment } from 'src/environments/environment';
 import { showToast } from '../../utils/toast.helpers';
 
 @Component({
@@ -24,27 +17,18 @@ import { showToast } from '../../utils/toast.helpers';
 })
 export class QuickAccessComponent implements OnInit {
   @Input() isPinEntryOpen = false;
+  @Input() addresses: QAccess[] | null | undefined;
 
   walletAddress: string | undefined;
 
-  hideSavedWalletAddress = environment.enableQuickAccess;
-
-  public Clipboard = Clipboard;
-
   constructor(
     private quickAccessService: QAccessService,
-    private quickAccessStore: QAccessStore,
     private toastCtrl: ToastController,
-    public quickAccessQuery: QAccessQuery,
     private loadingCtrl: LoadingController,
     private sessionService: SessionService,
     private navCtrl: NavController,
     private notification: SwalHelper
   ) {}
-
-  async ionViewWillEnter() {
-    await this.quickAccessService.fetchWalletAddresses();
-  }
 
   ngOnInit() {}
 
@@ -59,9 +43,8 @@ export class QuickAccessComponent implements OnInit {
       confirmButtonColor: 'var(--ion-color-primary)',
       cancelButtonColor: 'var(--ion-color-medium)',
       reverseButtons: true,
-      preConfirm: async () => {
-        await this.quickAccessService.deleteAddress(address.walletAddress);
-        this.quickAccessStore.remove(address.id);
+      preConfirm: () => {
+        this.quickAccessService.deleteAddress(address.walletAddress);
         this.showSuccess('Wallet Address deleted');
       },
     });

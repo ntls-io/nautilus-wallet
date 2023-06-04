@@ -18,6 +18,7 @@
 
 <ng-template #notUrl>
   <ion-item
+    *ngIf="showItem === undefined ? true : showItem"
     lines="none"
     button
     detail

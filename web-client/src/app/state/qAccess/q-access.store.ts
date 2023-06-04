@@ -7,6 +7,7 @@ export type QAccessState = EntityState<QAccess>;
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
   name: 'qAccess',
+  idKey: 'walletAddress',
 })
 export class QAccessStore extends EntityStore<QAccessState> {
   constructor() {

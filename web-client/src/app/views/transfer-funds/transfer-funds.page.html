@@ -16,6 +16,7 @@
   <ion-list>
     <ion-item-group *ngFor="let item of actionItems">
       <app-action-item
+        [showItem]="item?.showItem"
         [title]="item.title"
         [icon]="item.icon"
         (click)="execItemAction(item.action)"
