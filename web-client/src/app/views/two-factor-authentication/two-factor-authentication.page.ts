@@ -1,6 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { Subscription } from 'rxjs';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -8,12 +9,13 @@ import { SessionService } from 'src/app/state/session.service';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
+@UntilDestroy()
 @Component({
   selector: 'app-two-factor-authentication',
   templateUrl: './two-factor-authentication.page.html',
   styleUrls: ['./two-factor-authentication.page.scss'],
 })
-export class TwoFactorAuthenticationPage implements OnInit, OnDestroy {
+export class TwoFactorAuthenticationPage implements OnInit {
   /** @see showPinEntryModal */
   @Input() isPinEntryOpen = false;
   isOpening = false;
@@ -40,7 +42,9 @@ export class TwoFactorAuthenticationPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController
   ) {
     this.registrationForm = this.generateFormGroup();
-    this.sessionQuery.walletId.subscribe((wallet) => (this.walletId = wallet));
+    this.sessionQuery.walletId
+      .pipe(untilDestroyed(this))
+      .subscribe((wallet) => (this.walletId = wallet));
   }
 
   get f() {
@@ -60,7 +64,7 @@ export class TwoFactorAuthenticationPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.sessionQuery.wallet.subscribe((wallet) => {
+    this.sessionQuery.wallet.pipe(untilDestroyed(this)).subscribe((wallet) => {
       this.otpPhoneNumber = wallet?.otp_phone_number;
     });
   }
@@ -73,12 +77,6 @@ export class TwoFactorAuthenticationPage implements OnInit, OnDestroy {
   onSubmit() {
     if (this.registrationForm.valid) {
       this.showPinEntryModal();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 
