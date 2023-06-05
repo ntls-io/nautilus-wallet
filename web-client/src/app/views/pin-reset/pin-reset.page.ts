@@ -72,7 +72,7 @@ export class PinResetPage implements OnInit {
               autocorrect: 'off',
             },
             preConfirm: (pin) => {
-              if (!/^\d+$/.test(pin)) {
+              if (isNaN(pin)) {
                 this.notification.swal.showValidationMessage(
                   'Please enter digits only (0-9).'
                 );
