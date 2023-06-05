@@ -64,29 +64,27 @@ export class PinResetPage implements OnInit {
       try {
         const { value: password, dismiss: cancelReset } =
           await this.notification.swal.fire({
-            title: 'Enter new PIN.',
+            titleText: 'Enter new PIN.',
             input: 'password',
             inputPlaceholder: 'Enter your PIN here',
             inputAttributes: {
               autocomplete: 'off',
-              autocapitalize: 'off',
               autocorrect: 'off',
             },
             preConfirm: (pin) => {
-              // Perform additional PIN verification here
               if (!/^\d+$/.test(pin)) {
                 this.notification.swal.showValidationMessage(
                   'Please enter digits only (0-9).'
                 );
-                return false; // Prevent closing the popup
+                return false;
               }
               if (pin.length < 4) {
                 this.notification.swal.showValidationMessage(
                   'PIN should have a minimum of 4 digits.'
                 );
-                return false; // Prevent closing the popup
+                return false;
               }
-              return pin; // Return the valid PIN
+              return pin;
             },
           });
 
@@ -108,13 +106,6 @@ export class PinResetPage implements OnInit {
             text: 'Your PIN has been reset.',
           });
           this.navCtrl.navigateRoot('/');
-        } else if ('InvalidAuth' in pinResetResult) {
-          this.notification.swal.fire({
-            icon: 'warning',
-            title: 'Unexpected Failure',
-            text: 'An unexpected error occured. Please try again.',
-          });
-          this.navCtrl.navigateRoot('/');
         } else {
           this.notification.swal.fire({
             icon: 'warning',
@@ -122,7 +113,6 @@ export class PinResetPage implements OnInit {
             text: 'An unexpected error occured. Please try again.',
           });
           this.navCtrl.navigateRoot('/');
-          this.isBusySaving = false;
         }
       } catch (err) {
         console.log('catch err: ' + err);
