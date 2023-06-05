@@ -120,26 +120,11 @@ export class TriggersPage implements OnInit {
     );
   }
 
-  /** Validated {@link address}, or `undefined`. */
-  validatedAddress(address: string): string {
-    const trimmed = address?.trim();
-    return trimmed === '' ? '' : trimmed;
-  }
-
-  validAddressType(address: string): AddressType | undefined {
-    return this.validatedAddress(address)
-      ? addressType(this.validatedAddress(address))
-      : undefined;
-  }
-
   async createOtpRecipient(form: FormGroup) {
     form.markAllAsTouched();
     if (form.valid) {
       const otpRecipient = form.value.otpRecipient;
-      if (
-        this.validatedAddress(otpRecipient) !== '' &&
-        this.validAddressType(otpRecipient)
-      ) {
+      if (addressType(otpRecipient)) {
         const otpAttempt = await this.otpPromptService.requestOTP();
         if (!otpAttempt) {
           return;
