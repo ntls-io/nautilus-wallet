@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import {
+  AppUpdate,
+  AppUpdateAvailability,
+} from '@capawesome/capacitor-app-update';
 import { initializeApp } from 'firebase/app';
 import {
   doc,
@@ -8,12 +11,16 @@ import {
   getFirestore,
 } from 'firebase/firestore';
 import { getBlob, getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
 import { SetupStore } from './setup.store';
 
 @Injectable({ providedIn: 'root' })
 export class SetupService {
-  constructor(private setupStore: SetupStore, private platform: Platform) {}
+  constructor(
+    private setupStore: SetupStore,
+    private notification: SwalHelper
+  ) {}
 
   async iniFirebase() {
     initializeApp(environment.firebase);
@@ -60,6 +67,29 @@ export class SetupService {
         });
       });
     });
+  }
+
+  async checkUpdate() {
+    await AppUpdate.getAppUpdateInfo({ country: 'ZA' })
+      .then(async ({ updateAvailability }) => {
+        if (updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE) {
+          await this.notification.swal
+            .fire({
+              icon: 'info',
+              titleText: 'Update Available',
+              text: 'A new version of the app is available. Please update to continue using the app.',
+              confirmButtonText: 'Update',
+            })
+            .then(async (result) => {
+              if (result.isConfirmed) {
+                await AppUpdate.openAppStore();
+              }
+            });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   async runSetup(org: any) {
