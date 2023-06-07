@@ -26,6 +26,22 @@ export class SwalHelper {
     });
   }
 
+  showIncorrectSecutiyAnswers() {
+    this.swal.fire({
+      icon: 'warning',
+      titleText: 'Incorrect Answers!',
+      text: 'Authentication failed, please ensure that the answers to the security questions are correct.',
+    });
+  }
+
+  showPinResetSuccessNotification() {
+    this.swal.fire({
+      icon: 'success',
+      titleText: 'Pin Reset Successfully!',
+      text: 'Your PIN has been reset.',
+    });
+  }
+
   showUnexpectedFailureWarning() {
     this.swal.fire({
       icon: 'warning',
