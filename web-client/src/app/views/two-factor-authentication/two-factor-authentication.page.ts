@@ -42,9 +42,14 @@ export class TwoFactorAuthenticationPage implements OnInit {
     private toastCtrl: ToastController
   ) {
     this.registrationForm = this.generateFormGroup();
-    this.sessionQuery.walletId
+    this.sessionQuery.wallet
       .pipe(untilDestroyed(this))
-      .subscribe((wallet) => (this.walletId = wallet));
+      .subscribe(
+        (wallet) => (
+          (this.walletId = wallet?.wallet_id),
+          (this.otpPhoneNumber = wallet?.otp_phone_number)
+        )
+      );
   }
 
   get f() {
@@ -63,11 +68,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.sessionQuery.wallet.pipe(untilDestroyed(this)).subscribe((wallet) => {
-      this.otpPhoneNumber = wallet?.otp_phone_number;
-    });
-  }
+  ngOnInit() {}
 
   /** Show the PIN entry modal. */
   showPinEntryModal(): void {
