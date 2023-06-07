@@ -25,7 +25,6 @@ export class OtpRecipientsService {
       wallet_id,
       recipient,
     };
-    console.log(data);
 
     return await CapacitorHttp.post({
       headers,
