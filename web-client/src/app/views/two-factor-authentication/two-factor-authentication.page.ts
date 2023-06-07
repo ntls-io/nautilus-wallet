@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
-import { Subscription } from 'rxjs';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
@@ -22,7 +21,6 @@ export class TwoFactorAuthenticationPage implements OnInit {
   registrationForm: FormGroup;
   walletId: string | undefined;
   otpPhoneNumber: string | undefined;
-  subscription: Subscription | undefined;
 
   actionItems = [
     {
