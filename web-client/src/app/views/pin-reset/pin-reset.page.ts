@@ -46,86 +46,101 @@ export class PinResetPage implements OnInit {
     const newSession = StartSgxSession.new(wallet_id);
     const client_pk = newSession.our_public_key();
 
-    const initialResult = await withLoadingOverlayOpts(
+    const initialResult = await this.checkAnswers(
+      wallet_id,
+      answers,
+      client_pk
+    );
+
+    if ('InvalidAuth' in initialResult) {
+      this.notification.showIncorrectSecutiyAnswers();
+    } else if ('Success' in initialResult) {
+      try {
+        const password = await this.newPin();
+
+        if (password) {
+          const pinResetResult = await this.resetPin(
+            wallet_id,
+            password,
+            answers
+          );
+
+          if ('Reset' in pinResetResult) {
+            this.notification.showPinResetSuccessNotification();
+            this.navCtrl.navigateRoot('/');
+          } else {
+            this.notification.showUnexpectedFailureWarning();
+            this.navCtrl.navigateRoot('/');
+          }
+        }
+      } catch (err) {
+        console.log('catch err: ' + err);
+      }
+    } else {
+      this.notification.showUnexpectedFailureWarning();
+      this.navCtrl.navigateRoot('/');
+    }
+    this.isBusySaving = false;
+  }
+
+  async checkAnswers(
+    wallet_id: string,
+    answers: Map<string, string>,
+    client_pk: Uint8Array
+  ) {
+    return await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Checking your answers...' },
       async () =>
         await this.sessionService.startPinReset(wallet_id, answers, client_pk)
     );
+  }
 
-    if ('InvalidAuth' in initialResult) {
-      this.notification.swal.fire({
-        icon: 'warning',
-        title: 'Incorrect Answers!',
-        text: 'Authentication failed, please ensure that the answers to the security questions are correct.',
+  async newPin() {
+    const { value: password, dismiss: cancelReset } =
+      await this.notification.swal.fire({
+        titleText: 'Enter new PIN.',
+        input: 'password',
+        inputPlaceholder: 'Enter your PIN here',
+        inputAttributes: {
+          autocomplete: 'off',
+          autocorrect: 'off',
+        },
+        preConfirm: (pin) => {
+          if (isNaN(pin)) {
+            this.notification.swal.showValidationMessage(
+              'Please enter digits only (0-9).'
+            );
+            return false;
+          }
+          if (pin.length < 4) {
+            this.notification.swal.showValidationMessage(
+              'PIN should have a minimum of 4 digits.'
+            );
+            return false;
+          }
+          return pin;
+        },
       });
-      this.navCtrl.navigateRoot('/pin-reset');
-    } else if ('Success' in initialResult) {
-      try {
-        const { value: password, dismiss: cancelReset } =
-          await this.notification.swal.fire({
-            titleText: 'Enter new PIN.',
-            input: 'password',
-            inputPlaceholder: 'Enter your PIN here',
-            inputAttributes: {
-              autocomplete: 'off',
-              autocorrect: 'off',
-            },
-            preConfirm: (pin) => {
-              if (isNaN(pin)) {
-                this.notification.swal.showValidationMessage(
-                  'Please enter digits only (0-9).'
-                );
-                return false;
-              }
-              if (pin.length < 4) {
-                this.notification.swal.showValidationMessage(
-                  'PIN should have a minimum of 4 digits.'
-                );
-                return false;
-              }
-              return pin;
-            },
-          });
 
-        if (cancelReset) {
-          this.isBusySaving = false;
-          return;
-        }
-
-        const pinResetResult = await withLoadingOverlayOpts(
-          this.loadingCtrl,
-          { message: 'Resetting your PIN...' },
-          async () =>
-            await this.sessionService.pinReset(wallet_id, password, answers)
-        );
-        if ('Reset' in pinResetResult) {
-          this.notification.swal.fire({
-            icon: 'success',
-            title: 'Pin Reset Successfully!',
-            text: 'Your PIN has been reset.',
-          });
-          this.navCtrl.navigateRoot('/');
-        } else {
-          this.notification.swal.fire({
-            icon: 'warning',
-            title: 'Unexpected Failure',
-            text: 'An unexpected error occured. Please try again.',
-          });
-          this.navCtrl.navigateRoot('/');
-        }
-      } catch (err) {
-        console.log('catch err: ' + err);
-      }
-    } else if ('NotFound' in initialResult) {
-    } else {
-      this.notification.swal.fire({
-        icon: 'warning',
-        title: 'Unexpected Failure',
-        text: 'An unexpected error occured. Please try again.',
-      });
-      this.navCtrl.navigateRoot('/');
+    if (cancelReset) {
+      this.isBusySaving = false;
+      return null;
     }
-    this.isBusySaving = false;
+
+    return password;
+  }
+
+  async resetPin(
+    wallet_id: string,
+    password: string,
+    answers: Map<string, string>
+  ) {
+    return await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Resetting your PIN...' },
+      async () =>
+        await this.sessionService.pinReset(wallet_id, password, answers)
+    );
   }
 }
