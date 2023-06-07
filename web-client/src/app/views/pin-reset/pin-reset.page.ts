@@ -41,8 +41,7 @@ export class PinResetPage implements OnInit {
 
   async onSubmit(answers: Map<string, string>) {
     this.isBusySaving = true;
-    const wallet_id: string =
-      this.wallet_id !== undefined ? this.wallet_id : '';
+    const wallet_id: string = this.wallet_id ?? '';
     const newSession = StartSgxSession.new(wallet_id);
     const client_pk = newSession.our_public_key();
 

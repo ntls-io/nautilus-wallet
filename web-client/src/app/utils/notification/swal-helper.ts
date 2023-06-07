@@ -29,7 +29,7 @@ export class SwalHelper {
   showIncorrectSecutiyAnswers() {
     this.swal.fire({
       icon: 'warning',
-      title: 'Incorrect Answers!',
+      titleText: 'Incorrect Answers!',
       text: 'Authentication failed, please ensure that the answers to the security questions are correct.',
     });
   }
@@ -37,7 +37,7 @@ export class SwalHelper {
   showPinResetSuccessNotification() {
     this.swal.fire({
       icon: 'success',
-      title: 'Pin Reset Successfully!',
+      titleText: 'Pin Reset Successfully!',
       text: 'Your PIN has been reset.',
     });
   }
