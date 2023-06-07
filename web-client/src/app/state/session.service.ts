@@ -144,6 +144,15 @@ export class SessionService {
     };
     const result: UpdateOtpPhoneNumberResult =
       await this.enclaveService.updateOtpPhoneNumber(request);
+
+    if ('Updated' in result) {
+      this.sessionStore.update((state) => {
+        if (state.wallet) {
+          state.wallet.otp_phone_number = new_phone_number;
+        }
+      });
+    }
+
     return result;
   }
 

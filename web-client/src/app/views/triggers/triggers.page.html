@@ -33,6 +33,9 @@
 
     <ng-container *ngIf="shouldShowChangeButton">
       <div class="ion-text-center">
+        <ion-text color="light"
+          >Please choose an account to set a Limit for.</ion-text
+        >
         <ion-button id="trigger-change-account" color="secondary" shape="round">
           Change account
         </ion-button>
@@ -47,7 +50,7 @@
       <ng-template>
         <ion-list lines="full">
           <ng-container *ngFor="let option of paymentOptions">
-            <ion-item button (click)="selectedOption = option" class="">
+            <ion-item button (click)="selectAccount(option)">
               <div class="w-full text-center">
                 <ion-text
                   color="primary"
@@ -69,16 +72,22 @@
       <p>
         Set Limits for <b>{{selectedOption?.assetDisplay?.assetSymbol}}</b>.
       </p>
+      <p>
+        Current Limit is set at
+        <b>
+          {{currentLimitAmount}} {{selectedOption?.assetDisplay?.assetSymbol}} </b
+        >.
+      </p>
       <p>Set limit for which will require 2FA for this account.</p>
       <ion-input
         #limitInput
-        placeholder="Limit"
+        placeholder="Amount"
         class="text-2xl font-audiowide"
         [(ngModel)]="limit"
       ></ion-input>
       <ion-button shape="round" expand="block" (click)="saveLimits(limitInput)"
-        >Confirm</ion-button
-      >
+        >Confirm
+      </ion-button>
     </div>
 
     <div *ngIf="paymentOptions?.length === 0" class="w-full text-center">
