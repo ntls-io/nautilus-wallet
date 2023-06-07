@@ -69,16 +69,14 @@ export class PinResetPage implements OnInit {
               this.notification.showPinResetSuccessNotification();
               this.navCtrl.navigateRoot('/');
             } else {
-              this.notification.showUnexpectedFailureWarning();
-              this.navCtrl.navigateRoot('/');
+              this.handleUnexpected();
             }
           }
         } catch (err) {
-          console.log('catch err: ' + err);
+          this.handleUnexpected();
         }
       } else {
-        this.notification.showUnexpectedFailureWarning();
-        this.navCtrl.navigateRoot('/');
+        this.handleUnexpected();
       }
       this.isBusySaving = false;
     }
@@ -143,5 +141,10 @@ export class PinResetPage implements OnInit {
       async () =>
         await this.sessionService.pinReset(wallet_id, password, answers)
     );
+  }
+
+  handleUnexpected() {
+    this.notification.showUnexpectedFailureWarning();
+    this.navCtrl.navigateRoot('/');
   }
 }
