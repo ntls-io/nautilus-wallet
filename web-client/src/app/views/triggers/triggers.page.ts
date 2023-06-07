@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonInput, LoadingController } from '@ionic/angular';
+import algosdk from 'algosdk';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
-import { OtpLimitsService } from 'src/app/state/otpLimits';
+import { OtpLimitsQuery, OtpLimitsService } from 'src/app/state/otpLimits';
 import {
   OtpRecipientsQuery,
   OtpRecipientsService,
@@ -12,6 +13,7 @@ import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 import { environment } from 'src/environments/environment';
+import * as xrpl from 'xrpl';
 
 @Component({
   selector: 'app-triggers',
@@ -26,9 +28,12 @@ export class TriggersPage implements OnInit {
   otpRecipientForm: FormGroup;
   selectedOption?: AssetAmount;
   limit!: number;
+  currencyCode?: string;
+  currentLimitAmount?: number;
 
   constructor(
     public otpRecipientsQuery: OtpRecipientsQuery,
+    private otpLimitsQuery: OtpLimitsQuery,
     private notification: SwalHelper,
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
@@ -48,6 +53,16 @@ export class TriggersPage implements OnInit {
   /** "Change account" button should show for multiple options. */
   get shouldShowChangeButton(): boolean {
     return this.paymentOptions !== undefined && this.paymentOptions.length > 1;
+  }
+
+  selectAccount(option: AssetAmount) {
+    this.selectedOption = option;
+    this.currencyCode = option.assetDisplay.assetSymbol;
+    const limits = this.otpLimitsQuery.getAll({
+      filterBy: (limit) => limit.currency_code === this.currencyCode,
+    });
+
+    this.currentLimitAmount = limits.length > 0 ? limits[0].limit : 0;
   }
 
   ngOnInit() {
@@ -70,25 +85,85 @@ export class TriggersPage implements OnInit {
 
   async saveLimits(limitInput: IonInput) {
     const currencyCode = this.selectedOption?.assetDisplay.assetSymbol || '';
-    await this.otpLimitsService.setOtpLimit({
-      currency_code: currencyCode,
-      limit: this.limit,
-    });
 
-    limitInput.value = null;
+    const otpAttempt = await this.otpPromptService.requestOTP();
+    if (!otpAttempt) {
+      return;
+    }
+
+    await withLoadingOverlayOpts(
+      this.loadingCtrl,
+      { message: 'Checking OTP...' },
+      async () => {
+        const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
+        if (otpResult.status === 200) {
+          if (otpResult.data.status === 'approved') {
+            await withLoadingOverlayOpts(
+              this.loadingCtrl,
+              { message: 'Updating OTP Limit...' },
+              async () => {
+                await this.otpLimitsService.setOtpLimit({
+                  currency_code: currencyCode,
+                  limit: this.limit,
+                });
+                this.currentLimitAmount = this.limit;
+                limitInput.value = null;
+              }
+            );
+          } else if (otpResult.data.status === 'pending') {
+            this.notification.showIncorrectOTPWarning();
+          }
+        } else {
+          this.notification.showUnexpectedFailureWarning();
+        }
+      }
+    );
   }
 
   async createOtpRecipient(form: FormGroup) {
     form.markAllAsTouched();
     if (form.valid) {
       const otpRecipient = form.value.otpRecipient;
-      await this.otpRecipientsService
-        .createOtpRecipient(otpRecipient)
-        .then((success) => {
-          if (success) {
-            form.reset();
+      if (addressType(otpRecipient)) {
+        const otpAttempt = await this.otpPromptService.requestOTP();
+        if (!otpAttempt) {
+          return;
+        }
+        await withLoadingOverlayOpts(
+          this.loadingCtrl,
+          { message: 'Checking OTP...' },
+          async () => {
+            const otpResult = await this.otpPromptService.checkOtp(otpAttempt);
+            if (otpResult.status === 200) {
+              if (otpResult.data.status === 'approved') {
+                await withLoadingOverlayOpts(
+                  this.loadingCtrl,
+                  { message: 'Savint OTP Recipient...' },
+                  async () => {
+                    await this.otpRecipientsService
+                      .createOtpRecipient(otpRecipient)
+                      .then((success) => {
+                        if (success) {
+                          form.reset();
+                        }
+                      });
+                  }
+                );
+              } else if (otpResult.data.status === 'pending') {
+                this.notification.showIncorrectOTPWarning();
+              }
+            } else {
+              this.notification.showUnexpectedFailureWarning();
+            }
           }
+        );
+      } else {
+        await this.notification.swal.fire({
+          icon: 'warning',
+          title: 'Invalid Address',
+          text: 'Please input a valid wallet address',
         });
+      }
     }
   }
 
@@ -172,4 +247,30 @@ export type PaymentOption = {
 
   /** (Optional) A transaction amount limit for this option. */
   transactionLimit?: number;
+};
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
 };

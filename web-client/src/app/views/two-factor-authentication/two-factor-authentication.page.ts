@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IonIntlTelInputValidators } from 'ion-intl-tel-input';
 import { SessionQuery } from 'src/app/state/session.query';
 import { SessionService } from 'src/app/state/session.service';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
 
+@UntilDestroy()
 @Component({
   selector: 'app-two-factor-authentication',
   templateUrl: './two-factor-authentication.page.html',
@@ -18,6 +20,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
   isOpening = false;
   registrationForm: FormGroup;
   walletId: string | undefined;
+  otpPhoneNumber: string | undefined;
 
   actionItems = [
     {
@@ -37,7 +40,14 @@ export class TwoFactorAuthenticationPage implements OnInit {
     private toastCtrl: ToastController
   ) {
     this.registrationForm = this.generateFormGroup();
-    this.sessionQuery.walletId.subscribe((wallet) => (this.walletId = wallet));
+    this.sessionQuery.wallet
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (wallet) => (
+          (this.walletId = wallet?.wallet_id),
+          (this.otpPhoneNumber = wallet?.otp_phone_number)
+        )
+      );
   }
 
   get f() {
@@ -92,6 +102,7 @@ export class TwoFactorAuthenticationPage implements OnInit {
         title: 'OTP Phone Number Updated',
         text: 'The Phone Number for OTP has been updated successfully.',
       });
+      this.otpPhoneNumber = phoneNumber;
     } else if ('Failed' in updateOtpPhoneNumberResult) {
       await this.notification.swal.fire({
         icon: 'error',

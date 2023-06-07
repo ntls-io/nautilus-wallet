@@ -31,6 +31,7 @@ pub struct WalletDisplay {
     pub owner_name: String,
     pub phone_number: Option<String>,
     pub otp_phone_number: Option<String>,
+    pub auth_map: WalletAuthMap,
 
     // TODO(Pi): Decouple for multiple accounts per wallet.
     pub algorand_address_base32: AlgorandAddressBase32,
@@ -45,6 +46,7 @@ impl From<WalletStorable> for WalletDisplay {
             owner_name: storable.owner_name.clone(),
             phone_number: storable.phone_number.clone(),
             otp_phone_number: storable.otp_phone_number.clone(),
+            auth_map: storable.auth_map.clone(),
 
             algorand_address_base32: storable.algorand_account.address_base32(),
             xrpl_account: storable.xrpl_account.clone().into(),

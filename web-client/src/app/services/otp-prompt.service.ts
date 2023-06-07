@@ -13,9 +13,6 @@ const headers = {
   providedIn: 'root',
 })
 export class OtpPromptService {
-  phone_number = this.sessionQuery.getValue().wallet?.phone_number || '';
-  otp_phone_number =
-    this.sessionQuery.getValue().wallet?.otp_phone_number || '';
   verificaion_sid = '';
 
   constructor(
@@ -24,7 +21,8 @@ export class OtpPromptService {
   ) {}
 
   async requestOTP() {
-    const phoneNumberToSend = this.otp_phone_number || this.phone_number;
+    const phoneNumberToSend =
+      this.sessionQuery.getValue().wallet?.otp_phone_number;
     this.sendOtp(phoneNumberToSend);
     const lastFourDigits = phoneNumberToSend?.slice(-4);
     const maskedPhoneNumber = `*** *** ${lastFourDigits}`;
@@ -40,6 +38,21 @@ export class OtpPromptService {
       showCancelButton: true,
       showLoaderOnConfirm: true,
       reverseButtons: true,
+      preConfirm: (pin) => {
+        if (isNaN(pin)) {
+          this.notification.swal.showValidationMessage(
+            'Please enter digits only (0-9).'
+          );
+          return false;
+        }
+        if (pin.length !== 6) {
+          this.notification.swal.showValidationMessage(
+            'The OTP should be a 6-digit code.'
+          );
+          return false;
+        }
+        return pin;
+      },
     });
 
     return password;
