@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { resetStores } from '@datorama/akita';
 import { ModalController, ViewDidEnter } from '@ionic/angular';
-import { SetupQuery } from 'src/app/state/setup';
+import { SetupQuery, SetupService } from 'src/app/state/setup';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -15,7 +16,8 @@ export class LandingPage implements OnInit, ViewDidEnter {
 
   constructor(
     private modalCtrl: ModalController,
-    public setupQuery: SetupQuery
+    public setupQuery: SetupQuery,
+    private setupService: SetupService
   ) {
     checkResetStores();
   }
@@ -34,8 +36,11 @@ export class LandingPage implements OnInit, ViewDidEnter {
     checkResetStores();
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     checkResetStores();
+    if (Capacitor.isNativePlatform()) {
+      await this.setupService.checkUpdate();
+    }
   }
 }
 

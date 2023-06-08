@@ -29,7 +29,6 @@ describe('stubActiveSession', () => {
           public_key_hex: 'stub',
           address_base58: 'stub',
         },
-        auth_map: new Object(),
       },
       pin: 'stub',
     });
@@ -45,7 +44,6 @@ describe('stubActiveSession', () => {
         public_key_hex: 'public key',
         address_base58: 'address',
       },
-      auth_map: new Object(),
     };
     const pin = 'secret';
     stubActiveSession(store, { wallet, pin });

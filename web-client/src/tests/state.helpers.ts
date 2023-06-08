@@ -20,7 +20,6 @@ export const stubActiveSession = (
         public_key_hex: state?.wallet?.xrpl_account?.public_key_hex ?? 'stub',
         address_base58: state?.wallet?.xrpl_account?.address_base58 ?? 'stub',
       },
-      auth_map: state?.wallet?.auth_map ?? new Object(),
     },
     pin: state?.pin ?? 'stub',
   });
