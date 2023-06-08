@@ -15,7 +15,6 @@ export type WalletDisplay = {
   owner_name: string;
   phone_number?: string;
   otp_phone_number?: string;
-  auth_map: object;
 
   algorand_address_base32: AlgorandAddressBase32;
   xrpl_account: XrplAccountDisplay;

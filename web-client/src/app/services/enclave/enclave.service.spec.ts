@@ -259,7 +259,6 @@ const placeholderWalletDisplay = (owner_name: string): WalletDisplay => ({
     public_key_hex: 'placeholder public key hex',
     address_base58: 'placeholder xrp address',
   },
-  auth_map: new Object(),
 });
 
 const placeholderXrplAccountDisplay = (): XrplAccountDisplay => ({
