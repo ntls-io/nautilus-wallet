@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest, map, Observable } from 'rxjs';
+import { BookmarkService } from 'src/app/state/bookmark';
 import { OtpLimitsService } from 'src/app/state/otpLimits';
 import { OtpRecipientsService } from 'src/app/state/otpRecipients';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -85,7 +86,8 @@ export class WalletPage implements OnInit {
   constructor(
     public sessionQuery: SessionQuery,
     public otpLimitsService: OtpLimitsService,
-    public otpRecipientsService: OtpRecipientsService
+    public otpRecipientsService: OtpRecipientsService,
+    private bookmarkService: BookmarkService
   ) {
     if (environment.hidePullPayment) {
       this.actionItems = this.actionItems.filter(
@@ -95,6 +97,7 @@ export class WalletPage implements OnInit {
   }
 
   async ionViewWillEnter() {
+    this.bookmarkService.getBookmarks();
     await this.otpLimitsService.getOtpLimits();
     await this.otpRecipientsService.getOtpRecipients();
   }
