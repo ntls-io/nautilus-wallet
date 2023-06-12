@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { App } from '@capacitor/app';
 import {
   AppUpdate,
   AppUpdateAvailability,
@@ -24,6 +25,12 @@ export class SetupService {
 
   async iniFirebase() {
     initializeApp(environment.firebase);
+  }
+
+  async getAppInfo() {
+    await App.getInfo().then((appInfo) => {
+      this.setupStore.update({ appInfo });
+    });
   }
 
   async loadSettings(org: string) {

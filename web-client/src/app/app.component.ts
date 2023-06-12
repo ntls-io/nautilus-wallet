@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
-import { AutoLogoutService } from './services/auto-logout.service';
 import { SetupService } from './state/setup';
 
 @Component({
@@ -12,11 +11,7 @@ import { SetupService } from './state/setup';
 })
 export class AppComponent {
   logo: string | undefined;
-  constructor(
-    private platform: Platform,
-    private setupService: SetupService,
-    private autoLogoutService: AutoLogoutService
-  ) {
+  constructor(private platform: Platform, private setupService: SetupService) {
     this.initializeApp();
   }
 

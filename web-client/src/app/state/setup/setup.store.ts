@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AppInfo } from '@capacitor/app';
 import { Store, StoreConfig } from '@datorama/akita';
 
 export interface SetupState {
@@ -7,6 +8,7 @@ export interface SetupState {
   xrpIssuer: string;
   ledger: string;
   logo: string | undefined;
+  appInfo: AppInfo | undefined;
 }
 
 export const createInitialState = (): SetupState => ({
@@ -15,6 +17,7 @@ export const createInitialState = (): SetupState => ({
   xrpIssuer: '',
   ledger: '',
   logo: undefined,
+  appInfo: undefined,
 });
 
 @Injectable({ providedIn: 'root' })

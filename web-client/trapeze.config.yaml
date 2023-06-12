@@ -12,6 +12,7 @@ platforms:
       App:
         bundleId: $APP_ID
         version: $VERSION
+        buildNumber: $BUILD_NUMBER
         displayName: $DISPLAY_NAME
         productName: $DISPLAY_NAME
         buildSettings:
@@ -21,4 +22,5 @@ platforms:
   android:
     packageName: $APP_ID
     versionName: $VERSION
+    versionCode: $BUILD_NUMBER
     appName: $DISPLAY_NAME

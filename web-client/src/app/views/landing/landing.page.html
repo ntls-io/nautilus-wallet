@@ -26,8 +26,14 @@
         </p>
       </ion-col>
       <ion-col size="12" class="ion-text-center">
-        <p class="font-nasalization">Powered by</p>
+        <p class="font-nasalization mb-1">Powered by</p>
         <ion-text class="font-audiowide text-3xl font-bold">NAUTILUS</ion-text>
+        <p
+          class="mb-0 text-xs"
+          *ngIf="setupQuery.select('appInfo') | async as appInfo"
+        >
+          {{ appInfo.version }} ({{ appInfo.build }})
+        </p>
       </ion-col>
     </ion-row>
   </ion-grid>

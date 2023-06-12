@@ -18,6 +18,13 @@ module.exports = function (ctx) {
       variables = 'APP_ID="io.ntls.palau" DISPLAY_NAME="Palau PSC Wallet"';
     }
 
+    const dateAsBuildNumber = new Date()
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, "");
+
+    variables += " BUILD_NUMBER=" + dateAsBuildNumber;
+
     var command = variables + " " + base;
 
     console.log("> Run Trapeze", command);

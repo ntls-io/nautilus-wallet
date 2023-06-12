@@ -40,6 +40,7 @@ export class LandingPage implements OnInit, ViewDidEnter {
     checkResetStores();
     if (Capacitor.isNativePlatform()) {
       await this.setupService.checkUpdate();
+      await this.setupService.getAppInfo();
     }
   }
 }
