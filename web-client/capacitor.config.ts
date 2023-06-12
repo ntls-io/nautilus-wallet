@@ -14,6 +14,9 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: KeyboardResize.Ionic,
     },
+    PrivacyScreen: {
+      enable: true,
+    },
   },
 };
 
