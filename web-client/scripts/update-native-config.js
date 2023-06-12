@@ -23,7 +23,7 @@ module.exports = function (ctx) {
       .split("T")[0]
       .replace(/-/g, "");
 
-    variables += " BUILD_NUMBER=" + dateAsBuildNumber;
+    variables += ` BUILD_NUMBER="${dateAsBuildNumber}"`;
 
     var command = variables + " " + base;
 

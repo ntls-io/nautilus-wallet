@@ -5,6 +5,8 @@ vars:
     default: Nautilus Wallet
   VERSION:
     default: 1.0.0
+  BUILD_NUMBER:
+    default: 1
 
 platforms:
   ios:
