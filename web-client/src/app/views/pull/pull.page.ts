@@ -145,7 +145,7 @@ export class PullPage implements OnInit {
       await this.notifyResult(result, amount, sender);
       if (this.connectorQuery.getValue().walletId) {
         resetStores({ exclude: ['connector'] });
-        await this.navCtrl.navigateRoot('/');
+        await this.navCtrl.back();
       }
     }
   }
