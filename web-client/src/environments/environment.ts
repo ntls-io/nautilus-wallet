@@ -1,3 +1,7 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+
 import { Environment } from 'src/environments/types';
 
 export const environment: Environment = {
@@ -12,24 +16,27 @@ export const environment: Environment = {
     messagingSenderId: '907972056790',
     measurementId: 'G-TW4DGPTJ62',
   },
-  production: true,
+  production: false,
   staging: true,
   organization: 'nautilus',
 
-  // Enable persistence for demo purposes.
+  // Enable persistence for easier development.
   persistAkitaState: true,
-  nautilusWalletServer: 'https://wallet-staging-api.ntls.io/',
-  nautilusAssetServices: 'https://wallet-staging-services.ntls.io/',
+
+  nautilusWalletServer: 'http://localhost:4200/api/nautilus/',
+  nautilusAssetServices: 'http://localhost:4200/api/asset-services/',
+  // See `proxyConfig` in `angular.json`, and `proxy.conf.json`
+  // Docs: https://angular.io/guide/build#proxying-to-a-backend-server
   algod: {
-    baseServer: 'https://testnet-algorand.api.purestake.io/ps2',
-    port: '',
+    // XXX: Algodv2's parameter handling is a bit weird: the HTTP port must be passed separately.
+    baseServer: 'http://localhost/api/algorand',
+    port: 4200,
     // FIXME: Development key
-    token: { 'X-API-Key': 'J7eo2jPb5m4OiBneIV6r0ajgRLeSaHqk3QplGETk' },
+    token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
-  // USDC from https://testnet.folks.finance/faucet
-  defaultAlgorandAssetId: 67395862,
+
   xrplClient: {
-    server: 'wss://s.altnet.rippletest.net:51233',
+    server: 'ws://localhost:4200/api/xrpl',
     options: {
       connectionTimeout: 20000,
     },
@@ -37,12 +44,21 @@ export const environment: Environment = {
   commissionPercentage: 0.01,
   tokenIssuer: 'rpJv16Qmn2rQP6UC6UFsNRnVy5arkQihPP',
   tokenSymbol: 'FOO',
-  xrpIssuer: 'r9web3Ca7gXmQgdym3EQMgWw6vB4DYMPzC',
+  xrpIssuer: 'rf9vKLZVsozsaUgU533W4BUj87TgzTqyQE',
   hideXrpBalance: false,
-  autofundXrp: true,
+  autofundXrp: false,
   hidePullPayment: false,
   enableInvites: true,
   enableQuickAccess: true,
   enablePinReset: true,
-  autoLogout: true,
+  autoLogout: false,
 };
+
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
