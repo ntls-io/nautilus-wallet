@@ -35,7 +35,7 @@ export class GlobalErrorHandler implements ErrorHandler {
           })
           .then(() => {
             // XXX: See also modal closing code in LandingPage
-            this.navCtrl.navigateRoot('');
+            this.navCtrl.back();
           })
     );
   }

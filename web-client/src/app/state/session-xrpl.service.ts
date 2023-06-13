@@ -552,7 +552,7 @@ export class SessionXrplService {
           })
           .then(({ isConfirmed }) => {
             if (isConfirmed) {
-              this.navCtrl.navigateRoot('/');
+              this.navCtrl.back();
             }
           });
         throw new Error('Local error:');
