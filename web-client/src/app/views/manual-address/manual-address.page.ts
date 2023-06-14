@@ -15,6 +15,7 @@ import { checkClass } from 'src/helpers/helpers';
 })
 export class ManualAddressPage implements OnInit {
   @Input() wallet_id: string | undefined;
+  @Input() placeholder = "Enter recipient's wallet address";
   addressForm: FormGroup;
 
   constructor(private modalCtrl: ModalController) {
