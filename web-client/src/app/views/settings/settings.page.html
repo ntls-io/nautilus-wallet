@@ -57,6 +57,17 @@
             </ion-item>
           </ng-container>
 
+          <ion-item
+            detail="false"
+            class="app-item"
+            button
+            (click)="openLink('https://ntls.io/privacy-policy/')"
+          >
+            <ion-icon slot="start" name="document-text"></ion-icon>
+            <ion-label>Privacy Policy</ion-label>
+            <ion-icon slot="end" name="link"></ion-icon>
+          </ion-item>
+
           <ng-container *ngIf="sessionQuery.allBalances | async as balances">
             <ion-item
               *ngIf="balances.length > 0"

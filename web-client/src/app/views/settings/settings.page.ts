@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Browser } from '@capacitor/browser';
 import { ConnectorQuery } from 'src/app/state/connector';
 import { SessionQuery } from 'src/app/state/session.query';
 
@@ -25,4 +26,8 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {}
+
+  async openLink(url: string) {
+    await Browser.open({ url });
+  }
 }
