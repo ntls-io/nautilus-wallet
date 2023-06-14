@@ -18,6 +18,14 @@ export class SwalHelper {
     allowOutsideClick: false,
   });
 
+  showInvalidAddress() {
+    this.swal.fire({
+      icon: 'warning',
+      title: 'Invalid Address',
+      text: 'Please enter a valid wallet address.',
+    });
+  }
+
   showIncorrectOTPWarning() {
     this.swal.fire({
       icon: 'warning',

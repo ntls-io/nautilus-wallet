@@ -1,4 +1,6 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
+import algosdk from 'algosdk';
+import * as xrpl from 'xrpl';
 
 /**
  * Safely parse untrusted user input to a `number`.
@@ -42,4 +44,30 @@ export const numericValidator: ValidatorFn = (
 /** @see numericValidator*/
 export type NumericValidationError = {
   numeric: true;
+};
+
+type AddressType = 'Algorand' | 'XRPL';
+
+const addressTypes = (address: string): AddressType[] => {
+  const coerce = (t: AddressType[]) => t;
+  return [
+    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
+    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
+  ];
+};
+
+export const addressType = (address: string): AddressType | undefined => {
+  const types = addressTypes(address);
+  switch (types.length) {
+    case 0:
+      return undefined;
+    case 1:
+      return types[0];
+    default:
+      throw Error(
+        `addressType: ${JSON.stringify(
+          types
+        )} has multiple types: ${JSON.stringify(types)}`
+      );
+  }
 };
