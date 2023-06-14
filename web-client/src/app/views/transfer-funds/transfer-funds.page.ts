@@ -59,9 +59,15 @@ export class TransferFundsPage implements OnInit {
 
   async presentAddressModal() {
     const wallet_id = this.sessionQuery.getValue().wallet?.wallet_id;
+    let placeholder: string;
+    if (this.transferType === 'pay') {
+      placeholder = "Enter recipient's address";
+    } else {
+      placeholder = 'Enter Wallet Address that you are pulling funds from';
+    }
     const modal = await this.modalCtrl.create({
       component: ManualAddressPage,
-      componentProps: { wallet_id },
+      componentProps: { wallet_id, placeholder },
     });
 
     await modal.present();
