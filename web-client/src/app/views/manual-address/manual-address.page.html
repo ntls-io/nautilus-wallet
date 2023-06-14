@@ -17,7 +17,7 @@
         <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
           <ion-textarea
             type="text"
-            placeholder="Enter recipient's wallet address"
+            [placeholder]="placeholder"
             class="p-0"
             formControlName="address"
           ></ion-textarea>
