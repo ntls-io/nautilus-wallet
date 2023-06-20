@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonInput, LoadingController } from '@ionic/angular';
-import algosdk from 'algosdk';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
 import { OtpLimitsQuery, OtpLimitsService } from 'src/app/state/otpLimits';
 import {
@@ -12,8 +11,8 @@ import { SessionQuery } from 'src/app/state/session.query';
 import { AssetAmount } from 'src/app/utils/assets/assets.common';
 import { withLoadingOverlayOpts } from 'src/app/utils/loading.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { addressType } from 'src/app/utils/validators';
 import { environment } from 'src/environments/environment';
-import * as xrpl from 'xrpl';
 
 @Component({
   selector: 'app-triggers',
@@ -158,11 +157,7 @@ export class TriggersPage implements OnInit {
           }
         );
       } else {
-        await this.notification.swal.fire({
-          icon: 'warning',
-          title: 'Invalid Address',
-          text: 'Please input a valid wallet address',
-        });
+        this.notification.showInvalidAddress();
       }
     }
   }
@@ -247,30 +242,4 @@ export type PaymentOption = {
 
   /** (Optional) A transaction amount limit for this option. */
   transactionLimit?: number;
-};
-
-type AddressType = 'Algorand' | 'XRPL';
-
-const addressTypes = (address: string): AddressType[] => {
-  const coerce = (t: AddressType[]) => t;
-  return [
-    ...coerce(algosdk.isValidAddress(address) ? ['Algorand'] : []),
-    ...coerce(xrpl.isValidAddress(address) ? ['XRPL'] : []),
-  ];
-};
-
-const addressType = (address: string): AddressType | undefined => {
-  const types = addressTypes(address);
-  switch (types.length) {
-    case 0:
-      return undefined;
-    case 1:
-      return types[0];
-    default:
-      throw Error(
-        `addressType: ${JSON.stringify(
-          types
-        )} has multiple types: ${JSON.stringify(types)}`
-      );
-  }
 };
