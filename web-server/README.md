@@ -21,7 +21,7 @@ see [rust-sgx-sdk-dev-env] for one way to do this.
 You'll also need to install [bindgen], and its [requirements]:
 
 ```shell
-cargo install --version 0.63.0 bindgen-cli
+cargo install --version 0.63.0 bindgen-cli --locked
 sudo apt install llvm-dev libclang-dev clang
 ```
 
