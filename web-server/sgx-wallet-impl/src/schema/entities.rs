@@ -66,9 +66,6 @@ impl WalletSecret {
         let WalletSecret(secret) = self;
         secret.as_bytes()
     }
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
 }
 
 /*
