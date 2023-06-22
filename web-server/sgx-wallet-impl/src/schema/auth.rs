@@ -58,6 +58,10 @@ impl WalletChallenge {
         let mut stored = self.stored_responses.drain();
         let mut mismatch_count = 0;
 
+        if stored.is_empty() {
+            return Err(AuthError::InvalidAttempt);
+        }
+
         while let Some((key, stored_secret)) = stored.next() {
             if let Some(attempt) = self.auth_attempts.get(&key) {
                 /*
