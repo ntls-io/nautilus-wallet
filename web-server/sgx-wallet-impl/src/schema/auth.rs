@@ -55,13 +55,9 @@ impl WalletChallenge {
         }
     }
     pub fn authenticate(mut self) -> Result<ChallengeOutcome, AuthError> {
-        let stored_responses_copy = self.stored_responses.clone();
+        let stored_responses = self.stored_responses.clone();
         let mut stored = self.stored_responses.drain();
         let mut mismatch_count = 0;
-
-        if stored_responses_copy.is_empty() {
-            return Err(AuthError::InvalidAttempt);
-        }
 
         while let Some((key, stored_secret)) = stored.next() {
             if let Some(attempt) = self.auth_attempts.get(&key) {
@@ -86,7 +82,7 @@ impl WalletChallenge {
         /*
          *  Authentication fails iff two or more user responses were incorect
          */
-        if mismatch_count > 1 {
+        if mismatch_count > 1 || stored_responses.is_empty() {
             return Ok(ChallengeOutcome::Failure);
         }
         Ok(ChallengeOutcome::Success)
