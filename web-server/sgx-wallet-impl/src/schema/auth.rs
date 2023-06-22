@@ -46,9 +46,6 @@ impl WalletChallenge {
             Some(mut wallet_storable) => {
                 let stored_responses =
                     WalletAuthMap::from_iter(wallet_storable.auth_map.drain().into_iter());
-                if stored_responses.values().any(|response| response.is_empty()){
-                    return Err(AuthError::InvalidAttempt)
-                }
                 Ok(Self {
                     auth_attempts,
                     stored_responses,
