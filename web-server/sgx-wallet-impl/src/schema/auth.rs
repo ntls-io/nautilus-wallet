@@ -55,10 +55,11 @@ impl WalletChallenge {
         }
     }
     pub fn authenticate(mut self) -> Result<ChallengeOutcome, AuthError> {
+        let stored_responses_copy = self.stored_responses.clone();
         let mut stored = self.stored_responses.drain();
         let mut mismatch_count = 0;
 
-        if stored.is_empty() {
+        if stored_responses_copy.is_empty() {
             return Err(AuthError::InvalidAttempt);
         }
 
