@@ -52,6 +52,7 @@ pub extern "C" fn run_tests_ecall() -> usize {
         wallet_operations::test_sign_transaction_msgpack::prop_transaction_msgpack_roundtrips,
         wallet_operations::test_sign_transaction_xrpl::sign_transaction_empty,
         wallet_operations::test_pin_reset::start_pin_reset_success,
+        wallet_operations::test_pin_reset::start_pin_reset_failure,
         wallet_operations::test_pin_reset::reset_wallet_pin_success,
         wallet_operations::test_store::unlock_wallet_bad_auth_pin,
         wallet_operations::test_store::unlock_wallet_malformed_wallet_id,

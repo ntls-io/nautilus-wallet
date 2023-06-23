@@ -12,7 +12,7 @@ use sgx_wallet_impl::schema::types::WalletAuthMap;
 use sgx_wallet_impl::wallet_operations::pin_reset::{reset_wallet_pin, start_pin_reset};
 use sgx_wallet_impl::wallet_operations::store::load_wallet;
 
-use crate::helpers::wallet_store::{create_test_auth_map, create_test_wallet};
+use crate::helpers::wallet_store::{create_test_auth_map, create_test_wallet, create_test_auth_map_empty};
 
 pub fn start_pin_reset_success() {
     let stored_wallet = create_test_wallet();
@@ -23,6 +23,17 @@ pub fn start_pin_reset_success() {
     };
     let result = start_pin_reset(&request);
     assert!(matches!(result, StartPinResetResult::Success))
+}
+
+pub fn start_pin_reset_failure() {
+    let stored_wallet = create_test_wallet();
+    let request = StartPinReset {
+        wallet_id: stored_wallet.wallet_id,
+        wallet_auth_map: RefCell::new(create_test_auth_map_empty()),
+        client_pk: [1u8; 32],
+    };
+    let result = start_pin_reset(&request);
+    assert!(matches!(result, StartPinResetResult::InvalidAuth))
 }
 
 pub fn reset_wallet_pin_success() {

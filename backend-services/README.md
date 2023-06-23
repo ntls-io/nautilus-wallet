@@ -106,5 +106,15 @@ be done via
 poetry shell
 ```
 
+## Commands
+
+It's recommended to run these code format commands before committing any changes to
+ensure consistent code style across the project. This helps ensure consistent and
+organized imports, making your code easier to read and maintain.
+```shell
+poetry run black src tests
+poetry run isort src tests
+```
+
 [localhost-docs]: http://localhost:8000/docs
 [python-dotenv]: https://github.com/theskumar/python-dotenv#getting-started

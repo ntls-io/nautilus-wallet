@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookmarkService } from 'src/app/state/bookmark';
+import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { addressType } from 'src/app/utils/validators';
 
 @Component({
   selector: 'app-new-bookmark',
@@ -12,7 +14,8 @@ export class NewBookmarkComponent implements OnInit {
 
   constructor(
     private bookmarkService: BookmarkService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notification: SwalHelper
   ) {
     this.bookmarkForm = this.formBuilder.group({
       name: [
@@ -30,7 +33,7 @@ export class NewBookmarkComponent implements OnInit {
 
   async createBookmark(form: FormGroup) {
     form.markAllAsTouched();
-    if (form.valid) {
+    if (form.valid && addressType(form.value.address)) {
       const { name, address } = form.value;
       await this.bookmarkService
         .createBookmark({ name, address })
@@ -39,6 +42,8 @@ export class NewBookmarkComponent implements OnInit {
             form.reset();
           }
         });
+    } else {
+      this.notification.showInvalidAddress();
     }
   }
 }
