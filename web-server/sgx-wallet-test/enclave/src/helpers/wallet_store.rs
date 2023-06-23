@@ -23,6 +23,13 @@ pub fn create_test_auth_map() -> WalletAuthMap {
     auth_map.insert("Question C".to_string(), WalletSecret::new("Response C"));
     auth_map
 }
+pub fn create_test_auth_map_empty() -> WalletAuthMap {
+    let mut auth_map = HashMap::new();
+    auth_map.insert("Question A".to_string(), WalletSecret::new(""));
+    auth_map.insert("Question B".to_string(), WalletSecret::new(""));
+    auth_map.insert("Question C".to_string(), WalletSecret::new(""));
+    auth_map
+}
 
 pub fn create_test_wallet() -> WalletDisplay {
     type Result = CreateWalletResult;
