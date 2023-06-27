@@ -85,6 +85,14 @@ class CreateRecurringPayment(BaseModel):
     frequency: int
     payment_end_date: int
 
+    @validator("payment_start_date", "payment_end_date")
+    @classmethod
+    def valid_ordinal_date(cls: type, v: int) -> int:
+        if not isinstance(v, int) or v <= 0:
+            raise ValueError("Ordinal date must be a positive integer.")
+
+        return v
+
 
 class DeleteRecurringPayment(BaseModel):
     """
@@ -114,6 +122,14 @@ class UpdateRecurringPayment(BaseModel):
     frequency: int
     payment_end_date: int
 
+    @validator("payment_start_date", "payment_end_date")
+    @classmethod
+    def valid_ordinal_date(cls: type, v: int) -> int:
+        if not isinstance(v, int) or v <= 0:
+            raise ValueError("Ordinal date must be a positive integer.")
+
+        return v
+
     @validator("recurring_payment_id")
     @classmethod
     def valid_object_id_hex_representation(cls: type, v: str) -> str:
@@ -127,3 +143,11 @@ class UpdateLastPaidDate(BaseModel):
 
     recurring_payment_id: str
     last_paid_date: int
+
+    @validator("last_paid_date")
+    @classmethod
+    def valid_ordinal_date(cls: type, v: int) -> int:
+        if not isinstance(v, int) or v <= 0:
+            raise ValueError("Ordinal date must be a positive integer.")
+
+        return v
