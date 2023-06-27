@@ -54,3 +54,19 @@ class OtpRecipientTrigger(Model):
 
     wallet_id: WalletAddress
     recipient: WalletAddress
+
+
+class RecurringPayment(Model):
+    """
+    Recurring payment details setup by sender.
+    """
+
+    wallet_id: WalletAddress
+    wallet_public_key: str
+    recipient: WalletAddress
+    amount: float
+    currency_code: str
+    payment_start_date: int
+    frequency: int
+    payment_end_date: int
+    last_paid_date: int
