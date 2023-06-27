@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use crate::ported::kv_store::fs::{FsStore, SgxFiler};
 use crate::ported::kv_store::{Key, KvStore};
-use crate::schema::entities::{WalletStorable, XrplAccountDisplay};
+use crate::schema::entities::{WalletStorable, XrplAccount, XrplAccountDisplay};
 
 type WalletStore = FsStore<SgxFiler, WalletStorable>;
 
@@ -69,6 +69,16 @@ pub fn load_xrpl_wallet(wallet_id: &str) -> Result<XrplAccountDisplay, GetXrplWa
     Ok(XrplAccountDisplay::from(xrpl_account))
 }
 
+pub fn load_full_xrpl_wallet(
+    wallet_id: &str,
+) -> Result<XrplAccount, SignTransactionRecurringPaymentError> {
+    let stored: WalletStorable =
+        load_wallet(wallet_id)?.ok_or(SignTransactionRecurringPaymentError::InvalidWalletId)?;
+
+    let xrpl_account = stored.xrpl_account.clone();
+    Ok(xrpl_account)
+}
+
 /// [`unlock_wallet`] failed.
 ///
 /// # Security note
@@ -91,6 +101,15 @@ pub enum UnlockWalletError {
 /// [`load_xrpl_wallet`] failed.
 #[derive(Debug, Error)]
 pub enum GetXrplWalletError {
+    #[error("invalid wallet ID provided")]
+    InvalidWalletId,
+
+    #[error("I/O error while opening wallet")]
+    IoError(#[from] io::Error),
+}
+
+#[derive(Debug, Error)]
+pub enum SignTransactionRecurringPaymentError {
     #[error("invalid wallet ID provided")]
     InvalidWalletId,
 
