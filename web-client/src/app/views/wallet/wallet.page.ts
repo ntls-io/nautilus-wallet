@@ -81,6 +81,12 @@ export class WalletPage implements OnInit {
       path: '/2FA',
       disabled: false,
     },
+    {
+      title: 'Recurring Payments',
+      icon: 'cash',
+      path: '/recurring-pay',
+      disabled: false,
+    },
   ];
 
   constructor(
