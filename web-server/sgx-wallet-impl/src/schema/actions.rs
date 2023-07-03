@@ -16,7 +16,11 @@ use crate::schema::auth::AuthError;
 use crate::schema::entities::{WalletDisplay, XrplAccountDisplay};
 use crate::schema::serde_bytes_array;
 use crate::schema::types::{Bytes, WalletAuthMap, WalletId, WalletPin};
-use crate::wallet_operations::store::{GetXrplWalletError, UnlockWalletError};
+use crate::wallet_operations::store::{
+    GetXrplWalletError,
+    SignTransactionRecurringPaymentError,
+    UnlockWalletError,
+};
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
 #[derive(Deserialize, Serialize)] // serde
@@ -140,6 +144,46 @@ pub enum PinResetResult {
     InvalidAuth,
     NotFound,
     Failed(String),
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+#[derive(Zeroize, ZeroizeOnDrop)] // zeroize
+pub struct SignTransactionRecurringPayment {
+    pub wallet_id: WalletId,
+
+    #[zeroize(skip)]
+    pub transaction_to_sign: TransactionToSign,
+}
+
+#[derive(Clone, Eq, PartialEq, Debug)] // core
+#[derive(Deserialize, Serialize)] // serde
+pub enum SignTransactionRecurringPaymentResult {
+    Signed(TransactionSigned),
+    Failed(String),
+}
+
+impl SignTransactionRecurringPaymentResult {
+    /// Unwrap [`Self::Signed`] or panic.
+    pub fn unwrap_signed(self) -> TransactionSigned {
+        match self {
+            SignTransactionRecurringPaymentResult::Signed(signed) => signed,
+            otherwise => panic!(
+                "called `SignTransactionRecurringPaymentResult::unwrap_signed` on: {:?}",
+                otherwise
+            ),
+        }
+    }
+}
+
+impl From<SignTransactionRecurringPaymentError> for SignTransactionRecurringPaymentResult {
+    fn from(err: SignTransactionRecurringPaymentError) -> Self {
+        use SignTransactionRecurringPaymentError::*;
+        match err {
+            InvalidWalletId => Self::Failed("Invalid wallet id".to_string()),
+            IoError(err) => Self::Failed(err.to_string()),
+        }
+    }
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)] // core
@@ -352,6 +396,7 @@ pub enum WalletRequest {
     OpenWallet(OpenWallet),
     GetXrplWallet(GetXrplWallet),
     SignTransaction(SignTransaction),
+    SignTransactionRecurringPayment(SignTransactionRecurringPayment),
 
     StartPinReset(StartPinReset),
     PinReset(PinReset),
@@ -374,6 +419,7 @@ pub enum WalletResponse {
     StartPinReset(StartPinResetResult),
     PinReset(PinResetResult),
     SignTransaction(SignTransactionResult),
+    SignTransactionRecurringPayment(SignTransactionRecurringPaymentResult),
     SaveOnfidoCheck(SaveOnfidoCheckResult),
     UpdateOtpPhoneNumber(UpdateOtpPhoneNumberResult),
     LoadOnfidoCheck(LoadOnfidoCheckResult),
@@ -402,6 +448,12 @@ impl From<GetXrplWalletResult> for WalletResponse {
 impl From<SignTransactionResult> for WalletResponse {
     fn from(result: SignTransactionResult) -> Self {
         Self::SignTransaction(result)
+    }
+}
+
+impl From<SignTransactionRecurringPaymentResult> for WalletResponse {
+    fn from(result: SignTransactionRecurringPaymentResult) -> Self {
+        Self::SignTransactionRecurringPayment(result)
     }
 }
 
