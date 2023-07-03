@@ -16,6 +16,7 @@ use crate::wallet_operations::load_onfido_check::load_onfido_check;
 use crate::wallet_operations::open_wallet::open_wallet;
 use crate::wallet_operations::save_onfido_check::save_onfido_check;
 use crate::wallet_operations::sign_transaction::sign_transaction;
+use crate::wallet_operations::sign_transaction_recurring_payment::sign_transaction_recurring_payment;
 
 /// Implementation for [`crate::ecalls::wallet_operation::wallet_operation`].
 ///
@@ -113,6 +114,9 @@ fn wallet_operation_impl_dispatch(wallet_request: &WalletRequest) -> WalletRespo
         WalletRequest::OpenWallet(request) => open_wallet(request).into(),
         WalletRequest::GetXrplWallet(request) => get_xrpl_wallet(request).into(),
         WalletRequest::SignTransaction(request) => sign_transaction(request).into(),
+        WalletRequest::SignTransactionRecurringPayment(request) => {
+            sign_transaction_recurring_payment(request).into()
+        }
         WalletRequest::StartPinReset(request) => start_pin_reset(request).into(),
         WalletRequest::PinReset(request) => reset_wallet_pin(request).into(),
         WalletRequest::UpdateOtpPhoneNumber(request) => update_otp_phone_number(request).into(),
