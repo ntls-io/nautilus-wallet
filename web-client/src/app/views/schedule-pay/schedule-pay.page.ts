@@ -55,6 +55,7 @@ export class SchedulePayPage implements OnInit {
   balance: AssetAmount | undefined;
   maxAmount = 1000000000;
   wallet_id: string | undefined;
+  daysInMonth: number[] = [-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   constructor(
     private router: Router,
@@ -116,7 +117,27 @@ export class SchedulePayPage implements OnInit {
       this.amount = assetAmountXrplToken(amount, { currency, issuer });
     }
     this.isScheduleEntryOpen = true;
-    console.log(this.amount);
+  }
+
+  isLeapYear(year: number): boolean {
+    // year -> 1 if leap year, else 0.
+    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  }
+
+  getDateToOrdinal(date: Date): number {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return (
+      (year - 1) * 365 +
+      Math.floor((year - 1) / 4) -
+      Math.floor((year - 1) / 100) +
+      Math.floor((year - 1) / 400) +
+      this.daysInMonth.slice(1, month).reduce((acc, curr) => acc + curr, 0) +
+      (month > 2 && this.isLeapYear(year) ? 1 : 0) +
+      day
+    );
   }
 
   async onScheduleConfirmed(schedule: ScheduleValue) {
@@ -145,9 +166,13 @@ export class SchedulePayPage implements OnInit {
                     recipient: this.receiverAddress,
                     amount: this.amount?.amount ?? 0,
                     currency_code: this.selectedCurrency,
-                    payment_start_date: Date.parse(schedule.startDate) / 1000,
+                    payment_start_date: this.getDateToOrdinal(
+                      new Date(schedule.startDate)
+                    ),
                     frequency: schedule.frequency,
-                    payment_end_date: Date.parse(schedule.endDate) / 1000,
+                    payment_end_date: this.getDateToOrdinal(
+                      new Date(schedule.endDate)
+                    ),
                   });
                 }
               );

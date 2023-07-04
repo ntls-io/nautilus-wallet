@@ -42,8 +42,23 @@
           </ion-button>
         </ion-item>
         <ion-card-subtitle class="ion-text-center"
-          >Payment is made every {{item.frequency}} days.</ion-card-subtitle
+          >Payments are scheduled every {{item.frequency}} days, from
+          {{getOrdinalToDate(item.payment_start_date) | date}} to
+          {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
         >
+        <ion-card-subtitle
+          class="ion-text-center"
+          *ngIf="item.last_paid_date === -1"
+        >
+          No payments have been made yet</ion-card-subtitle
+        >
+        <ion-card-subtitle
+          class="ion-text-center"
+          *ngIf="item.last_paid_date !== -1"
+        >
+          Last payment was done on {{getOrdinalToDate(item.last_paid_date) |
+          date}}
+        </ion-card-subtitle>
       </ion-card-content>
     </ion-card>
   </div>

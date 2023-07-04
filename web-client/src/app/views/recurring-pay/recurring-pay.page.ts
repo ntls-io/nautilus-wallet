@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import {
-  RecurringPay,
   RecurringPayQuery,
   RecurringPayService,
 } from 'src/app/state/recurring-pay';
@@ -16,7 +15,7 @@ import { ManualAddressPage } from '../manual-address/manual-address.page';
 })
 export class RecurringPayPage implements OnInit {
   transferType: any;
-  recurringPayments: RecurringPay[] = [];
+  daysInMonth: number[] = [-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   constructor(
     private modalCtrl: ModalController,
@@ -27,9 +26,7 @@ export class RecurringPayPage implements OnInit {
     private recurringPayService: RecurringPayService
   ) {}
 
-  ngOnInit() {
-    this.recurringPayments = this.recurringPayQuery.getAll();
-  }
+  ngOnInit() {}
 
   async ionViewWillEnter() {
     await this.recurringPayService.getRecurringPayments();
@@ -56,6 +53,42 @@ export class RecurringPayPage implements OnInit {
         this.notification.showInvalidAddress();
       }
     }
+  }
+
+  isLeapYear(year: number): boolean {
+    // year -> 1 if leap year, else 0.
+    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  }
+
+  getOrdinalToDate(ordinal: number): Date {
+    let year = 1;
+    let daysLeft = ordinal;
+
+    while (daysLeft > 365) {
+      const daysInYear = this.isLeapYear(year) ? 366 : 365;
+      if (daysLeft <= daysInYear) {
+        break;
+      }
+      daysLeft -= daysInYear;
+      year++;
+    }
+
+    let month = 1;
+    while (daysLeft > this.daysInMonth[month]) {
+      if (month === 2 && this.isLeapYear(year)) {
+        if (daysLeft <= this.daysInMonth[month] + 1) {
+          break;
+        }
+        daysLeft -= this.daysInMonth[month] + 1;
+      } else {
+        daysLeft -= this.daysInMonth[month];
+      }
+      month++;
+    }
+
+    const day = daysLeft;
+
+    return new Date(year, month - 1, day);
   }
 
   deleteRecurringPayment(id: string) {

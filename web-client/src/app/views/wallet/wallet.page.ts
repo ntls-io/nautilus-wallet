@@ -4,6 +4,7 @@ import { combineLatest, map, Observable } from 'rxjs';
 import { BookmarkService } from 'src/app/state/bookmark';
 import { OtpLimitsService } from 'src/app/state/otpLimits';
 import { OtpRecipientsService } from 'src/app/state/otpRecipients';
+import { RecurringPayService } from 'src/app/state/recurring-pay';
 import { SessionQuery } from 'src/app/state/session.query';
 import { environment } from 'src/environments/environment';
 
@@ -93,7 +94,8 @@ export class WalletPage implements OnInit {
     public sessionQuery: SessionQuery,
     public otpLimitsService: OtpLimitsService,
     public otpRecipientsService: OtpRecipientsService,
-    private bookmarkService: BookmarkService
+    private bookmarkService: BookmarkService,
+    private recurringPayService: RecurringPayService
   ) {
     if (environment.hidePullPayment) {
       this.actionItems = this.actionItems.filter(
@@ -106,6 +108,7 @@ export class WalletPage implements OnInit {
     this.bookmarkService.getBookmarks();
     await this.otpLimitsService.getOtpLimits();
     await this.otpRecipientsService.getOtpRecipients();
+    await this.recurringPayService.getRecurringPayments();
   }
 
   ngOnInit() {}

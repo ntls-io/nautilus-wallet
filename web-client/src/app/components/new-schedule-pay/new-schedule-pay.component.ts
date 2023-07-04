@@ -28,7 +28,6 @@ export class NewSchedulePayComponent implements OnInit {
         endDate,
       };
       this.scheduleConfirmed.emit(schedule);
-      console.log(schedule);
     }
   }
 

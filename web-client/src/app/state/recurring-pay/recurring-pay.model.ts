@@ -8,7 +8,7 @@ export interface RecurringPay {
   payment_start_date: number;
   frequency: number;
   payment_end_date: number;
-  last_paid_date?: number;
+  last_paid_date: number;
 }
 export const createRecurringPay = (params: Partial<RecurringPay>) =>
   ({} as RecurringPay);
