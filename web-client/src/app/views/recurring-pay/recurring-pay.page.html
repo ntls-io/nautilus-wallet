@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Recurring Payments</ion-title>
+    <ion-buttons slot="end">
+      <app-logout-button></app-logout-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="addRecurringPay()" shape="round"
+      >Add
+    </ion-button>
+  </div>
+
+  <div *ngIf="recurringPayQuery.selectCount() | async; else noData">
+    <ion-card
+      *ngFor="let item of recurringPayQuery.selectAll() | async"
+      color="ion-color-primary"
+    >
+      <ion-card-header>
+        <ion-card-title>To</ion-card-title>
+        <ion-card-subtitle>{{item.recipient}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label slot="start" class="ion-text-right">
+            <ion-text class="font-audiowide"> {{item.amount}} </ion-text>
+          </ion-label>
+          <div slot="start" class="w-12">
+            <ion-text slot="end" class="font-bold">
+              {{item.currency_code}}
+            </ion-text>
+          </div>
+          <ion-button (click)="deleteRecurringPayment(item.id)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-card-subtitle class="ion-text-center"
+          >Payments are scheduled every {{item.frequency}} days, from
+          {{getOrdinalToDate(item.payment_start_date) | date}} to
+          {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
+        >
+        <ion-card-subtitle
+          class="ion-text-center"
+          *ngIf="item.last_paid_date === -1"
+        >
+          No payments have been made yet</ion-card-subtitle
+        >
+        <ion-card-subtitle
+          class="ion-text-center"
+          *ngIf="item.last_paid_date !== -1"
+        >
+          Last payment was done on {{getOrdinalToDate(item.last_paid_date) |
+          date}}
+        </ion-card-subtitle>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #noData>
+    <div class="ion-padding-horizontal ion-text-center">
+      <ion-text color="light">
+        <p>There are no payments scheduled.</p>
+      </ion-text>
+    </div>
+  </ng-template>
+</ion-content>

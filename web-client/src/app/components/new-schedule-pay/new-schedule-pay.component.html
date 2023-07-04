@@ -1,0 +1,96 @@
+<div class="text-center ion-padding-horizontal">
+  <h1 class="font-semibold font-nasalization">Set Schedule</h1>
+  <div class="inline-block w-auto m-auto">
+    <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+      <div>
+        <ion-list lines="none" mode="ios">
+          <ion-item>
+            <ion-label position="stacked" for="frequency"
+              >Set Frequency</ion-label
+            >
+            <ion-input
+              type="number"
+              formControlName="frequency"
+              placeholder="Number of Days"
+            ></ion-input>
+          </ion-item>
+          <ion-text
+            slot="error"
+            color="danger"
+            *ngIf="
+              scheduleForm.get('frequency')?.invalid &&
+              scheduleForm.get('frequency')?.dirty
+            "
+          >
+            <p *ngIf="scheduleForm.get('frequency')?.errors?.required">
+              Frequency is required.
+            </p>
+            <p
+              *ngIf="
+                scheduleForm.get('frequency')?.errors?.min ||
+                scheduleForm.get('frequency')?.errors?.max
+              "
+            >
+              Frequency must be between 1 and 30.
+            </p>
+          </ion-text>
+
+          <p>
+            The start date will be the date the payment occurs for all recurring
+            payments.
+          </p>
+
+          <ion-item>
+            <ion-label position="stacked" for="startDate">Start Date</ion-label>
+            <ion-input type="date" formControlName="startDate"></ion-input>
+          </ion-item>
+
+          <ion-text
+            slot="error"
+            color="danger"
+            *ngIf="
+              scheduleForm.get('startDate')?.invalid &&
+              scheduleForm.get('startDate')?.dirty
+            "
+          >
+            <p *ngIf="scheduleForm.get('startDate')?.errors?.required">
+              Start date is required.
+            </p>
+            <p *ngIf="scheduleForm.get('startDate')?.errors?.dateInvalid">
+              Start date must be in the future.
+            </p>
+          </ion-text>
+
+          <ion-item>
+            <ion-label position="stacked" for="endDate">End Date</ion-label>
+            <ion-input type="date" formControlName="endDate"></ion-input>
+          </ion-item>
+
+          <ion-text
+            slot="error"
+            color="danger"
+            *ngIf="
+              scheduleForm.get('endDate')?.invalid &&
+              scheduleForm.get('endDate')?.dirty
+            "
+          >
+            <p *ngIf="scheduleForm.get('endDate')?.errors?.required">
+              End date is required.
+            </p>
+            <p *ngIf="scheduleForm.get('endDate')?.errors?.dateInvalid">
+              End date must be after the start date.
+            </p>
+          </ion-text>
+        </ion-list>
+
+        <ion-button
+          expand="block"
+          shape="round"
+          type="submit"
+          [disabled]="!scheduleForm.valid"
+          >Confirm</ion-button
+        >
+      </div>
+    </form>
+  </div>
+</div>
