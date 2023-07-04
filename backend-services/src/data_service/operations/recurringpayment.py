@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from bson import ObjectId
 from fastapi import HTTPException
@@ -85,18 +85,14 @@ async def check_recurring_payments(engine: Engine) -> list[RecurringPayment]:
     """
     Retrieve a list of payments that need to happen today.
     """
-    today = date.today()
+    today = int(datetime.now().timestamp())
     payments = await engine.find(RecurringPayment)
     result_recurring_payments = []
 
     for payment in payments:
-        if (
-            payment.payment_start_date <= today.toordinal() <= payment.payment_end_date
-            and (
-                payment.last_paid_date == -1
-                or (today - date.fromordinal(payment.last_paid_date)).days
-                >= payment.frequency
-            )
+        if payment.payment_start_date <= today <= payment.payment_end_date and (
+            payment.last_paid_date == -1
+            or (today - payment.last_paid_date) // (24 * 60 * 60) >= payment.frequency
         ):
             result_recurring_payments.append(payment)
 

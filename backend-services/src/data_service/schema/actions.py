@@ -87,9 +87,9 @@ class CreateRecurringPayment(BaseModel):
 
     @validator("payment_start_date", "payment_end_date")
     @classmethod
-    def valid_ordinal_date(cls: type, v: int) -> int:
+    def valid_date(cls: type, v: int) -> int:
         if not isinstance(v, int) or v <= 0:
-            raise ValueError("Ordinal date must be a positive integer.")
+            raise ValueError("Date must be a positive integer.")
 
         return v
 
@@ -124,9 +124,9 @@ class UpdateRecurringPayment(BaseModel):
 
     @validator("payment_start_date", "payment_end_date")
     @classmethod
-    def valid_ordinal_date(cls: type, v: int) -> int:
+    def valid_date(cls: type, v: int) -> int:
         if not isinstance(v, int) or v <= 0:
-            raise ValueError("Ordinal date must be a positive integer.")
+            raise ValueError("Date must be a positive integer.")
 
         return v
 
@@ -146,8 +146,8 @@ class UpdateLastPaidDate(BaseModel):
 
     @validator("last_paid_date")
     @classmethod
-    def valid_ordinal_date(cls: type, v: int) -> int:
+    def valid_date(cls: type, v: int) -> int:
         if not isinstance(v, int) or v <= 0:
-            raise ValueError("Ordinal date must be a positive integer.")
+            raise ValueError("Date must be a positive integer.")
 
         return v
