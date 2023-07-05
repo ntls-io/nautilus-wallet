@@ -112,6 +112,7 @@ It's recommended to run these code format commands before committing any changes
 ensure consistent code style across the project. This helps ensure consistent and
 organized imports, making your code easier to read and maintain.
 ```shell
+poetry run ruff src tests
 poetry run black src tests
 poetry run isort src tests
 ```
