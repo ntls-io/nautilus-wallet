@@ -10,6 +10,7 @@ import { ActionItem } from 'src/app/components/action-item/action-item.component
 import { SessionQuery } from 'src/app/state/session.query';
 import { deviceHasCamera } from 'src/app/utils/camara.helpers';
 import { SwalHelper } from 'src/app/utils/notification/swal-helper';
+import { addressType } from 'src/app/utils/validators';
 import { ManualAddressPage } from '../manual-address/manual-address.page';
 import { handleScan } from '../scanner.helpers';
 
@@ -84,9 +85,13 @@ export class TransferFundsPage implements OnInit {
     const { data } = await modal.onDidDismiss();
     if (data?.success && data?.address) {
       const { address } = data;
-      this.navCtrl.navigateForward(this.transferType, {
-        state: { address },
-      });
+      if (addressType(address)) {
+        this.navCtrl.navigateForward(this.transferType, {
+          state: { address },
+        });
+      } else {
+        this.notification.showInvalidAddress();
+      }
     }
   }
 
