@@ -33,11 +33,7 @@ export class NewSchedulePayComponent implements OnInit {
 
   private initForm(): void {
     this.scheduleForm = new FormGroup({
-      frequency: new FormControl('', [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(30),
-      ]),
+      frequency: new FormControl('', []),
       startDate: new FormControl('', [Validators.required, this.dateValidator]),
       endDate: new FormControl('', [Validators.required, this.dateValidator]),
     });

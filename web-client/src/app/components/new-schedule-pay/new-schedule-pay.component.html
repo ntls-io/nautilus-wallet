@@ -8,11 +8,12 @@
             <ion-label position="stacked" for="frequency"
               >Set Frequency</ion-label
             >
-            <ion-input
-              type="number"
-              formControlName="frequency"
-              placeholder="Number of Days"
-            ></ion-input>
+            <ion-select formControlName="frequency">
+              <ion-select-option value="1">Every Day</ion-select-option>
+              <ion-select-option value="7">Every Week</ion-select-option>
+              <ion-select-option value="30">Every Month</ion-select-option>
+              <ion-select-option value="91">Quarterly</ion-select-option>
+            </ion-select>
           </ion-item>
           <ion-text
             slot="error"
@@ -42,7 +43,11 @@
 
           <ion-item>
             <ion-label position="stacked" for="startDate">Start Date</ion-label>
-            <ion-input type="date" formControlName="startDate"></ion-input>
+            <ion-input
+              type="date"
+              formControlName="startDate"
+              color="light"
+            ></ion-input>
           </ion-item>
 
           <ion-text

@@ -174,6 +174,8 @@ export class SchedulePayPage implements OnInit {
                       new Date(schedule.endDate)
                     ),
                   });
+                  await this.notification.showRecurringPaySuccessNotification();
+                  this.navCtrl.navigateRoot(['/recurring-pay']);
                 }
               );
             } else if (otpResult.data.status === 'pending') {
