@@ -29,7 +29,6 @@ export class RecurringPayService {
       .then(({ status }) => {
         if (status === 201) {
           this.getRecurringPayments();
-          this.showSuccess('Recurring payment scheduled!');
           return true;
         }
       })

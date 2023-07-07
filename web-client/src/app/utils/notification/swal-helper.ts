@@ -50,6 +50,14 @@ export class SwalHelper {
     });
   }
 
+  showRecurringPaySuccessNotification() {
+    this.swal.fire({
+      icon: 'success',
+      titleText: 'Recurring Payment Scheduled',
+      text: 'You have successfully scheduled a recurring payment.',
+    });
+  }
+
   showUnexpectedFailureWarning() {
     this.swal.fire({
       icon: 'warning',

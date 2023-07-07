@@ -13,7 +13,7 @@
 <ion-content>
   <div class="ion-padding">
     <ion-button expand="block" (click)="addRecurringPay()" shape="round"
-      >Add
+      >Add Payment Schedule
     </ion-button>
   </div>
 
@@ -41,8 +41,23 @@
             <ion-icon slot="icon-only" name="trash"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-card-subtitle class="ion-text-center"
-          >Payments are scheduled every {{item.frequency}} days, from
+        <ion-card-subtitle class="ion-text-center" *ngIf="item.frequency === 1"
+          >Payments are scheduled daily, from
+          {{getOrdinalToDate(item.payment_start_date) | date}} to
+          {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
+        >
+        <ion-card-subtitle class="ion-text-center" *ngIf="item.frequency === 7"
+          >Payments are scheduled weeky, from
+          {{getOrdinalToDate(item.payment_start_date) | date}} to
+          {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
+        >
+        <ion-card-subtitle class="ion-text-center" *ngIf="item.frequency === 30"
+          >Payments are scheduled monthly, from
+          {{getOrdinalToDate(item.payment_start_date) | date}} to
+          {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
+        >
+        <ion-card-subtitle class="ion-text-center" *ngIf="item.frequency === 91"
+          >Payments are scheduled quarterly from
           {{getOrdinalToDate(item.payment_start_date) | date}} to
           {{getOrdinalToDate(item.payment_end_date) | date}}.</ion-card-subtitle
         >
