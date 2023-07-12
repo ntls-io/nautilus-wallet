@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faKeyboard, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import {
+  faKeyboard,
+  faQrcode,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
 import { ModalController, NavController } from '@ionic/angular';
 import { ActionItem } from 'src/app/components/action-item/action-item.component';
 import { SessionQuery } from 'src/app/state/session.query';
@@ -26,6 +30,11 @@ export class TransferFundsPage implements OnInit {
       title: 'Enter address manually',
       icon: faKeyboard,
       action: 'presentAddressModal',
+    },
+    {
+      title: 'Search for a wallet',
+      icon: faSearch,
+      action: 'presentSearchWallet',
     },
   ];
 
@@ -81,6 +90,10 @@ export class TransferFundsPage implements OnInit {
     }
   }
 
+  async presentSearchWallet() {
+    await this.navCtrl.navigateForward('search-wallet');
+  }
+
   async execItemAction(action: ItemAction): Promise<void> {
     switch (action) {
       case 'presentScanner':
@@ -89,11 +102,19 @@ export class TransferFundsPage implements OnInit {
       case 'presentAddressModal':
         await this.presentAddressModal();
         break;
+      case 'presentSearchWallet':
+        await this.presentSearchWallet();
+        break;
       default:
         break;
     }
   }
 }
 
+// Customise ActionItem for this page with an 'action' field:
+
 type TransferFundsActionItem = ActionItem & { action: ItemAction };
-type ItemAction = 'presentScanner' | 'presentAddressModal';
+type ItemAction =
+  | 'presentScanner'
+  | 'presentAddressModal'
+  | 'presentSearchWallet';
