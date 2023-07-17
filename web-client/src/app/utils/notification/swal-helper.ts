@@ -26,6 +26,22 @@ export class SwalHelper {
     });
   }
 
+  showInsufficientFunds() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Insufficient Funds',
+      text: 'You have insufficient funds for this transaction.',
+    });
+  }
+
+  showInsufficientFundsPullPayment() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Insufficient Funds',
+      text: 'There are insufficient funds from the wallet you are pulling from.',
+    });
+  }
+
   showIncorrectOTPWarning() {
     this.swal.fire({
       icon: 'warning',

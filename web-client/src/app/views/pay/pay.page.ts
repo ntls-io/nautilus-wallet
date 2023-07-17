@@ -279,6 +279,9 @@ export class PayPage implements OnInit {
           txId: txResponse.id.toString(),
           timestamp: new Date(),
         });
+      } else if (resultCode === 'tecUNFUNDED_PAYMENT') {
+        this.notification.showInsufficientFunds();
+        this.navCtrl.back();
       } else {
         await this.notifyXrplFailure({ resultCode });
       }
