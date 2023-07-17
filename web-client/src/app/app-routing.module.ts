@@ -151,6 +151,20 @@ export const routes: Routes = [
         (m) => m.TriggersPageModule
       ),
   },
+  {
+    path: 'recurring-pay',
+    loadChildren: () =>
+      import('./views/recurring-pay/recurring-pay.module').then(
+        (m) => m.RecurringPayPageModule
+      ),
+  },
+  {
+    path: 'schedule-pay',
+    loadChildren: () =>
+      import('./views/schedule-pay/schedule-pay.module').then(
+        (m) => m.SchedulePayPageModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -32,13 +32,31 @@ from data_service.operations.otp import (
     otp_recipient_triggers,
     set_otp_limit_trigger,
 )
+from data_service.operations.recurringpayment import (
+    check_recurring_payments,
+    create_recurring_payment,
+)
+from data_service.operations.recurringpayment import (
+    delete_recurring_payment as data_delete_recurring_payment,
+)
+from data_service.operations.recurringpayment import recurring_payments
+from data_service.operations.recurringpayment import (
+    update_last_paid_date as update_payment,
+)
+from data_service.operations.recurringpayment import (
+    update_recurring_payment as update_existing_recurring_payment,
+)
 from data_service.schema.actions import (
     CreateBookmark,
     CreateOtpRecipientTrigger,
+    CreateRecurringPayment,
     DeleteBookmark,
     DeleteOtpLimitTrigger,
     DeleteOtpRecipientTrigger,
+    DeleteRecurringPayment,
     RedeemInvite,
+    UpdateLastPaidDate,
+    UpdateRecurringPayment,
 )
 from data_service.schema.entities import (
     Bookmark,
@@ -46,6 +64,7 @@ from data_service.schema.entities import (
     Invite,
     OtpLimitTrigger,
     OtpRecipientTrigger,
+    RecurringPayment,
 )
 from src.auth_service.operations.twilio_2fa import (
     check_otp_verification_status,
@@ -184,3 +203,68 @@ async def delete_otp_recipient_trigger(request: DeleteOtpRecipientTrigger) -> No
 @app.post("/wallet/autofund", response_model=None, status_code=status.HTTP_200_OK)
 async def post_autofund_wallet(wallet_id: WalletAddress) -> None:
     await autofund_wallet(wallet_id)
+
+
+@app.get(
+    "/recurring/payments",
+    response_model=list[RecurringPayment],
+    status_code=status.HTTP_200_OK,
+)
+async def get_recurring_payments(
+    wallet_id: WalletAddress,
+) -> list[RecurringPayment]:
+    return await recurring_payments(mongo_engine, wallet_id)
+
+
+@app.post(
+    "/recurring/payment",
+    response_model=None,
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_create_recurring_payment(request: CreateRecurringPayment) -> None:
+    await create_recurring_payment(mongo_engine, request)
+
+
+@app.delete(
+    "/recurring/payment",
+    response_model=None,
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_recurring_payment(request: DeleteRecurringPayment) -> None:
+    await data_delete_recurring_payment(mongo_engine, request)
+
+
+@app.get(
+    "/recurring/payments/today",
+    response_model=list[RecurringPayment],
+    status_code=status.HTTP_200_OK,
+)
+async def get_recurring_payments_today() -> list[RecurringPayment]:
+    """
+    Retrieve a list of recurring payments that need to happen today.
+    """
+    return await check_recurring_payments(mongo_engine)
+
+
+@app.put(
+    "/recurring/payment/update-last-paid-date",
+    response_model=None,
+    status_code=status.HTTP_200_OK,
+)
+async def update_last_paid_date(request: UpdateLastPaidDate) -> None:
+    """
+    Update the last paid date for a recurring payment after a successful payment.
+    """
+    await update_payment(mongo_engine, request)
+
+
+@app.put(
+    "/recurring/payment/update",
+    response_model=None,
+    status_code=status.HTTP_200_OK,
+)
+async def update_recurring_payment(request: UpdateRecurringPayment) -> None:
+    """
+    Update the details of a recurring payment.
+    """
+    await update_existing_recurring_payment(mongo_engine, request)
