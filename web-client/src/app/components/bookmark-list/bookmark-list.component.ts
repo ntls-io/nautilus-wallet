@@ -26,6 +26,12 @@ export class BookmarkListComponent implements OnInit {
     });
   }
 
+  pullPay(address: string) {
+    this.navCtrl.navigateForward('pull', {
+      state: { address },
+    });
+  }
+
   deleteBookmark(id: string) {
     this.notification.swal.fire({
       icon: 'warning',
