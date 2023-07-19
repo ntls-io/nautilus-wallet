@@ -6,14 +6,21 @@
         <ion-list lines="none" mode="ios">
           <ion-item>
             <ion-label position="stacked" for="frequency"
-              >Set Frequency</ion-label
+              >Select Frequency</ion-label
             >
-            <ion-select formControlName="frequency">
-              <ion-select-option value="1">Every Day</ion-select-option>
-              <ion-select-option value="7">Every Week</ion-select-option>
-              <ion-select-option value="30">Every Month</ion-select-option>
-              <ion-select-option value="91">Quarterly</ion-select-option>
-            </ion-select>
+            <ion-input labelPlacement="end" class="ion-text-right">
+              <ion-select
+                justify="space-between"
+                label-placement="floating"
+                label="Select Frequency"
+                formControlName="frequency"
+              >
+                <ion-select-option value="1">Every Day</ion-select-option>
+                <ion-select-option value="7">Every Week</ion-select-option>
+                <ion-select-option value="30">Every Month</ion-select-option>
+                <ion-select-option value="91">Quarterly</ion-select-option>
+              </ion-select>
+            </ion-input>
           </ion-item>
           <ion-text
             slot="error"
