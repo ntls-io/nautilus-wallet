@@ -282,6 +282,12 @@ export class PayPage implements OnInit {
       } else if (resultCode === 'tecUNFUNDED_PAYMENT') {
         this.notification.showInsufficientFunds();
         this.navCtrl.back();
+      } else if (resultCode === 'tecPATH_DRY') {
+        this.notification.showCurrencyNotOptIn();
+        this.navCtrl.back();
+      } else if (resultCode === 'tecNO_DST_INSUF_XRP') {
+        this.notification.showDeletedWalletError();
+        this.navCtrl.back();
       } else {
         await this.notifyXrplFailure({ resultCode });
       }

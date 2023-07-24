@@ -137,15 +137,25 @@ export class PullPage implements OnInit {
     const amount = defined(this.amount);
     const sender = defined(this.senderAddress);
     if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
-      const result = await withLoadingOverlayOpts(
-        this.loadingCtrl,
-        { message: 'Confirming Transaction' },
-        () => this.receiveXrpl(amount, sender, pin)
-      );
-      await this.notifyResult(result, amount, sender);
-      if (this.connectorQuery.getValue().walletId) {
-        resetStores({ exclude: ['connector'] });
-        await this.navCtrl.back();
+      try {
+        const result = await withLoadingOverlayOpts(
+          this.loadingCtrl,
+          { message: 'Confirming Transaction' },
+          () => this.receiveXrpl(amount, sender, pin)
+        );
+        await this.notifyResult(result, amount, sender);
+        if (this.connectorQuery.getValue().walletId) {
+          resetStores({ exclude: ['connector'] });
+          await this.navCtrl.back();
+        }
+      } catch (error: any) {
+        if (error.message.includes('Account not found.')) {
+          this.notification.showDeletedWalletErrorPull();
+          this.navCtrl.back();
+        }
+
+        this.notification.showUnexpectedFailureWarning();
+        this.navCtrl.back();
       }
     }
   }
@@ -232,6 +242,12 @@ export class PullPage implements OnInit {
         });
       } else if (resultCode === 'tecUNFUNDED_PAYMENT') {
         this.notification.showInsufficientFundsPullPayment();
+        this.navCtrl.back();
+      } else if (resultCode === 'tecNO_DST_INSUF_XRP') {
+        this.notification.showDeletedWalletErrorPull();
+        this.navCtrl.back();
+      } else if (resultCode === 'tecPATH_DRY') {
+        this.notification.showCurrencyNotOptInPull();
         this.navCtrl.back();
       } else {
         await this.notifyXrplFailure({ resultCode });
