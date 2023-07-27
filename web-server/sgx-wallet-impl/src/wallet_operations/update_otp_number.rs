@@ -23,6 +23,9 @@ pub fn update_otp_phone_number(request: &UpdateOtpPhoneNumber) -> UpdateOtpPhone
                 ))
             }
             UnlockWalletError::IoError(err) => UpdateOtpPhoneNumberResult::Failed(err.to_string()),
+            UnlockWalletError::AccountLocked => {
+                UpdateOtpPhoneNumberResult::Failed("Account is locked".to_string())
+            }
         },
     }
 }

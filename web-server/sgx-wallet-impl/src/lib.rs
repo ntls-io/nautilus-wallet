@@ -3,6 +3,7 @@
 
 #[macro_use]
 extern crate sgx_tstd as std;
+extern crate alloc;
 
 pub mod crypto;
 mod ecall_helpers;

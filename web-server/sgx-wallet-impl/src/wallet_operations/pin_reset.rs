@@ -53,6 +53,7 @@ pub fn reset_wallet_pin(request: &PinReset) -> PinResetResult {
         StartPinResetResult::Success => {
             match mutate_wallet(&request.wallet_id, |mut stored| {
                 stored.auth_pin = request.new_pin.clone();
+                stored.account_attempts = 0;
                 stored
             }) {
                 Ok(Some(_)) => PinResetResult::Reset,
