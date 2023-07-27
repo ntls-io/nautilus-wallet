@@ -26,11 +26,52 @@ export class SwalHelper {
     });
   }
 
+  showDeletedWalletError() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Transaction Failed',
+      text: 'You cannot send funds to a wallet that has been deleted.',
+    });
+  }
+
+  showDeletedWalletErrorPull() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Transaction Failed',
+      text: 'You cannot pull funds from a wallet that has been deleted.',
+    });
+  }
+
+  showDeleteAccountError() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Transaction Failed',
+      text: 'Wallet cannot be deleted currently. Please try again later.',
+    });
+  }
+
+  showCurrencyNotOptIn() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Transaction Failed',
+      text: 'The receiver needs to opt into this currency first, before trying again.',
+    });
+  }
+
+  showCurrencyNotOptInPull() {
+    this.swal.fire({
+      icon: 'error',
+      title: 'Transaction Failed',
+      text: 'The receiver may have insufficient funds or has not opted into this currency.',
+    });
+  }
+
   showInsufficientFunds() {
+    const reserveAmount = 10;
     this.swal.fire({
       icon: 'error',
       title: 'Insufficient Funds',
-      text: 'You have insufficient funds for this transaction.',
+      text: `Your transaction exceeds the minimum reserve of ${reserveAmount} XRP. Please adjust the amount and try again.`,
     });
   }
 
