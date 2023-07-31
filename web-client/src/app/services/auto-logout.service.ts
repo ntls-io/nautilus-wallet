@@ -13,6 +13,7 @@ const STORE_KEY = 'lastAction';
   providedIn: 'root',
 })
 export class AutoLogoutService {
+  private autoLogoutEnabled = true;
   constructor(
     private navCtrl: NavController,
     private sessionStore: SessionStore,
@@ -55,8 +56,16 @@ export class AutoLogoutService {
     });
   }
 
+  public disableAutoLogout() {
+    this.autoLogoutEnabled = false;
+  }
+
+  public enableAutoLogout() {
+    this.autoLogoutEnabled = true;
+  }
+
   check() {
-    if (this.sessionQuery.isActiveSession()) {
+    if (this.autoLogoutEnabled && this.sessionQuery.isActiveSession()) {
       const now = Date.now();
       const timeLeft =
         this.getLastAction() + MINUTES_UNTIL_AUTO_LOGOUT * 60 * 1000;
