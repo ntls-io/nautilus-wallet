@@ -94,6 +94,8 @@ pub struct WalletStorable {
     pub phone_number: Option<String>,
     pub otp_phone_number: Option<String>,
 
+    pub account_attempts: u32,
+
     pub algorand_account: AlgorandAccount,
     pub xrpl_account: XrplAccount,
 

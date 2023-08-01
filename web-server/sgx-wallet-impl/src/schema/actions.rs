@@ -54,6 +54,7 @@ pub struct OpenWallet {
 pub enum OpenWalletResult {
     Opened(WalletDisplay),
     InvalidAuth,
+    AccountLocked,
     Failed(String),
 }
 
@@ -63,6 +64,7 @@ impl From<UnlockWalletError> for OpenWalletResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            AccountLocked => Self::AccountLocked,
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
@@ -203,6 +205,7 @@ impl From<UnlockWalletError> for SignTransactionResult {
         match err {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
+            AccountLocked => Self::Failed("Account is locked.".to_string()),
             IoError(err) => Self::Failed(err.to_string()),
         }
     }
@@ -318,6 +321,7 @@ impl From<UnlockWalletError> for SaveOnfidoCheckResult {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
             IoError(err) => Self::from(err),
+            AccountLocked => Self::Failed("Account is locked.".to_string()),
         }
     }
 }
@@ -351,6 +355,7 @@ impl From<UnlockWalletError> for LoadOnfidoCheckResult {
             InvalidWalletId => Self::InvalidAuth,
             InvalidAuthPin => Self::InvalidAuth,
             IoError(err) => Self::from(err),
+            AccountLocked => Self::Failed("Account is locked.".to_string()),
         }
     }
 }
