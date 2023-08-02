@@ -8,7 +8,7 @@ pub fn open_wallet(request: &OpenWallet) -> OpenWalletResult {
     match unlock_wallet(&request.wallet_id, &request.auth_pin) {
         Ok(_) => {
             return match mutate_wallet(&request.wallet_id, |mut stored| {
-                stored.account_attempts = 0;
+                stored.account_attempts = Some(0);
                 stored
             }) {
                 Ok(Some(stored)) => OpenWalletResult::Opened(WalletDisplay::from(stored)),
@@ -19,7 +19,9 @@ pub fn open_wallet(request: &OpenWallet) -> OpenWalletResult {
         Err(err) => match err {
             UnlockWalletError::InvalidAuthPin => {
                 match mutate_wallet(&request.wallet_id, |mut stored| {
-                    stored.account_attempts = stored.account_attempts + 1;
+                    stored.account_attempts = stored
+                        .account_attempts
+                        .map_or(Some(1), |attempts| Some(attempts + 1));
                     stored
                 }) {
                     _ => {}
