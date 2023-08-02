@@ -55,7 +55,7 @@ pub fn unlock_wallet(wallet_id: &str, auth_pin: &str) -> Result<WalletStorable, 
     let stored: WalletStorable =
         load_wallet(wallet_id)?.ok_or(UnlockWalletError::InvalidWalletId)?;
 
-    if stored.account_attempts >= 3 {
+    if stored.account_attempts >= Some(3) {
         return Err(UnlockWalletError::AccountLocked);
     }
 
