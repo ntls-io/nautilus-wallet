@@ -5,6 +5,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { firstValueFrom, map } from 'rxjs';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { BookmarkQuery } from 'src/app/state/bookmark';
 import { ConnectorQuery } from 'src/app/state/connector';
@@ -71,6 +72,7 @@ export class PullPage implements OnInit {
   maxAmount = 1000000000;
 
   constructor(
+    private autoLogoutService: AutoLogoutService,
     public sessionQuery: SessionQuery,
     private router: Router,
     private navCtrl: NavController,
@@ -138,21 +140,26 @@ export class PullPage implements OnInit {
     const sender = defined(this.senderAddress);
     if (isAssetAmountXrp(amount) || isAssetAmountXrplToken(amount)) {
       try {
+        this.autoLogoutService.disableAutoLogout();
         const result = await withLoadingOverlayOpts(
           this.loadingCtrl,
           { message: 'Confirming Transaction' },
           () => this.receiveXrpl(amount, sender, pin)
         );
+        this.autoLogoutService.enableAutoLogout();
         await this.notifyResult(result, amount, sender);
         if (this.connectorQuery.getValue().walletId) {
           resetStores({ exclude: ['connector'] });
-          await this.navCtrl.back();
+          await this.navCtrl.navigateRoot('/');
         }
       } catch (error: any) {
+        this.autoLogoutService.enableAutoLogout();
         if (error.message.includes('Account not found.')) {
           this.notification.showDeletedWalletErrorPull();
           this.navCtrl.back();
         }
+
+        console.log(error);
 
         this.notification.showUnexpectedFailureWarning();
         this.navCtrl.back();
