@@ -23,6 +23,7 @@ export type OpenWallet = {
 export type OpenWalletResult =
   | { Opened: WalletDisplay }
   | { InvalidAuth: null }
+  | { AccountLocked: null }
   | { Failed: string };
 
 export type UpdateOtpPhoneNumber = {
