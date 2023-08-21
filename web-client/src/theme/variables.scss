@@ -95,6 +95,14 @@
   --ion-color-background-contrast-rgb: 0, 0, 0;
   --ion-color-background-shade: #e0e0e0;
   --ion-color-background-tint: #ffffff;
+
+  /** Signup Phone **/
+  --ion-color-signup-phone: #0008ff;
+  --ion-color-signup-phone-rgb: 0, 8, 255;
+  --ion-color-signup-phone-contrast: #ffffff;
+  --ion-color-signup-phone-contrast-rgb: 255, 255, 255;
+  --ion-color-signup-phone-shade: #0007e0;
+  --ion-color-signup-phone-tint: #1a21ff;
 }
 
 .ion-color-background {
@@ -104,4 +112,13 @@
   --ion-color-contrast-rgb: var(--ion-color-background-contrast-rgb);
   --ion-color-shade: var(--ion-color-background-shade);
   --ion-color-tint: var(--ion-color-background-tint);
+}
+
+.ion-color-signup-phone {
+  --ion-color-base: var(--ion-color-signup-phone);
+  --ion-color-base-rgb: var(--ion-color-signup-phone-rgb);
+  --ion-color-contrast: var(--ion-color-signup-phone-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-signup-phone-contrast-rgb);
+  --ion-color-shade: var(--ion-color-signup-phone-shade);
+  --ion-color-tint: var(--ion-color-signup-phone-tint);
 }

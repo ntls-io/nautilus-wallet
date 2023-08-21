@@ -55,6 +55,10 @@ pub fn unlock_wallet(wallet_id: &str, auth_pin: &str) -> Result<WalletStorable, 
     let stored: WalletStorable =
         load_wallet(wallet_id)?.ok_or(UnlockWalletError::InvalidWalletId)?;
 
+    if stored.account_attempts >= Some(3) {
+        return Err(UnlockWalletError::AccountLocked);
+    }
+
     match ConsttimeMemEq::consttime_memeq(stored.auth_pin.as_bytes(), auth_pin.as_bytes()) {
         true => Ok(stored),
         false => Err(UnlockWalletError::InvalidAuthPin),
@@ -96,6 +100,9 @@ pub enum UnlockWalletError {
 
     #[error("I/O error while opening wallet")]
     IoError(#[from] io::Error),
+
+    #[error("too many account attempts")]
+    AccountLocked,
 }
 
 /// [`load_xrpl_wallet`] failed.

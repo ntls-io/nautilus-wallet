@@ -41,8 +41,10 @@
 ion-searchbar {
   .searchbar-input {
     border: solid 1px !important;
+    color: var(--ion-color-signup-phone) !important;
     --border-radius: 9999px;
     --background: transparent;
+    --placeholder-color: var(--ion-color-signup-phone);
   }
 }
 

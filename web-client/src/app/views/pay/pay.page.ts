@@ -5,6 +5,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { Observable, pluck } from 'rxjs';
 import { Payment } from 'src/app/components/pay/pay.component';
 import { TransactionConfirmation } from 'src/app/services/algosdk.utils';
+import { AutoLogoutService } from 'src/app/services/auto-logout.service';
 import { OtpPromptService } from 'src/app/services/otp-prompt.service';
 import { checkTxResponseSucceeded } from 'src/app/services/xrpl.utils';
 import { ConnectorQuery } from 'src/app/state/connector';
@@ -73,6 +74,7 @@ export class PayPage implements OnInit {
     this.sessionQuery.onfidoCheckIsClear;
 
   constructor(
+    private autoLogoutService: AutoLogoutService,
     private router: Router,
     private navCtrl: NavController,
     private sessionAlgorandService: SessionAlgorandService,
@@ -123,6 +125,7 @@ export class PayPage implements OnInit {
       return;
     }
 
+    this.autoLogoutService.disableAutoLogout();
     const result = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Checking OTP...' },
@@ -145,12 +148,14 @@ export class PayPage implements OnInit {
         }
       }
     );
+    this.autoLogoutService.enableAutoLogout();
   }
 
   async confirmTransaction(
     amount: AssetAmount,
     receiverAddress: string
   ): Promise<void> {
+    this.autoLogoutService.disableAutoLogout();
     const result = await withLoadingOverlayOpts(
       this.loadingCtrl,
       { message: 'Confirming Transaction' },
@@ -158,6 +163,7 @@ export class PayPage implements OnInit {
     );
 
     await this.notifyResult(result, amount, receiverAddress);
+    this.autoLogoutService.enableAutoLogout();
 
     if (this.connectorQuery.getValue().walletId) {
       resetStores({ exclude: ['connector'] });
@@ -279,6 +285,15 @@ export class PayPage implements OnInit {
           txId: txResponse.id.toString(),
           timestamp: new Date(),
         });
+      } else if (resultCode === 'tecUNFUNDED_PAYMENT') {
+        this.notification.showInsufficientFunds();
+        this.navCtrl.back();
+      } else if (resultCode === 'tecPATH_DRY') {
+        this.notification.showCurrencyNotOptIn();
+        this.navCtrl.back();
+      } else if (resultCode === 'tecNO_DST_INSUF_XRP') {
+        this.notification.showDeletedWalletError();
+        this.navCtrl.back();
       } else {
         await this.notifyXrplFailure({ resultCode });
       }

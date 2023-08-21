@@ -15,6 +15,9 @@
         </ion-label>
         <ion-buttons>
           <ion-button (click)="sendFund(bookmark.address)">
+            <ion-icon slot="icon-only" name="card"></ion-icon>
+          </ion-button>
+          <ion-button (click)="pullPay(bookmark.address)">
             <ion-icon slot="icon-only" name="cash"></ion-icon>
           </ion-button>
           <ion-button (click)="deleteBookmark(bookmark.id)">

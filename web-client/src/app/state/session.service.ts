@@ -122,6 +122,8 @@ export class SessionService {
     } else if ('Failed' in result) {
       console.error(result);
       throw new Error(result.Failed);
+    } else if ('AccountLocked' in result) {
+      return 'You have failed to enter the correct pin 3 times. Please reset your pin in order to access your account.';
     } else {
       throw never(result);
     }

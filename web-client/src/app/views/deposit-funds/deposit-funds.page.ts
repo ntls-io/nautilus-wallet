@@ -40,25 +40,31 @@ export class DepositFundsPage implements OnInit {
   }
 
   async deleteWallet(): Promise<void> {
-    await withConsoleGroupCollapsed(
-      'Defaulting asset / token opt-ins',
-      async () => {
-        await this.defaultXrplTokenOptIns();
-      }
-    );
-
-    if (this.receiverAddress) {
-      const result = await withLoadingOverlayOpts<
-        { xrplResult: TxResponse } | undefined
-      >(this.loadingCtrl, { message: 'Confirming Transaction' }, () => {
-        if (this.receiverAddress) {
-          return this.deleteByLedgerType(this.receiverAddress);
+    try {
+      await withConsoleGroupCollapsed(
+        'Defaulting asset / token opt-ins',
+        async () => {
+          await this.defaultXrplTokenOptIns();
         }
-        return Promise.resolve(undefined);
-      });
-      if (result) {
-        await this.notifyResult(result, this.receiverAddress);
+      );
+
+      if (this.receiverAddress) {
+        const result = await withLoadingOverlayOpts<
+          { xrplResult: TxResponse } | undefined
+        >(this.loadingCtrl, { message: 'Confirming Transaction' }, async () => {
+          if (this.receiverAddress) {
+            return this.deleteByLedgerType(this.receiverAddress);
+          }
+          return Promise.resolve(undefined);
+        });
+
+        if (result) {
+          await this.notifyResult(result, this.receiverAddress);
+        }
       }
+    } catch (error) {
+      console.log('Error in deleteWallet:', error);
+      this.notification.showDeleteAccountError();
     }
   }
 
@@ -121,6 +127,8 @@ export class DepositFundsPage implements OnInit {
         txId: txResponse.id.toString(),
         timestamp: new Date(),
       });
+    } else if (resultCode === 'tecTOO_SOON') {
+      this.notification.showDeleteAccountError();
     } else {
       await this.notifyXrplFailure({ resultCode });
     }

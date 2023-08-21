@@ -20,6 +20,7 @@ pub fn create_wallet(request: &CreateWallet) -> Result {
         phone_number: request.phone_number.clone(),
         otp_phone_number: request.phone_number.clone(),
 
+        account_attempts: Some(0),
         algorand_account: new_algorand_account,
         xrpl_account: new_xrpl_account,
 
