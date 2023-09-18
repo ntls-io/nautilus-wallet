@@ -20,7 +20,7 @@ class AppSettings(BaseSettings):
     autofund_key: str
     autofund_server: HttpUrl
     autofund_sequence: int
-    autofund_amount: int
+    autofund_amount: float
 
     twilio_account_sid: str
     twilio_auth_token: str
