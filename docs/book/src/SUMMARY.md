@@ -11,7 +11,7 @@
   - [Wallet Connector app](design/wallet-connector-app.md)
 - [Asset services](design/asset-services.md)
   - [KYC service](design/kyc-service.md)
-  - [User verification]()
+- [Backend Services](design/backend-services.md)
 
 # Operations
 
