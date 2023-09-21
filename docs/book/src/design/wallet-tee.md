@@ -11,7 +11,7 @@ The Wallet SGX enclave contains the system's [Trusted Computing Base (TCB)][TCB]
 
 Once generated, secret keys and other sensitive data never leaves the enclave unencrypted. All persistent storage is cryptographically sealed and authenticated, and all trusted communication with the enclave occurs over cryptographically attested and mutually-authenticated channels.
 
-[TCB]: https://en.wikipedia.org/wiki/Trusted_computing_base
+To learn more about Trusted Computing Base, click on the following [link](https://en.wikipedia.org/wiki/Trusted_computing_base).
 
 ## Host service
 
@@ -20,6 +20,8 @@ The SGX enclave is embedded in an untrusted host service, which facilitates comm
 * Remote attestation, which allows the Connector app to remotely verify the identity and integrity of the enclave, and exchange keys to set up a trusted communication channel
 * Sealed message exchange, which allows the Connector app to request wallet operations, and receive results
 
-## Source code
+## Source Code
 
-* <https://github.com/ntls-io/nautilus-wallet/tree/main/web-server>
+You can access the source code for the Wallet TEE server on GitHub:
+
+* [Web-server Repository](https://github.com/ntls-io/nautilus-wallet/tree/main/web-server)

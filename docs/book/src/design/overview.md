@@ -9,6 +9,7 @@ The Nautilus Wallet system consists of the following high systems:
 3. [Asset services](asset-services.md), which help manage and govern the asset:
    - The KYC service
    - User verification service
+4. [Backend services](backend-services.md), which manages communication between the Wallet Connector app and third party services.
 
 ## System Landscape diagram
 
